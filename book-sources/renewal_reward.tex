@@ -10,7 +10,7 @@
 
 In a one-dollar store, each item costs $\$ 1$.
 If every minute a customer arrives, and each customer buys exactly $10$ items, this shop earns money at a rate of $ \$ 10$ per minute.
-At another shop, customers spend variable amounts but on average $\$ 10$ per customer, and customers come in irregularly, but the average inter-arrival time between two customers is $1$ minute.
+At another shop, customers spend variable amounts but on average $\$ 10$ per customer, and customers come in irregularly, but the average inter-arrival time between two customers is~$1$ minute.
 This other shop also earns money at rate of $\$ 10$ per minute.
 That both shops have the same earning rate is what the \recall{renewal reward} theorem says.
 In this section we prove this extremely useful theorem, and in the exercises we show how to apply it to queueing systems.
@@ -106,18 +106,18 @@ As the inventory is operated under an $(s,S)$-policy, it is a system that moves 
 
 
 
-\newthought{The renewal reward} theorem finds an easy application in the analysis of the \recall{Economic Production Quantity} (EPQ) model which is an inventory system in which demand arrives at a fixed rate $d$ and items are produced at constant rate $r$ by a machine that can switch on and off.
-The inventory is under an $(s,S)$ policy, the leadtime $L=0$, the holding and backlogging cost are $h$ and~$b$ per unit per time, and it costs $k$ to switch on the machine.
+\newthought{The renewal reward} theorem finds an easy application in the analysis of the \recall{Economic Production Quantity} (EPQ) model which is an inventory system in which demand arrives at a fixed rate~$d$ and items are produced at constant rate~$r$ by a machine that can switch on and off.
+The inventory is under an $(s,S)$ policy, the leadtime $L=0$, the holding and backlogging cost are~$h$ and~$b$ per unit per time, and it costs~$k$ to switch on the machine.
 \cref{fig:renewal} shows a sample path of the inventory level.
 Let us use the ideas of renewal reward theory to find the policy parameters that minimize the long-run time average cost.
 
 
-Clearly, the inventory level repeats over time, so it suffices to study just one cycle that starts and stops when the inventory level hits $S$.
+Clearly, the inventory level repeats over time, so it suffices to study just one cycle that starts and stops when the inventory level hits~$S$.
 From~\cref{fig:renewal} it is simple to see that
   \begin{align*}
     t_1 &= \frac{S-s}{d}, & t_2 &= \frac{S-s}{r-d}, & T = t_1+t_{2},
   \end{align*}
-are, respectively, the time  to empty the inventory from level $S$ to $s$ and switch on production,  the time needed to replenish the inventory from level $s$ to $S$ and switch off production, and the duration of a full cycle.
+are, respectively, the time  to empty the inventory from level~$S$ to~$s$ and switch on production,  the time needed to replenish the inventory from level~$s$ to~$S$ and switch off production, and the duration of a full cycle.
 Writing  $T_+$ ($T_-$) for the amount of time that the inventory is positive (negative) during a cycle,  it follows that
 \begin{align*}
 \frac{T_+}T &= \frac{S}{S-s},
@@ -129,7 +129,7 @@ Using that the cycle holding and backlogging cost are proportional to the areas 
 g
 &=\frac{K}{T} +  b\frac{s}{2} \frac{T_-} T  + h\frac{S}{2} \frac{T_+}{T}.
 \end{align*}
-Substituting $T_{-}, T_{+}, T$, taking the partial derivatives with respect to $s$ and $S$ and solving for the optimal values gives
+Substituting $T_{-}, T_{+}, T$, taking the partial derivatives with respect to~$s$ and~$S$ and solving for the optimal values gives
 \begin{align}\label{eq:renewal1}
 g^{*} &= \sqrt{2Kd} \sqrt{\frac{hb}{h+b}}\sqrt{1-\frac d r}, & s^{*} &= \frac{g^{*}}b, & S^{*} = \frac{g^{*}}{h}.
 \end{align}
@@ -154,12 +154,12 @@ An interesting extension is to consider a system which has  constraints on cycle
 % % Also $\lim_{t\to\infty} Y(t)/t=\rho$.
 %  In the relation $Y = \lambda X$, the $\lambda$ is $\delta$ since we consider departure epochs $T_k = D_k$, rather than $A_k$.
 %  Thus, with the renewal reward theorem $Y=\lambda X$, we get that $Y = \lim_{t\to\infty} t^{-1} \int_0^t \1{\L(s)>0} \d s = \delta \E S$.
-% Observe that the $Y$ is the long-run fraction of time the server is busy.
+% Observe that the~$Y$ is the long-run fraction of time the server is busy.
 % \end{solution}
 % \end{exercise}
 
 \begin{exercise}
-Take $Y(t)=t$ and $T_{k} = A_{k}$, i.e., the arrival time of the $k$th job. Use this to prove $\lambda = 1/\E X$, where $X$ is the inter-arrival time between jobs.
+Take $Y(t)=t$ and $T_{k} = A_{k}$, i.e., the arrival time of the~$k$th job. Use this to prove $\lambda = 1/\E X$, where~$X$ is the inter-arrival time between jobs.
 \begin{solution}
 Note that  $Y(t)/t = 1$. Next, since $T_K=A_{k}$ and $Y(t)=t$,
 \begin{equation*}
@@ -177,7 +177,7 @@ Define suitable moments $T_{1} < T_{2} < \ldots$ to inspect the system, and try 
 \end{hint}
 
 \begin{solution}
-Take $T_{k}$ as the end of the $k$th repair, and $Y(t) = \int_0^{t} u(s) \d s$, where $u(s) = 1$ if the server is up (operational) and 0 if the server is down (broken).
+Take $T_{k}$ as the end of the~$k$th repair, and $Y(t) = \int_0^{t} u(s) \d s$, where $u(s) = 1$ if the server is up (operational) and 0 if the server is down (broken).
 Thus $Y(t)$ is the total amount of time the system has been up during $[0,t]$, and $Y(t)/t$ becomes the fraction of up time (which is the availability) in the limit.
 As for $X_{k}$, this is $X_k = Y(T_k)-Y(T_{k-1})$, which is the up time in $[T_{k-1}, T_{k}]$.
 Therefore, in the limit, $X$ is the average uptime between two break downs, hence $X \sim m_{f}$.
@@ -207,8 +207,8 @@ We can also derive the relation between utilization and the fraction of busy tim
 \end{equation}
 Explain the above and show that by taking appropriate limits we find $\lambda \E S \geq \rho \geq \delta \E S$.
 \begin{hint}
-For the direction of the inequalities~\cref{eq:2a}, observe that $t$ can lie half way a service interval, and $A(t) \geq D(t)$.
-Divide by $t$ in~\cref{eq:2a}. Then for the LHS, multiply by $A(t)/A(t)$ and take appropriate limits. Similar for the RHS but multiply by $D(t)/D(t)$.
+For the direction of the inequalities~\cref{eq:2a}, observe that~$t$ can lie half way a service interval, and $A(t) \geq D(t)$.
+Divide by~$t$ in~\cref{eq:2a}. Then for the LHS, multiply by $A(t)/A(t)$ and take appropriate limits. Similar for the RHS but multiply by $D(t)/D(t)$.
 \end{hint}
 \begin{solution}
   For the LHS, as $A(t)\to \infty$ as $t\to\infty$,
@@ -226,7 +226,7 @@ The limit of the middle term gives the fraction of time the server is busy.
 Show for the $G/G/1$ queue that $\rho = \E \U / (\E \U + \E I)$ where $\E B$ is the expected busy time and $\E I$ the expected idle time.
 (The busy time of a server is the time between starting after an idle time until a new idle time starts.)
 \begin{solution}
-Take $Y(t) = \int_0^t \1{\Ls(s)=1} \d t$. Then, when $U_{k}$ is the $k$th busy time and $I_{k}$ the $k$th idle time, let $X_{k} = U_{k}$ and $T_{k} = U_k + I_{k}$.
+Take $Y(t) = \int_0^t \1{\Ls(s)=1} \d t$. Then, when $U_{k}$ is the~$k$th busy time and $I_{k}$ the~$k$th idle time, let $X_{k} = U_{k}$ and $T_{k} = U_k + I_{k}$.
 Then $Y(t)/ t\to\rho$, $X_k/k \to \E \U$, and $(I_k + \U_k)/k \to \E I + \E U = \lambda^{-1}$, i.e., the inverse of the~$\lambda$ we use in the renewal-reward theorem.
 \end{solution}
 \end{exercise}

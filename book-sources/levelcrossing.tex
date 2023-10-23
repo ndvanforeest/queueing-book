@@ -15,9 +15,9 @@
 
 Consider a sample path\sidenote{A sample path can be seen as the graph of the number of jobs in the system obtained by simulation.}
 of $L:=\{\L\}$.
-We say that the sample path \recall{up-crosses level $n$} at time $t$ when the number of jobs in the system changes from $n$ to $n+1$ due to an arrival, in other words, when $L(t-)=n$ and $L(t)=n+1$.
-The sample path \recall{down-crosses level $n$} at time $t$ when, due to a departure, $L(t-)=n+1$ and $L(t)=n$.
-Clearly, the number of up-crossings and down-crossings cannot differ by more than 1 at any time, because it is only possible to down-cross level $n$ after an up-crossing (or the other way around).
+We say that the sample path \recall{up-crosses level~$n$} at time~$t$ when the number of jobs in the system changes from~$n$ to $n+1$ due to an arrival, in other words, when $L(t-)=n$ and $L(t)=n+1$.
+The sample path \recall{down-crosses level~$n$} at time~$t$ when, due to a departure, $L(t-)=n+1$ and $L(t)=n$.
+Clearly, the number of up-crossings and down-crossings cannot differ by more than 1 at any time, because it is only possible to down-cross level~$n$ after an up-crossing (or the other way around).
 This simple idea will prove to be a key stepping stone in the analysis of queueing systems.
 
 In this section we make a distinction between jobs that just arrive and jobs that do enter, because we want our arguments to apply to queueing systems in which jobs can be blocked or do not enter for other reasons.
@@ -28,20 +28,20 @@ Just as in~\cref{sec:rate-stability}, we write $A(t)$ and $\tilde A(t)$ to disti
 \begin{equation*}\label{eq:102}
  \tilde A(n,t) :=  \sum_{k=1}^\infty \1{A_k \leq t} \1{\L(A_k) = n+1} = \sum_{k=1}^{A(t)} \1{\L(A_k) = n+1}
  \end{equation*}
- denote the number of jobs that \emph{enter} the system when the system contains $n$ jobs just before arrival.
-To see this, if $\1{L(A_{k}-) = n}=1$ then customer $k$ sees $n$ jobs in the system. If customer $k$ does \emph{not} join the system, then $L(A_{k}-) = L(A_{k})$. However, if customer $k$ enters the system, then $L(A_{k})=n+1$, because just after its arrival, the system contains $n+1$ jobs.
+ denote the number of jobs that \emph{enter} the system when the system contains~$n$ jobs just before arrival.
+To see this, if $\1{L(A_{k}-) = n}=1$ then customer~$k$ sees~$n$ jobs in the system. If customer~$k$ does \emph{not} join the system, then $L(A_{k}-) = L(A_{k})$. However, if customer~$k$ enters the system, then $L(A_{k})=n+1$, because just after its arrival, the system contains $n+1$ jobs.
 Likewise, let
 \begin{equation*}
  D(n,t) :=  \sum_{k=1}^\infty \1{D_k \leq t} \1{\L(D_k) = n} = \sum_{k=1}^{D(t)} \1{\L(D_k) = n}
  \end{equation*}
- denote the number of departures up to time $t$ that\emph{ leave $n$ customers behind}.
+ denote the number of departures up to time~$t$ that\emph{ leave~$n$ customers behind}.
 Note that we write $L(D_{k})$ and not $L(D_{k}-)$.
 With this, define
 \begin{equation*}
  \mu(n+1) := \lim_{t\to\infty} \frac{D(n,t)}{Y(n+1,t)},
 \end{equation*}
 as the departure rate from state $n+1$.
-As for $\tilde A(n,t)$ it is easy to get confused here: to leave $n$ jobs behind, the system must contain $n+1$ jobs just prior to the departure.
+As for $\tilde A(n,t)$ it is easy to get confused here: to leave~$n$ jobs behind, the system must contain $n+1$ jobs just prior to the departure.
 
 \newthought{As jobs arrive} and depart as single units, $|L(t) - L(t-)| \leq 1$ for all $t\geq 0$.
 But this implies that\sidenote{Think about this. This is simple, but has profound consequences. Do you understand why this does not need to hold for $A(n,t)$?}
@@ -52,7 +52,7 @@ From this observation it follows immediately that
 \begin{equation}\label{eq:15}
  \lim_{t\to\infty} \frac{\tilde A(n,t)}t = \lim_{t\to\infty} \frac{D(n,t)}t.
 \end{equation}
-By defining the rate at which jobs enter when the system contains $n$ jobs as
+By defining the rate at which jobs enter when the system contains~$n$ jobs as
 \begin{equation*}
 \tilde \lambda(n) = \lim_{t\to\times} \frac{\tilde A(n,t)}{Y(n,t)},
 \end{equation*}
@@ -60,7 +60,7 @@ we see that
 \begin{equation*}
 \lim_{t\to\infty} \frac{\tilde A(n,t)}t = \lim_{t\to\infty} \frac{\tilde A(n,t)}{Y(n,t)}\frac{Y(n,t)}t = \tilde \lambda(n) p(n).
 \end{equation*}
-Similarly, the rate of jobs that leave $n$ jobs behind is
+Similarly, the rate of jobs that leave~$n$ jobs behind is
 \begin{equation*}
 \lim_{t\to\infty} \frac{D(n,t)}t = \lim_{t\to\infty} \frac{D(n,t)}{Y(n+1,t)}\frac{Y(n+1,t)}t = \mu(n+1) p(n+1).
 \end{equation*}
@@ -89,7 +89,7 @@ Combining the above with~\cref{eq:15} we arrive at the \recall{ level-crossing e
 % (3) edge [bend left] node {$\lambda(3)$} (4)
 % (4) edge [bend left] node {$\mu(4)$} (3);
 
-%\draw[-, dotted, gray] (1.5,-1.5)--(1.5,1.5) node[above, black] {}; % {level $1$};
+%\draw[-, dotted, gray] (1.5,-1.5)--(1.5,1.5) node[above, black] {}; % {level~$1$};
 \draw[->] (3,1.8) node[left] {$\tilde A(1,t)$} -- (4.5,1.8);
 \draw[<-] (3,-1.8) node[left] {$D(1,t)$} --(4.5,-1.8) ;
 
@@ -98,7 +98,7 @@ Combining the above with~\cref{eq:15} we arrive at the \recall{ level-crossing e
 
 
 \newthought{Suppose we can} specify\sidenote{In \cref{sec:mm1} and onward we will model many queueing situations by making suitable choices for $\tilde \lambda(n)$ and $\mu(n)$.}
-the arrival and service rates $\tilde \lambda(n)$ and $\mu(n)$, then we can easily compute the long-run fraction of time $p(n)$ that the system contains $n$ jobs.
+the arrival and service rates $\tilde \lambda(n)$ and $\mu(n)$, then we can easily compute the long-run fraction of time $p(n)$ that the system contains~$n$ jobs.
 To see this, rewrite~\cref{eq:12} as
 \begin{equation}\label{eq:25}
  p(n+1) = \frac{\tilde \lambda(n)}{\mu(n+1)}p(n).
@@ -116,7 +116,7 @@ $G$ being the \emph{normalization constant}
 G = 1+\sum_{n=0}^\infty \frac{\tilde \lambda(n)\tilde \lambda(n-1)\cdots\tilde \lambda(0)}{\mu(n+1)\mu(n)\cdots \mu(1)}.
 \end{equation}
 
-Finally, once we have $p(n)$, it is easy to compute  the time-average\sidenote{It is important to realize that this is not necessarily the same as what jobs see upon arrival.} number of jobs in the system and the long-run fraction of time the system contains at least $n$:
+Finally, once we have $p(n)$, it is easy to compute  the time-average\sidenote{It is important to realize that this is not necessarily the same as what jobs see upon arrival.} number of jobs in the system and the long-run fraction of time the system contains at least~$n$:
 \begin{align*}
 \E\L &= \sum_{n=0}^\infty n p(n), & \P{\L \geq n} &= \sum_{i=n}^\infty p(i).
 \end{align*}
@@ -126,7 +126,7 @@ Finally, once we have $p(n)$, it is easy to compute  the time-average\sidenote{I
 \begin{equation*}
  \delta(n) := \lim_{t\to\infty} \frac{D(n,t)}{D(t)}
 \end{equation*}
-as the long-run fraction of jobs that leave $n$ jobs \emph{behind}.
+as the long-run fraction of jobs that leave~$n$ jobs \emph{behind}.
 From~\cref{eq:15} and supposing that $A(n,t) = \tilde A(n,t)$,
 \begin{equation*}
 \frac{A(t)}t \frac{A(n,t)}{A(t)} = \frac{A(n,t)}t = \frac{\tilde A(n,t)}{t}\approx \frac{D(n,t)}t
@@ -166,7 +166,7 @@ For a more general approach, we focus on a single state and count how often this
  % (4) edge [bend left] node[below] {$\mu(4)$} (3);
 \end{tikzpicture}
 \end{marginfigure}
-Specifically, define $I(n,t) = A(n-1,t) + D(n,t)$ as the number of times the queueing process enters state $n$ either due to an arrival from state $n-1$ or due to a departure leaving $n$ jobs behind. Similarly,  $O(n,t) = A(n,t) + D(n-1,t)$ counts how often state $n$ is left either by an arrival (to state $n+1$) or a departure (to state $n-1$).
+Specifically, define $I(n,t) = A(n-1,t) + D(n,t)$ as the number of times the queueing process enters state~$n$ either due to an arrival from state $n-1$ or due to a departure leaving~$n$ jobs behind. Similarly,  $O(n,t) = A(n,t) + D(n-1,t)$ counts how often state~$n$ is left either by an arrival (to state $n+1$) or a departure (to state $n-1$).
 
 
 Just like~\eqref{eq:97}, it is evident that $|I(n,t)-O(n,t)|\leq 1$, and this implies\sidenote{~\cref{ex:79}}
@@ -182,13 +182,13 @@ With this we can find a closed form expression for the waiting time of the $M/G/
 However, this is a bit more complicated as the argument hinges on an integral equation.
 If you don't like developing mathematical skills, you may skip this derivation.
 
-Suppose that the waiting time $W$ of the $M/G/1$ queue has a density $f$, that is, the cdf $F(x) = \P{W\leq x}$ has a derivative $f(x)$ for all $x>0$.\sidenote{For a real proof we should prove first that $f$ exists.}
-($F$ is only differentiable from the right at $0$ because $\P{W=0}>0$, while $\P{W\leq x} = 0$ for $x<0$.)
+Suppose that the waiting time~$W$ of the $M/G/1$ queue has a density~$f$, that is, the cdf $F(x) = \P{W\leq x}$ has a derivative $f(x)$ for all $x>0$.\sidenote{For a real proof we should prove first that~$f$ exists.}
+($F$ is only differentiable from the right at~$0$ because $\P{W=0}>0$, while $\P{W\leq x} = 0$ for $x<0$.)
 Consider some level $x>0$.
 By PASTA, the rate of arriving jobs that see a waiting time $y \in [0, x)$ is equal to $\lambda f(y)$. (Observe that we use the splitting property of Poisson processes.)
 To up-cross level~$x$ from state $y< x$, the service time must be at least $x-y$, the probability of which is $G(x-y) = \P{S>x-y}$.
-Adding up the rates for all possible waiting times below $x$ gives that $\lambda\int_0^x f(y) G(x-y)\d y$ is the up-crossing rate of level $x$.
-The downcrossing rate is $f(x)$ because a fraction $f(x)$ of waiting time is served per unit time at level $x$.
+Adding up the rates for all possible waiting times below~$x$ gives that $\lambda\int_0^x f(y) G(x-y)\d y$ is the up-crossing rate of level~$x$.
+The downcrossing rate is $f(x)$ because a fraction $f(x)$ of waiting time is served per unit time at level~$x$.
 Equaling these rates gives the integral equation $\lambda \int_0^{x} f(y) G(x-y)\d y = f(x)$.
 For $x=0$, we need to consider the atom $\P{W=0}$.
 In that case, $\lambda \P{W=0} = f(0+)$.
@@ -212,12 +212,12 @@ Bringing $\lambda \E S \E W = \rho \E W$ to the left, and dividing by $1-\rho$ g
 \begin{align*}
   \E W  &= \lambda \frac{\E{S^2}}{2(1-\rho)}.
 \end{align*}
-It is left to compute the second moment of the service time $S$. We will derive this formula with the renewal reward equation in~\cref{sec:mg1}.
+It is left to compute the second moment of the service time~$S$. We will derive this formula with the renewal reward equation in~\cref{sec:mg1}.
 
 
 \begin{exercise} \label{ex:111} This first exercise is meant to help you to understand the notation by applying it to a simple case.
 Consider the following (silly) queueing process.
-At times $0, 2,4, \ldots$ customers arrive, each customer requires $1$ unit of service, and there is one server.
+At times $0, 2,4, \ldots$ customers arrive, each customer requires~$1$ unit of service, and there is one server.
  \begin{enumerate}
  \item  Find an expression for $A(n,t)$, when $L(0)=0$.
  \item Show that $\pi(0)=1$ and $\pi(n)=0$, for $n>0$.
@@ -276,7 +276,7 @@ Y(t,1) =
  \end{equation*}
 
 Since $Y(n,t)=0$ for all $n\geq 2$, $L(s) = 1$ or
- $L(s)=0$ for all $s$, therefore,
+ $L(s)=0$ for all~$s$, therefore,
  \begin{equation*}
  Y(0,t) = t-Y(1,t).
  \end{equation*}
@@ -297,7 +297,7 @@ and $\mu(n) = 0$ for $n\geq2$.
 \item
  $\lambda(0)p(0)=1\cdot 1/2 = 1/2$, $\lambda(n)p(n)= 0$ for $n>1$, as $\lambda(n)=0$ for $n>0$.
 Next, $\mu(1)=1$, hence $\mu(1) p(1) = 1\cdot 1/2 = 1/2$. Moreover, $\mu(n)=0$ for $n\geq 2$.
-Clearly, for all $n$ we have $\lambda(n)p(n)= \mu(n+1)p(n+1)$.
+Clearly, for all~$n$ we have $\lambda(n)p(n)= \mu(n+1)p(n+1)$.
 \end{enumerate}
 \end{solution}
 \end{exercise}
@@ -305,7 +305,7 @@ Clearly, for all $n$ we have $\lambda(n)p(n)= \mu(n+1)p(n+1)$.
 \begin{exercise}\label{ex:l-111}
  Derive $\E\L = \sum_{n=0}^\infty n p(n)$ from~\cref{eq:46}.
 \begin{solution}
-Noting that %As $L(s)$ counts the number of jobs in the system at time $s$ (thus $L(s)$ is an integer),
+Noting that %As $L(s)$ counts the number of jobs in the system at time~$s$ (thus $L(s)$ is an integer),
 $L(s) = \sum_{n=0}^\infty n\, \1{\L(s) = n}$, we see that
 %With this we can write for the time-average number of jobs in the system
 \begin{equation*}
@@ -359,7 +359,7 @@ Make a graph of the state-space and show, with arrows, the transitions that can 
 (3) edge [bend left] node[below] {$\mu$} (1)
 (2) edge [bend left] node[below] {$\mu$} (0);
 
-\draw[-, dotted, gray] (4,-2.)--(4,2.0) node[above, black] {level $1$};
+\draw[-, dotted, gray] (4,-2.)--(4,2.0) node[above, black] {level~$1$};
 \end{tikzpicture}
 
 With level-crossing:

@@ -56,28 +56,28 @@ Using fixed-sized periods has the advantage that we do not have to specify inter
 
 Let us define:
 \begin{itemize}
- \item[$a_k =$] the number of jobs that arrive \textit{in} period $k$,
+ \item[$a_k =$] the number of jobs that arrive \textit{in} period~$k$,
  \item[$c_k= $] the capacity, i.e., the maximal number of jobs that can be served, during period~$k$,
- \item[$d_k =$] the number of jobs that depart \textit{in} period $k$,
- \item[$\L_k =$] the \recall{system length}, i.e., the number of jobs in the system at the \textit{end} of period $k$.
+ \item[$d_k =$] the number of jobs that depart \textit{in} period~$k$,
+ \item[$\L_k =$] the \recall{system length}, i.e., the number of jobs in the system at the \textit{end} of period~$k$.
 \end{itemize}
-In the sequel we also call $a_k$ the \emph{size of the batch} arriving in period $k$.
+In the sequel we also call $a_k$ the \emph{size of the batch} arriving in period~$k$.
 Note that the definition of $a_k$ is a bit subtle: we may assume that the arriving jobs arrive either at the start or at the end of the period.
-In the first case, the jobs can be served in period $k$, in the latter case, they \emph{cannot} be served in period~$k$.
+In the first case, the jobs can be served in period~$k$, in the latter case, they \emph{cannot} be served in period~$k$.
 
 
-Since $\L_{k-1}$ is the system length at the \emph{end} of period $k-1$, it must also be the number of customers at the \emph{start} of period $k$.
-Assuming that jobs arriving in period $k$ cannot be served in period~$k$, the number of customers that depart in period $k$ is therefore
+Since $\L_{k-1}$ is the system length at the \emph{end} of period $k-1$, it must also be the number of customers at the \emph{start} of period~$k$.
+Assuming that jobs arriving in period~$k$ cannot be served in period~$k$, the number of customers that depart in period~$k$ is therefore
 \begin{subequations}\label{eq:31}
 \begin{equation}
 d_k = \min\{\L_{k-1}, c_k\},
 \end{equation}
-Now that we know the number of departures, the number at the end of period $k$ is given by
+Now that we know the number of departures, the number at the end of period~$k$ is given by
 \begin{equation}
  \L_k = \L_{k-1} -d_k + a_k.
 \end{equation}
 \end{subequations}
-Like this, if we are given $\L_0$ and numbers $\{a_{k}\}_{k=1}^{n}$ and $\{c_{k}\}_{k=1}^{n}$, we can obtain the numbers $\{L_{k}\}_{k=0}^{n}$ from this recursion.\sidenote{In a sense,~\cref{eq:31} is the $F = m a$ of a queueing system: Given initial conditions, we apply the rule at time $k-1$ to get the state at time $k$, and so on.}
+Like this, if we are given $\L_0$ and numbers $\{a_{k}\}_{k=1}^{n}$ and $\{c_{k}\}_{k=1}^{n}$, we can obtain the numbers $\{L_{k}\}_{k=0}^{n}$ from this recursion.\sidenote{In a sense,~\cref{eq:31} is the $F = m a$ of a queueing system: Given initial conditions, we apply the rule at time $k-1$ to get the state at time~$k$, and so on.}
 
 
 Of course we are not going to carry out the computations for $\{L_k\}$ by hand.
@@ -93,7 +93,7 @@ As a first step in the analysis, we model the arrival process of patients as a P
 The duration of a period is taken to be a week.
 The average number of arrivals per period, based on data of the company, was slightly less than~12 per week; in the simulation we set it to $\lambda= 11.8$ per week.
 
-\newthought{Next, we model} the capacity in the form of a matrix such that row $i$ corresponds to the weekly capacity of psychiatrist $i$:
+\newthought{Next, we model} the capacity in the form of a matrix such that row~$i$ corresponds to the weekly capacity of psychiatrist~$i$:
 \begin{equation*}
  \begin{pmatrix}
  1 & 1 & 1 & \ldots\\
@@ -105,7 +105,7 @@ The average number of arrivals per period, based on data of the company, was sli
 \end{equation*}
 Thus, psychiatrists 1, 2, and 3 do just one intake per week, the
 fourth does 3, and the fifth does 9 intakes per week. The sum over
-column $k$ is the total service capacity for week $k$ of all
+column~$k$ is the total service capacity for week~$k$ of all
 psychiatrists together.
 
 With such a matrix it is simple to make other capacity schemes.
@@ -134,7 +134,7 @@ C =
  \end{pmatrix}.
 \end{equation*}
 Hence, the total average capacity is $4/5 \cdot (2+2+3+4+4) = 12$ patients per week.
-There is another simple holiday scheme: when all psychiatrists take holiday in the same week--corresponds we  set  entire columns to zero, i.e., $C_{i,5}=C_{i,10}=\cdots=0$ for week $5$, $10$:
+There is another simple holiday scheme: when all psychiatrists take holiday in the same week--corresponds we  set  entire columns to zero, i.e., $C_{i,5}=C_{i,10}=\cdots=0$ for week~$5$, $10$:
 \begin{equation*}
 C =
  \begin{pmatrix}
@@ -259,7 +259,7 @@ Per time point  we plot the maximum and the minimum queue length under the polic
 
 
 \newthought{Now we consider} Suggestion 3, which comes down to doing more intakes when it is busy, and fewer when it is quiet.
-A simple rule is to let the capacity  for week $k$ depend on the queue length of the week before, for instance,
+A simple rule is to let the capacity  for week~$k$ depend on the queue length of the week before, for instance,
 \begin{equation}\label{eq:103}
   c_k =
   \begin{cases}
@@ -267,7 +267,7 @@ A simple rule is to let the capacity  for week $k$ depend on the queue length of
     12 - e, & \text{if } \L_{k-1} \leq 12.
   \end{cases}
 \end{equation}
-We can take  $e=1$ or $2$, or perhaps a larger number; the larger $e$, the larger the control we exercise. We can of course also adapt the thresholds 12 and 24.
+We can take  $e=1$ or~$2$, or perhaps a larger number; the larger~$e$, the larger the control we exercise. We can of course also adapt the thresholds 12 and 24.
 
 Let's consider three different control levels, $e=1$, $e=2$, and $e=5$; when $e=5$, each psychiatrist does one extra intake.
 The results, see~\cref{fig:intakes}, show a striking difference indeed.
@@ -316,7 +316,7 @@ However, controlling the service rate as a function of the queue length can impr
 
 \newthought{The above example} hopefully claries how we can use simulation to obtain insight into a stochastic system behaves and how to control it. We next discuss some general points that need further attention.
 
-In~\cref{eq:31} we assume that jobs that arrive in period $k$ cannot be served in period $k$. If the situation is such that jobs \emph{can} be served in the same period as they arrive, then~\cref{eq:31} should be changed to\sidenote{~\cref{ex:24}}
+In~\cref{eq:31} we assume that jobs that arrive in period~$k$ cannot be served in period~$k$. If the situation is such that jobs \emph{can} be served in the same period as they arrive, then~\cref{eq:31} should be changed to\sidenote{~\cref{ex:24}}
 \begin{equation}\label{eq:aap3}
 d_k = \min\{\L_{k-1}+a_{k}, c_k\}.
 \end{equation}
@@ -334,14 +334,14 @@ In this book we assume henceforth that jobs move to the server  in the order in 
 This is known as \recall{First-In-First-Out (FIFO)}.\sidenote{\recall{First-Come-First Serve (FCFS)} is also often used.}
 There are many other scheduling rules, such as Last-In-First-Out; we do not discuss these here.
 
-It is quite remarkable that the computation of the system length process $\{L_{k}\}$ is very simple with~\cref{eq:31}, but it is much harder to compute the sojourn time $J_{k}$ for the jobs arriving in period $k$.
+It is quite remarkable that the computation of the system length process $\{L_{k}\}$ is very simple with~\cref{eq:31}, but it is much harder to compute the sojourn time $J_{k}$ for the jobs arriving in period~$k$.
 In fact, the best we can obtain are bounds on the sojourn time $J_{k}$ such that $J_k^{-} \leq J_{k}\leq J_k^{+}$, where
  \begin{align*}
  \J_{k}^{-} &= \min\left\{m: \sum_{i=k}^{k+m} c_i > \L_{k-1}\right\}, &
  \J_{k}^{+} &= \min\left\{m: \sum_{i=k}^{k+m} c_i \geq  \L_{k-1}+a_k\right\}.
  \end{align*}
- To see how this works, suppose $\L_{k-1}=20$, $a_{k}=6$, and $c_k=2$ for all $k$.
-Any job that arrives in the $k$th period, must wait at least $20/2 = 10$ periods just to get access to the server under FIFO rule, and we can be sure that the last of these jobs is served after $(20+6)/2=13$ periods.
+ To see how this works, suppose $\L_{k-1}=20$, $a_{k}=6$, and $c_k=2$ for all~$k$.
+Any job that arrives in the~$k$th period, must wait at least $20/2 = 10$ periods just to get access to the server under FIFO rule, and we can be sure that the last of these jobs is served after $(20+6)/2=13$ periods.
 
 We note that there is a difference between \emph{waiting time}~$\W$ and sojourn time~$\J$.
 The former is the time jobs spend in queue, the latter the time in the system, which is the waiting plus the time at the server $\Ls$.
@@ -363,7 +363,7 @@ As another example, a hospital considers to buy a second MRI scanner, because th
 However, if the hospital can identify some extra capacity, it might postpone the purchasing of an additional MRI scanner for a few years.
 Suppose that a percentage of staff is willing to work from 8 pm to 11 pm, say, and that 30\% of the patients\sidenote{Perhaps some staff and patients even prefer to work/have scans in the evening.}
 is prepared to come to the hospital for a scan between 8 pm and 11 pm, then the capacity would increase with about $30\% = (3/(18-8))$.
-To see whether this idea is interesting, we can use~\cref{eq:31} to let the computer make a graph of the influence on $L$.
+To see whether this idea is interesting, we can use~\cref{eq:31} to let the computer make a graph of the influence on~$L$.
 Thus, the recursions such as \cref{eq:31} and control rules such as~\cref{eq:103} are the essential elements of any queueing model.
 Once we have the recursions,\sidenote{An intellectually challenging task sometimes.} the computer can compute the performance measures, and then we (humans) have to interpret the results.
 
@@ -371,7 +371,7 @@ Such recursion are not limited just to queueing systems. For instance, a common 
 \begin{align*}
   N_{t+1} &= N_t + B_t + I_t - D_t - E_{t}, \\
 \end{align*}
-where $N_t$ is the population size at year $t$, $B_{t}$ the number of births, $I_{t}$ the immigration, $D_{t}$ the deaths, and $E_{t}$ the emmigation.
+where $N_t$ is the population size at year~$t$, $B_{t}$ the number of births, $I_{t}$ the immigration, $D_{t}$ the deaths, and $E_{t}$ the emmigation.
 
 Yet another setting is the reflection of infra-red light by carbon-dioxide.
 The atmosphere is modeled as a sequence of layers, such that per layer the temperature, air density and chemical composition are considered constant.
@@ -407,7 +407,7 @@ generates a system in which jobs can be served in the period they arrive.
 
 \begin{exercise}\label{ex:50}
 To ensure that the server capacity is always fully used, \marginpar{Server controlled by threshold policy}
-a server  works at rate $c$ in period $k$  if $L_{k-1}\geq N$ jobs, and not otherwise.
+a server  works at rate~$c$ in period~$k$  if $L_{k-1}\geq N$ jobs, and not otherwise.
 Set up the recursions.
 \begin{solution}
 Take $c_k = c\1{\L_{k-1} >= N}$.
@@ -440,7 +440,7 @@ serves  with two queues such that jobs in the first queue get priority over jobs
  Each queue receives service capacity in proportion to the queue length.
  Derive the recursions.
 \begin{solution}
- Let $c_k^i$ be the capacity allocated to queue $i$ in period $k$. The fair rule gives that
+ Let $c_k^i$ be the capacity allocated to queue~$i$ in period~$k$. The fair rule gives that
  \begin{align*}
  c_k^1 &= \text{round} \frac{\L_{k-1}^1}{\L_{k-1}^1 + \L_{k-1}^2}, &  c_k^2 &= c_k - c_k^1, \\
  d_k^i &= \min\{\L_{k-1}^i, c^i_k\}, & \L_k^i &= \L_{k-1}^i+a_k^i - d_k^i.
@@ -455,12 +455,12 @@ serves  with two queues such that jobs in the first queue get priority over jobs
 
 \begin{exercise}
  Consider \marginpar{Queues with reserved service capacity} a single-server that serves two parallel queues.
-Queue $i$ has minimal guaranteed service capacity $r^i$ each  period, such that $c_k \geq r^1 + r^2$.
+Queue~$i$ has minimal guaranteed service capacity $r^i$ each  period, such that $c_k \geq r^1 + r^2$.
  Extra capacity beyond the reserved capacity is given to queue 1 with priority.
 (An example is a psychiatrist who reserves capacity for different  patient groups.)
  Formulate the recursions.
 \begin{solution}
-  Queue $2$ minimally needs $c_{k}^2 = \min\{\L_{k-1}^2, r^2\}$, and with this,
+  Queue~$2$ minimally needs $c_{k}^2 = \min\{\L_{k-1}^2, r^2\}$, and with this,
   \begin{align*}
  d_{k}^1 &= \min\{\L_{k-1}^1, c_k-c_{k}^2\}, & d_{k}^2 &= \min\{\L_{k-1}^2, c_k-d_{k}^1\}.
   \end{align*}
@@ -470,7 +470,7 @@ Queue $i$ has minimal guaranteed service capacity $r^i$ each  period, such that 
 
 \begin{exercise}\label{ex:l-118}
  Consider \marginpar{Queue with protected service capacity and lost capacity} a single-server that serves two parallel queues.
- Queue $i$ receives a minimal service capacity $r^i$ every period.
+ Queue~$i$ receives a minimal service capacity $r^i$ every period.
  Reserved capacity unused for one queue cannot be used to serve the other queue.
  Any extra capacity beyond the reserved capacity, i.e, $c_k - r^2$,  is given to queue 1 with priority.
  Formulate the recursions.
@@ -495,7 +495,7 @@ of the unused capacity is lost. `Use it, or lose it' often applies to service ca
 
 
 \begin{exercise}\label{ex:l-119}
- Consider\marginpar{Tandem networks} a production network with two production stations in tandem, that is, the jobs processed at station 1 move at the end of  period $k$ to station 2.
+ Consider\marginpar{Tandem networks} a production network with two production stations in tandem, that is, the jobs processed at station 1 move at the end of  period~$k$ to station 2.
  What are the recursions?
 \begin{solution}
   Let $a^1_k$ be the external arrivals at station 1, and the departures of station 1 are the arrivals at station 2: $a_k^2 = d_{k}^1$.
@@ -509,7 +509,7 @@ of the unused capacity is lost. `Use it, or lose it' often applies to service ca
 
 
 \begin{exercise}
- Consider\marginpar{Splitting streams} a paint mixing machine that produces products for two downstream packaging machines $A$ and $B$, each with its own queue.
+ Consider\marginpar{Splitting streams} a paint mixing machine that produces products for two downstream packaging machines~$A$ and~$B$, each with its own queue.
 In the simplest model, the content of the queue at the mixing machine is proportional to the demands $\lambda^A$ and $\lambda^B$ for the packaging machines.
  Provide the recursions.
 \begin{solution}
@@ -524,9 +524,9 @@ At  the mixing machine $d_k=\min\{L_k, c_k\}$. Therefore, in this very simple mo
 % Demand
 %  \marginpar{Cost models}
 % arriving at a single-server queue in a period can be served in that period.
-% At the start of  period $k$, the server capacity is set to $c_k$ at cost $\beta c_k$.
-% A job charges $h$ per period in the  system.
-% Make a  model that computes the cost for the first $T$ periods.
+% At the start of  period~$k$, the server capacity is set to $c_k$ at cost $\beta c_k$.
+% A job charges~$h$ per period in the  system.
+% Make a  model that computes the cost for the first~$T$ periods.
 % \begin{hint}
 %   Use~\cref{ex:24} for the dynamics of $\{L_k\}$.
 % \end{hint}
@@ -536,11 +536,11 @@ At  the mixing machine $d_k=\min\{L_k, c_k\}$. Therefore, in this very simple mo
 
 
 \begin{exercise}\label{ex:n-policies}
-A machine \marginpar{Cost of an $N$ policy.} can switch on and off. Suppose that the jobs that arrive in period $k$ can be served in that period.
- If the system length hits $N$ (becomes empty) in period $k$, the machine switches on (off) in period $k+1$.
- It costs $K$ to switch on the machine.
- There is also a cost $\beta$ per period when the machine is on, and it costs $h$ per period per customer in the system.
-Make a  model to compute the cost for the first $T$ periods.
+A machine \marginpar{Cost of an~$N$ policy.} can switch on and off. Suppose that the jobs that arrive in period~$k$ can be served in that period.
+ If the system length hits~$N$ (becomes empty) in period~$k$, the machine switches on (off) in period $k+1$.
+ It costs~$K$ to switch on the machine.
+ There is also a cost $\beta$ per period when the machine is on, and it costs~$h$ per period per customer in the system.
+Make a  model to compute the cost for the first~$T$ periods.
 Assume the machine is  off at $k=0$.
 \begin{hint}
   Introduce a variable $I_k\in\{0, 1\}$ to keep track of the state of the server.
@@ -550,13 +550,13 @@ Assume the machine is  off at $k=0$.
 \begin{solution}
 $I_0 = 0$,  $d_k =\min\{\L_{k-1}+a_{k}, I_k c_k\}$, from which
 $\L_k$ and $I_{k+1}$ follow, and so on. Next,
- observing that the machine  switches on in period $k$ iff
+ observing that the machine  switches on in period~$k$ iff
 $I_{k-1} = 0$ and $I_k=1$, the cost is
 \begin{equation*}
 \sum_{k=1}^T \left(\beta I_k + h \L_k + K[I_k - I_{k-1}]^+\right).
 \end{equation*}
 Interestingly, if arrivals cannot be served in the period in which they arrive, it might be that the system is never empty.
-For instance, if $a_{k}\sim\Unif{4, 10}$, then $L_{k}\geq a_{k} \geq 4$ for all $k$.
+For instance, if $a_{k}\sim\Unif{4, 10}$, then $L_{k}\geq a_{k} \geq 4$ for all~$k$.
 \end{solution}
 \end{exercise}
 
@@ -570,10 +570,10 @@ After serving
 An example: a nurse takes blood samples at two departments in a hospital. It takes time to walk from one location to another. An interesting, but hard question: what rule would minimize average waiting time?
 \begin{hint}
   Introduce an extra variable $p_k$ that specifies which queue is being served.
-  If $p_k=0$, the server is moving from one queue to the other, if $p_k=1$, the server is at queue 1, and if $p_k=2$ it is at queue $2$. Develop a table with conditions on $L_k^i$ and $p_k$ to specify $p_{k+1}$.
+  If $p_k=0$, the server is moving from one queue to the other, if $p_k=1$, the server is at queue 1, and if $p_k=2$ it is at queue~$2$. Develop a table with conditions on $L_k^i$ and $p_k$ to specify $p_{k+1}$.
 \end{hint}
 \begin{solution}
-  With $d_k^i = \min\{\L^i_{k-1}, c_k^i \1{p_k=i}\}$ we can specify the evolution of queue $i$.
+  With $d_k^i = \min\{\L^i_{k-1}, c_k^i \1{p_k=i}\}$ we can specify the evolution of queue~$i$.
   So it remains to deal with $p_{k+1}$.
   For this, we use the following `truth table'. This can be implemented in code to specify what $p_{k+1}$ has to become.
   \begin{center}

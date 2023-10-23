@@ -77,7 +77,7 @@ The first item scanned after a payment determines the start of a service, and th
 For the \emph{service objective} we prefer to keep the average number of people in the system such that $\E L \leq 5$. (Other KPIs are also possible to use.)
 
 Let us model the situation as an $M/M/1$ queue with a fast server, so that it is easy to find the smallest number of servers necessary to prevent the queue from exploding.
-Since $\E L = \rho/(1-\rho)$, and $\rho=\lambda \E S /c$, solving for $c$ in the inequality $\E L \leq 5$ gives
+Since $\E L = \rho/(1-\rho)$, and $\rho=\lambda \E S /c$, solving for~$c$ in the inequality $\E L \leq 5$ gives
 \begin{equation*}
 c \geq \frac 6 5 \lambda \E S \approx 0.03 \lambda,
 \end{equation*}
@@ -99,12 +99,12 @@ problem. For instance, suppose only 4 \emph{shift plans} are available as shown 
 \end{enumerate}
 Shift plans. A $+$ indicates a working hour and $-$ a break of an hour.}
 
-For the optimization, let $x_i$ be the number of shifts of type $i$ and~$c_i$ the cost of this type.
+For the optimization, let $x_i$ be the number of shifts of type~$i$ and~$c_i$ the cost of this type.
 Then the problem is to solve $\min \sum_i c_i x_i$,
-such that for all hours $t$ the shifts cover the load, i.e., $\sum_i x_i \1{t \in s_i} \geq 0.03 \lambda_t$.
-(We write $t\in s_i$ if hour $t$ is covered by shift type $i$.)
+such that for all hours~$t$ the shifts cover the load, i.e., $\sum_i x_i \1{t \in s_i} \geq 0.03 \lambda_t$.
+(We write $t\in s_i$ if hour~$t$ is covered by shift type~$i$.)
 
-\newthought{Finally, we need} to address the quality of our approximation: to simplify we used the $M/M/1$ queue with a fast server, while we know that in a supermarket there are often multiple parallel cashiers. Specifically, we are interested in the ratio $\E{\L(M/M/c}$ and $\E{L(M/M/1)}$ where in the $M/M/1$ queue the server works at rate $c$.
+\newthought{Finally, we need} to address the quality of our approximation: to simplify we used the $M/M/1$ queue with a fast server, while we know that in a supermarket there are often multiple parallel cashiers. Specifically, we are interested in the ratio $\E{\L(M/M/c}$ and $\E{L(M/M/1)}$ where in the $M/M/1$ queue the server works at rate~$c$.
 
 To understand this better, we consider a numerical example.
 Suppose that we have an $M/M/3$ queue with $\lambda = 5$ per day and $\mu=2$ per day per server, and we compare $\E L$ of this queue to that of an $M/M/1$ queue with the same arrival rate but with a service rate of $\mu = 3\cdot 2 = 6$.
@@ -151,7 +151,7 @@ print(plot)
 \end{marginfigure}
 
 \cref{fig:fast} shows  the ratio of $\E\L$ for both queues as a function of $\rho$.
-Clearly, when $\rho$ is small, this ratio is about $3$.
+Clearly, when $\rho$ is small, this ratio is about~$3$.
 This is reasonable, because the service time in the fast $M/M/1$ is 3 times as small as the service time in the $M/M/3$ queue.  Thus, when $\rho$ is small, the time in queue is small, hence $\E\J \approx \E S$.
 However, when $\rho$ is large, $\E\J \gg \E S$, so that in this case, the ratio between the queue lengths becomes approximately 1.
 
@@ -210,7 +210,7 @@ J
 L = labda*J
 L
 \end{pyconsole}
-Next, find $n$ such that $\sum_{j=1}^n p_j > 0.9$.
+Next, find~$n$ such that $\sum_{j=1}^n p_j > 0.9$.
 We start counting at 1, because while the system contains one job, this customer is in service, hence stands at desk of the employee.
 \begin{pyconsole}[municipality]
 n, p = 0, 1 - rho
@@ -223,7 +223,7 @@ while total <= 0.9:
 total
 n - 1
 \end{pyconsole}
-Note that the while loop breaks when $n$ is one too large.
+Note that the while loop breaks when~$n$ is one too large.
 
 The average queue is huge: hire an extra employee.
 \end{solution}
@@ -337,9 +337,9 @@ Explain how to model this system as an $M/M/1$ system.  Then compute the average
 You should remember this problem.
 It is of fundamental importance in inventory control and known as an \emph{inventory system with backlogging}; it is (implicitly) used by nearly any company that keeps inventory.
 \begin{hint}
-Let $T$ be the number of pattys waiting and $G$ the number of persons waiting.
+Let~$T$ be the number of pattys waiting and~$G$ the number of persons waiting.
 There cannot be a patty and a person waiting at the same time, hence $T\cdot G = 0$.
-Take $L$ as the number of jobs in an $M/M/1$ queue.
+Take~$L$ as the number of jobs in an $M/M/1$ queue.
 If $L=0$, then there are 3 pattys on stock, when $L=1$ there is one patty less $T=2, G=0$; when $L=2$, we have two pattys less, so $T=1, G=0$, when $L=3$, there are no pattys on stock, but also no people waiting, hence $T=0, G=0$.
 When $L=4$, we ran out of pattys and one person must be waiting, hence $T=0, G=1$.
 
@@ -347,7 +347,7 @@ With this reasoning we see a pattern:  at all moments in time, $3=T+L - G$.
 Now map this system to an $M/M/1$ queue.
 \end{hint}
 \begin{solution}
-From the hint, the rv $L$ behaves like the number of jobs in an $M/M/1$ queue. If we have $L$, then with the two properties $T G = 0$ and $3 = T +L - G$, we can retrieve (uniquely at all moments in time) the number of pattys $T$ on stock and the number of people waiting $G$. In inventory terms, $G$ represents the number of \emph{backlogged} pattys.
+From the hint, the rv~$L$ behaves like the number of jobs in an $M/M/1$ queue. If we have~$L$, then with the two properties $T G = 0$ and $3 = T +L - G$, we can retrieve (uniquely at all moments in time) the number of pattys~$T$ on stock and the number of people waiting~$G$. In inventory terms, $G$ represents the number of \emph{backlogged} pattys.
 
 With this mapping, the expected number of pattys on stock is $\E T =  \sum_{l=0}^3 (3-l)p(l)$.
 \begin{pyconsole}[taxis]
@@ -420,13 +420,13 @@ The \emph{invariant}  $3 = T + L -G$ becomes $0 = T + L -G$. This implies that $
 
 % \begin{solution}
 %  We concentrate on departure epochs of the taxis.
-%  Thus, the $k$th period is the time between the departure of taxi $k-1$ and taxi $k$, and during this period, $a_k$ batches can arrive.
+%  Thus, the~$k$th period is the time between the departure of taxi $k-1$ and taxi~$k$, and during this period, $a_k$ batches can arrive.
 %  The system starts with $a_0$ batches in queue.
 
 
-% Consider the arrival of taxi $k$. Let this taxi see $\Q_{s,k}$  riders at the head of the line. Let $b$ be the index of the first group in the queue, hence group $b-1$ stands at the head of the line. Then,
+% Consider the arrival of taxi~$k$. Let this taxi see $\Q_{s,k}$  riders at the head of the line. Let~$b$ be the index of the first group in the queue, hence group $b-1$ stands at the head of the line. Then,
 % \begin{align*}
-% d_k &= \min\{\Q_{s,k}, 4\}, &\text{riders served by taxi $k$}, \\
+% d_k &= \min\{\Q_{s,k}, 4\}, &\text{riders served by taxi~$k$}, \\
 % \Q_{s}' &= \Q_{s,k} - d_k, &\text{riders remaining behind at head of line}, \\
 % \Q_k' &= \Q_k + a_{k+1}, &\text{groups waiting just before arrival taxi $k+1$}, \\
 % h_k &= \1{\Q_s'=0}\1{\Q_k'>0} & \text{If $h_k=1$ a group can move to the head of the line}, \\

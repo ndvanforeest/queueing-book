@@ -30,25 +30,25 @@ If job service times at the second station are exponentially distributed, then t
 But then its departure process is a Poisson process in turn, and the third station receives jobs as a Poisson process.
 
 
-With this insight, it follows from~\cref{eq:el} that the expected total sojourn time in a tandem network of $M$ stations is equal to
+With this insight, it follows from~\cref{eq:el} that the expected total sojourn time in a tandem network of~$M$ stations is equal to
 \begin{equation*}
   \E{\J} = \sum_{i=1}^{M}\E{\J_i} = \sum_{i=1}^M \frac{\E{S_i}}{1-\rho_i},
 \end{equation*}
-where $\E{\J_i}$ is the sojourn time at station $i$ with $\rho_i = \lambda \E{S_i}$.
+where $\E{\J_i}$ is the sojourn time at station~$i$ with $\rho_i = \lambda \E{S_i}$.
 
 
 
 \newthought{It is not difficult} to extend the above result to general networks of $M/M/1$ queues.
 For this, we first need to model such networks more formally.
 In particular, we assume that the probability that a job moves to station~$j$ after completing its service at station~$i$ is independent of anything else, and is given by the number $P_{i j}\in[0,1]$.\sidenote{This is called Markov routing.}
-We assemble all these probabilities in a \emph{routing matrix} $P$ such that $P_{i j}$ is the element of~$P$ on the $i$th row and $j$th column.
-Define $P_{i0} = 1-\sum_{j>0}P_{ij}$ as the probability that a job leaves the network from station $i$.
-In~\cref{sec:lambda-=-gamma} we discuss some properties on $P$ such that the  network is stable.
+We assemble all these probabilities in a \emph{routing matrix} $P$ such that $P_{i j}$ is the element of~$P$ on the~$i$th row and~$j$th column.
+Define $P_{i0} = 1-\sum_{j>0}P_{ij}$ as the probability that a job leaves the network from station~$i$.
+In~\cref{sec:lambda-=-gamma} we discuss some properties on~$P$ such that the  network is stable.
 
-Consider station $i$, say, and assume that jobs arrive as a Poisson process with rate $\lambda_i$.
+Consider station~$i$, say, and assume that jobs arrive as a Poisson process with rate $\lambda_i$.
 Since service times are exponentially distributed, the departure process is also Poisson with rate $\lambda_i$.
 Then, after departure, jobs are sent with probability $P_{i j}$ to station~$j$.
-It follows from~\cref{ex:1} that jobs sent to station~$j$ from station $i$ form a thinned Poisson process with rate $\lambda_i P_{i j}$.
+It follows from~\cref{ex:1} that jobs sent to station~$j$ from station~$i$ form a thinned Poisson process with rate $\lambda_i P_{i j}$.
 
 Now take the perspective of station~$j$.
 This station receives a merged `stream' of thinned Poisson process from all other stations.
@@ -56,7 +56,7 @@ But, by~\cref{ex:l-103}, this merged process is also a Poisson process with rate
 Assuming that external jobs arrive at station~$j$ as a Poisson process with rate~$\gamma_j$, then by
 merging this process with the other Poisson stream, we obtain a Poisson process with rate $\gamma_j + \sum_{i=1}^M \lambda_i P_{i j}$.
 
-By assumption, service times at station $j$ are exponential, hence, the departure process of this station is Poisson.
+By assumption, service times at station~$j$ are exponential, hence, the departure process of this station is Poisson.
 But then the thinned process resulting from routing its departing jobs to yet other stations is again Poisson, and so on.
 
 We arrive at the intuitively clear fact that this network behaves as a set of $M/M/1$ queues. Below we will give a formal proof of this fact for two stations.
@@ -67,12 +67,12 @@ Therefore, this is an \recall{open network}.
 This differs from so-called \emph{closed networks}; in such networks jobs do not enter or leave the network.
 
 \newthought{It is evident} that, when the network is stable, all jobs that enter a station eventually must leave that station.
-This insight leads us to the \recall{traffic equations}, which state that for each station $i$ the departure rate must equal the arrival rate, i.e.,
+This insight leads us to the \recall{traffic equations}, which state that for each station~$i$ the departure rate must equal the arrival rate, i.e.,
 \begin{equation}\label{eq:101}
   \lambda_i = \gamma_i + \sum_{j=1}^M \lambda_j P_{j i}, \quad i = 1, \ldots, M.
 \end{equation}
 For the \emph{network as whole}, the total external arrival rate is given by $|\gamma|= \sum_{i=1}^M \gamma_i$.
-Hence, this is also the departure rate of the network.\sidenote{Not for an individual station $i$, because $\delta_i = \lambda_i$.} In~\cref{sec:lambda-=-gamma} we present a method to compute $\lambda$ from $\gamma$ and $P$.
+Hence, this is also the departure rate of the network.\sidenote{Not for an individual station~$i$, because $\delta_i = \lambda_i$.} In~\cref{sec:lambda-=-gamma} we present a method to compute $\lambda$ from $\gamma$ and~$P$.
 
 \newthought{Let us for} the moment assume that we can solve the traffic equations, in other words, for given $\gamma =(\gamma_1, \ldots, \gamma_M)$ and routing matrix~$P$ we can find a set of numbers $\lambda =(\lambda_1, \ldots, \lambda_M)$  that satisfies \cref{eq:101}.
 Then, we can define $\rho_i = \lambda_i \E{S_i}$ as the utilization of (the server of) station~$i$.
@@ -91,7 +91,7 @@ Dividing by $|\gamma|$ gives  $\E\J$  in terms of the \recall{visit ratios} $\la
 \begin{equation*}
  \E\J = \sum_{i=1}^M \frac{\lambda_i}{|\gamma|} \frac{\E{S_i}}{1-\rho_i}.
 \end{equation*}
-This is intuitive: the visit ratio $\lambda_i/|\gamma|$ tells how often station $i$ is visited relative to the total number of arrivals.
+This is intuitive: the visit ratio $\lambda_i/|\gamma|$ tells how often station~$i$ is visited relative to the total number of arrivals.
 Thus, $\E{\J_i} \lambda_i /|\gamma|$ is the amount of time an `average' job spends at station~$i$ before leaving the network.
 
 \newthought{Above we derived} expressions for the average waiting time in a network of $M/M/1$ queues, but it is possible to obtain a much stronger result.
@@ -100,7 +100,7 @@ In fact, the stationary probability $p(n)$ that the system contains $n=(n_1,n_2,
 p(n) =  \P{\L_1=n_1, \ldots, \L_M=n_M}  = \prod_{i=1}^M p(n_i). % = \prod_{i=1}^M (1-\rho_i)\rho_i^{n_i},
 \end{equation*}
 where $p(n_i)=(1-\rho_i)\rho_i^{n_i}$ is the stationary probability that station~$i$ contains $n_i$ jobs, compare~\cref{eq:23}.
-In other words, the stationary probability $p(n_i)$ of station $i$ is \emph{independent} of the state of the other stations. Hence, in stationarity, we can concentrate on each station individually. As a consequence, we can easily compute the excess probability $\P{\L_1> n_1}$ for each station $i$.
+In other words, the stationary probability $p(n_i)$ of station~$i$ is \emph{independent} of the state of the other stations. Hence, in stationarity, we can concentrate on each station individually. As a consequence, we can easily compute the excess probability $\P{\L_1> n_1}$ for each station~$i$.
 
 As a matter of fact, any stable open network of $M/M/c$ stations\sidenote{Note, $M/M/c$ queues, not just $M/M/1$ queues.}
 admits a \recall{product-form solution}, a result known as \recall{Jackson's theorem}.
@@ -217,7 +217,7 @@ Hence,
 We want of course that $\lambda_1 < \mu_1$ and $\lambda_2 < \mu_2$.
 With the above expressions this leads to conditions on $\alpha$, $\beta_1$ and $\beta_2$.
 Note that we have three parameters, and two equations; there is not a single condition from which the stability can be guaranteed.
-If $\alpha\uparrow 1$, the arrival rate at node $1$ explodes.
+If $\alpha\uparrow 1$, the arrival rate at node~$1$ explodes.
 If $\beta_1=0$ no jobs are sent from node 2 to node 1.
 \end{solution}
 \end{exercise}

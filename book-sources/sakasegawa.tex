@@ -24,13 +24,13 @@ where $C_a^2 = \V X/(\E X )^2$ and $C_s^2=\V S/(\E S)^2$ are the square coeffici
 When there are multiple machines, the utilization of each machine need not be equal to $\rho$.
 For instance, if there is a preference to choose the `left-most' machine whenever it is free, then the utilization of this machine is larger than $\rho$.
 Only when the machines have the same speed, and the \emph{routing} is such that each machine receives a fraction $\lambda/c$ of jobs, the machines have the same utilization.}
-is $\rho = \lambda \E S/c$, where $\lambda$ is the rate at which jobs arrive at the system, $\E S$ is the expected service time, and $c$ the number of servers. It is evident from this formula that $\rho \in[0, 1)$, hence the load and utilization are the same.
+is $\rho = \lambda \E S/c$, where $\lambda$ is the rate at which jobs arrive at the system, $\E S$ is the expected service time, and~$c$ the number of servers. It is evident from this formula that $\rho \in[0, 1)$, hence the load and utilization are the same.
 
 
 Note that Sakasegawa's formula for the $G/G/c$ queue reduces to the PK formula for $\E{\W}$ for the $M/G/1$ queue; just fill in $c=1$ and set $C_a^2=1$.
 Part of the intuition behind Sakasegawa's formula is based on the following idea.
 To generalize the formula for $\E W$ from the $M/M/1$ queue to that of the $M/G/1$ queue, we replace $(1+1)/2$ by $(1+C_{s}^{2})/2$; the result remains exact.
-Now, to go from the $M/G/1$ queue to the $G/G/1$ queue, replace $(1+C_{s}^{2})/2$ by $(C_a^2+C_s^2)/2$; this is no longer exact, but the approximation remains good for most practical purposes. For the details behind the power with $c$, we refer to Sakasegawa's paper.
+Now, to go from the $M/G/1$ queue to the $G/G/1$ queue, replace $(1+C_{s}^{2})/2$ by $(C_a^2+C_s^2)/2$; this is no longer exact, but the approximation remains good for most practical purposes. For the details behind the power with~$c$, we refer to Sakasegawa's paper.
 
 
 \newthought{It is crucial} to memorize the insights into the performance of queueing systems that this formula offers.
@@ -46,14 +46,14 @@ Thus, when $\rho$ must be made smaller, we have just three options.\sidenote{And
 We can reduce the arrival rate $\lambda$ of jobs, for instance by blocking demand, or sending it elsewhere such as to another machine.\sidenote{And if customers have a choice, they will take their own measures, simply by going elsewhere.}
 We can make $\E S$ smaller by replacing a server with a faster one or by shifting some of the processing steps of a job to other servers, thereby making job sizes smaller.
 Finally, we can add servers, which reduces $\rho$ quite significantly when~$c$ is small.\sidenote{This is precisely what you see in supermarkets.}
-If technically possible, adapting $c$ is a very effective mechanism to control waiting times.
+If technically possible, adapting~$c$ is a very effective mechanism to control waiting times.
 
 Third, $\E{\W} \sim C_a^2$ and $\E{\W} \sim C_s^2$, which implies that when job inter-arrival or service times are very variable, $\E\W$ is large.
 Thus, after ensuring that~$\rho$ is sufficiently small, it becomes important to concentrate on reducing on $C_a^2$ and $C_s^2$.\sidenote{It works the other way too: systems with low variability can deal with higher load.
 }
 
 Finally, $\E{\W} \sim \E S/c$.
-This says that, from the perspective of a job in queue, average job service times are $c$ times as short as `its own service time'.
+This says that, from the perspective of a job in queue, average job service times are~$c$ times as short as `its own service time'.
 
 
 % \newthought{Clearly, Sakasegawa's equation} requires an estimate of $C_a^2$ and $C_s^2$.
@@ -74,11 +74,11 @@ This says that, from the perspective of a job in queue, average job service time
 % We derive this results in steps.\sidenote{It is based an argument in~\cite{cox62:_renew_theor}.} If you don't like to extend your knowledge of statistics, you can skip this derivation.
 
 % First recall some results of earlier sections.
-% Let the inter-arrival time $X$ have mean $1/\lambda$ and variance $\sigma^2$, so that
+% Let the inter-arrival time~$X$ have mean $1/\lambda$ and variance $\sigma^2$, so that
 % \begin{equation*}
 % C_a^2 = \frac{\V{X_i}}{(\E{X_i})^2} = \frac{\sigma^2}{1/\lambda^2} = \lambda^2 \sigma^2.
 % \end{equation*}
-% Let $A_k$ be the arrival time of the $k$th arrival and $A(t)$ the number of arrivals up to time $t$.
+% Let $A_k$ be the arrival time of the~$k$th arrival and $A(t)$ the number of arrivals up to time~$t$.
 % Consider the following useful relation between $A(t)$ and $A_k$, see~\cref{ex:54},
 % \begin{equation*}
 % \P{A(t) < k} = \P{A_k > t}.
@@ -141,7 +141,7 @@ This says that, from the perspective of a job in queue, average job service time
 % \begin{equation*}
 % \alpha = \lambda^{3/2}\sigma.
 % \end{equation*}
-% Finally, for $t$ large, or, by the same token, $k$ large,
+% Finally, for~$t$ large, or, by the same token, $k$ large,
 % \begin{equation*}
 % \frac{\sigma_k^2}{\lambda_k} = \frac{\V{A(t)}}{\E{A(t)}} \approx \frac{\alpha^2 t}{\lambda t}
 % = \frac{\alpha^2}{\lambda} = \frac{\lambda^3\sigma^2}{\lambda} = \lambda^2 \sigma^2 = C_a^2,
@@ -174,7 +174,7 @@ Think about the inter-departure time of a machine that produces items every 10 m
 \end{exercise}
 
 \begin{exercise}\label{ex:76}
- Consider the same single-server system as in~\cref{ex:77}, but now the customer service time is stochastic: with probability $1/2$ a customer requires $1$ minute and $20$ seconds of service, and with probability $1/2$ the customer requires only $20$ seconds of service.
+ Consider the same single-server system as in~\cref{ex:77}, but now the customer service time is stochastic: with probability $1/2$ a customer requires~$1$ minute and $20$ seconds of service, and with probability $1/2$ the customer requires only $20$ seconds of service.
  What are $\rho$, $C_a^2$, and $C_s^2$?
 \begin{solution}
  Again $\E S$ is 50 seconds, so that $\rho = 5/6$. Also
@@ -193,7 +193,7 @@ Think about the inter-departure time of a machine that produces items every 10 m
 
 \begin{exercise}\label{ex:91}
 In a workplace, when a mechanic has used a specific high precision tool, the tool has to be inspected by a microscope for potential failures.
-The interarrival times of the tools at the microscope is $X\sim \Unif{3, 9}]$, and the inspection time $S$ is such that $\E S = 5$ minutes and $\V S = 4$ minutes squared.
+The interarrival times of the tools at the microscope is $X\sim \Unif{3, 9}]$, and the inspection time~$S$ is such that $\E S = 5$ minutes and $\V S = 4$ minutes squared.
 Use Sakasegawa's formula to estimate $\E{\W}$.
 Next, when tools would arrive as a Poisson process, what would be $\E\W$.
 Discuss your findings.
@@ -257,9 +257,9 @@ In the first case, tool arrivals are spaced in time at least with 3 minutes.
 
 \begin{exercise}\label{ex:49}
   A machine serves two types of jobs.
-  The processing time of jobs of type $i$, $i=1,2$, is exponentially distributed with parameter $\mu_i$.
+  The processing time of jobs of type~$i$, $i=1,2$, is exponentially distributed with parameter $\mu_i$.
   The type~$T$ of a job is random and independent of anything else, and such that $\P{T=1} = p = 1-q = 1-\P{T=2}$.
-  (An example is a desk serving adults and children, both requiring different average service times, and $p$ is the probability that the customer in service is a adult.)
+  (An example is a desk serving adults and children, both requiring different average service times, and~$p$ is the probability that the customer in service is a adult.)
   Show that the expected processing time and variance are given by
 \begin{align*}
  \E S &= p \E{S_1} + q \E{S_2} \\
@@ -268,8 +268,8 @@ In the first case, tool arrivals are spaced in time at least with 3 minutes.
 Thus, even if $\V{S_1} = \V{S_2} = 0$, still $\V S > 0$ if $\E{S_1} \neq \E{S_2}$.
     Mixing different jobs types increases variability, hence queueing times.
 \begin{hint}
- Let $S$ be the processing (or service) time at the server, and
- $S_i$ the service time of a type $i$ job. Then,
+ Let~$S$ be the processing (or service) time at the server, and
+ $S_i$ the service time of a type~$i$ job. Then,
  \begin{equation*}
  S = \1{T=1} S_1 + \1{T=2} S_2.
  \end{equation*}
@@ -279,7 +279,7 @@ With the hint,
 \begin{align*}
  \E S
 &= \E{\1{T=1} S_1} + \E{\1{T=2} S_2} \\
-&= \E{\1{T=1}} \E{S_1} + \E{\1{T=2}} \E{S_2}, \quad \text{by the independence of $T$}, \\
+&= \E{\1{T=1}} \E{S_1} + \E{\1{T=2}} \E{S_2}, \quad \text{by the independence of~$T$}, \\
 &= \P{T=1}\E{S_1} + \P{T=2} \E{S_2} \\
 &= p \E{S_1} + q \E{S_2}.
 \end{align*}

@@ -27,11 +27,11 @@ In this section we develop a simple model to understand the impact of adjustment
 With this model, we can analyze a number of trade-offs, such doing fewer, but longer adjustments, or planning adjustments instead just waiting until it becomes necessary at an unexpected moment.\sidenote{~\cref{ex:104}} With the model we can make graphs of the sojourn time as a function of adjustment rate, so that we can optimize for the adjustment rate.
 
 
-\newthought{Let us write} $F_{i}$ for the Bernouilli rv that, when equal to $1$, indicates that job $i$ requires an adjustment, and, when $0$, the adjustment is not necessary.
-We assume that $\{F_{i}\}$ is a set of iid rvs, distributed as the common rv $F$ such that $\P{F=1} = p = 1-\P{F=0}$.
-Thus, with constant probability $p$ an adjustment occurs between any two jobs.
-As a consequence, the number of jobs served between two consequtive adjustments is a geometric rv $B$ such that $\E{B} = 1/p$, and $B$ is memoryless.\sidenote{In practice, we measure the average number of jobs $\E B$ served between a number of adjustments, and take $p=1/\E B$.}
-We further assume that the adjustment times $\{R_{i}\}$ are iid rvs, distributed as the common rv $R$ with mean $\E R$ and variance $\V R$.
+\newthought{Let us write} $F_{i}$ for the Bernouilli rv that, when equal to~$1$, indicates that job~$i$ requires an adjustment, and, when~$0$, the adjustment is not necessary.
+We assume that $\{F_{i}\}$ is a set of iid rvs, distributed as the common rv~$F$ such that $\P{F=1} = p = 1-\P{F=0}$.
+Thus, with constant probability~$p$ an adjustment occurs between any two jobs.
+As a consequence, the number of jobs served between two consequtive adjustments is a geometric rv~$B$ such that $\E{B} = 1/p$, and~$B$ is memoryless.\sidenote{In practice, we measure the average number of jobs $\E B$ served between a number of adjustments, and take $p=1/\E B$.}
+We further assume that the adjustment times $\{R_{i}\}$ are iid rvs, distributed as the common rv~$R$ with mean $\E R$ and variance $\V R$.
 Finally, we assume that the net processing times $\{S_{0,i}\}$, $\{R_{i}\}$ and $\{F_{i}\}$ are independent.
 
 \newthought{To compute $\E\W$} with Sakasegawa's formula, we only have to find out how the adjustments affect the  mean $\E S$ and SCV $C_s^2$ of the effective processing time.
@@ -49,7 +49,7 @@ and its  variance is
 &= \V{S_0} + \frac{\V R}{\E B} + (\E R)^2\frac{C_B^2}{\E B},
  \end{split}
 \end{equation}
-where $C_B^2$ is the SCV of the runlength $B$.
+where $C_B^2$ is the SCV of the runlength~$B$.
 By dividing $\V S$ by $(\E S)^{2}$ we obtainx $C_{S}^{2}$.
 
 Assuming there is one server,  we can now  fill in Sakasegewa's formula!
@@ -66,11 +66,11 @@ The first few exercises demonstrate how to do apply the above, the rest are conc
 
 \begin{exercise}\label{ex:l-255}
 Jobs arrive as a Poisson process with rate $\lambda=9$ per working day.
-The machine works two $8$ hour shifts a day.
+The machine works two~$8$ hour shifts a day.
 Work not processed on a day is carried over to the next day.
 Job service times are 1.5 hours, on average, with standard deviation of $0.5$ hours.
 Outages occur on average between $30$ jobs.
-The average duration of an outage is $5$ hours and has a standard deviation of $2$ hours.
+The average duration of an outage is~$5$ hours and has a standard deviation of~$2$ hours.
 Compute $\E\J$.
 \begin{hint}
  Get the units right.  Compute the load, and then the rest.
@@ -161,7 +161,7 @@ Applying adam's and Eve's is  straightforward, but the details require attention
 % The effective processing time $S = S_{0} + R F$.
 % Use this to derive \cref{eq:88}.
 % \begin{solution}
-% Taking expectations and using the independence of $R$ and $F$ gives the result.
+% Taking expectations and using the independence of~$R$ and~$F$ gives the result.
 %  % \begin{equation*}
 %  % \E{S} = (1-p)\E{S_0} + p (\E{R} + \E{S_0}) = \E{S_0}  + p \E{R}.
 %  % \end{equation*}
@@ -174,7 +174,7 @@ Applying adam's and Eve's is  straightforward, but the details require attention
 %  \E{S^2} = \E{S_0^2} + 2 p \E{S_0} \E R + p \E{R^2}.
 %  \end{equation*}
 %  \begin{hint}
-%  Recall that $F^2= F$. Expand the square, use that $S_0$, $R$ and $F$ are independent. Finally, $\E{\1{F=1}} = p$.
+%  Recall that $F^2= F$. Expand the square, use that $S_0$, $R$ and~$F$ are independent. Finally, $\E{\1{F=1}} = p$.
 %  \end{hint}
 % \begin{solution}
 
@@ -190,7 +190,7 @@ Applying adam's and Eve's is  straightforward, but the details require attention
 % \begin{exercise}\label{ex:l-257}
 % Derive \cref{eq:89}.
 % \begin{hint}
-%  First compute $\E{S^2}$. See~\cref{ex:78}. Don't make the error to assume that,  since $R$ and $F$ are independent,  $V{R F} = \V R \V{F} = \V R p (1-p)$.
+%  First compute $\E{S^2}$. See~\cref{ex:78}. Don't make the error to assume that,  since~$R$ and~$F$ are independent,  $V{R F} = \V R \V{F} = \V R p (1-p)$.
 % \end{hint}
 % \begin{solution}
 %  \begin{equation*}
@@ -206,7 +206,7 @@ Applying adam's and Eve's is  straightforward, but the details require attention
 % &= \V{S_0} + p\V R + p (\E R)^2 C^2_B.
 %  \end{split}
 %  \end{equation*}
-%  Now replace $p$ by $1/\E B$.
+%  Now replace~$p$ by $1/\E B$.
 % \end{solution}
 % \end{exercise}
 

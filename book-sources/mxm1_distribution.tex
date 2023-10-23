@@ -44,7 +44,7 @@ However, the reasoning by which we obtained the level-crossing equations $\lambd
  shorten >=2pt}
 ]
 
-\draw[dashed, thick] node at (5,-1.5) [below] {level $n$}
+\draw[dashed, thick] node at (5,-1.5) [below] {level~$n$}
 (5,-1.5) -- (5,3);
 
 \node[circ] (n-2) {$n-2$};
@@ -63,20 +63,20 @@ However, the reasoning by which we obtained the level-crossing equations $\lambd
 ;
 \end{tikzpicture}
 
-\caption{When $L(t)=n$, the arrival of any batch crosses level $n$ from below, but when $L(t)=n-1$, only a batch larger than $1$ ensures a crossing of level $n$, and so on.} \label{fig:levelcrossing}
+\caption{When $L(t)=n$, the arrival of any batch crosses level~$n$ from below, but when $L(t)=n-1$, only a batch larger than~$1$ ensures a crossing of level~$n$, and so on.} \label{fig:levelcrossing}
 \end{figure}
 
 Let us first guess what could be the appropriate generalization of $\lambda \pi(n) = \mu \pi(n+1)$.
-The down-crossings of level~$n$ are easy: since items are served one-by-one, we still must have $\mu \pi(n+1)$, where $n$ refers to the number of items\sidenote{Not the number of batches.}
+The down-crossings of level~$n$ are easy: since items are served one-by-one, we still must have $\mu \pi(n+1)$, where~$n$ refers to the number of items\sidenote{Not the number of batches.}
 in the system.
-For the upcrossings of level~$n$ we should consider batch arrivals that see $m$ items in the system, with $m\leq n$.
-Since jobs arrive at rate $\lambda$, it follows from PASTA that the arrival rate of jobs that see $m$ upon arrival is~$\lambda \pi(m)$, in other words, the process is thinned with a fraction $\pi(m)$.
+For the upcrossings of level~$n$ we should consider batch arrivals that see~$m$ items in the system, with $m\leq n$.
+Since jobs arrive at rate $\lambda$, it follows from PASTA that the arrival rate of jobs that see~$m$ upon arrival is~$\lambda \pi(m)$, in other words, the process is thinned with a fraction $\pi(m)$.
 As a further consequence of PASTA, the arrival process $\{N(u), u\geq t\}$ is independent of $\{L(s), s< t\}$, hence this thinned process is also Poisson.
 
-When an arriving job sees $m$ in the system, and level $n$ has to be up-crossed, the batch size of this job must contain more than $n-m$ items.
+When an arriving job sees~$m$ in the system, and level~$n$ has to be up-crossed, the batch size of this job must contain more than $n-m$ items.
 The rate at which such jobs arrive must be $G(n-m)\pi(m)\lambda$ as  $G(n-m)$ is the probability that the job size is larger than $n-m$.  Noting that the batch sizes are independent of the arrival times, we obtain yet again a Poisson process, but with rate $\lambda \pi(m) G(n-m)$.
 
-Finally, to the compute rate at which level $n$ is upcrossed, we merge
+Finally, to the compute rate at which level~$n$ is upcrossed, we merge
 all these thinned Poisson processes to form a new Poisson process with rate $\lambda \sum_{m=0}^n \pi(m) G(n-m)$.
 As by level-crossing, the up-crossing and down-crossing rates must match,
 \begin{equation}\label{eq:42}
@@ -89,20 +89,20 @@ Moreover, we can use it to derive $\E\L$.\sidenote{~\cref{ex:73}}
 
 \newthought{It is left} to find the normalization constant.
 As~\cref{eq:42} does not lead to a closed form expression for $\pi(n)$, such as~\cref{eq:23}, we have to specify a criterion to stop this iterative procedure.
-We discuss three different strategies to cope with this problem. For actual computations we need to  suppose that the batch size $B$ is finite and bounded by some $N$.
+We discuss three different strategies to cope with this problem. For actual computations we need to  suppose that the batch size~$B$ is finite and bounded by some~$N$.
 
-The first method is to prevent the problem altogether by blocking demand above some level $M$.
+The first method is to prevent the problem altogether by blocking demand above some level~$M$.
 There are three common policies to decide which items in a batch to accept.
 \begin{enumerate}
-\item Complete acceptance: accept all batches that arrive when the system contains $K$ or fewer items, and reject the entire batch otherwise.\sidenote{~\cref{ex:9}}
+\item Complete acceptance: accept all batches that arrive when the system contains~$K$ or fewer items, and reject the entire batch otherwise.\sidenote{~\cref{ex:9}}
 \item Partial acceptance: accept whatever fits of a batch, and reject the rest.\sidenote{~\cref{ex:45}}
 \item Complete rejection: if a batch does not fit entirely into the system, it will be rejected completely.\sidenote{~\cref{ex:l-156}}
 \end{enumerate}
 In the exercises we will derive recursions similar to~\cref{eq:42} by which we can obtain $\{\pi(n)\}$.
-Since the recursions stop after some level $M$, there is a finite number of recusions, hence we can solve them numerically without much problems.
+Since the recursions stop after some level~$M$, there is a finite number of recusions, hence we can solve them numerically without much problems.
 
 
-A second method is to set $\pi(0)=1$ to start the iteration, then compute the first $M$ iterates until $\pi(M)\ll 1$, and take $\sum_{i=0}^M \pi(i)$ as the normalization constant.
+A second method is to set $\pi(0)=1$ to start the iteration, then compute the first~$M$ iterates until $\pi(M)\ll 1$, and take $\sum_{i=0}^M \pi(i)$ as the normalization constant.
 Note that as $B\leq N$, it must be that $G(n)=0$ for $n\geq N$. With this we can save some computer cycles by simplify~\cref{eq:42} to
 \begin{equation*}
 \mu \pi(n+1) = \lambda \sum_{m=0}^{\min\{n, N-1\}} \pi(n-m) G(m).
@@ -142,7 +142,7 @@ Whether $\epsilon = 0.001$ is  small enough is moot: the second digit is wrong w
 
 
 
-\newthought{The third method} relies on the fact that the numbers $\pi(n)$ decrease geometrically fast for $n$ sufficiently large.
+\newthought{The third method} relies on the fact that the numbers $\pi(n)$ decrease geometrically fast for~$n$ sufficiently large.
 Let us check this for the numerical example we studied above.
 \begin{marginfigure}
 \begin{pycode}[ignore]
@@ -183,7 +183,7 @@ plot = tikzplotlib.get_tikz_code(axis_height='5cm', axis_width='6cm')
 print(plot)
 \end{pycode}
 \end{marginfigure}
-In the figure at the right we plot $\log (\pi(n))$  as a function of $n$. Clearly, $\pi(n), n\geq 5$ seems to decrease as a straight line.
+In the figure at the right we plot $\log (\pi(n))$  as a function of~$n$. Clearly, $\pi(n), n\geq 5$ seems to decrease as a straight line.
 
 
 To provide some intuition for this fact, observe that  for $N<n\leq 2N-1$,
@@ -198,7 +198,7 @@ and so on.
 
 For the interested reader, we note that we can do better by substituting the form $\pi(n)= C \alpha^n$ into~\cref{eq:42} for $k>N$.
 Then $\alpha$ should be a root of the equation $\lambda \sum_{m=0}^{N-1} \alpha^m G(N-1-m) = \mu \alpha^{N}$.
-Now this is a polynomial (in $\alpha$) of degree $N$, which has $N$ roots in general.
+Now this is a polynomial (in $\alpha$) of degree~$N$, which has~$N$ roots in general.
 It is an interesting challenge to motivate why the $\alpha$ we need is the largest root.
 
 \begin{exercise}\label{ex:27}
@@ -234,7 +234,7 @@ It is an interesting challenge to motivate why the $\alpha$ we need is the large
  Derive a set of recursions for the $M^B/M/1/K$ queue with partial acceptance.
 \begin{solution}
   For the partial acceptance case, any job is accepted, but the system only admits whatever fits.
-  As level $n\in {0,1,\ldots,K-1}$ is still up-crossed by any batch of size at least $n-m$ when the system is in state $m$, the formula for the up-crossing rate is identical to the case without this acceptance policy.
+  As level $n\in {0,1,\ldots,K-1}$ is still up-crossed by any batch of size at least $n-m$ when the system is in state~$m$, the formula for the up-crossing rate is identical to the case without this acceptance policy.
   Hence, $\mu \pi(n+1) = \lambda \sum_{m=0}^n \pi(m) G(n-m)$, for $n=0,1,\ldots, K-1$.
 \end{solution}
 \end{exercise}
@@ -243,7 +243,7 @@ It is an interesting challenge to motivate why the $\alpha$ we need is the large
 \begin{exercise}\label{ex:l-156}
  Derive a set of recursions for the $M^B/M/1/K$ queue with complete rejection.
 \begin{solution}
-  Suppose a batch of size $k$ arrives when the system contains $m$ items.
+  Suppose a batch of size~$k$ arrives when the system contains~$m$ items.
   When $m+k \leq K$, the batch can be accepted since the entire batch will fit into the queue, otherwise it will be rejected.
   Further, level $n, 0\leq n < K$, can only be crossed when $m+k > n$.
   Thus, for $n=0,\ldots, K-1$,
@@ -254,7 +254,7 @@ It is an interesting challenge to motivate why the $\alpha$ we need is the large
  Let us check this for some simple cases.
  First, when $K\to \infty$, then $G(K-m)\to 0$, so we get our earlier result.
  Second, take $n=K$.
- Then $G(n-m)-G(K-m)=0$ for all $m$, so that the RHS is 0, as it should.
+ Then $G(n-m)-G(K-m)=0$ for all~$m$, so that the RHS is 0, as it should.
  Third, take $n=0$ and $K=1$, then $\mu \pi(1)= \lambda \pi(0)$.
  This also makes sense.
 \end{solution}
@@ -301,8 +301,8 @@ Define
 \begin{equation*}
  A(m,n,t) := \sum_{k=1}^{A(t)}\1{\L(A_k-) = m}\1{B_k > n-m}
 \end{equation*}
-as the number of jobs up to time $t$ that see $m$ in the system upon arrival and have batch size larger than $n-m$.
-From~\cref{fig:levelcrossing} we see that $A(n,m,t)$ counts the number of up-crossings of level $n$ up to time $t$.
+as the number of jobs up to time~$t$ that see~$m$ in the system upon arrival and have batch size larger than $n-m$.
+From~\cref{fig:levelcrossing} we see that $A(n,m,t)$ counts the number of up-crossings of level~$n$ up to time~$t$.
 
 As earlier, we are interested in the limit $A(n,m,t)/t$ as $t\to\infty$.
 If we follow the reasoning of~\cref{sec:poisson-arrivals-see}, we obtain by multiplying and dividing,
@@ -316,9 +316,9 @@ If we fill in the definitions, we get
  \frac{A(m,n,t)}{A(m,t)} =  \frac{\sum_{k=1}^{A(t)}\1{\L(A_k-) = m, B_k > n-m}}
 {\sum_{k=1}^{A(t)}\1{\L(A_k-) = m}}.
 \end{equation*}
-In words, this is the fraction of those jobs that see $m$ in the system upon arrival and have size $> n-m$.
+In words, this is the fraction of those jobs that see~$m$ in the system upon arrival and have size $> n-m$.
 But recall that we assumed that  $\{B_k\}$  are independent of what jobs see upon arrival.
-Thus, we can just as well count all jobs of size $>n-m$ along a sample path instead of those that see $m$ upon arrival; in the limit the statistics must be the same. Therefore
+Thus, we can just as well count all jobs of size $>n-m$ along a sample path instead of those that see~$m$ upon arrival; in the limit the statistics must be the same. Therefore
 \begin{equation*}
 \lim_{t\to\infty}  \frac{\sum_{k=1}^{A(t)}\1{\L(A_k-) = m, B_k > n-m}}
 {\sum_{k=1}^{A(t)}\1{\L(A_k-) = m}} = \lim_{t\to\infty}

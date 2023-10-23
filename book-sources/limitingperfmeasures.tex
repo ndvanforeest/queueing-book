@@ -32,8 +32,8 @@ The \recall{average number of jobs} in the system as seen by arrivals is given b
 \begin{equation}\label{eq:EQ}
 \E\L = \lim_{n\to\infty}\frac 1 n \sum_{k=1}^n L(A_k-),
 \end{equation}
-since $L(A_k-)$ is the number of jobs in the system just before the arrival epoch of the $k$th job.
-Like~\cref{eq:48}, for the distribution of $L$,
+since $L(A_k-)$ is the number of jobs in the system just before the arrival epoch of the~$k$th job.
+Like~\cref{eq:48}, for the distribution of~$L$,
 \begin{align}
  \P{\L \leq m} &= \lim_{n\to\infty} \frac 1n\sum_{k=1}^n \1{\L_k\leq m}.
 \end{align}
@@ -47,7 +47,7 @@ Assuming the limit exists, we use~\cref{eq:14} to define the \recall{time-averag
 \begin{equation} \label{eq:46}
  \E\L = \lim_{t\to\infty} \frac 1 t\int_0^t L(s) \d s.
 \end{equation}
- The \emph{time-average fraction of time the system contains at most $m$ jobs} is defined as
+ The \emph{time-average fraction of time the system contains at most~$m$ jobs} is defined as
 \begin{equation*}
  \P{\L\leq m} =\lim_{t\to\infty} \frac 1 t\int_0^t \1{\L(s)\leq m} \d s.
 \end{equation*}
@@ -69,7 +69,7 @@ Consider a queueing system with constant service and constant inter-arrival time
 \begin{solution}
  Take $L(0) = 0$, $X_k = 10$ and $S_k = 10-\epsilon$ for some tiny
  $\epsilon>0$. Then $L(t) = 1$ nearly all the time. In fact,
- $\lim_{t\to\infty}t^{-1}\int_0^t L(t) \d t= 1-\epsilon/10$. However, $L(A_k-)=0$ for all $k$.
+ $\lim_{t\to\infty}t^{-1}\int_0^t L(t) \d t= 1-\epsilon/10$. However, $L(A_k-)=0$ for all~$k$.
 \end{solution}
 \end{exercise}
 
@@ -80,7 +80,7 @@ Consider a queueing system with constant service and constant inter-arrival time
  \begin{equation*}
  \E{\L} = \lim_{t\to\infty} \frac 1 t \int_0^t L(s) \d s \neq \lim_{t\to\infty} \frac{\L(t)}t.
  \end{equation*}
-If $L(t)=1$ for all $t$, $\E{\L} =1 $, but $L(t)/t \to 0$.
+If $L(t)=1$ for all~$t$, $\E{\L} =1 $, but $L(t)/t \to 0$.
 \end{solution}
 \end{exercise}
 

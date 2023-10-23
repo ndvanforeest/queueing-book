@@ -31,21 +31,21 @@ In a later chapter, after developing some appropriate further mathematical conce
 
 
 We use the following notation, the meaning of which we explain below,\sidenote{Inventory theory uses  the word `level'  for many different concepts, which should not be confused.
-Below we introduce inventory level $\IL$,  order-up-to level $S$,  reorder level $s$, and service levels.}
+Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level~$s$, and service levels.}
 \begin{align*}
-  Q_t &= \text{order size that arrives at  the \emph{start} of period $i$}, \\
-  D_t &= \text{demand arriving \emph{during} period $i$}, \\
-  \IL_t &= \text{inventory level at the \emph{start} of period $i$}, \\
-\IL_t^+ &= \text{inventory on hand at the \emph{start} of period $i$}, \\
-\IL_t^- &= \text{backlogged demand at the \emph{start} of period $i$}. \\
-  \IP_t &= \text{inventory position at the \emph{start} of period $i$}, \\
+  Q_t &= \text{order size that arrives at  the \emph{start} of period~$i$}, \\
+  D_t &= \text{demand arriving \emph{during} period~$i$}, \\
+  \IL_t &= \text{inventory level at the \emph{start} of period~$i$}, \\
+\IL_t^+ &= \text{inventory on hand at the \emph{start} of period~$i$}, \\
+\IL_t^- &= \text{backlogged demand at the \emph{start} of period~$i$}. \\
+  \IP_t &= \text{inventory position at the \emph{start} of period~$i$}, \\
   L &= \text{fixed lead time}.
 \end{align*}
-Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_t'$.\sidenote{The leadtime $L$ is not the same as the average number $L$ of jobs in the system.}
+Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_t'$.\sidenote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in the system.}
 
 \newthought{The dynamics of} the inventory can be simply constructed if we are given a set of period demands $\{D_t, t=1, 2, \ldots\}$ and order sizes $\{Q_t, t=0, 1, \ldots\}$, but first we we need to address a subtle point.
-In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take $L$ to be constant over time and independent of the number of outstanding orders.
-Then, when placing an order of size $Q_{t-L}$ at the start of period $t-L$ so that it arrives at the start of period $t$,  the  \recall{inventory level} follows  the rules
+In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take~$L$ to be constant over time and independent of the number of outstanding orders.
+Then, when placing an order of size $Q_{t-L}$ at the start of period $t-L$ so that it arrives at the start of period~$t$,  the  \recall{inventory level} follows  the rules
 \begin{align}\label{eq:i5}
   \IL_t &= \IL_{t-1}'+Q_{t-L}. & \IL_t' &= \IL_{t} - D_t.
 \end{align}
@@ -60,7 +60,7 @@ Clearly, if we would use the inventory level to determine when and how much the 
   \IP_t &= \IP_{t-1}+Q_t, & \IP_t' = \IP_{t}- D_t.
 \end{align}
 Thus, the inventory position includes the outstanding orders, hence accounts for items under way to cover future demand.
-In other words, the difference between the inventory position and the inventory level is that in the former we immediately include all orders `in the books', but these orders physically arrive $L$ periods later, and only then they can be used to meet demand.
+In other words, the difference between the inventory position and the inventory level is that in the former we immediately include all orders `in the books', but these orders physically arrive~$L$ periods later, and only then they can be used to meet demand.
 
 
 Let us next study a number of rules that use the inventory position to compute order sizes; these policies differ only in the decision when to trigger an order and how much to order. Since these rules check the inventory position at the end of a period, we say that the inventory is under periodic review.
@@ -70,20 +70,20 @@ Let us next study a number of rules that use the inventory position to compute o
 \begin{equation}
   Q_t = (s+1-\IP_{t-1}')\1{\IP_{t-1}' \leq s} = s+1-\IP_{t-1}',
 \end{equation}
-where $s$ is known as the \recall{reorder level}, and $s+1$ as the \recall{order-up-to} level.
-Note that the amount ordered depends on the \emph{end-of-period} inventory position, and that the inventory control policy uses the inventory position, not the inventory level. By combining this ordering rule with \cref{eq:b9}, we see that the $P_t=s+1$ for all $t$.
+where~$s$ is known as the \recall{reorder level}, and $s+1$ as the \recall{order-up-to} level.
+Note that the amount ordered depends on the \emph{end-of-period} inventory position, and that the inventory control policy uses the inventory position, not the inventory level. By combining this ordering rule with \cref{eq:b9}, we see that the $P_t=s+1$ for all~$t$.
 
 
-A basestock policy is often used to control inventories of expensive items in which the order cost $K$ is small relative to the price of the item or can be easily included in the selling price of the item. For instance, when somebody buys a washing machine, the customer is often prepared to pay to have the washing machine delivered and installed in place. Also, customers do not buy multiple washing machines as the same time, hence, any setup or ordering costs must be covered by  each single demand.
+A basestock policy is often used to control inventories of expensive items in which the order cost~$K$ is small relative to the price of the item or can be easily included in the selling price of the item. For instance, when somebody buys a washing machine, the customer is often prepared to pay to have the washing machine delivered and installed in place. Also, customers do not buy multiple washing machines as the same time, hence, any setup or ordering costs must be covered by  each single demand.
 
 
 
 \newthought{An $(s,S)$ policy} is appropriate in situations in which the size of the deliveries can vary and the order cost is significant. The update rule is as follows.
-When the inventory position is at or below $s$, we order up to level $S$, specifically,
+When the inventory position is at or below~$s$, we order up to level~$S$, specifically,
 \begin{equation*}
   Q_t = (S-\IP_{t-1}')\1{\IP_{t-1}' \leq s}.
 \end{equation*}
-As in the basestock case, the parameter $s$ is called the \recall{reorder level}, while $S$ is the \recall{order-up-to} level.
+As in the basestock case, the parameter~$s$ is called the \recall{reorder level}, while~$S$ is the \recall{order-up-to} level.
 The basestock policy is special case when we set $S=s+1$.
 Sometimes supermarkets use $(s,S)$ policies to control the inventory of packaged meat, like bacon.
 The inventory levels are tracked real time, and there are daily deliveries.
@@ -92,7 +92,7 @@ Then the shelvers should put the newest items under the older items, so that cus
 
 
 \newthought{The $(Q,r)$ policy} is useful when the ordering cost is large, or can be easily spread over multiple items.
-The order quantity is taken as a multiple of a minimal order quantity $Q$ such that $\IP(t)$ always lies above the reorder level $r$ and below $r+Q+1$.
+The order quantity is taken as a multiple of a minimal order quantity~$Q$ such that $\IP(t)$ always lies above the reorder level~$r$ and below $r+Q+1$.
 In a formula,
 \begin{equation*}
   Q_t = Q \left\lceil \frac{r+1-\IP_{t-1}'}{Q} \right\rceil \1{\IP_{t-1}'\leq r}.
@@ -103,26 +103,26 @@ The factory packets the items in batches, and transports these batches on pallet
 At a distribution center, batches are picked from the pallets and send to supermarkets.
 Finally, at the supermarket a shelver removes the cellophane or box and places the single items on the shelf.
 Thus, to reduce ordering costs, the entire supply chain orders and transports batches of items, rather than single units.
-Moreover, as for supermarkets leadtimes are  in the order of a day, the  order size $Q$ is typically larger than the average daily demand.
+Moreover, as for supermarkets leadtimes are  in the order of a day, the  order size~$Q$ is typically larger than the average daily demand.
 
 Admittedly, it is a bit strange that the $(Q,r)$ policy is not called the $(Q,s)$ policy, but this is the names that is commonly used.
 
 
-\newthought{Finally, the $(T,S)$ policy}  specifies to order up to $S$ every $T$ periods. In a formula:
+\newthought{Finally, the $(T,S)$ policy}  specifies to order up to~$S$ every~$T$ periods. In a formula:
 \begin{equation*}
   Q_t = (S-\IP_{t-1}')\1{\text{mod}\{i, T\}=0},
 \end{equation*}
 where $\text{mod}\{i, T\}$ is the remainder of $i/T$, In settings in which it is convenient to supply stores in a fixed order, this policy makes sense.
-The route length determines the number of periods $T$ between the deliveries.
-Then, at a visit, the inventory is refilled to level $S$. An example can be highway service areas whose fuel tanks are refilled during the night.
+The route length determines the number of periods~$T$ between the deliveries.
+Then, at a visit, the inventory is refilled to level~$S$. An example can be highway service areas whose fuel tanks are refilled during the night.
 
 
 Clearly, when we have a (simulated) sequence of period demands $D_{1}, D_{2}, \ldots$ and we have an inventory control rule, we can run the above recursions to compute how the inventory level and position behave over time.
 It remains to develop a number of measures to assess how the inventory control rule performs, in particular to see how costs depend on the policy parameters.
 
 \newthought{For cost computations} we need to make a choice when to account for the period cost of inventory and backlog.
-Here we choose to charge $b$ Euro for each demand in backlog at the end of the period and $h$ per item on hand.
-If there is a cost $K$ per time we place an order, the average cost up to time $n$ becomes
+Here we choose to charge~$b$ Euro for each demand in backlog at the end of the period and~$h$ per item on hand.
+If there is a cost~$K$ per time we place an order, the average cost up to time~$n$ becomes
 \begin{align*}
 K q' + h I_t'^+ + b I_t'^-,
 \end{align*}
@@ -141,7 +141,7 @@ The \recall{ready rate} is the fraction of periods in which the end-of-period in
 \end{equation*}
 
 The \recall{fill rate} $\beta$ relates to the fraction of demand satisfied from on-hand stock.
-Observe first that at period $i$ as much as possible of the demand $D_{t}$ is satisfied.
+Observe first that at period~$i$ as much as possible of the demand $D_{t}$ is satisfied.
 It seems that this should be equal to $\min\{D_{t}, I_{t}\}$, but $I_{t}$ might be negative.
 Thus, we should take $\min\{D_{t}, \IL_{t}^{+}\}$ instead, and with this we define the fill rate as
 \begin{equation*}
@@ -168,8 +168,8 @@ Summing and dividing gives the result.
 
 
 The third measure is the \recall{cycle service level} which is defined as the fraction of cycles in which the inventory was not negative; a cycle is the time between the arrival of two consecutive replenishments.
-To capture this in a formula, note first that a cycle ends in period $t$ when $Q_{t-L}> 0$ (because then a replenishment arrives).
-Second, there is still on-hand inventory at the start of period $t$ when $I_{t-1}'\geq 0$.
+To capture this in a formula, note first that a cycle ends in period~$t$ when $Q_{t-L}> 0$ (because then a replenishment arrives).
+Second, there is still on-hand inventory at the start of period~$t$ when $I_{t-1}'\geq 0$.
 Thus, the number of cycles in which the inventory was non-negative must be $\sum_{t=L+1}^n \1{Q_{t-L}>0}\1{I_{t-1}'\geq 0}$.
 The cycle service level then follows from averaging over the total number of cycles $\sum_{t=L+1}^n \1{Q_{t-L}>0}$:
 \begin{equation}
@@ -197,7 +197,7 @@ Here is check to see whether you understand the definitions.
   \item Is there a difference inventory position and inventory level when $L=0$?
   \end{enumerate}
   \begin{solution}
-    Only $\IP'$ triggers the orders and only $\IL$ depends on the leadtime $L$. When $L=0$, the inventory position and level coincide.
+    Only $\IP'$ triggers the orders and only $\IL$ depends on the leadtime~$L$. When $L=0$, the inventory position and level coincide.
   \end{solution}
 \end{exercise}
 
@@ -239,9 +239,9 @@ The $(s,S)$ policy must be ablle to achieve the lowest average cost, because it 
 \begin{exercise}
 Above we assumed that demand in excess of the  stock level is backlogged.
 Modify the recursions of the basestock model such that it can cope with lost demand.
-For instance, if right after the start of period $i$, the inventory level $\IL_{t}= 5$, and $D_t=9$, then 4 items are lost, and $5$ are accepted.
+For instance, if right after the start of period~$i$, the inventory level $\IL_{t}= 5$, and $D_t=9$, then 4 items are lost, and~$5$ are accepted.
 \begin{solution}
-Since at the start of period $t$, the inventory present to serve is $I_{t}$, the rules for a loss system become
+Since at the start of period~$t$, the inventory present to serve is $I_{t}$, the rules for a loss system become
 \begin{align*}
 L_t &= (\IL_t-D_t)^- = \IL_t'^- & \text{lost demand}\\
 A_t &= \IL_{t} - L_t & \text{accepted demand}\\

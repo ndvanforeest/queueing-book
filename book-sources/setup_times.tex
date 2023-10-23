@@ -32,8 +32,8 @@ Finally, setup times are iid and have mean $\E R$ and variance $\V R$, and are a
 
 A job's sojourn time in the \emph{entire} system is built up as follows.
 First, we assemble jobs into batches of the same color.
-For simplicity, we take $B$ constant and the same for both colors.\sidenote{In general, $B$ should depend on the arrival rate of the job type when the arrival rates vary considerably between the famlilies.}
-Once $B$ jobs of one color arrived, the batch is complete, and the \emph{batch enters} a queue; thus we consider a queue with batches, not single jobs.
+For simplicity, we take~$B$ constant and the same for both colors.\sidenote{In general, $B$ should depend on the arrival rate of the job type when the arrival rates vary considerably between the famlilies.}
+Once~$B$ jobs of one color arrived, the batch is complete, and the \emph{batch enters} a queue; thus we consider a queue with batches, not single jobs.
 After some time the batch reaches the head of the queue, and its service starts as soon as the machine becomes free.
 To serve a batch, the machine first performs a setup, and then processes each job individually until the batch is finished.
 Once a job's service is completed, it leaves the server.
@@ -41,7 +41,7 @@ Once a job's service is completed, it leaves the server.
 It remains to make a quantitative model of this queueing system.
 
 
-\newthought{When a job} of color $i$ arrives, the expected time for its batch to be formed is given by\sidenote{~\cref{ex:48}}
+\newthought{When a job} of color~$i$ arrives, the expected time for its batch to be formed is given by\sidenote{~\cref{ex:48}}
 \begin{equation}\label{eq:79}
 \frac{B-1}{2\lambda_i}, \quad i\in \{r, b\}.
 \end{equation}
@@ -57,8 +57,8 @@ The expected service time of a batch is
 \end{equation}
 With the batch arrival rate and expected batch service time, the load becomes  $\rho = \lambda_B \E{S_B}$
 
-It is essential that $B$ is sufficiently large to ensure that $\rho<1$.
-With~\cref{eq:90} this leads to the condition that $B$ must be larger than some minimal batch size, i.e.,
+It is essential that~$B$ is sufficiently large to ensure that $\rho<1$.
+With~\cref{eq:90} this leads to the condition that~$B$ must be larger than some minimal batch size, i.e.,
 \begin{equation*}
 B> B_m = \frac{\lambda \E R}{1-\lambda \E{S_0}}.
 \end{equation*}
@@ -76,7 +76,7 @@ Observe that we now have all components for Sakasegawa's formula.
 
 
 It can useful to convert the effects of the setup time into an \recall{effective processing time} of individual jobs.
-By dividing by $B$ we see
+By dividing by~$B$ we see
 \begin{align}\label{eq:60}
   \E{S} &= \frac{\E{S_B}}{B} =  \E{S_0} + \frac{\E{R}} B , &  \V{S} &=  \V{S_0} + \frac{\V R}{B}.
 \end{align}
@@ -95,7 +95,7 @@ Our model is complete!
 
 
 \newthought{We can obtain a number} of important insights from the above model.
-Using the code from~\cref{ex:103} we plot the sojourn time $\E{J_r}$ of a red job for various values of $B$ in the figure at the right.
+Using the code from~\cref{ex:103} we plot the sojourn time $\E{J_r}$ of a red job for various values of~$B$ in the figure at the right.
 
 
 \begin{marginfigure}
@@ -153,20 +153,20 @@ print(tikzplotlib.get_tikz_code(axis_height="5cm", axis_width="6cm"))
 \end{pycode}
 \end{marginfigure}
 
-First, as $B$ increases, we see a sharp decline of $\E{J_r}$.
-The reason for this is that the load~$\rho$ decreases as a function of $B$.
+First, as~$B$ increases, we see a sharp decline of $\E{J_r}$.
+The reason for this is that the load~$\rho$ decreases as a function of~$B$.
 Since $\E\W \sim (1-\rho)^{-1}$, it is essential to stay away from critically loading the server.
 
 
-When $B$ becomes quite large, we see that the sojourn time  increases linearly.
-This follows right away from \cref{eq:79} and \cref{eq:85}, because the time to (dis)assemble batches is  linear in $B$.
+When~$B$ becomes quite large, we see that the sojourn time  increases linearly.
+This follows right away from \cref{eq:79} and \cref{eq:85}, because the time to (dis)assemble batches is  linear in~$B$.
 
 Finally, observe that the graph is not symmetric around the minimum.
-It is much worse to take $B$ too small than too large.
+It is much worse to take~$B$ too small than too large.
 More generally, when designing systems, we can use such graphs to understand how sensitive the system is to variation and measurement errors.
 
 
-For the purpose of making this simple, but useful, figure, we took $B$ and (the distribution of) $S_{0}$ the same for the red and blue jobs.
+For the purpose of making this simple, but useful, figure, we took~$B$ and (the distribution of) $S_{0}$ the same for the red and blue jobs.
 Allowing for different batch sizes and net processing times per color is very simple indeed: just label the relevant symbols with and carry out the algebra.
 
 
@@ -175,7 +175,7 @@ Allowing for different batch sizes and net processing times per color is very si
  Jobs\marginpar{Before dealing with technical derivations, let us first see how to apply the model.}
 arrive at $\lambda=3$ per hour at a machine with $C_a^2=1$; service times are exponential with an average of 15 minutes.
 Assume $\lambda_r = 0.5$ per hour, hence $\lambda_b = 2.5$ per hour.
-Between any two batches, the machine requires a cleanup of 2 hours, with a standard deviation of $1$ hour.
+Between any two batches, the machine requires a cleanup of 2 hours, with a standard deviation of~$1$ hour.
 First find  the smallest batch size that can be allowed, then compute the average time a red job spends in the system in case $B=30$ jobs.
 \begin{solution}
 First check the load.
@@ -259,7 +259,7 @@ An arbitrary job has to wait half the time it takes  to form a batch.
 \begin{exercise}\label{ex:490}
 Explain that the SCV of the batch inter-arrival times is given by~\cref{eq:82}.
 \begin{solution}
-The variance of the inter-arrival time of batches is $B$ times the variance of job inter-arrival times. The inter-arrival times of batches is also $B$ times the inter-arrival times of jobs. Thus,
+The variance of the inter-arrival time of batches is~$B$ times the variance of job inter-arrival times. The inter-arrival times of batches is also~$B$ times the inter-arrival times of jobs. Thus,
 \begin{equation*}
  C_{a,B}^2 = \frac{B \V{X}}{(B \E X)^2} = \frac{\V X}{(\E X)^2} \frac 1 B = \frac{C_a^2}{B}.
 \end{equation*}
@@ -273,7 +273,7 @@ Show that $C_{s,B}^2$ takes the form as in~\cref{eq:82}.
 %  What is the variance of a batch service time?
 % \end{hint}
 \begin{solution}
- The variance of a batch is $\V{R+\sum_{i=1}^B S_{0,i} } = \V R + B\V{S_0}$, since the normal service times $S_{0,i}, i=1,\ldots,B$, of the jobs are independent, and also independent of the setup time $R$ of the batch.
+ The variance of a batch is $\V{R+\sum_{i=1}^B S_{0,i} } = \V R + B\V{S_0}$, since the normal service times $S_{0,i}, i=1,\ldots,B$, of the jobs are independent, and also independent of the setup time~$R$ of the batch.
 \end{solution}
 \end{exercise}
 

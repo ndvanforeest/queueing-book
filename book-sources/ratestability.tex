@@ -18,7 +18,7 @@
 In this section, we develop a number of measures to characterize the performance of queueing systems in steady-state.
 In particular, we define the load, which is, arguably, the most important performance measure of a queueing system to check.
 
-We first develop the concepts for a queueing process with batch and service sizes of $1$, i.e. $B=C=1$ in Kendall's formula. At the end we present the general formula.
+We first develop the concepts for a queueing process with batch and service sizes of~$1$, i.e. $B=C=1$ in Kendall's formula. At the end we present the general formula.
 
 
 \newthought{We first formalize} the arrival rate and departure rate in terms of the arrival and departure processes $\{A(t)\}$ and $\{D(t)\}$, c.f., \cref{sec:constr-gg1-queu}.
@@ -41,7 +41,7 @@ We prove below that our assumptions imply that the average inter-arrival time $\
  \E X = \lim_{n\to\infty} \frac{1}n\sum_{k=1}^n X_k = \lim_{n\to\infty} \frac{A_{n}}{n} = \lim_{t\to\infty} \frac t{A(t)} = \frac 1 \lambda.
 \end{equation}
 
-For the service rate of a \emph{single} server, take $S_k$ as the required service time of the $k$th job served by the server, so that $U_n = \sum_{k=1}^n S_k$ is the total service time of the first $n$ jobs.
+For the service rate of a \emph{single} server, take $S_k$ as the required service time of the~$k$th job served by the server, so that $U_n = \sum_{k=1}^n S_k$ is the total service time of the first~$n$ jobs.
 Similar to the definition of $A(t)$, we let $ U(t) = \max\{n: U_n \leq t\}$ and define the \recall{service}, or \recall{processing}, rate of a single server as
 \begin{equation*}
  \mu := \lim_{t\to\infty} \frac{U(t)}t, \quad 0 < \mu < \infty,
@@ -96,7 +96,7 @@ Note that the load can exceed 1, while the utilization is~$< 1$.
 
 
 \newthought{When the station} contains multiple identical servers, or arrivals occur in batches and/or are served in batches, the work per job arrival is $\E S \E B$.
-Similarly, when a server serves $\E C$ jobs per service time, its service rate is $\E C/\E S$. Finally, when the station contains $c$ servers, the station's capacity is $c$ times are large as that of a single server. Thus, in the most general case,
+Similarly, when a server serves $\E C$ jobs per service time, its service rate is $\E C/\E S$. Finally, when the station contains~$c$ servers, the station's capacity is~$c$ times are large as that of a single server. Thus, in the most general case,
 \begin{equation*}
 \rho := \frac{\lambda \E S}c \frac{\E B}{\E C}.
 \end{equation*}
@@ -110,8 +110,8 @@ The utilization has to change accordingly.
 This equality is not entirely evident because the first limit runs of over all real numbers, while the second runs over the natural numbers.
 
 To show the equality, observe first that the counting funciton $A(t) \to \infty$ as $t\to\infty$ by our assumptions $0<\lambda<\infty$ and the existence of the limit of $A(t)/t\to\lambda$ as $t\to\infty$.
-Observe next that $A_{A(t)}$ is the arrival time of the last job \emph{before} time $t$, hence $A_{A(t)} \leq t$.
-This, in turn, implies that $A_{A(t)+1}$ is the arrival time of the first job \emph{after} time $t$.
+Observe next that $A_{A(t)}$ is the arrival time of the last job \emph{before} time~$t$, hence $A_{A(t)} \leq t$.
+This, in turn, implies that $A_{A(t)+1}$ is the arrival time of the first job \emph{after} time~$t$.
 Therefore, $A_{A(t)} \leq t < A_{A(t)+1}$, which is equivalent to
 \begin{equation*}
  \frac{A_{A(t)}} {A(t)} \leq \frac{t}{A(t)} <\frac{A_{A(t)+1}}{A(t)} = \frac{A_{A(t)+1}}{A(t)+1}\frac{A(t)+1}{A(t)}.
@@ -161,10 +161,10 @@ Realize further that because inter-arrivals times are memoryless for the $M/G/1$
 
 
 % \begin{exercise}\label{ex:98}
-% If the system starts empty, then we know that the number $L(t)$ in the system at time $t$ is equal to $A(t) - D(t)$.
+% If the system starts empty, then we know that the number $L(t)$ in the system at time~$t$ is equal to $A(t) - D(t)$.
 % Show that the system is rate-stable  if $L(t)$ remains finite, or, more generally, $\lim_{t\to\infty}L(t)/t = 0$.
 % \begin{solution}
-% Since $L(t) = L(0) + A(t) - D(t)$, and $\lim_{t\to\infty}L(0)/t = 0$ because $L(0)$ is a constant, and $\lim_{t\to\infty} L(t)/t \leq \lim_{t\to\infty} L/t = 0$ when $L(t)$ is bounded by the number $L$,
+% Since $L(t) = L(0) + A(t) - D(t)$, and $\lim_{t\to\infty}L(0)/t = 0$ because $L(0)$ is a constant, and $\lim_{t\to\infty} L(t)/t \leq \lim_{t\to\infty} L/t = 0$ when $L(t)$ is bounded by the number~$L$,
 % \begin{equation*}
 %  \lambda = \lim_{t \to \infty} \frac{A(t)}t = \lim_{t \to \infty} \frac{D(t)+L(t)}t = \lim_{t \to \infty} \frac{D(t)}t + \lim_{t \to \infty} \frac{\L(t)}t
 %  = \delta.

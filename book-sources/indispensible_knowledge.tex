@@ -28,8 +28,8 @@ We recall them here, and use them over and over in the rest of the book, mostly 
 %  \begin{align}
 %  \1{A} &=
 %  \begin{cases}
-%  1, & \text{if $A$ is true}, \\
-%  0, & \text{if $A$ is false},
+%  1, & \text{if~$A$ is true}, \\
+%  0, & \text{if~$A$ is false},
 %  \end{cases}
 %  \end{align}
 % With this, define
@@ -43,9 +43,9 @@ The left and right limit of a function $f: \R\to \R$ are defined as
  f(x+) &= \lim_{y\downarrow x} f(y).\label{eq:5}
 \end{align}
 
-% We write $f(h)=o(h)$ for a function $f$ to say that $f$ is such that $f(h)/h \to 0$ as $h\to 0$.
+% We write $f(h)=o(h)$ for a function~$f$ to say that~$f$ is such that $f(h)/h \to 0$ as $h\to 0$.
 % If we write $f(h) = o(h)$ it is implicit that $|h| \ll 1$.
-% We call this \recall{small $o$ notation}.
+% We call this \recall{small~$o$ notation}.
 
 
 You should know that:
@@ -57,7 +57,7 @@ e^x &= \lim_{n\to\infty} (1+x/n)^n = \sum_{k=0}^{\infty} \frac{x^k}{k!}, \label{
 \end{align}
 \end{subequations}
 
-For a non-negative integer-valued random variable $X$ with \recall{probability mass function} $f(k)= \P{X = k}$,
+For a non-negative integer-valued random variable~$X$ with \recall{probability mass function} $f(k)= \P{X = k}$,
 \recall{(cumulative) distribution function} $F(k)=\P{X\leq k}$ and \recall{survivor function} $G(k) = \P{X>k}$ we have
 \begin{subequations}\label{eq:105}
 \begin{align}
@@ -71,10 +71,10 @@ X&=\sum_{n=0}^\infty X\1{X=n} = \sum_{n=0}^\infty n \1{X=n}, \label{eq:77} \\
 Eq.~\cref{eq:66} is known as the \recall{LOTUS (law of the unconscious statistician)}.
 
 
-Let $X$ be a continuous non-negative random variable with pdf $f$.
+Let~$X$ be a continuous non-negative random variable with pdf~$f$.
 We write $ \E{X} = \int_0^\infty x f(x) \d x$ for the expectation of~$X$. By LOTUS, $\E{g(X)} = \int_0^\infty g(x) f(x) \d x$.
 
-Sometimes we write $\int \d F(x)$ rather than $\int f(x) \d x$. The reason behind this notation has to do with jumps in the cdf $F$. As an example, suppose the rv $X$ is such that $\P{X\leq x} = 0$ for $x<0$, $\P{X=0} = 1/2$, and $\P{X\leq x} = (2-e^{-\lambda x})/2$ for $x>0$. Then $X$ does not have a pdf $f$ everywhere, in particular, $F$ makes a jump of size $1/2$ at $0$. For such mixed rvs, we write $\d F(x)$ to include the jumps and the continuous part in an integral. To see how this works, consider some general continuous function $g$. Then, for the $X$ above,
+Sometimes we write $\int \d F(x)$ rather than $\int f(x) \d x$. The reason behind this notation has to do with jumps in the cdf~$F$. As an example, suppose the rv~$X$ is such that $\P{X\leq x} = 0$ for $x<0$, $\P{X=0} = 1/2$, and $\P{X\leq x} = (2-e^{-\lambda x})/2$ for $x>0$. Then~$X$ does not have a pdf~$f$ everywhere, in particular, $F$ makes a jump of size $1/2$ at~$0$. For such mixed rvs, we write $\d F(x)$ to include the jumps and the continuous part in an integral. To see how this works, consider some general continuous function~$g$. Then, for the~$X$ above,
 \begin{align*}
 \E{g(X)} &= \int_{-\infty}^{0-} g(x) f(x) \d x + g(0)/2 + \int_{0+}^{\infty} g(x) f(x) \d x \\
  &= g(0)/2 + 1/2 \int_{0+}^{\infty} g(x) \lambda e^{-\lambda x} \d x,
@@ -84,10 +84,10 @@ since $f(x) = 0$ for $x<0$ and $f(x) = \lambda e^{-\lambda x}/2$ for $x>0$, but 
 
 You should be able to use indicator functions and integration by parts to show that $\E{X^2} = 2\int_0^\infty y G(y) \d y$, where $G(x) = 1- F(x)$, provided the second moment exists.
 
-For general random variables $X$ and $Y$:
+For general random variables~$X$ and~$Y$:
 \begin{align}
   \E{X+Y} &= \E X + \E Y, \label{eq:95}\\
-\intertext{and, if $X$ and $Y$ are independent so that $\E{XY} = \E X \E Y$,}
+\intertext{and, if~$X$ and~$Y$ are independent so that $\E{XY} = \E X \E Y$,}
   \V{X+Y} &= \V X + \V Y. \label{eq:94}
 \end{align}
 
@@ -101,10 +101,10 @@ The \recall{moment-generating function} $M_X(s)$ of a random variable~$X$ is def
 \begin{subequations}
 \begin{align}
  M_X(s) &= \E{e^{s X}}. \label{eq:75}\\
-\intertext{$M_X(s)$  uniquely characterizes the distribution of $X$. From this definition it follows that:}
+\intertext{$M_X(s)$  uniquely characterizes the distribution of~$X$. From this definition it follows that:}
  \E{X} &= M_{X}'(0) = \left.\frac{\d M_{X}(s)}{d s}\right|_{s=0},\label{eq:69}\\
 \E{X^2} &= M_{X}''(0), \label{eq:64}\\
-\intertext{and, if $X$ and $Y$ are independent,}
+\intertext{and, if~$X$ and~$Y$ are independent,}
 M_{X+Y}(s) &= M_X(s)\cdot M_Y(s). \label{eq:73}
 \end{align}
 \end{subequations}
@@ -114,15 +114,15 @@ M_{X+Y}(s) &= M_X(s)\cdot M_Y(s). \label{eq:73}
 \begin{subequations}\label{eq:70}
 \begin{align}
 \P{A\given B} & = \frac{\P{AB}}{\P{B}}, \quad\text{if}\, \P{B}>0, \\
-\intertext{and, if $A=\bigcup_{i=1}^n B_i$ with $\P{B_i>0}$ for all $i$,}
+\intertext{and, if $A=\bigcup_{i=1}^n B_i$ with $\P{B_i>0}$ for all~$i$,}
  \P{A} &= \sum_{i=1}^n \P{A B_i} = \sum_{i=1}^n \P{A\given B_i} \P{B_i}.
 \end{align}
 \end{subequations}
 
-\newthought{We say that} a set $\{X_k\}$ of iid rvs are \recall{distributed as the common rv} $X$ when all $X_k$ have the same cdf as $X$.
+\newthought{We say that} a set $\{X_k\}$ of iid rvs are \recall{distributed as the common rv} $X$ when all $X_k$ have the same cdf as~$X$.
 
 \begin{exercise}\label{ex:12}
-Show that $|h|^{\alpha} = o(h)$ for all $\alpha > 1$. Conclude in particular that $a h^{2} = o(h)$ for any constant $a$.
+Show that $|h|^{\alpha} = o(h)$ for all $\alpha > 1$. Conclude in particular that $a h^{2} = o(h)$ for any constant~$a$.
 \begin{solution}
 Take $f(x) = h^{\alpha}$. Then,
 \begin{align*}
@@ -137,7 +137,7 @@ Take $f(x) = h^{\alpha}$. Then,
 
 
 \begin{exercise}\label{ex:l-104}
- Let $c$ be a constant (in $\R$) and the functions $f$ and $g$ both of $o(h)$. Then show that (1) $f(h) \to 0$ when $h\to 0$, (2) $c\cdot f = o(h)$, (3) $f+g=o(h)$, and (4) $f\cdot g=o(h)$.
+ Let~$c$ be a constant (in $\R$) and the functions~$f$ and~$g$ both of $o(h)$. Then show that (1) $f(h) \to 0$ when $h\to 0$, (2) $c\cdot f = o(h)$, (3) $f+g=o(h)$, and (4) $f\cdot g=o(h)$.
 \begin{solution}
  In fact (1) is trivial: $|f(h)| \leq |f(h)/h|$ when $|h| < 1$.
  But it is given that the RHS goes to zero.
@@ -165,12 +165,12 @@ For (4), use the Algebraic Limit Theorem and multiply with $h/h$,
 \begin{exercise}
  Why is~\cref{eq:77} true?
 \begin{solution}
-To see~\cref{eq:77}, note first that $X\1{X=n} = n\1{X=n}$ because $X=n$ when $\1{X=n} =1$, and second that $\sum_{n=0}^\infty \1{X=n} =1$, since $X$ takes one of the values in $\N$, and events $\{X=n\}$ and $\{X=m\}$ are non-overlapping when $n\neq m$.
+To see~\cref{eq:77}, note first that $X\1{X=n} = n\1{X=n}$ because $X=n$ when $\1{X=n} =1$, and second that $\sum_{n=0}^\infty \1{X=n} =1$, since~$X$ takes one of the values in $\N$, and events $\{X=n\}$ and $\{X=m\}$ are non-overlapping when $n\neq m$.
 \end{solution}
 \end{exercise}
 
 \begin{exercise}\label{ex:l-105}
-Show that $G(k) = \sum_{m=0}^\infty \1{m>k} f(m)$ for discrete $X$.
+Show that $G(k) = \sum_{m=0}^\infty \1{m>k} f(m)$ for discrete~$X$.
 \begin{solution}
  This is just rewriting the definition:
 \begin{equation*}
@@ -180,7 +180,7 @@ G(k) = \P{X>k} = \sum_{m=k+1}^\infty \P{X=m} = \sum_{m=k+1}^\infty f(m)=\sum_{m=
 \end{exercise}
 
 \begin{exercise}\label{ex:6}
- For a nonnegative discrete random variable $X$, use indicator functions to prove that $\E X = \sum_{k=0}^\infty G(k)$.
+ For a nonnegative discrete random variable~$X$, use indicator functions to prove that $\E X = \sum_{k=0}^\infty G(k)$.
 \begin{hint}
 Write
 $\sum_{k=0}^\infty G(k) = \sum_{k=0}^\infty \sum_{m=k+1}^\infty \P{X=m}$, reverse the summations. Then realize that $\sum_{k=0}^\infty \1{k<m} = m$.
@@ -202,7 +202,7 @@ For further detail, see \citet{capinski03:_probab_probl}.
 \end{exercise}
 
 \begin{exercise}\label{ex:66}
-For discrete $X$,  use indicator functions to prove that
+For discrete~$X$,  use indicator functions to prove that
 $\sum_{i=0}^\infty i G(i) = \E{X^2}/2 - \E{X}/2$.
 \begin{hint}
 $\sum_{i=0}^\infty i G(i) = \sum_{n=0}^\infty \P{X=n} \sum_{i=0}^\infty i \1{n\geq i+1}$,
@@ -220,7 +220,7 @@ and reverse the summations.
 \end{exercise}
 
 \begin{exercise}\label{ex:l-107}
-For  general non-negative $X$,  use indicator functions to prove that
+For  general non-negative~$X$,  use indicator functions to prove that
 $ \E X = \int_0^\infty x \d F(x) = \int_0^\infty G(y) \d y,$
 where $G(x) = 1 - F(x)$.
 \begin{hint}
@@ -253,7 +253,7 @@ $\int_0^\infty y G(y) \d y = \int_0^\infty y \int_0^\infty \1{y\leq x}f(x)\, \d 
 \end{exercise}
 
 \begin{exercise}\label{ex:l-108}
- Show that $\E{X^2}/2 = \int_0^\infty y G(y) \d y$ for a continuous non-negative random variable $X$ with survivor function $G$.
+ Show that $\E{X^2}/2 = \int_0^\infty y G(y) \d y$ for a continuous non-negative random variable~$X$ with survivor function~$G$.
  \begin{solution}
  \begin{hint}
  Use integration by parts.

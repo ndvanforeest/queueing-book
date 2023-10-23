@@ -20,20 +20,20 @@ In particular, we show how the exponential and gamma distribution relate to the 
 
 \newthought{The timescales} that are relevant for queueing systems range roughly from minutes to a week\sidenote{With exceptions, naturally.}.
 On such timescales it seems is reasonable to model inter-arrival times of jobs as memoryless.
-For instance, if $X$ is the interarrival time between two patients with a broken arm at the emergency room of a hospital, what can we say about the time the next patient with a broken arm arrives if somebody tells us that an hour earlier a similar patient arrived?
+For instance, if~$X$ is the interarrival time between two patients with a broken arm at the emergency room of a hospital, what can we say about the time the next patient with a broken arm arrives if somebody tells us that an hour earlier a similar patient arrived?
 Not much, as most of us will agree.
 Similarly, suppose that the average time between the sales of some shirt in a clothes shop is 5 minutes, and the shop owner informs us that no shirt has been sold the past 7 minutes.
 Does that knowledge imply that the next shirt must be sold within the next minute?
 Surely not.
 
-In more formal terms we claim that the probability that the next arrival will not occur within $t$ time units from now does not depend on somebody telling us that there wasn't an arrival in the past $s$ time units.
-In other words, if the person does not tell us anything, we write the the probability that no arrival occurs before $t$ as $\P{X>t}$.
-However, if the person tells us at time $s$ there was no arrival during $[0,s]$, we write that the probability that there will not be an arrival for an additional amount time $t$ as $\P{X>s+t|X>s}$.
+In more formal terms we claim that the probability that the next arrival will not occur within~$t$ time units from now does not depend on somebody telling us that there wasn't an arrival in the past~$s$ time units.
+In other words, if the person does not tell us anything, we write the the probability that no arrival occurs before~$t$ as $\P{X>t}$.
+However, if the person tells us at time~$s$ there was no arrival during $[0,s]$, we write that the probability that there will not be an arrival for an additional amount time~$t$ as $\P{X>s+t|X>s}$.
 And if we believe that this information is immaterial to our probabilistic model, then we must have that
 \begin{equation}\label{eq:29}
  \P{X > s+t \given X>s} = \P{X>t}.
 \end{equation}
-A rv $X$ whose cdf satisfies this property is said to be \recall{memoryless}.
+A rv~$X$ whose cdf satisfies this property is said to be \recall{memoryless}.
 
 It is simple to see that when $X\sim \Exp{\lambda}$, i.e.,  $X$ is exponentially distributed, it is memoryless. If fact, as
 \begin{equation*}
@@ -41,7 +41,7 @@ It is simple to see that when $X\sim \Exp{\lambda}$, i.e.,  $X$ is exponentially
 \end{equation*}
 $\P{X>t} = e^{-\lambda t}$. Now fill this in~\cref{eq:29}, use the standard formula for conditional probability, and note that $e^{-\lambda t + s}/e^{-\lambda s} = e^{-\lambda t}$.
 Notably, the reverse is also true: when a continuous memoryless rv is memoryless it is necessarily exponential\sidenote{For a proof, see \citet[Appendix 3]{yushkevich69:_markov_proces}}.
-As a counter example, the life span of human beings is not memoryless: take $X$ as the life span of an arbitrary person born in 1880, and $s= 100$ and $t = 99$ years.
+As a counter example, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s= 100$ and $t = 99$ years.
 Then $\P{X>99}æ$ was small, but not zero, but $\P{X>199 \given X>100} = 0$.
 
 Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cref{ex:11}}
@@ -75,7 +75,7 @@ f_{A_k}(t) = \int_{0}^{t}f_{A_{k-1}}(s) f_X(t-s)\d s = \lambda \frac{(\lambda t)
 \begin{equation}\label{eq:e-35}
 \P{N(t) = k} = \P{A_k \leq t} - \P{A_{k+1} \leq t},
 \end{equation}
-that is, to have precisely $k$ arrivals during $[0, t]$, the arrival time $A_{k}$ of job $k$ must lie in $[0, t]$, but job $k+1$ must not have yet arrived.
+that is, to have precisely~$k$ arrivals during $[0, t]$, the arrival time $A_{k}$ of job~$k$ must lie in $[0, t]$, but job $k+1$ must not have yet arrived.
 Using the cdf of $A_{k}$ and partial integration,
 \begin{align*}
 \P{A_{k+1} \leq t}
@@ -103,7 +103,7 @@ It is simple to see from~\cref{eq:e-9} that\sidenote{\cref{ex:pois-mgf}}
 Interestingly, we can use~\cref{eq:e-35} to derive the pdf of $A_{k}$ from the Poisson distribution.
 For $k=0$, $\P{N(t) = 0} = e^{-\lambda t}$, and as $A_0=0$ by definition, the RHS of~\cref{eq:e-35} becomes $1-\P{A_1\leq t}$.
 Consequently, $\P{A_{1}\leq t} = 1 - e^{-\lambda t}$, hence, by differentiation,  $f_{A_1}(t) = \lambda e^{-\lambda t}$.
-For $k\geq 1$, taking the derivative with respect to $t$ of the RHS of~\cref{eq:e-9} and at both sides of~\cref{eq:e-35},
+For $k\geq 1$, taking the derivative with respect to~$t$ of the RHS of~\cref{eq:e-9} and at both sides of~\cref{eq:e-35},
 \begin{equation*}
 \lambda \frac{(\lambda t)^{k-1}}{(k-1)!} e^{-\lambda t} - \lambda \frac{(\lambda t)^{k-1}}{(k-1)!} e^{-\lambda t} = f_{A_{k}}(t) - f_{A_{k+1}}(t).
 \end{equation*}
@@ -122,7 +122,7 @@ It is important to know that $N_\lambda$ has \recall{stationary and independent 
 Stationarity means that the distributions of the number of arrivals are the same for all intervals of equal length, that is, $N(s,t]$ has the same probability distribution as $N(u, v]$ if $t-s = v-u$.
 Independence means, roughly speaking, that knowing that $N(s,t]= n$, does not help to make any predictions about the value of $N(u, v]$ if the intervals $(s,t]$ and $(u, v]$ do not overlap.
 \cref{eq:e-9} implies a number of useful properties of the Poisson process.
-Next, with small $o$ notation\sidenote{A function $f(h) = o(h)$ when $f(h)/h \to 0$ as $h\to 0$, e.g., $x^{2} = o(x)$.}, if $t\ll 1$,
+Next, with small~$o$ notation\sidenote{A function $f(h) = o(h)$ when $f(h)/h \to 0$ as $h\to 0$, e.g., $x^{2} = o(x)$.}, if $t\ll 1$,
 \begin{subequations}\label{eq:32}
 \begin{align}
 \P{N( t) = 0} &= e^{-\lambda t} = 1-\lambda  t + o( t),  \label{eq:4}\\
@@ -145,7 +145,7 @@ and the third  relations in~\cref{eq:32} follow similarly.
 Moreover, as $N_{\lambda}$ and $N_{\mu}$ have stationary and independent increments, $N_{\lambda +\mu}$ has these properties too.
 
 We can also \emph{split}, or \emph{thin}, a stream into several sub-streams.
-For instance, consider a stream of people passing by a shop as a Poisson process $N_\lambda$, and suppose that a customer decides to enter the shop as a Bernoulli distributed rv $B$, independent of $N_{\lambda}$, with success probability $p$ and failure probability $q=1-p$.
+For instance, consider a stream of people passing by a shop as a Poisson process $N_\lambda$, and suppose that a customer decides to enter the shop as a Bernoulli distributed rv~$B$, independent of $N_{\lambda}$, with success probability~$p$ and failure probability $q=1-p$.
 Then the process of customers entering the shop is a Poisson process $N_{\lambda p}$ with rate $\lambda p$, because, from~\eqref{eq:32}, for $t\ll 1$,
 \begin{align*}
   \P{N_{\lambda p}(t) = 0 } &= \P{N_{\lambda}(t) = 0} +\P{N_{\lambda}(t) = 1}\P{B=0} \\
@@ -162,8 +162,8 @@ And, if you find it reasonable that the occurrence of an event in a small time i
 
 
 % The concepts of \recall{merging} and \recall{thinning} are useful to analyze queueing networks, see~\cref{sec:jackson-networks}.
-% Suppose the departure stream of a machine splits into two sub-streams, e.g., a fraction $p$ of the jobs moves on to another machine and the rest ($1-p$) of the jobs leaves the system.
-% Then we can model the arrival stream at the second machine as a thinned stream (with probability $p$) of the departures of the first machine.
+% Suppose the departure stream of a machine splits into two sub-streams, e.g., a fraction~$p$ of the jobs moves on to another machine and the rest ($1-p$) of the jobs leaves the system.
+% Then we can model the arrival stream at the second machine as a thinned stream (with probability~$p$) of the departures of the first machine.
 % Merging occurs where the output streams of various stations arrive at another station.
 
 
@@ -237,7 +237,7 @@ hence $\E Z = (\lambda+\mu)^{-1}$.
 $\{\min\{X, S\}>x\} =\{X>x\} \cap\{S> x\}$.
 \end{hint}
 \begin{solution}
-$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as  $X$ and $S$ independent.
+$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as  $X$ and~$S$ independent.
 \end{solution}
 \end{exercise}
 
@@ -276,7 +276,7 @@ Use that $\P{S > X} = \E{\E{\1{S>X}|X}}$.
 \begin{solution}
 With conditioning, $\P{S>X|X=t} = \P{S>t} =e^{-\mu t}$.
 With the fundamental bridge and conditional expectation, $\E{\1{S>X}|X} = e^{-\mu X}$, hence $\E{\1{S>X}} = \E{e^{-\mu X}}$. But this last formula is equal to
-$M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of $X$ we obtain $\lambda/(\lambda+\mu)$.
+$M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of~$X$ we obtain $\lambda/(\lambda+\mu)$.
 % \begin{align*}
 %  \P{X\leq S}
 % &= \E{\1{X\leq S}} = \int_0^\infty \int_0^\infty \1{x\leq y} f_{X,S}(x,y)\, \d y\,\d x\\
@@ -308,21 +308,21 @@ M_{N_\lambda(t)+N_\mu(t)}(s)
 
 
 \begin{exercise}\label{ex:1}
- Show with moment-generating functions that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability $p$ results in a Poisson process $N_{\lambda p}$.
+ Show with moment-generating functions that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability~$p$ results in a Poisson process $N_{\lambda p}$.
 \begin{hint}
-Dropping the dependence of $N$ on $t$ for the moment for notational convenience, consider the random variable
+Dropping the dependence of~$N$ on~$t$ for the moment for notational convenience, consider the random variable
  \begin{equation*}
  Y = \sum_{i=1}^N Z_i,
  \end{equation*}
  with $N\sim P(\lambda)$ and $Z_i\sim B(p)$ and $\{Z_{i}\}$ iid.
-Show that the moment-generating function of $Y$ is equal to the moment-generating function of a Poisson random variable with parameter $\lambda p$.
+Show that the moment-generating function of~$Y$ is equal to the moment-generating function of a Poisson random variable with parameter $\lambda p$.
 \end{hint}
 \begin{solution}
-% Consider $Y=\sum_{i=1}^N Z_i$. Suppose that $N=n$, so that $n$
-% arrivals occurred. Then we throw $n$ independent coins with success probability
-% $p$. It is clear that $Y$ is indeed a thinned Poisson random variable.
+% Consider $Y=\sum_{i=1}^N Z_i$. Suppose that $N=n$, so that~$n$
+% arrivals occurred. Then we throw~$n$ independent coins with success probability
+% $p$. It is clear that~$Y$ is indeed a thinned Poisson random variable.
 
-% Model the coins as a generic Bernoulli distributed random variable $Z$.
+% Model the coins as a generic Bernoulli distributed random variable~$Z$.
 Use the hint. Then,
 \begin{equation*}
  \E{e^{s Z}} = e^0 \P{Z=0} + e^{s} \P{Z=1} = (1-p) + e^s p,

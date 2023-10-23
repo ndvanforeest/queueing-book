@@ -20,11 +20,11 @@ And, as always, this is not simple.}
 The second reason is that building code to deal with rvs deepens our understanding of probability and numerical analysis, and this in turn helps us to prevent making subtle errors, of which we will discuss a few in the exercises.
 We start with an example and then present the code that deals with all the computations.
 
-\newthought{We can obtain} the waiting of the $n$th job in a single-server queue by means of the recursion $W_{n} = [W_{n-1} S_{n-1}-X_{n}]^{+}$.
+\newthought{We can obtain} the waiting of the~$n$th job in a single-server queue by means of the recursion $W_{n} = [W_{n-1} S_{n-1}-X_{n}]^{+}$.
 That is, for given random deviates $\{X_{i}\}$ and $\{S_{i}\}$ we can compute the \emph{number} $W_{n}$.
 If want to get information about the \emph{distribution} of $W_{n}$, we need to do some more work.
 One is to repeat the recursions many different times with different seeds and make a histogram of the observed values of $W_{n}$.
-There is however, another way that is directly based on arithmetic with the pmfs of $X$ and $S$.
+There is however, another way that is directly based on arithmetic with the pmfs of~$X$ and~$S$.
 Let us show how to we can do this.~\cref{fig:waitingdistribution} shows the result of the code below.
 
 Besides the regular libraries we load \pyth/pytictoc/ which allows us to time it takes to run certain parts of the code.
@@ -34,12 +34,12 @@ The module \pyth/random_variables.py/ contains our code to handle the probabilis
 The next lines are needed for the \LaTeX\/ plots. We have discussed earlier; we include them here for completeness.
 \inputminted[firstline=11, lastline=24]{python}{../code/waiting_time_distribution.py} % seaborn
 
-In the recursions for $W$ we use the $[\cdot]^{+}$ function. We also instantiate a \pyth/tictoc/ object and set it.
+In the recursions for~$W$ we use the $[\cdot]^{+}$ function. We also instantiate a \pyth/tictoc/ object and set it.
 \inputminted[firstline=29, lastline=34]{python}{../code/waiting_time_distribution.py} % tictoc
 
 
 An \pyth/RV/ object uses a dictionary to make the support and pmf of a rv; the keys of the dict form the support, the values the associated pmf.
-Observe from the numbers below that the mean service time is larger than the mean interarrival time, because $S$  takes the value $7$ where $X$ takes the value $3$.
+Observe from the numbers below that the mean service time is larger than the mean interarrival time, because~$S$  takes the value~$7$ where~$X$ takes the value~$3$.
 This is on purpose to see later in the graphs how this affects the distribution of the waiting time and the departure time.
 \inputminted[firstline=38, lastline=39]{python}{../code/waiting_time_distribution.py} % rvs
 
@@ -49,10 +49,10 @@ Then, by writing \pyth\A += X\, we compute by means of convolution the distribut
 This is done implicitly by \emph{overloading} the $+$ operator such that it works on \pyth/RV/ objects.
 Below we will discuss operator overloading  in a bit more detail. In a similar way we compute $W+S-X$. Finally, we need to apply the `plus'-function.
 Note how concise this code is and close it stays to the mathematical formulation of the recursions.
-This helps much to understand how the maths and the code works. The call to \pyth/tic.toc()/ prints the time that elapsed between \pyth/tic.tic()/ and the `toc'. There is final remark, we start the recursions at $1$. The reason is that we want to compare this result to simulation and the simulation starts necessarily at $1$.
+This helps much to understand how the maths and the code works. The call to \pyth/tic.toc()/ prints the time that elapsed between \pyth/tic.tic()/ and the `toc'. There is final remark, we start the recursions at~$1$. The reason is that we want to compare this result to simulation and the simulation starts necessarily at~$1$.
 \inputminted[firstline=43, lastline=53]{python}{../code/waiting_time_distribution.py} % computedist
 
-Let us now estimate the distribution of $W$ by means of simulation.
+Let us now estimate the distribution of~$W$ by means of simulation.
 We compute from $W_{30}=0$ a number of \pyth/num_runs/ times and store the outcomes in the array \pyth/nth_waiting_time/.
 In the computations we let the departure times tag along.
 We use small letters for the variables to avoid a name clash with the capitals like \pyth/X/ we used earlier.
@@ -82,16 +82,16 @@ The results of theory and simulation are similar.}
 
 \newthought{You might wonder} why we plot the cdf instead of the pmf of the waiting and departure times; It seems that the pmf is easier to interpret.
 However, this is not true: the pmf is an ill-behaved object.\sidenote{You'll appreciate the wisdom of this only after making similar mistakes yourself.}
-For instance, let us take the support of $X$ as $3, 4.1, 5$ instead of $3, 4, 5$ as above, and leave the rest of the parameters untouched.
+For instance, let us take the support of~$X$ as $3, 4.1, 5$ instead of $3, 4, 5$ as above, and leave the rest of the parameters untouched.
 Running the code, after changing the \pyth/cdf/ in \pyth/pmf/ and removing the lines with \pyth/cumulative=True/ so that we plot the histograms and pmfs instead of the cdfs, we get~\cref{fig:waitingdistributionpmf}.\sidenote{If you doubt the correctness of this, just run the same code but plot the cdfs instead; the pathology disappear.}
 In general, you should remember that plotting the density of a rv is not simple, and it's an interesting exercise to find out why this is so.
 
 \begin{figure}[tb]
 \centering
 \includegraphics{../figures/waiting_time_distribution_pmf_4.1.pdf}
-\caption{The pmfs of the departure and waiting time of job $30$ with $X$ concentrated on $3, 4.1, 5$ instead of $3, 4, 5$; the rest of the parameters are the same as in~\cref{fig:waitingdistribution}.
+\caption{The pmfs of the departure and waiting time of job $30$ with~$X$ concentrated on $3, 4.1, 5$ instead of $3, 4, 5$; the rest of the parameters are the same as in~\cref{fig:waitingdistribution}.
 Note how pathological the pmf of the theoretical distribution behaves.
-This is not a mistake in the code; when using $3, 4, 5$ as support for $X$ we get~\cref{fig:waitingdistributionpmfgood}.
+This is not a mistake in the code; when using $3, 4, 5$ as support for~$X$ we get~\cref{fig:waitingdistributionpmfgood}.
 }
 \label{fig:waitingdistributionpmf}
 \end{figure}
@@ -99,7 +99,7 @@ This is not a mistake in the code; when using $3, 4, 5$ as support for $X$ we ge
 \begin{figure}[tb]
 \centering
 \includegraphics{../figures/waiting_time_distribution_pmf.pdf}
-\caption{The pmfs of the departure and waiting time of job $30$ with $X$  concentrated on $3, 4, 5$. Compare this to~\cref{fig:waitingdistributionpmf}.}
+\caption{The pmfs of the departure and waiting time of job $30$ with~$X$  concentrated on $3, 4, 5$. Compare this to~\cref{fig:waitingdistributionpmf}.}
 \label{fig:waitingdistributionpmfgood}
 \end{figure}
 
@@ -149,9 +149,9 @@ res[1 - 2 / 3] += 1
 res
 \end{pyconsole}
 \noindent The dictionary \pyth/res/ suddenly contains two elements rather than just one.
-Inspecting the last digit of the keys, we see that in one number the last digit is a $7$ and in the other it is a $3$.
+Inspecting the last digit of the keys, we see that in one number the last digit is a~$7$ and in the other it is a~$3$.
 So, apparently, for a \emph{computer} $1-2/3 \neq 1/3$.
-This is not something specific to python; the problem lies in the fact that general numbers in $\R$ cannot be represented as floating point numbers.
+This is not something specific to python; the problem lies in the fact that general numbers in~$\R$ cannot be represented as floating point numbers.
 
 To get around this, we round the elements of the support to a fixed precision so that we can use fractions instead of floats.
 This works well as demonstrated by this code.
@@ -173,7 +173,7 @@ To speed up some arithmetic, we need to run over the support such that the eleme
 \inputminted[firstline=51, lastline=59]{python}{../code/random_variable.py} % support
 
 From the pmf $\{p_{k}\}$ we want to compute the cdf, the survivor function, mean, variance and standard deviation.
-All this is easy once we realize that all this can be computed as $\E{f(X)}$ for suitable chosen functions $f$.
+All this is easy once we realize that all this can be computed as $\E{f(X)}$ for suitable chosen functions~$f$.
 For instance, by taking $f(x) = \1{x\leq y}$, the cdf $F(x) = \E{f(x)} = \sum_{k} \1{k \leq x} p_{k}$.
 Here is an inefficient implementation to compute the cdf with the method \pyth\E/:\sidenote{Check the web on \pyth/lambda/.}: \pyth/lambda x: x <= y/.
 \begin{python}
@@ -192,20 +192,20 @@ As an aside, in more professional code, we should check the input of \pyth/pmf/:
 To keep the code short, we don't include it.
 \inputminted[firstline=81, lastline=104]{python}{../code/random_variable.py} % convience
 
-Additionally, we like to able to use our \pyth/RV/ class to generate random deviates that are distributed according to the cdf $F$.
-Recall that if $U\sim \Unif{[0,1]}$, then $F^{-1}(U)$ has the required distribution, because $\P{F^{-1}(U) \leq x} = \P{U \leq F(x)} = F(x)$, where the last equality follows from the fact that $U$ is uniform on $[0,1]$.
+Additionally, we like to able to use our \pyth/RV/ class to generate random deviates that are distributed according to the cdf~$F$.
+Recall that if $U\sim \Unif{[0,1]}$, then $F^{-1}(U)$ has the required distribution, because $\P{F^{-1}(U) \leq x} = \P{U \leq F(x)} = F(x)$, where the last equality follows from the fact that~$U$ is uniform on $[0,1]$.
 Binary sort is useful and fast to compute the inverse $F^{-1}(U)$.
 \inputminted[firstline=108, lastline=113]{python}{../code/random_variable.py} % rvs
 
 
 We are nearly finished with the code, but we need to further elements.
-To add and subtract two \pyth/RV/s we call a general function \pyth/compose_function/, see below, that returns the composition under a function $f$ of two independent random variables.
+To add and subtract two \pyth/RV/s we call a general function \pyth/compose_function/, see below, that returns the composition under a function~$f$ of two independent random variables.
 To call the plus and minus operator on two \pyth/RV/s we need to tell the class what to do when writing code like \pyth/X + Y/.
 The private methods \pyth/__add__/ and \pyth/__sub__/ achieve this.
 (Note that we build $X - Y $ as $X + (- Y)$.)
 \inputminted[firstline=117, lastline=123]{python}{../code/random_variable.py} % arithmetic
 
-Finding the pmf of the sum $Z=X+Y$ of two independent rvs $X$ and $Y$ with pmfs $p$ and $q$ requires  convolution like so
+Finding the pmf of the sum $Z=X+Y$ of two independent rvs~$X$ and~$Y$ with pmfs~$p$ and~$q$ requires  convolution like so
 \begin{equation*}
 \P{Z=k} = \sum_{i}\sum_j \1{i+j=k} p_i q_{j}.
 \end{equation*}
@@ -214,7 +214,7 @@ Observe that here it becomes clear why we need a support with elements sorted in
 Once the probabilities beome too small, we simply break the loop.
 \inputminted[firstline=128, lastline=139]{python}{../code/random_variable.py} % compose
 
-Finally, we have to be able to compute  $f(X)$ for some function $f$, for instance $[W_i + S_i - X_{i+1}]^{+}$ applies the  function $[\cdot]^{+}$ to a rv.
+Finally, we have to be able to compute  $f(X)$ for some function~$f$, for instance $[W_i + S_i - X_{i+1}]^{+}$ applies the  function $[\cdot]^{+}$ to a rv.
 \inputminted[firstline=144, lastline=151]{python}{../code/random_variable.py} % apply
 
 

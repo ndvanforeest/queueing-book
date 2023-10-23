@@ -20,8 +20,8 @@ We derive a number of its properties in the text and in the exercises; we use th
 
 
 
-\newthought{Consider a stream} of customers that enter a shop in a sequence of time intervals, each with a duration of $t$ minutes, and such that the expected number of arrivals in  any such interval is $\lambda t$.
-Let us suppose we have $\lambda t n$ customers that select, uniformly distributed, the first interval out of these $n$ intervals to enter the shop.
+\newthought{Consider a stream} of customers that enter a shop in a sequence of time intervals, each with a duration of~$t$ minutes, and such that the expected number of arrivals in  any such interval is $\lambda t$.
+Let us suppose we have $\lambda t n$ customers that select, uniformly distributed, the first interval out of these~$n$ intervals to enter the shop.
 Let the total number of arrivals be given by the rv $N_n(t)$. It is well-known that $N_{t} \sim \Bin{\lambda t n, p}$, i..e.,
 \begin{equation*}
  \P{N_n(t) = k} = {\lambda t n \choose k} p^k (1-p)^{\lambda t n-k},
@@ -68,7 +68,7 @@ If $\Delta t\ll 1$ then for all $t\geq 0$,
 \P{N(t+\Delta t) \geq n+2 \given N(t) = n} &= o(\Delta t).\label{eq:10}
 \end{align}
 \end{subequations}
-To see how to derive the first of these estimates,  we use the definition of the conditional probability and small $o$ notation, and get
+To see how to derive the first of these estimates,  we use the definition of the conditional probability and small~$o$ notation, and get
 % \begin{align*}
 %  \1{N(t+\Delta t)=n, N(t)=n}
 % &= \1{N(t) + N(t, t+\Delta t] = n, N(t)=n} = \1{N(t, t+\Delta t] = 0, N(t)=n}.
@@ -125,7 +125,7 @@ Thus, the shop `sees' the merged process of these two arrival processes.
 In fact, this merged process $N_{\lambda+\mu}$ is also a Poisson process\sidenote{\cref{ex:l-103} } with rate $\lambda+\mu$.
 
 We can also \emph{split}, or \emph{thin}, a stream into several sub-streams.
-Model the stream of people passing by a shop as a Poisson process $N_\lambda$, and the decision $B_{i}\in \{0, 1\}$ that customer $i$ enters the shop as an  Bernoulli distributed rv with success probability $\P{B_{i} = 1} = 1$.
+Model the stream of people passing by a shop as a Poisson process $N_\lambda$, and the decision $B_{i}\in \{0, 1\}$ that customer~$i$ enters the shop as an  Bernoulli distributed rv with success probability $\P{B_{i} = 1} = 1$.
 \begin{marginfigure}
 \begin{tikzpicture}[xscale=0.4]
 %\draw[[-{Triangle[open]},dotted] (0,10)--(8.5,10);
@@ -163,8 +163,8 @@ The lines downward represent whether a potential customer actually enters the sh
 
 
 The concepts of \recall{merging} and \recall{thinning} are useful to analyze queueing networks, see~\cref{sec:jackson-networks}.
-Suppose the departure stream of a machine splits into two sub-streams, e.g., a fraction $p$ of the jobs moves on to another machine and the rest ($1-p$) of the jobs leaves the system.
-Then we can model the arrival stream at the second machine as a thinned stream (with probability $p$) of the departures of the first machine.
+Suppose the departure stream of a machine splits into two sub-streams, e.g., a fraction~$p$ of the jobs moves on to another machine and the rest ($1-p$) of the jobs leaves the system.
+Then we can model the arrival stream at the second machine as a thinned stream (with probability~$p$) of the departures of the first machine.
 Merging occurs where the output streams of various stations arrive at another station.
 
 % \newthought{With moment-generating functions} we can simplify the derivations above; the last few exercises of this section show how to apply this.\sidenote{In general, it is hard to obtain closed-form expressions for the moment-generating function, but when it works, it is an easy and slick technique.}
@@ -187,10 +187,10 @@ Merging occurs where the output streams of various stations arrive at another st
 % \begin{exercise}\label{ex:p2}
 % What is the difference between $N_n(t)$ and $N(t)$?
 % \begin{solution}
-%  $N_n(t)$ is a binomially distributed random variable with parameters $n$ and $p$.
-%  The maximum value of $N_n(t)$ is $n$.
+%  $N_n(t)$ is a binomially distributed random variable with parameters~$n$ and~$p$.
+%  The maximum value of $N_n(t)$ is~$n$.
 %  The random variable $N(t)$ models the number of arrivals that can occur during $[0,t]$.
-%  As such it is not necessarily bounded by $n$.
+%  As such it is not necessarily bounded by~$n$.
 %  Thus, $N_n(t)$ and $N(t)$ cannot represent the same random variable.
 % \end{solution}
 % \end{exercise}
@@ -386,7 +386,7 @@ M_{N_\lambda(t)+N_\mu(t)}(s)
 
 
 % \begin{exercise} \label{ex:l-102}
-%  Show that the SCV of $N(t)\sim P(\lambda t)$ is equal to $1/(\lambda t)$. What does this mean for $t$ large?
+%  Show that the SCV of $N(t)\sim P(\lambda t)$ is equal to $1/(\lambda t)$. What does this mean for~$t$ large?
 % \begin{solution}
 %  \begin{equation*}
 % SCV = \frac{\V{N(t)}}{(\E{N(t)})^2} = \frac{\lambda t}{(\lambda t)^2} = \frac1{\lambda t}.
@@ -398,21 +398,21 @@ M_{N_\lambda(t)+N_\mu(t)}(s)
 
 
 \begin{exercise}\label{ex:1}
- Show with moment-generating functions that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability $p$ results in a Poisson process $N_{\lambda p}$.
+ Show with moment-generating functions that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability~$p$ results in a Poisson process $N_{\lambda p}$.
 \begin{hint}
-Dropping the dependence of $N$ on $t$ for the moment for notational convenience, consider the random variable
+Dropping the dependence of~$N$ on~$t$ for the moment for notational convenience, consider the random variable
  \begin{equation*}
  Y = \sum_{i=1}^N Z_i,
  \end{equation*}
  with $N\sim P(\lambda)$ and $Z_i\sim B(p)$ and $\{Z_{i}\}$ iid.
-Show that the moment-generating function of $Y$ is equal to the moment-generating function of a Poisson random variable with parameter $\lambda p$.
+Show that the moment-generating function of~$Y$ is equal to the moment-generating function of a Poisson random variable with parameter $\lambda p$.
 \end{hint}
 \begin{solution}
-% Consider $Y=\sum_{i=1}^N Z_i$. Suppose that $N=n$, so that $n$
-% arrivals occurred. Then we throw $n$ independent coins with success probability
-% $p$. It is clear that $Y$ is indeed a thinned Poisson random variable.
+% Consider $Y=\sum_{i=1}^N Z_i$. Suppose that $N=n$, so that~$n$
+% arrivals occurred. Then we throw~$n$ independent coins with success probability
+% $p$. It is clear that~$Y$ is indeed a thinned Poisson random variable.
 
-% Model the coins as a generic Bernoulli distributed random variable $Z$.
+% Model the coins as a generic Bernoulli distributed random variable~$Z$.
 Use the hint. Then,
 \begin{equation*}
  \E{e^{s Z}} = e^0 \P{Z=0} + e^{s} \P{Z=1} = (1-p) + e^s p,
@@ -435,7 +435,7 @@ This is the MGF of a Poisson rv with rate $\lambda p$.
 % &= \E{\sum_{n=0}^\infty e^{s\sum_{i=1}^N Z_i} \1{N=n}}
 % = \E{\sum_{n=0}^\infty e^{s\sum_{i=1}^n Z_i} \1{N=n}}
 % = \sum_{n=0}^\infty \E{e^{s\sum_{i=1}^n Z_i} \1{N=n}} \\
-% &= \sum_{n=0}^\infty \E{e^{s\sum_{i=1}^n Z_i}} \E{\1{N=n}},\quad\text{by independence of $Z_i$ and $N$}, \\
+% &= \sum_{n=0}^\infty \E{e^{s\sum_{i=1}^n Z_i}} \E{\1{N=n}},\quad\text{by independence of $Z_i$ and~$N$}, \\
 % &= \sum_{n=0}^\infty \left(1+p(e^s-1)\right)^n \P{N=n} \\
 % &= \sum_{n=0}^\infty \left(1+p(e^s-1)\right)^n e^{-\lambda} \frac{\lambda^n}{n!}
 % = e^{-\lambda} \sum_{n=0}^\infty \frac{\left(1+p(e^s-1)\right)^n \lambda^n}{n!}\\
@@ -446,7 +446,7 @@ This is the MGF of a Poisson rv with rate $\lambda p$.
 % &= \E{\sum_{n=0}^\infty e^{s\sum_{i=1}^N Z_i} \1{N=n}}
 % = \E{\sum_{n=0}^\infty e^{s\sum_{i=1}^n Z_i} \1{N=n}}
 % = \sum_{n=0}^\infty \E{e^{s\sum_{i=1}^n Z_i} \1{N=n}} \\
-% &= \sum_{n=0}^\infty \E{e^{s\sum_{i=1}^n Z_i}} \E{\1{N=n}},\quad\text{by independence of $Z_i$ and $N$}, \\
+% &= \sum_{n=0}^\infty \E{e^{s\sum_{i=1}^n Z_i}} \E{\1{N=n}},\quad\text{by independence of $Z_i$ and~$N$}, \\
 % &= \sum_{n=0}^\infty \left(1+p(e^s-1)\right)^n \P{N=n} \\
 % &= \sum_{n=0}^\infty \left(1+p(e^s-1)\right)^n e^{-\lambda} \frac{\lambda^n}{n!}
 % = e^{-\lambda} \sum_{n=0}^\infty \frac{\left(1+p(e^s-1)\right)^n \lambda^n}{n!}\\
@@ -481,7 +481,7 @@ Recall that $p= \lambda t/ n$. Then, with~\cref{eq:76},
 % \begin{exercise} \label{ex:31}
 %  Show~\cref{eq:bin}
 % \begin{hint}
-%  First find $p$, $n$, $\lambda$ and $t$ such that the rate at which an event occurs in both processes are the same.
+%  First find~$p$, $n$, $\lambda$ and~$t$ such that the rate at which an event occurs in both processes are the same.
 %  Then consider the binomial distribution and use the standard limit $(1-x/n)^n \to e^{-x}$ as $n\to \infty$.
 % \end{hint}
 % \begin{solution}
@@ -493,7 +493,7 @@ Recall that $p= \lambda t/ n$. Then, with~\cref{eq:76},
 % &= \frac{(\lambda t)^k}{k!} \left(\frac N{N-\lambda t} \right)^k \frac{N}{N}\frac{N-1}{N}\cdots\frac{N-k+1}{N} \left(1-\frac{\lambda t}N\right)^{N}.
 % \end{align*}
 % Observe now that, as $\lambda t$ is finite, $N/(N-\lambda t)\to 1$ as
-% $n$, hence $N$, $\to \infty$. Also for any finite $k$, $(N-k)/N\to1$. Finally, use~\cref{eq:76} to see that
+% $n$, hence~$N$, $\to \infty$. Also for any finite~$k$, $(N-k)/N\to1$. Finally, use~\cref{eq:76} to see that
 % $\left(1-\frac{\lambda t}N\right)^{N} \to e^{-\lambda t}$.
 % \end{solution}
 % \end{exercise}
@@ -573,11 +573,11 @@ Recall that $p= \lambda t/ n$. Then, with~\cref{eq:76},
 
 
 % \begin{exercise}\label{ex:32}
-%  Show with conditioning that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability $p$ results in a Poisson process $N_{\lambda p}$.
+%  Show with conditioning that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability~$p$ results in a Poisson process $N_{\lambda p}$.
 % \begin{hint}
-% Suppose that $N_1$ is the thinned stream, and $N$ the original stream. Condition on the total number of arrivals $N(t)=n$ up to time
-%  $t$. Then, realize that the probability that a person is of type 1 is $p$. Hence, when you consider $n$ people in
-%  total, the number $N_1(t)$ of type 1 people is binomially distributed. Thus, given that $n$ people arrived, the probability of $k$ `successes' (i.e., arrivals of type 1), is
+% Suppose that $N_1$ is the thinned stream, and~$N$ the original stream. Condition on the total number of arrivals $N(t)=n$ up to time
+%  $t$. Then, realize that the probability that a person is of type 1 is~$p$. Hence, when you consider~$n$ people in
+%  total, the number $N_1(t)$ of type 1 people is binomially distributed. Thus, given that~$n$ people arrived, the probability of~$k$ `successes' (i.e., arrivals of type 1), is
 %  \begin{equation*}
 %  \P{N_1(t)=k \given N(t) = n} = {n \choose k} p^k (1-p)^{n-k}.
 %  \end{equation*}

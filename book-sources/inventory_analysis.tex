@@ -27,7 +27,7 @@ and likewise notation for $Q(i, j]$.
 \newthought{For the basetock} model in discrete time, recall from~\cref{eq:b9} that the start-of-period inventory position is always equal to the order-up-to level $S=s+1$, i.e., $P_{t}=S$, and that the end-of-period $P_t' = S - D_{t}$.
 
 \begin{lemma}\label{lem:1}
-Under a basestock policy with reorder level $s$, if $\IP_{1} = S$, then for all periods $t$,
+Under a basestock policy with reorder level~$s$, if $\IP_{1} = S$, then for all periods~$t$,
   \begin{equation}
     D[1, t) = Q(1, t],
   \end{equation}
@@ -41,12 +41,12 @@ Using the recursion for the inventory position under the basestock policy repeat
 &= \IP_{t-2} -D_{t-2}+ Q_{t-1} - D_{t-1} - Q_t  \\
 &= \IP_1 - D[1, t) +     Q(1, t].
 \end{align*}
-The proof is finished by realizing that $\IP_{t} = S$ for all $t$.
+The proof is finished by realizing that $\IP_{t} = S$ for all~$t$.
 \end{proof}
 
 We can use this lemma to obtain a useful result.
 \begin{lemma}\label{lem:2}
-Under a basestock policy with reorder level $s$, if $\IL_{1}=\IP_{1} = S$ and $Q_{t} = 0$ for $t \leq 1$, then for all periods $t$,
+Under a basestock policy with reorder level~$s$, if $\IL_{1}=\IP_{1} = S$ and $Q_{t} = 0$ for $t \leq 1$, then for all periods~$t$,
   \begin{equation*}
     \IL_t= S - D[t-L, t).
   \end{equation*}
@@ -70,9 +70,9 @@ where we apply~\cref{lem:1} to $Q(1, t-L]$ in step 1.
 
 Since the period demand are iid rvs, the rvs $\{D(t-L, t]\}$, while not independent, do have the same distribution.
 Necessarily the rvs $\{I_{t}\}$ have the same distribution.
-We can associate a rv $I$ to this distribution, and we call this rv the stochastic inventory level $I(S)$, and likewise for the end-of-period inventory level $I'(S)$; we include the reference to the basestock level $S$ for ease.
-Let us write $F$ for the cdf common to the rvs $\{D[t-L, t]]$ and let $X\sim F$ be the associated rv.
-The cdf $F$ of $X$ follows from straightforward convolution\sidenote{We show in code how to do this.}, and from $F$ we obtain easiy the pmf $f$ and the survivor function $G=1-F$.
+We can associate a rv~$I$ to this distribution, and we call this rv the stochastic inventory level $I(S)$, and likewise for the end-of-period inventory level $I'(S)$; we include the reference to the basestock level~$S$ for ease.
+Let us write~$F$ for the cdf common to the rvs $\{D[t-L, t]]$ and let $X\sim F$ be the associated rv.
+The cdf~$F$ of~$X$ follows from straightforward convolution\sidenote{We show in code how to do this.}, and from~$F$ we obtain easiy the pmf~$f$ and the survivor function $G=1-F$.
 
 
 In~\cref{sec:single-item-invent} we express the performance measures in terms of the of-period inventory level.
@@ -101,7 +101,7 @@ The average end-of-period backlog is equal to
 \begin{equation}
    \E{\IL'^-(S)} = \theta - \sum_{j=0}^{s} G(j).
 \end{equation}
-Mind, the $s$ in the RHS is the reorder level $s=S-1$, not $S$.
+Mind, the~$s$ in the RHS is the reorder level $s=S-1$, not~$S$.
 \end{lemma}
 \begin{proof} Since $\sum_{j=0}^\infty \1{j< k-r - 1} = k-r -1$, from~\cref{eq:ia22}
 \begin{align*}
@@ -127,10 +127,10 @@ GIVES A THRESHOLD POLICY.
 
 \newthought{For the $(s, Q)$ model} we can also find some nice closed form expressions.
 There is a nice way to relate the $(Q,r)$ system to a number of basestock systems.
-To see this, imagine two animals, a quoll that observes the $(Q,r)$ system, and a bear that only wakes up when the inventory position right at the start of the interval equals $i$ where $k\in \{r+1, \ldots r+Q\}$ and hibernates otherwise.
+To see this, imagine two animals, a quoll that observes the $(Q,r)$ system, and a bear that only wakes up when the inventory position right at the start of the interval equals~$i$ where $k\in \{r+1, \ldots r+Q\}$ and hibernates otherwise.
 Clearly, from the bear's point of view, the system behaves as a basestock system with order-up-to level~$k$.
 More generally, we can associate a different bear to each different order-up-to level, so that always exactly one bear is awake, and the rest sleeps.
-To combine the statistics of the bears into the statistics as observed by the quoll, we need to know for each $k$ the average fraction of periods  the inventory position $\IP = k$. More specifically, the quoll needs to know\sidenote{We assume that the limit over all sample paths $\{\IP_{t}\}$ exists almost surely, so that we can invoke the strong law of large numbers.}
+To combine the statistics of the bears into the statistics as observed by the quoll, we need to know for each~$k$ the average fraction of periods  the inventory position $\IP = k$. More specifically, the quoll needs to know\sidenote{We assume that the limit over all sample paths $\{\IP_{t}\}$ exists almost surely, so that we can invoke the strong law of large numbers.}
 \begin{equation*}
 \pi_{k} = \lim_{T\to \infty} \frac{1}{T} \sum_{t=1}^{T}\1{\IP_t = k},
 \end{equation*}
@@ -142,21 +142,21 @@ because with this, the quoll can retrieve the ready rate $\sum_{k=r+1}^{Q+r} \pi
 The  probabilities $\pi_{k} = \P{\IP = k}$, $k=r+1, \ldots, r+Q$,  under the $(Q,r)$ are all equal, that is, $\pi_k = 1/Q$.
 \end{theorem}
 \begin{proof}
-For ease take $Q=3, r=0$, so that the inventory position $\IP$ cycles between the levels $1, 2$ and $3$.\sidenote{The proof is the same for general $Q$ and $r$,  but needs a bit more notation.}
+For ease take $Q=3, r=0$, so that the inventory position $\IP$ cycles between the levels $1, 2$ and~$3$.\sidenote{The proof is the same for general~$Q$ and~$r$,  but needs a bit more notation.}
 We can use level crossing arguments as follows.
-Write $p_{i} = \P{D\in \{i, 3+i, 6+i, \ldots\}}$ for the probability that the period demand is a multiple of $3$ offset by $i$, $i=0, 1, 2$.
-Suppose that, at the start of period $t$, the position $\IP_{t} = 3$.
+Write $p_{i} = \P{D\in \{i, 3+i, 6+i, \ldots\}}$ for the probability that the period demand is a multiple of~$3$ offset by~$i$, $i=0, 1, 2$.
+Suppose that, at the start of period~$t$, the position $\IP_{t} = 3$.
 Since we order in multiples of $Q=3$, the probability $\P{\IP_{t+1} =3|\IP_{t}=3} = p_{0}$, i.e., equal to the probability that $D_{t}$ is a multiple of~$3$.
 Likewise, $\P{\IP_{t+1} = 2|\IP_t=3} = p_{1}$, and $\P{\IP_{t+1} = 1|\IP_t=3} = p_{2}$.
-However, again because we order in multiples of $Q$, $\P{\IP_{t+1} = 1|\IP_t=2} = p_{1}$, and similarly for the other possibities.
-Therefore, we can use level-crossing to conclude that on the long run, $(p_{1}+p_2)\pi_{3} = p_2\pi_{2} + p_1 \pi_{1}$. But, because of the $(Q,r)$ ordering rule, we can cyclically change $\pi_{1}, \pi_{2}$ and $\pi_{3}$ is this equality. The only  solution that is compatible with this is that $\pi_{i} = 1/3$ for all $i$.
+However, again because we order in multiples of~$Q$, $\P{\IP_{t+1} = 1|\IP_t=2} = p_{1}$, and similarly for the other possibities.
+Therefore, we can use level-crossing to conclude that on the long run, $(p_{1}+p_2)\pi_{3} = p_2\pi_{2} + p_1 \pi_{1}$. But, because of the $(Q,r)$ ordering rule, we can cyclically change $\pi_{1}, \pi_{2}$ and $\pi_{3}$ is this equality. The only  solution that is compatible with this is that $\pi_{i} = 1/3$ for all~$i$.
 \end{proof}
 
 With the above theorem, the ready rate for the $(Q,r)$ model can be computed with the formula
 \begin{align}
    \alpha(Q,r) = \frac1Q \sum_{k=r}^{r+Q-1} \alpha(k), % = \frac1Q \sum_{k=s}^{s+Q-1} F(k+1)
 \end{align}
-where $\alpha(k)$ is the ready rate  of the basestock model with reorder level $k$. Interestingly, the ready rate of the $(Q,r)$ policy can be expressed in terms of the
+where $\alpha(k)$ is the ready rate  of the basestock model with reorder level~$k$. Interestingly, the ready rate of the $(Q,r)$ policy can be expressed in terms of the
 average backlog of the basestock model.
 
 \begin{lemma}
@@ -174,7 +174,7 @@ From~\cref{eq:5}, and the fact that $G(k) = 1- F(k)$,
   &= Q - \sum_{k=0}^{r+Q} G(k)  +  \sum_{k=0}^{r} G(k).
 %  &= Q + \E{I^{-}(r+Q)} -  \E{I^{-}(r)}.
 \end{align*}
-Dividing by $Q$ and using~\cref{lem:3} gives the result.
+Dividing by~$Q$ and using~\cref{lem:3} gives the result.
 \end{proof}
 
 For the average inventory level  we find
@@ -189,20 +189,20 @@ and for the expected number of back-orders
    \E{I'^-(Q,r)} = \frac1Q \sum_{k=r+1}^{r+Q} \E{I'^-(k)},
 \end{equation*}
 From this, $\E{I'^{+}(Q,r)} = \E{I'(Q,r)} + \E{I'^{-}(Q,r)}$.
-Finally, with $h$ and $b$ the holding and backorder cost per item per period,  the total average cost becomes
+Finally, with~$h$ and~$b$ the holding and backorder cost per item per period,  the total average cost becomes
 \begin{equation*}
   K\frac{\E D}{Q} + h \E{I'(Q,r)} +  (b+h) \E{I'^-(Q,r)}.
 \end{equation*}
 With regard to the first term, note that $\E D$ is average demand per period, so $\E D / Q$ is the order frequency per period.
 
 
-It remains to find good values for $r$ and $Q$.
-One way would be to carry out a full grid search over a (reasonable) set of pairs of $r$ and $Q$.
-Another simple heuristic is to take $Q=\sqrt{2\E{D}K/h}$, i.e., the EOQ value, and then search for $r$ such that the total average cost is minimal, or such that some service level criterion is met.
-and take for $r$ the optimal basestock level, as if $Q=1$.
+It remains to find good values for~$r$ and~$Q$.
+One way would be to carry out a full grid search over a (reasonable) set of pairs of~$r$ and~$Q$.
+Another simple heuristic is to take $Q=\sqrt{2\E{D}K/h}$, i.e., the EOQ value, and then search for~$r$ such that the total average cost is minimal, or such that some service level criterion is met.
+and take for~$r$ the optimal basestock level, as if $Q=1$.
 
 
-For the $(s,S)$ model we can take $s$ to be the same as for the $(s,Q)$ model, and then set $S=s+Q$.
+For the $(s,S)$ model we can take~$s$ to be the same as for the $(s,Q)$ model, and then set $S=s+Q$.
 
 \newthought{Here is a worked} example: we implement the above formulas for the  Lighthouse Company that we simulated earlier in~\cref{sec:single-item-invent} under the $(s,S)$ rule. Here we consider the $(Q,r)$ rule with $Q=3$ and $r=10$.
 
@@ -213,13 +213,13 @@ For the $(s,S)$ model we can take $s$ to be the same as for the $(s,Q)$ model, a
 
 
 \begin{exercise}
-  Here is a subtle problem, that you should think about, and \emph{memorize}. In these notes so far, we have been concerned with \emph{periodic-review} systems: at the end of period $i$, we check the inventory $I_t$. Hence, if $I_t\geq 0$, all demand must have been satisfied.
+  Here is a subtle problem, that you should think about, and \emph{memorize}. In these notes so far, we have been concerned with \emph{periodic-review} systems: at the end of period~$i$, we check the inventory $I_t$. Hence, if $I_t\geq 0$, all demand must have been satisfied.
 
-  In continuous-review systems,  the notation $I_t$ corresponds to the inventory level as perceived by the $i$th customer (observe that this is very different from the meaning of the $I_t$ for period-review systems).
+  In continuous-review systems,  the notation $I_t$ corresponds to the inventory level as perceived by the~$i$th customer (observe that this is very different from the meaning of the $I_t$ for period-review systems).
 
   Why is the ready rate $F(S)$ (and not $F(S)=F(s+1)$ as in \eqref{eq:13}) for continuous-review systems?
   \begin{solution}
-    In continuous time, when $I_t=0$, the $i$th demand `sees' an empty inventory. Hence, the $i$th demand cannot be met from on-hand stock when $I_t=0$. Thus, only when $I_t>0$, this demand can be served. Therefore,
+    In continuous time, when $I_t=0$, the~$i$th demand `sees' an empty inventory. Hence, the~$i$th demand cannot be met from on-hand stock when $I_t=0$. Thus, only when $I_t>0$, this demand can be served. Therefore,
 \begin{align*}
    \alpha(s) &= \P{\IL_t > 0} \\
    &= \P{r+1 - D[i-L, i] > 0} \\

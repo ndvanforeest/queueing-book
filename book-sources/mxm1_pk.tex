@@ -21,10 +21,10 @@ Here we derive expressions for the load, the expected waiting time and number of
 
 
 \newthought{Assume that jobs} arrive as a Poisson process with rate $\lambda$ and each \emph{job} contains multiple \emph{items}.
-%Let $A_k$ be the arrival time of job $k$ and $A(t)$ the number of (job) arrivals up to time $t$.
-Denote by $B_k$ the number of items, i.e., the batch size, of the $k$th job.
+%Let $A_k$ be the arrival time of job~$k$ and $A(t)$ the number of (job) arrivals up to time~$t$.
+Denote by $B_k$ the number of items, i.e., the batch size, of the~$k$th job.
 We assume that $\{B_k\}$ is a sequence of iid discrete rvs with common rv~$B$.
-We write $S_{k,i}$ for the service time of the $i$th item of batch~$k$, and assume that $\{S_{k, i}\}$ is a sequence of iid rvs with common rv~$S$, and that the service times of the items are independent of the sizes of the batches.
+We write $S_{k,i}$ for the service time of the~$i$th item of batch~$k$, and assume that $\{S_{k, i}\}$ is a sequence of iid rvs with common rv~$S$, and that the service times of the items are independent of the sizes of the batches.
 The utilization is therefore
 %\begin{equation*}
 $\rho = \lambda \E B \E S$;
@@ -57,8 +57,8 @@ It remains to find an expression for $\E{\Ls^B}$.
 
 For this we can use the renewal reward theorem.
 With~\cref{eq:little:2} as inspiration, define $Y(t) := \int_0^t \Ls^B(s) \d s$, so that $Y(t)/t$  is the time-average number of items at the \emph{server}.
-By taking $D_k$ as the departure time of the $k$th batch, let $X_k = Y(D_k)-Y(D_{k-1})$.
-Suppose the $k$th job has batch size $B_{k}$, then
+By taking $D_k$ as the departure time of the~$k$th batch, let $X_k = Y(D_k)-Y(D_{k-1})$.
+Suppose the~$k$th job has batch size $B_{k}$, then
   \begin{align*}
     X_k|B_{k} &= \int_{D_{k-1}}^{D_k} \Ls^B(s) \d s
     = B_{k} S_{k,1} + (B_{k}-1)S_{k,2} + \cdots + S_{B_{k}, B_{k}}.
@@ -68,7 +68,7 @@ Using Adam's law\sidenote{$\E{\E{Y|X}} = \E Y$.}, and that the $S_{k,i}$ are iid
     \E{X_k | B_k} &= B_{k}\E S + (B_{k}-1)\E S + \cdots \E S = B_{k}(B_{k}+1)/2 \cdot \E S, \\
     \E{X_k} & = \E{\E{X_k| B_k}} = \E{\frac{B(B+1)}2} \E S =    \frac{\E{B^2}+\E B}2 \E S,
 \end{align*}
-as $B_{k}\sim B$, i.e., distributed as the common rv $B$.
+as $B_{k}\sim B$, i.e., distributed as the common rv~$B$.
 Since $Y=\lim_{t\to\infty} Y(t)/t = \E{\Ls^{B}}$, $Y=\lambda X$, $\lambda = \delta$, and $\rho=\lambda \E B \E S$, we obtain
 \begin{align}\label{eq:17}
   \E{\Ls^B} &= \lambda \frac{\E{B^2}}2\E S + \frac\rho 2. % = \frac{\E{B^2}}{2\E B}\rho + \frac\rho 2
@@ -93,17 +93,17 @@ It tells us that the load increases when the load increases or the variability $
 concentrate on the expected time spent by single items at the server.
 This will provide us with a simple expression for $\P{\Ls=i}$, from which we can also derive~\cref{eq:17}.
 
-If $\Ls(t)$ is the number of items (of the batch in service) at the server at time $t$, then $Y_i(t) = \int_0^t \1{\Ls(s)=i} \d s$ is the total time there are~$i$ items at the server.
+If $\Ls(t)$ is the number of items (of the batch in service) at the server at time~$t$, then $Y_i(t) = \int_0^t \1{\Ls(s)=i} \d s$ is the total time there are~$i$ items at the server.
 By sampling $Y(\cdot)$ at departure times $\{D_k\}$, we see that
 \begin{align*}
 X_k = Y_i(D_k) - Y_i(D_{k-1}) = S_{k,i} \1{B_{k} \geq i},
 \end{align*}
-where $S_{k,i}$ is the service time of the $i$th remaining item of the batch.
+where $S_{k,i}$ is the service time of the~$i$th remaining item of the batch.
 Since the $\{S_{k, i}\}$ are iid\ with $\E{S_{k,i}} = \E S$, and the $\{B_k\}$ are iid and independent of the service times of the items, we obtain
  \begin{equation*}
 X = \lim_{n\to\infty} \frac{1}{n}\sum_{k=1}^n S_{k,i} \1{B_{k} \geq i} = \E{S \1{B\geq i}} = \E S G(i-1),
  \end{equation*}
-since\sidenote{Recall: $\P{A} := \E{\1{A}}$.} $G(i-1) = \E{\1{B\geq i}} = \P{B> i-1}$ is the survivor function of $B$.
+since\sidenote{Recall: $\P{A} := \E{\1{A}}$.} $G(i-1) = \E{\1{B\geq i}} = \P{B> i-1}$ is the survivor function of~$B$.
 Since, by construction, $Y_i(t)/t \to \P{\Ls=i}$,   we use the renewal reward theorem and rate stability, $\delta = \lambda$, to conclude that
  \begin{align*}
  \P{\Ls = i} &= \lambda \E{S} G(i-1) = \rho \frac{G(i-1)}{\E B}, \\
@@ -161,8 +161,8 @@ Simplifying\sidenote{\cref{ex:ER}}  the summation yields~\cref{eq:43}.
  %\draw[<->] (0, -0.6) -- (18, -.6) node[fill=white, midway] {$\sum_{k=1}^n B_k$};
 \end{tikzpicture}
 
-\caption{A batch crosses the line $y=i$ iff it contains at least $i$ items.
- Thus, during the service of a batch with $i$ or more items, there is precisely one service of an $i$-th item.}
+\caption{A batch crosses the line $y=i$ iff it contains at least~$i$ items.
+ Thus, during the service of a batch with~$i$ or more items, there is precisely one service of an~$i$-th item.}
  \label{fig:remainingservicetime}
 \end{figure}
 
@@ -243,7 +243,7 @@ $B\equiv 1 \implies \V B = 0 \implies C_{s}^{2} =0$ and $\E B = 1$. Filling the 
 
 
 \begin{exercise}\label{ex:l-168}
-Compute $\E\L$ for the $M^{B}/M/1$ queue when $B$ is geometrically distributed with $\E B = 1/p$.
+Compute $\E\L$ for the $M^{B}/M/1$ queue when~$B$ is geometrically distributed with $\E B = 1/p$.
 Check that if $\E B =1$ the $M/M/1$ queue results.
 \begin{hint}
 $\P{B=k}=q^{k-1}p$ with $q=1-p$. Look up the expectation and variance of a geometric rv.
@@ -275,7 +275,7 @@ If you can't find the expectation and variance of a geometric rv, then here is t
 \end{exercise}
 
 \begin{exercise}\label{ex:6}
- For a nonnegative discrete random variable $X$, use indicator functions to prove that
+ For a nonnegative discrete random variable~$X$, use indicator functions to prove that
  \begin{enumerate}
  \item  $\E X = \sum_{k=0}^\infty G(k)$,
  \item $\sum_{i=0}^\infty i G(i) = \E{X^2}/2 - \E{X}/2$.

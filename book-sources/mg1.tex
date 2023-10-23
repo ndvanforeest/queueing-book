@@ -27,12 +27,12 @@ With Little's law $\E \Q = \lambda \E\W$ and writing $\rho = \lambda \E S$, we f
  \E{\W} = \frac{\E{S_r}}{1-\rho}.
 \end{equation*}
 
-To make further progress we need to find an expression for $\E{S_r}$ when $S$ is some generally distributed rv.\sidenote{For the $M/M/1$ queue, $\E{S_r} = \rho\E S$, but not fora the $M/G/1$ queue.}
+To make further progress we need to find an expression for $\E{S_r}$ when~$S$ is some generally distributed rv.\sidenote{For the $M/M/1$ queue, $\E{S_r} = \rho\E S$, but not fora the $M/G/1$ queue.}
 For this, we use the renewal reward theorem, just as in~\cref{sec:mxm1-queue:-expected}.
 
-Consider the $k$th job of some sample path of the $M/G/1$ queueing process.
+Consider the~$k$th job of some sample path of the $M/G/1$ queueing process.
 Let the job's service start\sidenote{Usually this is later than the arrival time $A_{k}$.} at time $\tilde A_k$, so that it departs at time $D_k=\tilde A_k + S_k$, see~\cref{fig:mg1remainingservicetime}.
-At time $s$,  the remaining service time of job~$k$ is
+At time~$s$,  the remaining service time of job~$k$ is
 $(D_k-s)\1{\tilde A_k \leq s < D_k}$.
 \begin{marginfigure}
 \begin{tikzpicture}[scale=1,
@@ -58,9 +58,9 @@ By adding up all these times, we find that the total remaining service time as s
  \begin{equation*}
  Y(t) = \int_0^t (D_{D(s)+1}-s)\1{A_{D(s)+1} \leq s \leq D_{D(s)+1}} \d s
  \end{equation*}
-To see this, note that at time $s$, the number of departures is $D(s)$.
- Thus, $D(s)+1$ is the first job to depart after time $s$.
- The departure time of this job is $D_{D(s)+1}$, hence the remaining service time at time $s$ is $D_{D(s)+1}-s$, provided this job is in service.
+To see this, note that at time~$s$, the number of departures is $D(s)$.
+ Thus, $D(s)+1$ is the first job to depart after time~$s$.
+ The departure time of this job is $D_{D(s)+1}$, hence the remaining service time at time~$s$ is $D_{D(s)+1}-s$, provided this job is in service.
 Then, as $t \to \infty$, $Y(t)/t$ converges to the  (time-average) remaining service time $\E{S_r}$.
 
  We also see in \cref{fig:mg1remainingservicetime} that $X_k = Y(D_k) - Y(D_{k-1})$ is the area under the triangle.

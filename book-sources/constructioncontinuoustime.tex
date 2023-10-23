@@ -24,20 +24,20 @@ First we concentrate on a situation in which there is single server available; a
 When the next job arrives before $10$ am, this second job has to wait in queue until the first job finishes at 10 am.
 If, however, this second job arrives after 10 am, it finds the server free, so that its service can start right at the moment of arrival.
 
-More generally, suppose we are given an (ordered) sequence of \emph{arrival times} $\{A_{k}\}$ and a set of iid \emph{service times} $\{S_{k}\}$, such that job $k$ arrives at time $A_{k}$ and needs an amount $S_{k}$ of service.
-Then we can compute the sequence of departure times $\{D_{k}\}$ from the recursion\sidenote{Note that we assume that job $k$ `reveals' its service time at the moment it arrives.}
+More generally, suppose we are given an (ordered) sequence of \emph{arrival times} $\{A_{k}\}$ and a set of iid \emph{service times} $\{S_{k}\}$, such that job~$k$ arrives at time $A_{k}$ and needs an amount $S_{k}$ of service.
+Then we can compute the sequence of departure times $\{D_{k}\}$ from the recursion\sidenote{Note that we assume that job~$k$ `reveals' its service time at the moment it arrives.}
 \begin{equation}\label{eq:qc-3}
 D_k = \max\{A_k, D_{k-1}\} + S_k.
 \end{equation}
 Why is this true?
-The service of job $k$ cannot start before it arrives, hence, the job cannot leave before $A_k + S_k$ which is the same as saying that $D_k \geq A_k +S_k$.
-Moreover, the service of job $k$ cannot start before job $k-1$ left the server. Thus job $k$ can also not start before $D_{k-1}$.
+The service of job~$k$ cannot start before it arrives, hence, the job cannot leave before $A_k + S_k$ which is the same as saying that $D_k \geq A_k +S_k$.
+Moreover, the service of job~$k$ cannot start before job $k-1$ left the server. Thus job~$k$ can also not start before $D_{k-1}$.
 
 Once $A_{k}$ and $D_{k}$ are known, we can compute the \recall{sojourn time} and \recall{waiting time} as
 \begin{align*}
 \J_k &= D_{k} - A_k, &   &  \W_k = J_k - S_k,
  \end{align*}
-thus, $\J_{k}$ is the total amount of time job $k$ spends in the system, and $\W_{k}$ is the time the job spends in queue (but not at the server).  \cref{fig:waitingtimegg1} shows how the above concepts relate to each other.
+thus, $\J_{k}$ is the total amount of time job~$k$ spends in the system, and $\W_{k}$ is the time the job spends in queue (but not at the server).  \cref{fig:waitingtimegg1} shows how the above concepts relate to each other.
 
 
 \begin{figure}[t]
@@ -105,7 +105,7 @@ node[right] (c2) at (5,-1.5) {$A_{k}$}
 node[midway, fill=white] {$X_{k}$};
 \end{tikzpicture}
 \caption{Construction of the single-server queue in continuous time. The sojourn time is the time a job remains in the system, hence equals the sum of the waiting time and the service time.
-The virtual waiting time process $V$ is shown by the solid lines with slope~$-1$. Note that right after the arrival of job $k$, the virtual waiting time $V(A_{k}) = J_{k}$.}
+The virtual waiting time process~$V$ is shown by the solid lines with slope~$-1$. Note that right after the arrival of job~$k$, the virtual waiting time $V(A_{k}) = J_{k}$.}
  \label{fig:waitingtimegg1}
 \end{figure}
 
@@ -116,7 +116,7 @@ The virtual waiting time process $V$ is shown by the solid lines with slope~$-1$
  \end{align}
 
 Interestingly, if  $\{X_{k}\}$ and $\{S_{k}\}$ are given, we don't need to first compute $\{A_{k}\}$ and $\{D_{k}\}$  to find the sojourn times and waiting  times. In fact,
-suppose that job $k-1$ has to wait a time $\W_{k-1}$ in queue and then adds its service time $S_{k-1}$ to the waiting time, so that its sojourn time $\J_{k-1} =\W_{k-1}+ S_{k-1}$. If a time $X_k$ elapses between the arrival time of job $k-1$ and $k$, then job $k$ has to wait in queue,\sidenote{$[x]^{+} := \max\{x, 0\}$}
+suppose that job $k-1$ has to wait a time $\W_{k-1}$ in queue and then adds its service time $S_{k-1}$ to the waiting time, so that its sojourn time $\J_{k-1} =\W_{k-1}+ S_{k-1}$. If a time $X_k$ elapses between the arrival time of job $k-1$ and~$k$, then job~$k$ has to wait in queue,\sidenote{$[x]^{+} := \max\{x, 0\}$}
 \begin{align}\label{eq:56}
  \W_{k} &= [\J_{k-1} -X_k]^+, & \J_{k} &= \W_{k} + S_{k}, & W_{0} &= 0.
 \end{align}
@@ -134,10 +134,10 @@ The number of arrivals $A(t)$ as a \emph{function of time} $t$ can be computed f
 \begin{equation} \label{eq:2}
  A(t) = \max\{k: A_k \leq t\} = \sum_{k=1}^{\infty}\1{A_k\leq t}.
 \end{equation}
-Observe that the function $t\to A(t)$ is right-continuous\sidenote{A function $f$ if right-continuous if, for all $x$, $f(x) = f(x+) := \lim_{y\downarrow x} f(y)$.}.
+Observe that the function $t\to A(t)$ is right-continuous\sidenote{A function~$f$ if right-continuous if, for all~$x$, $f(x) = f(x+) := \lim_{y\downarrow x} f(y)$.}.
 
 In turn, we can retrieve the arrival times $\{A_{k}\}$ from the sequence of numbers $\{A(t)\}$.
-For instance, if we know that $A(s) = k-1$ and $A(t) = k$, then the arrival time $A_k$ of the $k$th job must lie somewhere in $(s,t]$.
+For instance, if we know that $A(s) = k-1$ and $A(t) = k$, then the arrival time $A_k$ of the~$k$th job must lie somewhere in $(s,t]$.
 Specifically,\sidenote{~\cref{ex:60}}
 \begin{equation*}
  A_k = \min\{t: A(t) \geq k\}, \quad A_0 = 0.
@@ -149,16 +149,16 @@ Likewise, for the departures $\{D_{k}\}$ and the \emph{departure process} $\{D(t
  D(t) &= \max\{k : D_k \leq t\} = \sum_{k=1}^\infty \1{D_k \leq t}, &  D_{k} &=\min\{t: D(t) \geq k\}.
 \end{align*}
 
-Once we have the arrival and departure processes, it is easy to compute the \recall{number of jobs in the system} at time $t$ as, see~\cref{fig:atltdt},
+Once we have the arrival and departure processes, it is easy to compute the \recall{number of jobs in the system} at time~$t$ as, see~\cref{fig:atltdt},
 \begin{equation}\label{eq:14}
  \L(t) = A(t) - D(t) + \L(0),
 \end{equation}
 where $\L(0)$ is the number of jobs in the system at time $t=0$; typically we assume that $\L(0)=0$.
 Recalling that in a queueing system, a job can either be in queue or in service, we distinguish between the number of jobs in the system $\L(t)$, the number of jobs in queue $\Q(t)$, and the number in service $\Ls(t)$.
-Clearly, $\L(t) = \Q(t) + \Ls(t)$.  Sometimes we write  $\tilde A(t)$ for the number of jobs that departed from the queue up to time $t$; it follows that $\Ls(t) = \tilde A(t) - D(t) = \L(t) - \Q(t)$.
+Clearly, $\L(t) = \Q(t) + \Ls(t)$.  Sometimes we write  $\tilde A(t)$ for the number of jobs that departed from the queue up to time~$t$; it follows that $\Ls(t) = \tilde A(t) - D(t) = \L(t) - \Q(t)$.
 
 
-It is important to realize that the queue length process $\{Q(t)\}$ at general time moments $t$ can be quite different from the queue length process $\{ \Q(A_k-)\}$ as observed by arriving jobs.\sidenote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
+It is important to realize that the queue length process $\{Q(t)\}$ at general time moments~$t$ can be quite different from the queue length process $\{ \Q(A_k-)\}$ as observed by arriving jobs.\sidenote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
 
 
 \begin{figure}[t]
@@ -211,9 +211,9 @@ Observe that the arrival and departures times are intertwined.}
 \end{figure}
 
 
-Finally, the \recall{virtual waiting time process} $\{V(t)\}$ is the time a job would have to wait if it would arrive at time $t$.
+Finally, the \recall{virtual waiting time process} $\{V(t)\}$ is the time a job would have to wait if it would arrive at time~$t$.
 In other words, the virtual waiting time is the waiting time observed by jobs arriving virtually (but not in reality).
-To construct\sidenote{~\cref{ex:l-150}} $\{V(t)\}$, we simply draw lines that start at points $(A_k, \J_k)$ and have slope -1, until the lines hit the $x$-axis.
+To construct\sidenote{~\cref{ex:l-150}} $\{V(t)\}$, we simply draw lines that start at points $(A_k, \J_k)$ and have slope -1, until the lines hit the~$x$-axis.
 Once at $y=0$, the virtual waiting time remains there until an arrival occurs, c.f., \cref{fig:waitingtimegg1}.
 Here is the expression\sidenote{See~\cref{ex:l-150}.}
  \begin{equation}\label{eq:34}
@@ -232,7 +232,7 @@ Here is the expression\sidenote{See~\cref{ex:l-150}.}
 %   What is $\1{A_k \leq t}$ if $A_k \leq t$?
 % \end{hint}
 % \begin{solution}
-% For every $A_k \leq t$, we have that $\1{A_k \leq t} = 1$, and else the indicator is $0$. Hence, in the summation we count the number of times $A_k \leq t$.
+% For every $A_k \leq t$, we have that $\1{A_k \leq t} = 1$, and else the indicator is~$0$. Hence, in the summation we count the number of times $A_k \leq t$.
 % \end{solution}
 % \end{exercise}
 
@@ -251,11 +251,11 @@ Are the following mappings correct:
  What are the meanings of $A_{A(t)}$, and of $A(A_n)$?
 \begin{solution}
  $A(t)$ is the number of arrivals during $[0,t]$. Suppose that
- $A(t) = n$. This $n$th job arrived at time $A_n$. Thus, $A_{A(t)}$
+ $A(t) = n$. This~$n$th job arrived at time $A_n$. Thus, $A_{A(t)}$
  is the arrival time of the last job that arrived before or at time
- $t$. In a similar vein, $A_n$ is the arrival time of the $n$th
+ $t$. In a similar vein, $A_n$ is the arrival time of the~$n$th
  job. Thus, the number of arrivals up to time $A_n$, i.e., $A(A_n)$,
- must be $n$.
+ must be~$n$.
 \end{solution}
 \end{exercise}
 
@@ -280,8 +280,8 @@ Compare this to Definition~\cref{eq:2}, or use a numerical example.
 
 
 % \begin{exercise}\label{ex:25}
-% Assume that $X_k = 10$ minutes and $S_k = 11$ minutes for all $k$, i.e., $X_k$ and $S_k$ are deterministic and constant.
-% Compute $A_k$, $\W_k$, $D_k$ as functions of $k$.
+% Assume that $X_k = 10$ minutes and $S_k = 11$ minutes for all~$k$, i.e., $X_k$ and $S_k$ are deterministic and constant.
+% Compute $A_k$, $\W_k$, $D_k$ as functions of~$k$.
 % Then find expressions for $A(t)$ and $D(t)$.
 % \begin{hint}
 % Observe that jobs arrive faster than they are served.
@@ -293,7 +293,7 @@ Compare this to Definition~\cref{eq:2}, or use a numerical example.
 %  $\W_{3} = \max\{1+11-10,0\} =2$. Hence, $\W_{k} = k-1$ for
 %  $k\geq1$. Thus, $\J_k = k-1+11 = k + 10$ for $k\geq1$, and
 %  $D_k = 10k + k+10 = 11k+10$. Note that $\W_k$ increases linearly
-%  as a function of $k$. All in all, $A(t) = \lfloor t/10\rfloor$, and $D(t) = \lfloor (t-10)/11 \rfloor$.
+%  as a function of~$k$. All in all, $A(t) = \lfloor t/10\rfloor$, and $D(t) = \lfloor (t-10)/11 \rfloor$.
 % \end{solution}
 % \end{exercise}
 
@@ -304,10 +304,10 @@ Compare this to Definition~\cref{eq:2}, or use a numerical example.
 
 \begin{exercise}
 Show  that $\L(A_k-)>0 \iff A_k \leq D_{k-1}$.
-\begin{hint} Use that $\L(A_k-)>0$ means that the system contains at least one job at the time of the $k$th arrival, and that $A_k- < D_{k-1}$ means that job $k$ arrives (almost surely) before job $k-1$ departs.
+\begin{hint} Use that $\L(A_k-)>0$ means that the system contains at least one job at the time of the~$k$th arrival, and that $A_k- < D_{k-1}$ means that job~$k$ arrives (almost surely) before job $k-1$ departs.
 \end{hint}
-\begin{solution} In a sense, the claim is evident, for, if the system contains a job when job $k$ arrives, it cannot be empty.
- But if it is not empty, then at least the last job that arrived before job $k$, i.e., job $k-1$, must still be in the system.
+\begin{solution} In a sense, the claim is evident, for, if the system contains a job when job~$k$ arrives, it cannot be empty.
+ But if it is not empty, then at least the last job that arrived before job~$k$, i.e., job $k-1$, must still be in the system.
  That is, $D_{k-1} \geq   A_k$.
  A more formal proof proceeds along the following lines.
  Using that $A(A_k-) = k-1 = D(D_{k-1})$,
@@ -325,14 +325,14 @@ Show  that $\L(A_k-)>0 \iff A_k \leq D_{k-1}$.
 
 
 \begin{exercise}\label{ex:l-150}
-Explain~\cref{eq:34} for the virtual waiting time at time $t$.
+Explain~\cref{eq:34} for the virtual waiting time at time~$t$.
 \begin{hint}Make a plot of the function $t-A_{A(t)}$.
 \end{hint}
 \begin{solution}
 Suppose that $A_{n+1} = A_{n} + \epsilon$, i.e., the arrival time $A_{n+1}$ is just a tiny bit larger than $A_{n}$.
 Then job $n+1$ would have to wait $J_{n}-\epsilon$ before it can get access to the server.
-Now, recall from a previous exercise that if $A(t)=n$, then $A_n$ is the arrival time of the $n$th job, so that the function $A_{A(t)}$ provides us with arrival times as a function of~$t$.
-Between arrival moments, the virtual waiting time decreases with slope $1$, until it hits 0.
+Now, recall from a previous exercise that if $A(t)=n$, then $A_n$ is the arrival time of the~$n$th job, so that the function $A_{A(t)}$ provides us with arrival times as a function of~$t$.
+Between arrival moments, the virtual waiting time decreases with slope~$1$, until it hits 0.
 \end{solution}
 \end{exercise}
 
@@ -354,7 +354,7 @@ Between arrival moments, the virtual waiting time decreases with slope $1$, unti
 
 
 % \begin{exercise}\label{ex:l-148}
-% Compute $\P{S-X\leq u}$ for $S$ and $X$ independent and $S\sim \Unif{[0,7]}$ and $X\sim \Unif{[0,10]}$.
+% Compute $\P{S-X\leq u}$ for~$S$ and~$X$ independent and $S\sim \Unif{[0,7]}$ and $X\sim \Unif{[0,10]}$.
 % \begin{hint}
 % It's evident that $f_{X}(x) = \1{0\leq x \leq 10}/10$ and $f_{S}(s) = \1{0\leq s \leq 7}/7$. Let  $T=S-X$. Then $X=S-T$, and
 % \begin{align*}
@@ -426,7 +426,7 @@ Between arrival moments, the virtual waiting time decreases with slope $1$, unti
 % \begin{align*}
 %  \P{Y_k=-2} &=\P{S_{k-1}-X_k=-2} = \P{S_{k-1}=1, X_k=3} = \P{S_{k-1}=1}\P{X_k=3} = \frac14.
 % \end{align*}
-% Dropping the dependence on $k$ for ease, we get
+% Dropping the dependence on~$k$ for ease, we get
 % \begin{align*}
 %  \P{Y=-2} &=\P{S-X=-2} = \P{S=1, X=3} = \P{S=1}\P{X=3} = \frac14,\\
 %  \P{Y=-1} &=\P{S=2}\P{X=3} = \frac14,\\

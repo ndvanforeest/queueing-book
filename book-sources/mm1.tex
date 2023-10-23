@@ -21,7 +21,7 @@ Then we sketch an algorithm to compute these measures for the general case.
 We assume that all systems that do not block arrivals in some way are stable; when demand is blocked, the systems is stable anyway.
 
 
-\newthought{In the models} below we allow $\lambda(n)$ and $\mu(n)$ to depend on the number~$n$ in the system, but given $n$, the inter-arrival and service times should be exponentially distributed, that is,\sidenote{This very general queueing systems is sometimes written as the $M(n)/M(n)/1$ queue.}
+\newthought{In the models} below we allow $\lambda(n)$ and $\mu(n)$ to depend on the number~$n$ in the system, but given~$n$, the inter-arrival and service times should be exponentially distributed, that is,\sidenote{This very general queueing systems is sometimes written as the $M(n)/M(n)/1$ queue.}
 \begin{align*}
   X|L=n &\sim \Exp{\lambda(n)}, & S|L=n &\sim \Exp{\mu(n)}.
 \end{align*}
@@ -59,7 +59,7 @@ recall that $\E\Ls$ is the time-average number of jobs in service. Since $\E\L$ 
 
 
 
-\newthought{The \recall{$M/M/c$} queue} has $c$ identical servers to process jobs.
+\newthought{The \recall{$M/M/c$} queue} has~$c$ identical servers to process jobs.
 To model this, set
 \begin{align*}
 \lambda(n) &= \lambda, & \mu(n) &= \mu \min\{n, c\}.
@@ -100,13 +100,13 @@ Moreover, since jobs are blocked, the utilization is no longer equal to the load
 \E\Ls = \sum_{n=0}^K \min\{n, 1\} p(n) = 1-p(0) = \frac{\lambda}{\mu} (1-p(K)).
 \end{equation}
 
-\newthought{The \recall{$M/M/c/c$} queue} blocks jobs when all of its $c$ servers are occupied.\sidenote{This queueing model is also known as the Erlang $B$ model.}
+\newthought{The \recall{$M/M/c/c$} queue} blocks jobs when all of its~$c$ servers are occupied.\sidenote{This queueing model is also known as the Erlang~$B$ model.}
 Thus, we take
 \begin{align*}
 \tilde \lambda(n) &= \lambda\1{n<c}, & \mu(n) &= n \mu.
  \end{align*}
 This queueing system is often used to determine the number of beds needed by a hospital: the beds act as servers and the patients as jobs.
-Given the arrival rate of patients, and the average time they occupy a bed\sidenote{i.e., the expected service time}, the problem is to find the number of beds $c$ such that the probability $p(c)$ to block a patient is less than some threshold, $1\%$ say.
+Given the arrival rate of patients, and the average time they occupy a bed\sidenote{i.e., the expected service time}, the problem is to find the number of beds~$c$ such that the probability $p(c)$ to block a patient is less than some threshold, $1\%$ say.
 For hospitals it is reasonable to assume Poisson arrivals since patients arrive independently from a large population.
 Then, by PASTA, we conclude that indeed$\pi(c) = p(c)$, in other words, the blocked fraction is equal to the time average $p(c)$ during which all beds are occupied.
 As for the service times, there are often many patients in a hospital, and they have many different reasons why they occupy a bed.
@@ -138,10 +138,10 @@ We mention in passing---but do not prove it---that the same results also hold fo
 
 \newthought{With a finite calling population} the number of jobs is fixed, $N$ say.
 This model is useful to analyze repair systems and inventory systems of spare parts.
-To see this, consider a factory with $N$ machines and $c$ mechanics.\sidenote{When  $c=N$ we obtain the Ehrenfest model of diffusion, which is used to provide some insight into the second law of thermodynamics.}
+To see this, consider a factory with~$N$ machines and~$c$ mechanics.\sidenote{When  $c=N$ we obtain the Ehrenfest model of diffusion, which is used to provide some insight into the second law of thermodynamics.}
 A machine can be in one of two states: working or failed.
 When a machine breaks down, it moves to the repair department and waits until it is repaired.
-When $n$ machines are in repair, there are $N-n$ machines still working.
+When~$n$ machines are in repair, there are $N-n$ machines still working.
 Thus, if $\lambda$ is the rate at which a individual machine can fail, $\lambda(N-n)$ is the rate at which any of the working machines can fail,
 we obtain
 \begin{align*}
@@ -153,7 +153,7 @@ In case $c=1$, the probabilities become \sidenote{~\cref{ex:l-247}}
 \begin{align*}
  p(n)  &= \frac{N!}{(N-n)!}\frac{\rho^n}{G}, & G &= \sum_{n=0}^N \rho^n \frac{N!}{(N-n)!}.
 \end{align*}
-As the expression for $G$ cannot be simplified, there is not much point trying to derive simple expressions for $\E \L$.
+As the expression for~$G$ cannot be simplified, there is not much point trying to derive simple expressions for $\E \L$.
 There exist algorithms to compute $\E L$, we don't discuss these here.
 
 \newthought{A customer balks} when the customer finds the queue too long, hence decides not to join.
@@ -163,7 +163,7 @@ A simple example model with customer balking is to take,
 \end{align*}
 
 Balking is not necessarily the same as blocking.
-In the latter case, $\tilde \lambda(n)= \lambda \1{n < K}$; in the former case, a fraction of the customers may already choose not the join the system at a lower level than $K$.
+In the latter case, $\tilde \lambda(n)= \lambda \1{n < K}$; in the former case, a fraction of the customers may already choose not the join the system at a lower level than~$K$.
 
 As the steady-state probabilities depend heavily on the form of $\tilde \lambda(n)$ and $\mu(n)$, we use the recursion~\cref{eq:25} and the code below to compute the performance measures.
 
@@ -178,7 +178,7 @@ We can use the code below if we need to analyze such as system.
 
 \newthought{The most general} case can only be approached with numerical methods.
 We present example code to deal with a queue with balking; the other models of this section are easy modifications of this.
-Note that we need to assume that $K$ is finite, although it can be large. For all practical purposes, allowing $K$ in the order of 1000 seems more than large enough.
+Note that we need to assume that~$K$ is finite, although it can be large. For all practical purposes, allowing~$K$ in the order of 1000 seems more than large enough.
 
 \begin{python}
 import numpy as np
@@ -218,7 +218,7 @@ print(EL, EQ + ELs) # check
 \begin{exercise}
  Explain that for the $M/M/1$ queue $\E{\Q} = \sum_{n=1}^\infty (n-1)\pi(n)$ and use this to find that $\E{\Q}=\rho^2/(1-\rho)$.
 \begin{solution}
- The fraction of time the system contains $n$ jobs is $\pi(n)$ (by
+ The fraction of time the system contains~$n$ jobs is $\pi(n)$ (by
  PASTA). When the system contains $n>0$ jobs, the number in queue
  is one less, i.e., $n-1$.
 \begin{align*}
@@ -243,7 +243,7 @@ Similarly, $\P{\L\geq n} = \sum_{k\geq n} p(k)$.
 \begin{equation*}
  M_L(s) = \E{e^{s L}} = \sum_{n=0}^\infty e^{s n}p(n) = (1-\rho) \sum_n e^{s n} \rho^n=\frac{1-\rho}{1-e^{s}\rho},
 \end{equation*}
-where we assume that $s$ is such that $e^s \rho < 1$. Then,
+where we assume that~$s$ is such that $e^s \rho < 1$. Then,
 \begin{align*}
  M_L'(s) &= (1-\rho) \frac{1}{(1-e^s\rho)^2} e^s \rho \implies \E\L = M_L'(0)= \frac{\rho}{1-\rho}, \\
  \E{\L^2}&= M''(0)= \frac{2\rho^2}{(1-\rho)^2} + \frac{\rho}{1-\rho},\\
@@ -357,7 +357,7 @@ Next, for $n\geq c$, note that $p(n) = (c \rho)^{n}/(c^{n-c}c!) = c^{c} \rho^{n}
 &=\frac{c^c\rho^c}{G c!} \frac{\rho}{(1-\rho)^2}.
 \end{align*}
 
-The derivation of the expected number of jobs in service becomes easier if we pre-multiply the normalization constant $G$:
+The derivation of the expected number of jobs in service becomes easier if we pre-multiply the normalization constant~$G$:
  \begin{align*}
  G \E{\Ls}
 &= G \left( \sum_{n=0}^{c} n p(n) + \sum_{n=c+1}^{\infty} c p(n) \right) \\
@@ -373,7 +373,7 @@ Observe that the RHS is precisely equal to $\rho c G$, so that $\E\Ls = c \rho$.
 \begin{exercise}\label{ex:l-245}
 Derive the expressions for the $M/M/c/c$ queue.
 \begin{hint}
-  Realize that the $M/M/c/c$ queue is similar to the $M/M/c$ queue. However, there cannot be more than $c$ jobs in the system.
+  Realize that the $M/M/c/c$ queue is similar to the $M/M/c$ queue. However, there cannot be more than~$c$ jobs in the system.
 \end{hint}
 \begin{solution}
 In the expressions for the $M/M/c$ queue, just neglect the parts that deal with states $n>c$.
@@ -395,7 +395,7 @@ $1=\sum_{n=0}^c p(n) = p(0) \sum_{n=0}^c \frac{(c\rho)^n}{n!}$. Next,
 \begin{exercise}\label{ex:l-246}
 Derive the expressions for the $M/M/\infty$ queue.
 \begin{hint}
-Use that for any $x$, $x^n/n!\to 0$ as $n\to\infty$.
+Use that for any~$x$, $x^n/n!\to 0$ as $n\to\infty$.
 \end{hint}
 \begin{solution}
  By taking the limit $c\to\infty$, note first that in~\cref{eq:501},
@@ -406,7 +406,7 @@ Hence
 \begin{equation*}
 G =\sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^c}{(1-\rho)c!} \to \sum_{n=0}^{\infty} \frac{(c\rho)^n}{n!} = e^{\lambda/\mu}.
 \end{equation*}
-Next, for any fixed $n$, eventually $c>n$, and then, as $\rho=\lambda/(\mu c)$,
+Next, for any fixed~$n$, eventually $c>n$, and then, as $\rho=\lambda/(\mu c)$,
 \begin{equation*}
  p(n) = \frac{1}G \frac{(c\rho)^n}{n!} = \frac{1}G \frac{(\lambda/\mu)^n}{n!}
 \to e^{-\lambda/\mu} \frac{(\lambda/\mu)^n}{n!}, \quad\text{as } c\to\infty.
@@ -419,7 +419,7 @@ Next, for any fixed $n$, eventually $c>n$, and then, as $\rho=\lambda/(\mu c)$,
 
 
 \begin{exercise}\label{ex:l-247}
-Find  the steady state probabilities  for a single-server queue with a finite calling population with $N$ jobs.
+Find  the steady state probabilities  for a single-server queue with a finite calling population with~$N$ jobs.
 \begin{solution}
  \begin{align*}
  p(n+1)
@@ -434,7 +434,7 @@ Find  the steady state probabilities  for a single-server queue with a finite ca
 \end{exercise}
 
 \begin{exercise}\label{ex:33}
- Derive the steady state probabilities $p(n)$ for a queue with a finite calling population with $N$ jobs and $N$ servers.
+ Derive the steady state probabilities $p(n)$ for a queue with a finite calling population with~$N$ jobs and~$N$ servers.
   What happens if $N\to\infty$?
 \begin{solution}
  Take $\lambda(n) = (N-n)\lambda$ and $\mu(n) = n \mu$. Then

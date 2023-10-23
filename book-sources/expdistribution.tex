@@ -21,7 +21,7 @@ In this section we concentrate on the properties of the  exponential distributio
 
 
 
-We say that a random variable $X$ is \recall{exponentially distributed} with mean~$1/\lambda$ if
+We say that a random variable~$X$ is \recall{exponentially distributed} with mean~$1/\lambda$ if
 \begin{equation*}
  \P{X \leq t} = 1- e^{-\lambda t},
 \end{equation*}
@@ -36,25 +36,25 @@ and then we write $X\sim \Exp{\lambda}$. The following properties hold:\sidenote
 \end{subequations}
 
 
-\newthought{Perhaps the most} important property of an exponential rv $X$ is that it is \recall{memoryless}, which means that it satisfies
+\newthought{Perhaps the most} important property of an exponential rv~$X$ is that it is \recall{memoryless}, which means that it satisfies
 \begin{equation*}
  \P{X > s+t \given X>s} = \P{X>t}.
 \end{equation*}
-In words, the probability that $X$ is larger than some time $s+t$, conditional on it being larger than a time~$s$, is equal to the probability that $X$ is larger than $t$.
-Stated differently, even given that $X$ did not occur before $s$, the probability that it takes $t$ time units more to occur, is the same as if we did not have to wait for $s$ time units to pass.
+In words, the probability that~$X$ is larger than some time $s+t$, conditional on it being larger than a time~$s$, is equal to the probability that~$X$ is larger than~$t$.
+Stated differently, even given that~$X$ did not occur before~$s$, the probability that it takes~$t$ time units more to occur, is the same as if we did not have to wait for~$s$ time units to pass.
 The remarkable fact is he reverse--when -a continuous memoryless random variable is memoryless it is exponential---can also be proven, but that is harder\sidenote{\citet[Appendix 3]{yushkevich69:_markov_proces}}.
 
 The characteristic timescales we consider in queueing theory range from minutes to a week.\sidenote{And of course there are exceptions.}
 On these timescales it often turns out that it is reasonable to model inter-arrival times of jobs as memoryless, hence exponentially distributed.
-For instance, if $X$ is the arrival time of the next patient with a broken arm at the emergency room of a hospital, what can we say about $X$ when we know that an hour earlier a patient came in with broken arm?
+For instance, if~$X$ is the arrival time of the next patient with a broken arm at the emergency room of a hospital, what can we say about~$X$ when we know that an hour earlier a patient came in with broken arm?
 Not much, as most of us will agree.
 
-However, the life span of human beings is not memoryless: take $X$ as the life span of an arbitrary person born in 1880, and $s=t = 100$ years. Then $\P{X>100}$ was small, but not zero, but $\P{X>200 \given X>100} = 0$.%\sidenote{Even if you believe that Elvis Presley is still alive.}
+However, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s=t = 100$ years. Then $\P{X>100}$ was small, but not zero, but $\P{X>200 \given X>100} = 0$.%\sidenote{Even if you believe that Elvis Presley is still alive.}
 
 
-\newthought{There is a} close link between the Poisson process $N$ and the exponential distribution.
+\newthought{There is a} close link between the Poisson process~$N$ and the exponential distribution.
 In fact, a counting process $\{N(t)\}$ is a \emph{Poisson process} with rate~$\lambda$ if and only if the inter-arrival times $\{X_k\}$ are iid and $X_{k} \sim \Exp{\lambda}$.
-To see this, note that the event $\{N(t)= 0\}$ is equal to the event that the first arrival occurs after $t$, i.e., $\{X_1 > t\}$.
+To see this, note that the event $\{N(t)= 0\}$ is equal to the event that the first arrival occurs after~$t$, i.e., $\{X_1 > t\}$.
 Therefore, $\P{X_1> t} = \P{N(t) = 0} = e^{-\lambda t}$.
 
 
@@ -65,8 +65,8 @@ And, if you find it reasonable that the occurrence of an event in a small time i
 \newthought{The geometric distribution} is the discrete-time analog of exponential distribution.
 As such, geometric rvs are also memoryless, but in discrete time.
 To demonstrate this, consider a machine that produces items.
-An item fails with probability $p$, and is correct with probability $q=1-p$, independent of the correctness of any other item.
-Let $X$ be the number of items produced until a failure occurs.  Then $\P{X=m} =  p q^{m-1}$, from which easily follows that
+An item fails with probability~$p$, and is correct with probability $q=1-p$, independent of the correctness of any other item.
+Let~$X$ be the number of items produced until a failure occurs.  Then $\P{X=m} =  p q^{m-1}$, from which easily follows that
 \begin{equation}  \label{eq:81}
 \P{X>n+m\given X>m} = \frac{\P{X>n+m}}{\P{X>m}} = \frac{q^{n+m}}{q^m}=q^{n} = \P{X>n}.
 \end{equation}
@@ -80,7 +80,7 @@ Let $X$ be the number of items produced until a failure occurs.  Then $\P{X=m} =
 %  \E X = \int_0^\infty t f(t)\, \d t =
 %  \int_0^\infty t \lambda e^{-\lambda t}\, \d t,
 %  \end{equation*}
-%  where~$f(t)=\lambda e^{-\lambda t}$ is the density function of $X$.
+%  where~$f(t)=\lambda e^{-\lambda t}$ is the density function of~$X$.
 % \end{hint}
 % \begin{solution}
 % Let $I_j = \int_0^\infty e^{- x} x^j \d x$. Then, $I_j = {j!}$, since by recursion,
@@ -130,7 +130,7 @@ Thus, $\V X = \E{X^2} - (\E X)^2 = \frac{2}{\lambda^2} - (\frac{1}{\lambda})^2 =
 
 
 \begin{exercise}\label{ex:l-214}
-If $X\sim \Exp{\lambda}$, show that $X$ is memoryless.
+If $X\sim \Exp{\lambda}$, show that~$X$ is memoryless.
 \begin{hint}
 Simplify $\P{X>t+h\given X>t}$ with $\P{A\given B} = \P{AB}/\P{B}$.
 \end{hint}
@@ -148,7 +148,7 @@ By the definition of conditional probability
 
 \begin{exercise}\label{ex:30}
  Assume \marginpar{In this and the next exercises we show that exponential $\implies$ Poisson.} that inter-arrival times $\{X_i\}$ are iid and $\sim\Exp{\lambda}$. Let
-the arrival time of the $i$th job be $A_i=\sum_{k=1}^i X_k$. Show that
+the arrival time of the~$i$th job be $A_i=\sum_{k=1}^i X_k$. Show that
 $\E{A_i} = i/\lambda$.
 \begin{hint}
 $\E{A_i} = \E{\sum_{k=1}^i X_k}$
@@ -228,7 +228,7 @@ hence $\E Z = (\lambda+\mu)^{-1}$.
 $\{\min\{X, S\}>x\} =\{X>x\} \cap\{S> x\}$.
 \end{hint}
 \begin{solution}
-$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as  $X$ and $S$ independent.
+$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as  $X$ and~$S$ independent.
 \end{solution}
 \end{exercise}
 
@@ -244,7 +244,7 @@ Use that $\P{S > X} = \E{\E{\1{S>X}|X}}$.
 \begin{solution}
 With conditioning, $\P{S>X|X=t} = \P{S>t} =e^{-\mu t}$.
 With the fundamental brigde and conditional expectation, $\E{\1{S>X}|X} = e^{-\mu X}$, hence $\E{\1{S>X}} = \E{e^{-\mu X}}$. But this last formula is equal to
-$M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of $X$ we obtain $\lambda/(\lambda+\mu)$.
+$M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of~$X$ we obtain $\lambda/(\lambda+\mu)$.
 % \begin{align*}
 %  \P{X\leq S}
 % &= \E{\1{X\leq S}} = \int_0^\infty \int_0^\infty \1{x\leq y} f_{X,S}(x,y)\, \d y\,\d x\\
