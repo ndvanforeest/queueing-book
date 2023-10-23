@@ -1,0 +1,334 @@
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
+% !arara: clean: { files: [ ans.tex, hint.tex] }
+
+\documentclass[queueing-book.tex]{subfiles}
+%\externaldocument{queueing-book}
+\input{header}
+
+\begin{document}
+
+\section{$M^B/M/1$ Queue Length Distribution}\label{sec:batch-arrivals}
+
+
+In~\cref{sec:mxm1-queue:-expected,sec:mg1} we established the Pollaczek-Khinchine formula for the waiting times of the $M^B/M/1$ queue and the $M/G/1$ queue, respectively.
+To compute more difficult performance measures such as the loss probability $\P{\L>n}$, we need expressions for the stationary distribution $\pi(n)$, which by PASTA is equal to $p(n)$.
+Here we present a numerical, recursive, scheme to compute these probabilities.
+
+
+\newthought{We can again} use level-crossing arguments to find $\{\pi(n)\}$.
+However, the reasoning by which we obtained the level-crossing equations $\lambda p(n) = \mu p(n-1)$ needs to be generalized because, at the arrival of a batch containing many items, multiple levels will be up-crossed, see~\cref{fig:levelcrossing}.
+
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[scale=1,
+ %Define standard arrow tip
+ >=stealth',
+ %Define style for boxes
+ circ/.style={
+ circle,
+ draw=black,
+ thick,
+ minimum size=1.cm,
+ inner sep=0pt,
+ text centered
+ },
+ % Define arrow style
+ pil/.style={
+ ->,
+ thick,
+ shorten <=2pt,
+ shorten >=2pt}
+]
+
+\draw[dashed, thick] node at (5,-1.5) [below] {level $n$}
+(5,-1.5) -- (5,3);
+
+\node[circ] (n-2) {$n-2$};
+
+%\node[circ, right=of n-2] (n-1) {$n-1$} edge[loop below, thick] node[midway, fill=white] {$\lambda f(0)$} (n-1);
+\node[circ, right=of n-2] (n-1) {$n-1$};
+
+\node[circ, right=of n-1] (n) {$ n $}
+ edge[pil,<-, bend left=45] node[below] {$\lambda f(1)$} (n-1.south east);
+\node[circ, right=of n] (n+1) {$n+1$}
+ edge[pil,bend left=45] node[midway, fill=white] {$\mu$} (n.south east);
+\node[above=of n+1] (inf) {}
+ edge[pil, <-, bend right=45] node[midway, fill=white] {$\lambda G(0)$} (n.north east)
+ edge[pil, <-, bend right=45] node[midway, fill=white] {$\lambda G(1)$} (n-1.north east)
+ edge[pil, <-, bend right=45] node[midway, fill=white] {$\lambda G(2)$} (n-2.north east)
+;
+\end{tikzpicture}
+
+\caption{When $L(t)=n$, the arrival of any batch crosses level $n$ from below, but when $L(t)=n-1$, only a batch larger than $1$ ensures a crossing of level $n$, and so on.} \label{fig:levelcrossing}
+\end{figure}
+
+Let us first guess what could be the appropriate generalization of $\lambda \pi(n) = \mu \pi(n+1)$.
+The down-crossings of level~$n$ are easy: since items are served one-by-one, we still must have $\mu \pi(n+1)$, where $n$ refers to the number of items\sidenote{Not the number of batches.}
+in the system.
+For the upcrossings of level~$n$ we should consider batch arrivals that see $m$ items in the system, with $m\leq n$.
+Since jobs arrive at rate $\lambda$, it follows from PASTA that the arrival rate of jobs that see $m$ upon arrival is~$\lambda \pi(m)$, in other words, the process is thinned with a fraction $\pi(m)$.
+As a further consequence of PASTA, the arrival process $\{N(u), u\geq t\}$ is independent of $\{L(s), s< t\}$, hence this thinned process is also Poisson.
+
+When an arriving job sees $m$ in the system, and level $n$ has to be up-crossed, the batch size of this job must contain more than $n-m$ items.
+The rate at which such jobs arrive must be $G(n-m)\pi(m)\lambda$ as  $G(n-m)$ is the probability that the job size is larger than $n-m$.  Noting that the batch sizes are independent of the arrival times, we obtain yet again a Poisson process, but with rate $\lambda \pi(m) G(n-m)$.
+
+Finally, to the compute rate at which level $n$ is upcrossed, we merge
+all these thinned Poisson processes to form a new Poisson process with rate $\lambda \sum_{m=0}^n \pi(m) G(n-m)$.
+As by level-crossing, the up-crossing and down-crossing rates must match,
+\begin{equation}\label{eq:42}
+\lambda \sum_{m=0}^n \pi(m) G(n-m) = \mu \pi(n+1).
+\end{equation}
+At the end of this section, we provide some further details for the interested reader.
+
+Moreover, we can use it to derive $\E\L$.\sidenote{~\cref{ex:73}}
+
+
+\newthought{It is left} to find the normalization constant.
+As~\cref{eq:42} does not lead to a closed form expression for $\pi(n)$, such as~\cref{eq:23}, we have to specify a criterion to stop this iterative procedure.
+We discuss three different strategies to cope with this problem. For actual computations we need to  suppose that the batch size $B$ is finite and bounded by some $N$.
+
+The first method is to prevent the problem altogether by blocking demand above some level $M$.
+There are three common policies to decide which items in a batch to accept.
+\begin{enumerate}
+\item Complete acceptance: accept all batches that arrive when the system contains $K$ or fewer items, and reject the entire batch otherwise.\sidenote{~\cref{ex:9}}
+\item Partial acceptance: accept whatever fits of a batch, and reject the rest.\sidenote{~\cref{ex:45}}
+\item Complete rejection: if a batch does not fit entirely into the system, it will be rejected completely.\sidenote{~\cref{ex:l-156}}
+\end{enumerate}
+In the exercises we will derive recursions similar to~\cref{eq:42} by which we can obtain $\{\pi(n)\}$.
+Since the recursions stop after some level $M$, there is a finite number of recusions, hence we can solve them numerically without much problems.
+
+
+A second method is to set $\pi(0)=1$ to start the iteration, then compute the first $M$ iterates until $\pi(M)\ll 1$, and take $\sum_{i=0}^M \pi(i)$ as the normalization constant.
+Note that as $B\leq N$, it must be that $G(n)=0$ for $n\geq N$. With this we can save some computer cycles by simplify~\cref{eq:42} to
+\begin{equation*}
+\mu \pi(n+1) = \lambda \sum_{m=0}^{\min\{n, N-1\}} \pi(n-m) G(m).
+\end{equation*}
+Below we show how to code this.
+We implement \pyv{p} as a dictionary, because we do not yet know how many terms we need before satisfying the stopping criterion.
+
+\begin{pyblock}[][numbers=left,frame=lines]
+import numpy as np
+
+labda, mu = 1, 3
+f = np.array([0, 1, 1, 1])
+f = f / f.sum()
+
+
+def compute_pi_2(f, eps):
+    F = np.cumsum(f)
+    G = np.ones_like(F) - F
+
+    pi, n = {}, 0
+    pi[n] = 1
+
+    while pi[n] > eps:
+        pi[n + 1] = sum(pi[n - m] * G[m] for m in range(min(n + 1, len((G)))))
+        pi[n + 1] *= labda / mu
+        n += 1
+
+    norm = sum(pi[n] for n in pi.keys())
+    return {n: pi[n] / norm for n in pi.keys()}
+
+
+pi = compute_pi_2(f, eps=0.001)
+EL = sum(n * pi[n] for n in pi.keys())
+\end{pyblock}
+When running this code, we get $\E\L = \py{np.round(EL,3)}$ and we stopped at $M=\py{len(pi)}$.
+Whether $\epsilon = 0.001$ is  small enough is moot: the second digit is wrong when comparing it to the exact formula~\cref{eq:43}.
+
+
+
+\newthought{The third method} relies on the fact that the numbers $\pi(n)$ decrease geometrically fast for $n$ sufficiently large.
+Let us check this for the numerical example we studied above.
+\begin{marginfigure}
+\begin{pycode}[ignore]
+import numpy as np
+import matplotlib.pylab as plt
+import tikzplotlib
+from matplotlib import style
+# style.use('ggplot')
+
+import seaborn as sns
+sns.set_style("whitegrid")
+
+
+def compute_pi(f, M):
+    pi = np.ones(M + 1)
+    F = np.cumsum(f)
+    G = np.ones_like(F) - F
+    N = len(G)
+
+    for n in range(M):
+        pi[n + 1] = sum(pi[n - m] * G[m] for m in range(min(n + 1, N)))
+        pi[n + 1] *= labda / mu
+    return pi / pi.sum()
+
+labda, mu = 1, 3
+f = np.array([0, 1, 1, 1])
+f = f / f.sum()
+
+pi = compute_pi(f, M=10)
+
+
+plt.yscale('log')
+plt.plot(pi, label=r"$\pi(n)$")
+plt.xlabel("$n$")
+plt.legend()
+# plt.show()
+plot = tikzplotlib.get_tikz_code(axis_height='5cm', axis_width='6cm')
+print(plot)
+\end{pycode}
+\end{marginfigure}
+In the figure at the right we plot $\log (\pi(n))$  as a function of $n$. Clearly, $\pi(n), n\geq 5$ seems to decrease as a straight line.
+
+
+To provide some intuition for this fact, observe that  for $N<n\leq 2N-1$,
+\begin{equation*}
+  \pi(n+1) = \frac{\lambda}{\mu} \sum_{m=0}^{N-1}\pi(n-m)G(m) < \frac{\lambda}{\mu} \sum_{m=0}^{N-1} G(m)  = \rho < 1.
+\end{equation*}
+as $\pi(n) < 1$ for $n\leq N$. But then, for $2N< n \leq 3N-1$,
+\begin{equation*}
+  \pi(n+1) = \frac{\lambda}{\mu} \sum_{m=0}^{N-1}\pi(n-m)G(m) < \frac{\lambda}{\mu} \sum_{m=0}^{N-1} G(m)\rho  = \rho^2,
+\end{equation*}
+and so on.
+
+For the interested reader, we note that we can do better by substituting the form $\pi(n)= C \alpha^n$ into~\cref{eq:42} for $k>N$.
+Then $\alpha$ should be a root of the equation $\lambda \sum_{m=0}^{N-1} \alpha^m G(N-1-m) = \mu \alpha^{N}$.
+Now this is a polynomial (in $\alpha$) of degree $N$, which has $N$ roots in general.
+It is an interesting challenge to motivate why the $\alpha$ we need is the largest root.
+
+\begin{exercise}\label{ex:27}
+ Show that~\cref{eq:42} reduces to $\lambda \pi(n) = \mu \pi(n+1)$ for the $M/M/1$ case.
+\begin{solution}
+  In the $M/M/1$ queue, $G(0)=1$ and $G(1)=G(2)=\cdots = 0$.
+  Thus, $\sum_{m=0}^n G(n-m) \pi(m) = G(0)\pi(n)=\pi(n)$.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:9}
+ Derive a set of recursions analogous to~\cref{eq:42} to compute $\pi(n)$ for the $M^B/M/1/K$ queue with complete acceptance.
+\begin{solution}
+ The complete-acceptance policy is actually quite simple. As any
+ batch will be accepted when $n\leq K$, the queue length is not
+ bounded. Only when the number of items in the system is larger than
+ $K$, we do not accept jobs.
+ \begin{equation*}
+ \mu \pi(n+1) =
+ \begin{cases}
+ \lambda \sum_{m=0}^n \pi(m) G(n-m), & \text{ for } n\leq K,\\
+ \lambda \sum_{m=0}^K \pi(m) G(n-m), & \text{ for } n> K.
+ \end{cases}
+ \end{equation*}
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:45}
+ Derive a set of recursions for the $M^B/M/1/K$ queue with partial acceptance.
+\begin{solution}
+  For the partial acceptance case, any job is accepted, but the system only admits whatever fits.
+  As level $n\in {0,1,\ldots,K-1}$ is still up-crossed by any batch of size at least $n-m$ when the system is in state $m$, the formula for the up-crossing rate is identical to the case without this acceptance policy.
+  Hence, $\mu \pi(n+1) = \lambda \sum_{m=0}^n \pi(m) G(n-m)$, for $n=0,1,\ldots, K-1$.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:l-156}
+ Derive a set of recursions for the $M^B/M/1/K$ queue with complete rejection.
+\begin{solution}
+  Suppose a batch of size $k$ arrives when the system contains $m$ items.
+  When $m+k \leq K$, the batch can be accepted since the entire batch will fit into the queue, otherwise it will be rejected.
+  Further, level $n, 0\leq n < K$, can only be crossed when $m+k > n$.
+  Thus, for $n=0,\ldots, K-1$,
+ \begin{align*}
+ \mu \pi(n+1) &= \lambda \sum_{m=0}^n \pi(m) \P{n-m < B \leq K-m} \\
+&=\lambda \sum_{m=0}^n \pi(m) [G(n-m)-G(K-m)],
+ \end{align*}
+ Let us check this for some simple cases.
+ First, when $K\to \infty$, then $G(K-m)\to 0$, so we get our earlier result.
+ Second, take $n=K$.
+ Then $G(n-m)-G(K-m)=0$ for all $m$, so that the RHS is 0, as it should.
+ Third, take $n=0$ and $K=1$, then $\mu \pi(1)= \lambda \pi(0)$.
+ This also makes sense.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:73}
+Use~\cref{eq:42}
+\marginpar{This is an important check both on \cref{eq:43} and~\cref{eq:42}.}
+in $\E{\L} = \sum_{n=0}^\infty n \pi(n)$ to derive~\cref{eq:43}.
+\begin{hint}
+  Show first that
+\begin{equation*}
+ \mu \E \L =\mu \sum_{n=0}^\infty n \pi(n) = \lambda \frac{\E{B^2}}2 + \lambda \E B \E \L +\lambda \frac{\E B}2.
+\end{equation*}
+\end{hint}
+\begin{solution}
+ We use that $\mu \pi(n) =\lambda \sum_{i=0}^{n-1} \pi(i) G(n-1-i)$ and the results of the exercises of~\cref{sec:mxm1-queue:-expected} to see that
+\begin{align*}
+ \mu \E \L
+ &=\sum_{n=0}^\infty n\, \mu \pi(n), \quad \text{now substitute for $\mu \pi(n)$ the recursion~\cref{eq:42}}, \\
+& =\lambda \sum_{n=0}^\infty n \sum_{i=0}^{n-1} \pi(i) G(n-1-i)
+ =\lambda \sum_{n=0}^\infty n \sum_{i=0}^\infty \1{i<n} \pi(i) G(n-1-i) \\
+& =\lambda \sum_{i=0}^\infty \pi(i) \sum_{n=0}^\infty \1{i<n} n G(n-1-i)
+ =\lambda \sum_{i=0}^\infty \pi(i) \sum_{n=i+1}^\infty n G(n-1-i) \\
+& =\lambda \sum_{i=0}^\infty \pi(i) \sum_{n=0}^\infty (n+i+1) G(n)
+ =\lambda \sum_{i=0}^\infty \pi(i) \left[\sum_{n=0}^\infty n G(n) +(i+1) \sum_{n=0}^\infty G(n)\right] \\
+ &=\lambda \sum_{i=0}^\infty \pi(i)\sum_{n=0}^\infty n G(n) +\lambda \E B \sum_{i=0}^\infty \pi(i) (i+1) \\
+ &=\lambda \sum_{i=0}^\infty \pi(i) \frac{\E{B^2} -\E B}2 + \lambda \E B (\E \L +1) \\
+ &= \lambda \frac{\E{B^2} -\E B}2 + \lambda \E B \E \L +\lambda \E B \\
+ &= \lambda \frac{\E{B^2} }2 + \lambda \E B \E \L +\lambda \frac{\E B}2.
+\end{align*}
+Dividing both sides by $\mu$ and using that $\lambda \E B/\mu = \rho$, we obtain
+\begin{equation*}
+E \L = \lambda \frac{\E{B^2}}2 \E S + \rho \E \L + \frac\rho2.
+\end{equation*}
+By bringing $\rho \E \L$ to the LHS, the RHS becomes equal to~\cref{eq:17}.
+\end{solution}
+\end{exercise}
+
+
+\newthought{Here we formalize} the above reasoning; you can skip it if you understand the details of level crossing.
+Define
+\begin{equation*}
+ A(m,n,t) := \sum_{k=1}^{A(t)}\1{\L(A_k-) = m}\1{B_k > n-m}
+\end{equation*}
+as the number of jobs up to time $t$ that see $m$ in the system upon arrival and have batch size larger than $n-m$.
+From~\cref{fig:levelcrossing} we see that $A(n,m,t)$ counts the number of up-crossings of level $n$ up to time $t$.
+
+As earlier, we are interested in the limit $A(n,m,t)/t$ as $t\to\infty$.
+If we follow the reasoning of~\cref{sec:poisson-arrivals-see}, we obtain by multiplying and dividing,
+\begin{equation}\label{eq:16}
+ \frac{A(m,n,t)}t = \frac{A(t)}t \frac{A(m,t)}{A(t)}\frac{A(m,n,t)}{A(m,t)}.
+\end{equation}
+We already know that $A(t)/t\to\lambda$ and $A(m,t)/A(t)\to\pi(m)$; so, let us  provide  an interpretation for the third term.
+
+If we fill in the definitions, we get
+\begin{equation*}
+ \frac{A(m,n,t)}{A(m,t)} =  \frac{\sum_{k=1}^{A(t)}\1{\L(A_k-) = m, B_k > n-m}}
+{\sum_{k=1}^{A(t)}\1{\L(A_k-) = m}}.
+\end{equation*}
+In words, this is the fraction of those jobs that see $m$ in the system upon arrival and have size $> n-m$.
+But recall that we assumed that  $\{B_k\}$  are independent of what jobs see upon arrival.
+Thus, we can just as well count all jobs of size $>n-m$ along a sample path instead of those that see $m$ upon arrival; in the limit the statistics must be the same. Therefore
+\begin{equation*}
+\lim_{t\to\infty}  \frac{\sum_{k=1}^{A(t)}\1{\L(A_k-) = m, B_k > n-m}}
+{\sum_{k=1}^{A(t)}\1{\L(A_k-) = m}} = \lim_{t\to\infty}
+\frac{\sum_{k=1}^{A(t)}\1{B_k > n-m}}{A(t)}= G(n-m).
+\end{equation*}
+By level-crossing $\left|\sum_{m=0}^n A(m,n,t) - D(n,t)\right| \leq 1$, from which we obtain~\cref{eq:16} by combining this with the above, dividing by~$t$, and taking the limit $t\to\infty$.
+
+\input{trailer}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

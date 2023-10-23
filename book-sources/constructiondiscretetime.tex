@@ -1,0 +1,602 @@
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
+% !arara: clean: { files: [ ans.tex, hint.tex] }
+
+\documentclass[queueing-book.tex]{subfiles}
+%%\externaldocument{queueing-book}
+\input{header}
+
+\begin{document}
+
+
+
+\section{Queueing Processes in Discrete-Time}
+\label{sec:constr-discr-time}
+
+
+We start with a case to provide motivation to study queueing systems.
+Then we develop a set of recursions of fundamental importance by which we can simulate the case and evaluate the efficacy of several policies to improve the system.
+
+
+
+\newthought{At a mental health} department, five psychiatrists do intakes of future patients to determine the best treatment process once patients `enter the system'.
+There are complaints about the time patients have to wait for the intake; the desired waiting time is around two weeks, but the realized waiting time is sometimes more than three months.
+This is  unacceptably long, but \ldots what to do about it?
+
+The five psychiatrists  put forward various suggestions to reduce the waiting times.
+\begin{enumerate}
+\item Give all psychiatrists the same weekly capacity for doing intakes.
+  Motivation: Currently one psychiatrist does 9 intakes per week, one does 3, and the three other psychiatrists do only 1.
+  This is not a problem during weeks when all psychiatrists are present; however, psychiatrists take holidays, visit conferences, and so on.
+  So, if the psychiatrist with the most intakes per week goes on leave, this affects the intake capacity considerably.
+\item Synchronize holidays.\sidenote{Later, with the models of \cref{cha:approximate-models}, we can immediately see that this will not work at best, but otherwise detrimental.}
+  Motivation: to reduce the variation in the service capacity, the psychiatrists plan their holidays consecutively.
+  However, perhaps it is better to work at full capacity or not at all.
+\item Control\sidenote{People often object to such policies because they believe that they have to do more work.
+    However, this is wrong.
+    Suppose that 1000 patients per year need treatment.
+    This number does not depend on whether they spend time in queue or not.}  the intake capacity as a function of the waiting time.
+ Motivation: in analogy with supermarkets,  scale up (down) capacity when the queue is long (short).
+\end{enumerate}
+
+
+
+We next develop a method to simulate the behavior of the system over time so that we can evaluate the effect of the above suggestions.
+We use simulation, because the mathematical analysis is too hard.\sidenote{In case you  doubt this, try to analyze transient multiserver queueing systems with vacations, of which this is an example.}
+
+\newthought{Let us start} with discussing the essentials of simulating of a queueing system.
+The easiest way to construct queueing processes is to `chop up' time in periods\sidenote{The length of these periods depends on context.
+  For the present case, it is appropriate to take weeks.
+  For supermarkets perhaps a length of 5 minutes is more appropriate.}
+and develop recursions for the behavior of the queue from period to period.
+Using fixed-sized periods has the advantage that we do not have to specify inter-arrival times or service times of individual customers; only the number of arrivals in a period and the number of potential services are relevant.
+
+
+Let us define:
+\begin{itemize}
+ \item[$a_k =$] the number of jobs that arrive \textit{in} period $k$,
+ \item[$c_k= $] the capacity, i.e., the maximal number of jobs that can be served, during period~$k$,
+ \item[$d_k =$] the number of jobs that depart \textit{in} period $k$,
+ \item[$\L_k =$] the \recall{system length}, i.e., the number of jobs in the system at the \textit{end} of period $k$.
+\end{itemize}
+In the sequel we also call $a_k$ the \emph{size of the batch} arriving in period $k$.
+Note that the definition of $a_k$ is a bit subtle: we may assume that the arriving jobs arrive either at the start or at the end of the period.
+In the first case, the jobs can be served in period $k$, in the latter case, they \emph{cannot} be served in period~$k$.
+
+
+Since $\L_{k-1}$ is the system length at the \emph{end} of period $k-1$, it must also be the number of customers at the \emph{start} of period $k$.
+Assuming that jobs arriving in period $k$ cannot be served in period~$k$, the number of customers that depart in period $k$ is therefore
+\begin{subequations}\label{eq:31}
+\begin{equation}
+d_k = \min\{\L_{k-1}, c_k\},
+\end{equation}
+Now that we know the number of departures, the number at the end of period $k$ is given by
+\begin{equation}
+ \L_k = \L_{k-1} -d_k + a_k.
+\end{equation}
+\end{subequations}
+Like this, if we are given $\L_0$ and numbers $\{a_{k}\}_{k=1}^{n}$ and $\{c_{k}\}_{k=1}^{n}$, we can obtain the numbers $\{L_{k}\}_{k=0}^{n}$ from this recursion.\sidenote{In a sense,~\cref{eq:31} is the $F = m a$ of a queueing system: Given initial conditions, we apply the rule at time $k-1$ to get the state at time $k$, and so on.}
+
+
+Of course we are not going to carry out the computations for $\{L_k\}$ by hand.
+Typically, we use company data to model the arrival process $\{a_k\}$ and the capacity $\{c_k\}$, and feed this data into a computer to carry out the recursions~\cref{eq:31}.
+If we do not have sufficient data, we make a probability model for these data and use the computer to generate random numbers with, hopefully, similar characteristics as the real data.
+At any rate, from this point on, we assume that it is easy, by means of computers, to obtain numbers $a_1,\ldots, a_n$ for $n\gg 1000$, and likewise for other sequences of numbers we may need.
+
+
+\newthought{Continuing with the} case of the five psychiatrists, with the above recursions we can now analyze the proposed rules to improve the performance of the system.
+We mainly want to reduce the long sojourn times.
+
+As a first step in the analysis, we model the arrival process of patients as a Poisson process.
+The duration of a period is taken to be a week.
+The average number of arrivals per period, based on data of the company, was slightly less than~12 per week; in the simulation we set it to $\lambda= 11.8$ per week.
+
+\newthought{Next, we model} the capacity in the form of a matrix such that row $i$ corresponds to the weekly capacity of psychiatrist $i$:
+\begin{equation*}
+ \begin{pmatrix}
+ 1 & 1 & 1 & \ldots\\
+ 1 & 1 & 1 & \ldots\\
+ 1 & 1 & 1 & \ldots\\
+ 3 & 3 & 3 & \ldots\\
+ 9 & 9 & 9 & \ldots\\
+ \end{pmatrix}.
+\end{equation*}
+Thus, psychiatrists 1, 2, and 3 do just one intake per week, the
+fourth does 3, and the fifth does 9 intakes per week. The sum over
+column $k$ is the total service capacity for week $k$ of all
+psychiatrists together.
+
+With such a matrix it is simple to make other capacity schemes.
+A more balanced scheme would be like this:
+\begin{equation*}
+ \begin{pmatrix}
+ 2 & 2 & 2 & \ldots\\
+ 2 & 2 & 2 & \ldots\\
+ 3 & 3 & 3 & \ldots\\
+ 4 & 4 & 4 & \ldots\\
+ 4 & 4 & 4 & \ldots\\
+ \end{pmatrix}.
+\end{equation*}
+
+We include the effects of holidays by setting the capacity of one or some  psychiatrists to~$0$ in a certain week.
+Let us assume that every week just one psychiatrist is on leave such that the psychiatrists' holiday schemes rotate.
+To model this, we set the entries of the matrix as $C_{1,1}=C_{2,2}=\cdots=C_{1,6}=C_{2,7} =\cdots = 0$, i.e.,
+\begin{equation*}
+C =
+ \begin{pmatrix}
+ 0 & 2 & 2 & 2 & 2 & 0 & \ldots \\
+ 2 & 0 & 2 & 2 & 2 & 2 & \ldots\\
+ 3 & 3 & 0 & 3 & 3 & 3 & \ldots\\
+ 4 & 4 & 4 & 0 & 4 & 4 & \ldots\\
+ 4 & 4 & 4 & 4 & 0 & 4 & \ldots\\
+ \end{pmatrix}.
+\end{equation*}
+Hence, the total average capacity is $4/5 \cdot (2+2+3+4+4) = 12$ patients per week.
+There is another simple holiday scheme: when all psychiatrists take holiday in the same week--corresponds we  set  entire columns to zero, i.e., $C_{i,5}=C_{i,10}=\cdots=0$ for week $5$, $10$:
+\begin{equation*}
+C =
+ \begin{pmatrix}
+ 2 & 2 & 2 & 2 & 0 &2 & 2 & \ldots \\
+ 2 & 2 & 2 & 2 & 0 &2 & 2 & \ldots\\
+ 3 & 3 & 3 & 3 & 0 & 3 & 3 & \ldots\\
+ 4 & 4 & 4 & 4 & 0 &4 & 4 & \ldots\\
+ 4 & 4 & 4 & 4 & 0 &0 & 4 & \ldots\\
+ \end{pmatrix}.
+\end{equation*}
+Of course, random schemes are more likely, but these two are perhaps the simplest that result in the same average capacity.
+Note that we also apply these the unbalanced capacity plans to obtain four different possibilies.
+
+With these  models for the arrivals and the capacities, we  use the recursions~\cref{eq:31} to simulate the queue length process for the four different scenarios proposed by the psychiatrists: unbalanced versus balanced capacity, and spread out holidays versus simultaneous holidays.
+
+The results are shown in~\cref{fig:balanced}.
+We plot, for each period, the largest and the smallest queue that occurred under all four capacity plans that result from following the first and second suggestions of the psychiatrists.
+The graphs make clear that these suggestions hardly affect the behavior of the queue length process.
+
+
+
+\begin{marginfigure}
+\begin{pycode}[simulation]
+import numpy as np
+import matplotlib.pylab as plt
+import tikzplotlib
+from matplotlib import style
+
+import seaborn as sns
+
+sns.set_style("whitegrid")
+
+np.random.seed(3)
+a = np.random.poisson(11.8, 1000)
+
+
+def computeQ(a, C, Q0=0):  # initial queue length is 0
+    N = len(a)
+    Q = np.empty(N)  # make a list to store the values of  Q
+    d = np.empty(N)  # make a list to store the values of  d
+    Q[0] = Q0
+    for n in range(1, N):
+        d[n] = min(Q[n - 1] + a[n], C[n])
+        Q[n] = Q[n - 1] + a[n] - d[n]
+    return Q
+
+
+def unbalanced():
+    p = np.empty([5, len(a)])
+    p[0, :] = 1.0 * np.ones_like(a)
+    p[1, :] = 1.0 * np.ones_like(a)
+    p[2, :] = 1.0 * np.ones_like(a)
+    p[3, :] = 3.0 * np.ones_like(a)
+    p[4, :] = 9.0 * np.ones_like(a)
+    return p
+
+
+p = unbalanced()
+
+# holidays.
+for j in range(len(a)):
+    Id = j % 5
+    p[Id, j] = 0
+
+s = np.sum(p, axis=0)
+
+Qub = computeQ(a, s)
+
+
+def balanced():
+    p = np.empty([5, len(a)])
+    p[0, :] = 2.0 * np.ones_like(a)
+    p[1, :] = 2.0 * np.ones_like(a)
+    p[2, :] = 3.0 * np.ones_like(a)
+    p[3, :] = 4.0 * np.ones_like(a)
+    p[4, :] = 4.0 * np.ones_like(a)
+    return p
+
+
+p = balanced()
+
+for j in range(len(a)):
+    Id = j % 5
+    p[Id, j] = 0
+
+s = np.sum(p, axis=0)
+Qbb = computeQ(a, s)
+
+p = unbalanced()
+for j in range(int(len(a) / 5)):
+    p[:, 5 * j] = 0
+s = np.sum(p, axis=0)
+Quu = computeQ(a, s)
+
+p = balanced()
+for j in range(int(len(a) / 5)):
+    p[:, 5 * j] = 0
+s = np.sum(p, axis=0)
+Qbu = computeQ(a, s)
+
+mins = np.minimum.reduce([Qbb, Qub, Qbu, Quu])
+maxs = np.maximum.reduce([Qbb, Qub, Qbu, Quu])
+
+
+plt.figure(figsize=(10, 2))
+plt.plot(mins, label="min")
+plt.plot(maxs, label="max")
+# plt.plot(Qbb, label="bal cap, spread out")
+# plt.plot(Qub, label="unbal capacity, simul")
+# plt.plot(Qbu, label="bal cap, spread out")
+# plt.plot(Quu, label="unbal capacity, simul")
+plt.xlabel("time (weeks)")
+plt.legend(loc="upper left")  # , bbox_to_anchor=(1,1))
+print(tikzplotlib.get_tikz_code(axis_height='4.5cm', axis_width='6cm'))
+\end{pycode}
+\caption{Effect of capacity and holiday plans.
+Per time point  we plot the maximum and the minimum queue length under the policies.
+}
+\label{fig:balanced}
+\end{marginfigure}
+
+
+
+\newthought{Now we consider} Suggestion 3, which comes down to doing more intakes when it is busy, and fewer when it is quiet.
+A simple rule is to let the capacity  for week $k$ depend on the queue length of the week before, for instance,
+\begin{equation}\label{eq:103}
+  c_k =
+  \begin{cases}
+    12 + e, & \text{if } \L_{k-1} \geq 24, \\
+    12 - e, & \text{if } \L_{k-1} \leq 12.
+  \end{cases}
+\end{equation}
+We can take  $e=1$ or $2$, or perhaps a larger number; the larger $e$, the larger the control we exercise. We can of course also adapt the thresholds 12 and 24.
+
+Let's consider three different control levels, $e=1$, $e=2$, and $e=5$; when $e=5$, each psychiatrist does one extra intake.
+The results, see~\cref{fig:intakes}, show a striking difference indeed.
+The queue does not explode anymore;  already taking $e=1$ has a large influence.
+
+\begin{marginfigure}
+\begin{pycode}[simulation]
+def computeQExtra(a, c, e, Q0=0):  #  initial queue length is 0
+    N = len(a)
+    Q = [0] * N  # make a list to store the values of  Q
+    Q[0] = Q0
+    for n in range(1, N):
+        q = Q[n - 1]
+        if q < 12:
+            C = c - e
+        elif q >= 24:
+            C = c + e
+        Q[n] = max(q + a[n] - C, 0)
+    return Q
+
+
+np.random.seed(3)
+a = np.random.poisson(11.8, 1000)
+c = 12
+Q = computeQ(a, c * np.ones_like(a))
+Qe1 = computeQExtra(a, c, 1)
+Qe2 = computeQExtra(a, c, 2)
+Qe5 = computeQExtra(a, c, 5)
+
+plt.figure(figsize=(6, 2))
+plt.ylim(0, 200)
+plt.plot(Q, label="Q", color='black')
+plt.plot(Qe1, label="Qe1", color='green')
+plt.plot(Qe2, label="Qe2", color='blue')
+plt.plot(Qe5, label="Qe5", color='red')
+print(tikzplotlib.get_tikz_code(axis_height='4.5cm', axis_width='6cm'))
+\end{pycode}
+\caption{Controlling the number of intakes. The control rules keep the queue length around 20.}
+\label{fig:intakes}
+\end{marginfigure}
+
+
+This simulation experiment shows that changing holiday plans or spreading the work over multiple servers, i.e., psychiatrists, may not significantly affect the queueing behavior.
+However, controlling the service rate as a function of the queue length can improve the situation dramatically.
+
+
+\newthought{The above example} hopefully claries how we can use simulation to obtain insight into a stochastic system behaves and how to control it. We next discuss some general points that need further attention.
+
+In~\cref{eq:31} we assume that jobs that arrive in period $k$ cannot be served in period $k$. If the situation is such that jobs \emph{can} be served in the same period as they arrive, then~\cref{eq:31} should be changed to\sidenote{~\cref{ex:24}}
+\begin{equation}\label{eq:aap3}
+d_k = \min\{\L_{k-1}+a_{k}, c_k\}.
+\end{equation}
+Which of~\cref{eq:31} or~\cref{eq:aap3} to choose depends on what we need to model; in general,  no rule is `best', and what is `good' depends essentially on the context.
+For instance, if we like to be `on the safe side', then it is perhaps best to use~\cref{eq:31} because with this rule, we overestimate the queue lengths, while with~\cref{eq:aap3} we underestimate the queue lengths.
+
+Note next that in the computation of $d_{k}$ we make a fundamental modeling choice: if there are jobs in the system and the server capacity $c_{k} > 0$, the server will serve jobs.
+There is, however, no formal need to serve jobs even when there is service capacity available.
+A simple reason not to serve jobs is when it is too expensive, for example, if there is very little demand for a flight on some day then the flight can be canceled.
+In the models we consider, we will \emph{not} allow to let jobs wait when there is capacity available; in other words, our service process are \recall{work-conserving}.
+
+The above recursions obviously only construct $\{L_k\}$, i.e., the dynamics of the number of jobs in the system.
+If we also need information about the \recall{sojourn times}, i.e., the time jobs spend in the system, it is necessary to specify the \recall{service discipline}, i.e., a scheduling rule that decides on the order in which jobs in queue are taken into service.
+In this book we assume henceforth that jobs move to the server  in the order in which they arrive.
+This is known as \recall{First-In-First-Out (FIFO)}.\sidenote{\recall{First-Come-First Serve (FCFS)} is also often used.}
+There are many other scheduling rules, such as Last-In-First-Out; we do not discuss these here.
+
+It is quite remarkable that the computation of the system length process $\{L_{k}\}$ is very simple with~\cref{eq:31}, but it is much harder to compute the sojourn time $J_{k}$ for the jobs arriving in period $k$.
+In fact, the best we can obtain are bounds on the sojourn time $J_{k}$ such that $J_k^{-} \leq J_{k}\leq J_k^{+}$, where
+ \begin{align*}
+ \J_{k}^{-} &= \min\left\{m: \sum_{i=k}^{k+m} c_i > \L_{k-1}\right\}, &
+ \J_{k}^{+} &= \min\left\{m: \sum_{i=k}^{k+m} c_i \geq  \L_{k-1}+a_k\right\}.
+ \end{align*}
+ To see how this works, suppose $\L_{k-1}=20$, $a_{k}=6$, and $c_k=2$ for all $k$.
+Any job that arrives in the $k$th period, must wait at least $20/2 = 10$ periods just to get access to the server under FIFO rule, and we can be sure that the last of these jobs is served after $(20+6)/2=13$ periods.
+
+We note that there is a difference between \emph{waiting time}~$\W$ and sojourn time~$\J$.
+The former is the time jobs spend in queue, the latter the time in the system, which is the waiting plus the time at the server $\Ls$.
+Relatedly, in the model~\cref{eq:31} there is not a job in service, we only count the jobs in the system at the end of a period. Thus, in this model the number of jobs in the system and in queue coincide.
+
+
+Finally, once the simulation is finished, we compute some performance measures to analyze how the (simulation of the) queueing system behaved.
+Besides making graphs, we can be interested in the arrival rate, the capacity (also known as the service rate) and mean number in the system,
+\begin{align*}
+a &= \frac{1}{n} \sum_{k=1}^{n} a_{k} &
+c &= \frac{1}{n} \sum_{k=1}^{n} c_{k} &
+L &= \frac{1}{n} \sum_{k=1}^{n} L_{k}.
+\end{align*}
+Similary, we can take averages over $d_{k}$, $J_k^{-}$ and $J_k^{+}$. The variances these (simulated) rvs can also be of interest.
+
+
+\newthought{In general, with} recursions like~\cref{eq:31} we can carry out numerous hat-if-analyses.
+As another example, a hospital considers to buy a second MRI scanner, because the current one is saturated, as it is used from 8 am to 6 pm, and can certainly not serve the forecasted demand.
+However, if the hospital can identify some extra capacity, it might postpone the purchasing of an additional MRI scanner for a few years.
+Suppose that a percentage of staff is willing to work from 8 pm to 11 pm, say, and that 30\% of the patients\sidenote{Perhaps some staff and patients even prefer to work/have scans in the evening.}
+is prepared to come to the hospital for a scan between 8 pm and 11 pm, then the capacity would increase with about $30\% = (3/(18-8))$.
+To see whether this idea is interesting, we can use~\cref{eq:31} to let the computer make a graph of the influence on $L$.
+Thus, the recursions such as \cref{eq:31} and control rules such as~\cref{eq:103} are the essential elements of any queueing model.
+Once we have the recursions,\sidenote{An intellectually challenging task sometimes.} the computer can compute the performance measures, and then we (humans) have to interpret the results.
+
+Such recursion are not limited just to queueing systems. For instance, a common model in population dynamics has this form
+\begin{align*}
+  N_{t+1} &= N_t + B_t + I_t - D_t - E_{t}, \\
+\end{align*}
+where $N_t$ is the population size at year $t$, $B_{t}$ the number of births, $I_{t}$ the immigration, $D_{t}$ the deaths, and $E_{t}$ the emmigation.
+
+Yet another setting is the reflection of infra-red light by carbon-dioxide.
+The atmosphere is modeled as a sequence of layers, such that per layer the temperature, air density and chemical composition are considered constant.
+These properties determine how much infrared light, which is initially reflected by the surface of the earth, makes it to outer space.
+In each of the layers we need to specify how many infrared photons are transmitted to a higher layer, absorbed, or reflected again to a lower level.
+Thus, people model physical process as a queueing system in which photons (customers) go from one layer (station) to another layer (station), or are absorbed (leave the network).\sidenote{\url{https://github.com/scienceetonnante/RadiativeForcing/blob/main/RadiativeForcing.py}}
+
+\newthought{Given that formulating} recursions is the key step in making useful models for data science, you should practice with this a lot.
+Here are a large number exercises to help you make a start with this extremely useful skill.
+
+\begin{exercise}\label{ex:24}
+%Modify~\cref{eq:31} such that jobs can be served in the period in which they arrive.
+Prove \marginpar{Serve jobs in the period in which they arrive.} that the recursion
+$\L_k = [\L_{k-1}+a_k - c_k]^+$
+generates a system in which jobs can be served in the period they arrive.
+\begin{hint}
+  Modify $d_k$ in~\cref{eq:31} to incorporate the changed service behavior.
+  Then, substitute $d_k$ in the expression for $L_k$.
+\end{hint}
+\begin{solution}
+ \begin{align*}
+ d_k &= \min\{\L_{k-1}+a_k, c_k\}, \\
+ \L_k &= \L_{k-1} + a_k - d_k  = \L_{k-1} + a_k - \min\{\L_{k-1}+a_k, c_k\} \\
+ &= \max\{\L_{k-1} + a_k - c_k, 0 \}.
+ \end{align*}
+% When jobs cannot be served in the period in which they arrive, then
+% $\L_k = [\L_{k-1} - c_k]^+ + a_{k}$.
+\end{solution}
+\end{exercise}
+
+
+
+
+\begin{exercise}\label{ex:50}
+To ensure that the server capacity is always fully used, \marginpar{Server controlled by threshold policy}
+a server  works at rate $c$ in period $k$  if $L_{k-1}\geq N$ jobs, and not otherwise.
+Set up the recursions.
+\begin{solution}
+Take $c_k = c\1{\L_{k-1} >= N}$.
+\end{solution}
+\end{exercise}
+
+
+
+
+
+
+\begin{exercise}\label{ex:l-117}
+ A machine  \marginpar{Priority queueing}
+serves  with two queues such that jobs in the first queue get priority over jobs in the other queue.
+ Find the recursions.
+\begin{hint}
+  Compute the number of jobs that depart from queue 1.
+  Subtract the used capacity for these jobs from the total capacity to get the capacity remaining for queue 2.
+\end{hint}
+\begin{solution}
+\begin{align*}
+ d_{k}^1 &= \min\{\L^1_{k-1}, c_k\}, & c^2_{k} &= c_k - d^1_{k}, & d^2_{k} &= \min\{\L^2_{k-1}, c^2_{k}\}, &
+ \L^i_{k} &= \L^i_{k-1} + a^i_{k} - d^i_{k}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+\begin{exercise} \label{ex:51}
+ One server serves two queues. \marginpar{Proportionally fair queueing}
+ Each queue receives service capacity in proportion to the queue length.
+ Derive the recursions.
+\begin{solution}
+ Let $c_k^i$ be the capacity allocated to queue $i$ in period $k$. The fair rule gives that
+ \begin{align*}
+ c_k^1 &= \text{round} \frac{\L_{k-1}^1}{\L_{k-1}^1 + \L_{k-1}^2}, &  c_k^2 &= c_k - c_k^1, \\
+ d_k^i &= \min\{\L_{k-1}^i, c^i_k\}, & \L_k^i &= \L_{k-1}^i+a_k^i - d_k^i.
+ \end{align*}
+
+ In general, rules to distribute capacity $c_k$ over the queues can be based on game-theoretic ideas, such as the principle of \textit{equal division of the contested sum}, see the work of  Aumann and Maschler.
+\end{solution}
+\end{exercise}
+
+
+
+
+\begin{exercise}
+ Consider \marginpar{Queues with reserved service capacity} a single-server that serves two parallel queues.
+Queue $i$ has minimal guaranteed service capacity $r^i$ each  period, such that $c_k \geq r^1 + r^2$.
+ Extra capacity beyond the reserved capacity is given to queue 1 with priority.
+(An example is a psychiatrist who reserves capacity for different  patient groups.)
+ Formulate the recursions.
+\begin{solution}
+  Queue $2$ minimally needs $c_{k}^2 = \min\{\L_{k-1}^2, r^2\}$, and with this,
+  \begin{align*}
+ d_{k}^1 &= \min\{\L_{k-1}^1, c_k-c_{k}^2\}, & d_{k}^2 &= \min\{\L_{k-1}^2, c_k-d_{k}^1\}.
+  \end{align*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:l-118}
+ Consider \marginpar{Queue with protected service capacity and lost capacity} a single-server that serves two parallel queues.
+ Queue $i$ receives a minimal service capacity $r^i$ every period.
+ Reserved capacity unused for one queue cannot be used to serve the other queue.
+ Any extra capacity beyond the reserved capacity, i.e, $c_k - r^2$,  is given to queue 1 with priority.
+ Formulate the recursions.
+
+An example is  the operation room of a hospital.
+There is a weekly capacity, part of which is reserved for emergencies.
+It might not be possible to assign this reserved capacity to other patient groups, because it should be available at all times for emergency patients.
+A result of this is that unused capacity is lost.
+In practice it may not be as extreme as in the model, but still part
+of the unused capacity is lost. `Use it, or lose it' often applies to service capacity.
+\begin{solution}
+ Queue 1 uses all capacity except $r^2$, queue 2 gets the left-over:
+  \begin{align*}
+    d^1_{ k} &= \min\{\L^1_{k-1}, c_k - r^2\}, \\
+    c^2_{ k} &= \min\{c_k-r^1, c_k-d^1{ k}\} = c_k - \max\{r^1, d^1_{ k}\}, \\
+    d^2_{ k} &= \min\{\L^2_{k-1}, c^2_k\}.
+  \end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+
+\begin{exercise}\label{ex:l-119}
+ Consider\marginpar{Tandem networks} a production network with two production stations in tandem, that is, the jobs processed at station 1 move at the end of  period $k$ to station 2.
+ What are the recursions?
+\begin{solution}
+  Let $a^1_k$ be the external arrivals at station 1, and the departures of station 1 are the arrivals at station 2: $a_k^2 = d_{k}^1$.
+  Thus,
+\begin{align*}
+ d^i_k &= \min\{\L_{k-1}^i, c_k^i\}, & \L_k^i &= \L_{k-1}^i -d_k^i + a_k^i.
+ \end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+ Consider\marginpar{Splitting streams} a paint mixing machine that produces products for two downstream packaging machines $A$ and $B$, each with its own queue.
+In the simplest model, the content of the queue at the mixing machine is proportional to the demands $\lambda^A$ and $\lambda^B$ for the packaging machines.
+ Provide the recursions.
+\begin{solution}
+At  the mixing machine $d_k=\min\{L_k, c_k\}$. Therefore, in this very simple model, $a_k^A = d_k \lambda^A/(\lambda^A+\lambda^B)$, and likewise for the other downstream station.
+\end{solution}
+\end{exercise}
+
+
+
+
+% \begin{exercise}\label{ex:l-116}
+% Demand
+%  \marginpar{Cost models}
+% arriving at a single-server queue in a period can be served in that period.
+% At the start of  period $k$, the server capacity is set to $c_k$ at cost $\beta c_k$.
+% A job charges $h$ per period in the  system.
+% Make a  model that computes the cost for the first $T$ periods.
+% \begin{hint}
+%   Use~\cref{ex:24} for the dynamics of $\{L_k\}$.
+% \end{hint}
+% \begin{solution} $\sum_{k=1}^T \left(\beta c_k + h \L_k\right)$.
+% \end{solution}
+% \end{exercise}
+
+
+\begin{exercise}\label{ex:n-policies}
+A machine \marginpar{Cost of an $N$ policy.} can switch on and off. Suppose that the jobs that arrive in period $k$ can be served in that period.
+ If the system length hits $N$ (becomes empty) in period $k$, the machine switches on (off) in period $k+1$.
+ It costs $K$ to switch on the machine.
+ There is also a cost $\beta$ per period when the machine is on, and it costs $h$ per period per customer in the system.
+Make a  model to compute the cost for the first $T$ periods.
+Assume the machine is  off at $k=0$.
+\begin{hint}
+  Introduce a variable $I_k\in\{0, 1\}$ to keep track of the state of the server.
+  Then, $I_{k+1} = \1{\L_k\geq N} + I_k \1{0<\L_k<N}$ implements the N-policy.
+  Now use~\cref{ex:50} to find $\{c_k\}$ and the switching cost.
+\end{hint}
+\begin{solution}
+$I_0 = 0$,  $d_k =\min\{\L_{k-1}+a_{k}, I_k c_k\}$, from which
+$\L_k$ and $I_{k+1}$ follow, and so on. Next,
+ observing that the machine  switches on in period $k$ iff
+$I_{k-1} = 0$ and $I_k=1$, the cost is
+\begin{equation*}
+\sum_{k=1}^T \left(\beta I_k + h \L_k + K[I_k - I_{k-1}]^+\right).
+\end{equation*}
+Interestingly, if arrivals cannot be served in the period in which they arrive, it might be that the system is never empty.
+For instance, if $a_{k}\sim\Unif{4, 10}$, then $L_{k}\geq a_{k} \geq 4$ for all $k$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}
+ One\marginpar{Queues with setup times. Hard exercise.}
+ server serves two parallel queues, one at a time.
+After serving
+ one queue until it is empty, the server moves to the other
+ queue, which requires one period setup time.  Find the recursions.
+
+An example: a nurse takes blood samples at two departments in a hospital. It takes time to walk from one location to another. An interesting, but hard question: what rule would minimize average waiting time?
+\begin{hint}
+  Introduce an extra variable $p_k$ that specifies which queue is being served.
+  If $p_k=0$, the server is moving from one queue to the other, if $p_k=1$, the server is at queue 1, and if $p_k=2$ it is at queue $2$. Develop a table with conditions on $L_k^i$ and $p_k$ to specify $p_{k+1}$.
+\end{hint}
+\begin{solution}
+  With $d_k^i = \min\{\L^i_{k-1}, c_k^i \1{p_k=i}\}$ we can specify the evolution of queue $i$.
+  So it remains to deal with $p_{k+1}$.
+  For this, we use the following `truth table'. This can be implemented in code to specify what $p_{k+1}$ has to become.
+  \begin{center}
+\begin{tabular}{ccc|l}
+ $\1{\L^1_k > 0}$ & $\1{\L_k^2 > 0}$ & $p_k$ & $p_{k+1}$ \\ \midrule
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 1 \\
+0 & 0 & 2 & 2 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 1 & 1 \\
+1 & 0 & 2 & 0 (switch over time)\\
+0 & 1 & 0 & 2 \\
+0 & 1 & 1 & 0 (switch over time)\\
+0 & 1 & 2 & 2 \\
+1 & 1 & 0 & 1 (to break ties) \\
+1 & 1 & 1 & 1 \\
+1 & 1 & 2 & 2 \\
+\end{tabular}
+  \end{center}
+
+  Here is an important warning: in such tables it is very, very easy to miss one (or more) cases.
+  Here, each of the indicators has 2 possible values, and $p_k$ has 3, so there are $2 \times 2\times 3 = 12$ cases, all of which are covered in the table.
+\end{solution}
+\end{exercise}
+
+\input{trailer}

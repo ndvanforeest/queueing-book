@@ -1,0 +1,172 @@
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
+% !arara: clean: { files: [ ans.tex, hint.tex] }
+
+\documentclass[queueing-book.tex]{subfiles}
+%\externaldocument{queueing-book}
+\input{header}
+
+\begin{document}
+\section{Little's Law}
+\label{sec:littles-law}
+
+There exists a fascinating connection between the average sojourn time of a job in a (queueing) system and the long-run time-average number of jobs within that system.
+This relationship is known as \emph{Little's law} and stands as one of the most useful results in any input-output system, including queueing systems.
+To understand the essence of Little's law, let's consider an illustrative example: imagine a highway segment between points A and B spanning 100 km.
+Every minute, one car enters the highway, and each car maintains a constant speed of 50 km/h.
+Now, let's determine the number of cars on that highway segment.
+Since each car spends 2 hours on the highway,  there must be 120 cars traversing the distance at any moment in time.
+Stated as a formula, if items arrive at rate $\lambda$ and each item spends a time $\E J$ time in the system, then the total number of items in the system is $\E L = \lambda \E J$.
+
+Our objective in this section is to demonstrate that this law also applies to stochastic systems, given a few simple conditions.
+
+
+\newthought{Let's begin by} expressing the sojourn time of a particular job, denoted as~$k$, in terms of an indicator function\sidenote{The indicator $\1{A} = 0$ if the event $A$ occurs, and $0$ otherwise.}.
+When job~$k$ is present in the system at time~$s$, then $\1{A_{k}\leq s < D_{k}}$ is 1, and 0 otherwise.
+Consequently, the integral $\int_{0}^{t} \1{A_{k}\leq s < D_{k}} \d s$ represents the total time that job~$k$ spends in the system until time~$t$.
+\sidenote{A helpful analogy is to imagine that a job pays~$1$ Euro for each unit of time spent in the system, making this integral equivalent to the total payment made by job~$k$ up to time~$t$.}
+Hence, we can express the sojourn time of the~$k$th job as follows:
+\begin{equation*}
+\J_k = \int_0^\infty \1{A_k \leq s < D_k},\d s.
+\end{equation*}
+
+
+Furthermore, it is evident that $\L(s) = \sum_{k=1}^\infty \1{A_k \leq s < D_k}$ represents the number of jobs in the system at time~$s$.
+By combining these two facts, the LHS of the equation
+\begin{equation}\label{eq:little:2}
+\int_{0}^{t}\L(s) \d s = \int_{0}^{t }\sum_{k=1}^\infty \1{A_k \leq s < D_k} \d s = \sum_{k=1}^\infty \int_{0}^{t }\1{A_k \leq s < D_k} \d s
+\end{equation}
+can be interpreted as the total time that jobs have spent in the system up to time~$t$.\sidenote{Alternatively, it's the total payment made by the jobs up to time~$t$.}
+
+
+\newthought{Consider a specific} time~$T$ at which the system is empty. At this point, any job $k\leq A(T)$ must have left the system, implying that $ \J_k = \int_0^T \1{A_k \leq s < D_k}\,\d s$ when $k\leq A(T)$, therefore,
+\begin{equation}\label{eq:111}
+ \int_0^T \L(s)\, \d s  = \int_0^T \sum_{k=1}^{A(T)} \1{A_k \leq s < D_k}\, \d s
+ = \sum_{k=1}^{A(T)}\int_0^T \1{A_k \leq s < D_k}\, \d s = \sum_{k=1}^{A(T)} \J_k.
+\end{equation}
+
+Suppose now there exists an infinite sequence of  times $\{T_i\}$ at which the system is empty, i.e., $A(T_i) = D(T_i)$, and such that $T_i\to\infty$. In that case we can deduce that
+\begin{equation*}
+ \frac 1 {T_i} \int_0^{T_i} \L(s)\, \d s = \frac{A(T_i)} {T_i} \frac{1}{A(T_i)} \sum_{k=1}^{A(T_i)} \J_k.
+\end{equation*}
+By taking the limit $i\to\infty$ on both sides, provided the limits exist, we arrive at \recall{Little's law}:\sidenote{Use the physical dimensions of the components of Little's law to check that $\E{\J} \neq \lambda \E{\L}$.}
+\begin{equation*}
+ \E \L = \lambda \E \J.
+\end{equation*}
+It is important to note that  Little's law does  not necessarily hold at an arbitrary moment in time, instead, it expresses a relation between \emph{averages}.
+
+
+\newthought{In the above} proof of Little's law we assumed that there is an increasing sequence of epochs $\{T_k, k=0,1,\ldots\}$ at which the system is empty.
+However, in many practical queueing situations the system is never empty.
+It can be proven that Little's law still holds under the weaker condition of rate-stability.
+
+
+
+
+\begin{exercise}\label{ex:37}
+Think of all servers of the (stable) $G/G/c$ queue as being put in a box.
+Jobs enter the box at rate $\lambda$ and stay $\E S$ in this box.
+Use Little's law to conclude that the time-average number of busy server is $\E{\Ls} = \lambda \E S$.
+\begin{hint}
+Recall that $\lim_{t\to\infty} t^{-1}\int_0^t \Ls(s)\d s$ is the time-average number of servers busy up to~$t$.
+\end{hint}
+\begin{solution}
+Since the queue is stable by assumption, jobs depart at rate $\lambda$, hence any job enters and leaves the box that contains the~$c$ servers.
+The average time a job spends in the box is $\E S$.
+By Little's law, the average number in the box is $\E\Ls = \lambda \E S$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:44}
+Consider the $M/M/1$ queue when $\lambda=5/h$ and $\mu=6/h$.
+Suppose that, at the moment you join the system, the number of customers in the system is 10.
+What is your expected waiting time?
+\begin{solution}
+When you arrive, you first have to wait for the job in service to finish and then for the 9 jobs in queue.
+By the memoryless property, at the moment you arrive, the remaining service time of the job in service is still $\E S$ Thus, you have to wait $10/\mu = 5/3 h \neq 5/6 h$.
+\end{solution}
+\end{exercise}
+
+
+% \begin{exercise}\label{ex:59}
+% Derive \cref{eq:111}.
+% \begin{hint}
+%  Substitute the definition of $\L(s) = \sum_{k=1}^{A(T)}\1{A_k \leq s < D_k}$ for $s\leq T$ in  the LHS, then reverse the integral and summation.
+% \end{hint}
+% \begin{solution}
+% \begin{equation*}
+%  \begin{split}
+%  \int_0^T \L(s)\, \d s & = \int_0^T \sum_{k=1}^{A(T)} \1{A_k \leq s < D_k}\, \d s \\
+% & = \sum_{k=1}^{A(T)}\int_0^T \1{A_k \leq s < D_k}\, \d s = \sum_{k=1}^{A(T)} \J_k.
+%  \end{split}
+% \end{equation*}
+% \end{solution}
+% \end{exercise}
+
+\begin{exercise}
+Let's take `life' itself as an input-output system, and ask how many people are born and die in the Netherlands per week.
+For ease, assume that in 2023 the Netherlands has 16 M inhabitants, and people have an expected lifetime (i.e., the time they remain in the system called `life') of 80 years.
+With Little's law we conclude that the rate $\lambda$ into the system (i.e., people born) is $16 M/80 = 0.2 M $ per year.
+Again for ease, if a year has 50 weeks, there are 4000 births per week.
+If the size of the population remains about constant, also around 4000 people die per week.
+
+As it turns out, the death rate in 2023 is about 2900 per week.
+This is much lower than the above estimate, and a more precise computation does not close the gap.
+Can you explain this paradoxical difference?
+
+\begin{hint}
+What happens if the population increases?
+\end{hint}
+\begin{solution}
+Let's make a very simple model to clarify the problem.
+We start with an initial population size of~$A$.
+Then assume that each and every individual dies after exactly 80 years (and does not live a day longer).
+Moreover, assume that the population increases by $1\%$ per year.
+Then, after 79 years, the size of the population is $A \sum_{k=0}^{79}(1.01)^{k}$.
+If we assume (as we do when we apply Little's law) that each year contains the same amount of people, then the number of people per year equals:
+\begin{equation*}
+\frac{A}{80}\sum_{k=0}^{79} (1.01)^k = \frac{A}{80} \frac{(1.01)^{80}}{1.01-1} = 1.5 A.
+\end{equation*}
+However, after 80 years, just~$A$ people die, not $1.5 A$.
+Interestingly, $4000/1.5 = 2700$, which is quite a bit closer to 2900 per week.
+
+In conclusion, we should apply Little's law with caution; in particular, when we just consider stretches of time in which we know that the population increases (or decreases) on average, Little's law does not hold.
+
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:l-220}
+Explain that $\sum_{k=1}^{A(t)} \J_k \geq \int_0^t \L(s) \d s \geq \sum_{k=1}^{D(t)} \J_k$.
+\begin{solution}
+ Intuitively, the left term is all the work that arrived up to time~$t$, the middle term is all the work that has been processed, and the right term all the work that left.
+ Any job that is half-way its service counts for full at the left, for half in the middle expression, and not in the right.
+
+ More formally, for any job~$k$ and time~$t$, we have $\J_k \1{A_k \leq t} \geq \int_0^t \1{A_k \leq s < D_k } \d s \geq \J_k \1{D_k \leq t}$. (To see this, fix~$k$, and check the three cases $t < A_k, A_k \leq t < D_k, D_k < t$.) Then,
+ \begin{equation*}
+ \sum_{k=1}^\infty \J_k \1{A_k \leq t} \geq \int_0^t \sum_{k=1}^\infty \1{A_k \leq t < D_k} \d s \geq \sum_{k=1}^\infty \J_k \1{D_k \leq t}.
+ \end{equation*}
+ Finally, note that $ \sum_{k=1}^\infty \J_k \1{A_k \leq t} = \sum_{k=1}^{A(t)} \J_k$ and $ \sum_{k=1}^\infty \J_k \1{D_k \leq t} = \sum_{k=1}^{D(t)} \J_k$, and use the definition of $\L(s)$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Continuation of \cref{ex:l-220}]\label{ex:l-221}
+Take suitable limits to show that
+$\lambda \E\J \geq \E \L \geq \delta \E\J$.
+ Where do you need the strong law of large numbers?
+\begin{solution}
+ \begin{equation*}
+ \lim_{t\to\infty} \frac{A(t)}{t}\frac 1{A(t)}\sum_{k=1}^{A(t)} \J_k \geq \lim_{t\to \infty} \frac 1 t \int_0^t \L(s) \d s \geq \lim_{t\to\infty} \frac{D(t)}{t}\frac 1{D(t)} \sum_{k=1}^{D(t)} \J_k.
+ \end{equation*}
+ We use the strong law of large numbers to conclude that the limits converges to $n^{-1} \sum_{k=1}^n \J_k \to \E \J$, and we assume that $\{\J_k, k\geq N\}$ is a sequence of iid random variables for~$N$ sufficiently large.
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

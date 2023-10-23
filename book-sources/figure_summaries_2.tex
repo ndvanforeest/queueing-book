@@ -1,0 +1,96 @@
+\section{Graphical Summary}
+
+We finish this chapter with providing two summaries in graphical form to clarify how the concepts developed in this and the next chapter relate.
+
+\begin{figure*}[thp]
+ \centering
+
+ \begin{tikzpicture}[node distance = 2.5cm]
+
+\tikzset{
+ %Define standard arrow tip
+ >=stealth',
+ %Define style for boxes
+ % Define arrow style
+ pil/.style={
+ ->,
+ thick,
+ shorten <=2pt,
+ shorten >=2pt,}
+}
+\tikzstyle{block} = [rectangle, draw,text centered, rounded corners, minimum height=3em]
+
+ % nodes
+ \node [block, text width=5.5cm, align=center] (level) {Counting};
+\node[block, below=1cm of level] (An) {$|A(n,t)-D(n,t)|\leq 1$}
+edge[pil,<-] (level);
+
+\node[block, left=1.5cm of An] (A) {$A(t)-D(t)=\L(t)$}
+edge[pil,<-] (level);
+
+\node[block, right=1.5cm of An] (Anm) {$|A(m,n,t)-D(n,t)|\leq 1$}
+edge[pil,<-] (level);
+
+\node[block, below=1cm of A] (At) {$\frac{A(t)}t \approx \frac{D(t)}t$ if $\frac{\L(t)}t \to 0$}
+edge[pil,<-] (A);
+
+\node[block, below=1.5cm of At] (lambda) {$\lambda=\delta$}
+edge[pil,<-] node[fill=white] {$t\to\infty$} (At);
+
+\node[block, below=1cm of An] (AnDn) {$\frac{A(n,t)}t\approx\frac{D(n,t)}t$}
+edge[pil,<-] (An);
+
+\node[block, below=1.5cm of AnDn] (AnDn2) {$\frac{A(n,t)}{Y(n,t)}\frac{Y(n,t)}t\approx\frac{D(n,t)}{Y(n+1)}\frac{Y(n+1)}t$}
+edge[pil,<-] (AnDn);
+
+\node[block, below=1.5cm of AnDn2, text width=4cm] (lp) {Level Crossing: \\
+$\lambda(n)p(n) = \mu(n+1)p(n+1)$}
+edge[pil,<-] node[fill=white] {$t\to\infty$} (AnDn2);
+
+\node[block, below=1cm of lp, text width=3cm] (poisson) {Poisson: \\
+$\lambda=\lambda(n)$, \\
+$\mu=\mu(n)$}
+edge[pil,<-] (lp);
+
+\node[block, below=1cm of poisson, text width=4cm] (mm1) {$M/M/1$, $M/M/c$, $M/M/c/k$, \ldots} edge[pil,<-] (poisson);
+;
+
+\node[block, right=0.6cm of lp, text width=5cm, align=center] (batch) {Recursion: \\ $\lambda\sum_{m=0}^nG(n-m)p(m) = \mu(n+1)p(n+1)$}
+edge[pil,<-] node[fill=white] {$t\to\infty$} (Anm);
+
+\node[block, right=2.3cm of mm1] (batch2) {$M^B/M/1$}
+edge[pil,<-] (poisson)
+edge[pil,<-] (batch);
+
+
+\node[block, below=1cm of mm1, text width=4.5cm] (perf) {Performance
+ measures:
+$\E \L= \sum_{n=0}^\infty n p(n)$, $\P{\L\geq m}$, \ldots}
+edge[pil,<-] (mm1)
+edge[pil,<-] (batch2);
+
+\node[block, below=1.5cm of lambda] (pasta1) {$\frac{A(t)}t\frac{A(n,t)}{A(t)} = \frac{A(n,t)}{Y(n,t)}\frac{Y(n,t)}t$}
+edge[pil,<-] (AnDn2)
+edge[pil,<-,bend left=20] (At.south west)
+;
+
+\node[block, below=1.5cm of pasta1] (pasta2) {$\lambda \pi(n) = \lambda(n)p(n)$}
+edge[pil,<-] node[fill=white] {$t\to\infty$} (pasta1);
+
+\node[block, below=1.5cm of pasta2, text width=3cm] (pasta3) {PASTA: $\pi(n) = p(n)$}
+edge[pil,<-] (poisson)
+edge[pil,<-] (pasta2)
+edge[pil,->] (perf);
+
+\end{tikzpicture}
+ \caption{With level-crossing arguments we can derive a number of
+ useful relations. This figure presents an overview of these
+ relations that we derive in this and the next sections.}
+\label{fig:summaries}
+\end{figure*}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

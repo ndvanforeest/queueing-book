@@ -1,0 +1,83 @@
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex: { shell: yes, interaction: nonstopmode }
+% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
+% !arara: clean: { files: [ ans.tex, hint.tex] }
+
+\documentclass[queueing-book.tex]{subfiles}
+% %\externaldocument{queueing-book}
+\input{header}
+
+\loadgeometry{normal}
+
+\begin{document}
+
+In the first section of this chapter we provide some high level motivation why to study queueing systems and an overview of the book. In the second we recall some notation and results of analysis and probability that we use throughout the book.
+
+\section{Motivation and overview}
+\label{sec:motivation-overview}
+
+Queueing systems abound, and the analysis and control of queueing systems are major topics in the control, performance evaluation and optimization of production and service systems.
+
+
+\newthought{At my local supermarket}, for instance, any customer gets his/her groceries for free when there is a queue of 4 or more customers and there is an unoccupied cashier desk.
+The manager that controls the occupation of the cashier positions is keen on keeping the queue short.
+Now this is easy enough: just hire many cashiers. However, the cost of personnel may then outweigh the yearly average cost of paying the customer penalties.
+Thus, the manager's problem is to control the service capacity such the penalties and the personnel cost are about equally large.
+
+Fast food restaurants also deal with many interesting queueing situations.
+Consider, for instance, the preparation of hamburgers.
+Typically, hamburgers are made-to-stock, in other words, they are prepared before the actual demand has arrived.
+Thus, hamburgers in stock can be interpreted as customers in queue waiting for service, where the service time is the time between the arrival of two customers that buy hamburgers.
+The hamburgers have a typical lifetime, and they have to be scrapped if they remain on the shelf longer than a specified amount of time.
+Of course, it is easy to achieve zero scrap cost, simply by keeping no stock at all.
+However, to prevent lost-sales, it is important to maintain a certain amount of hamburgers in stock.
+In this case, the manager has to balance the scrap cost against the cost of lost sales.
+
+Service systems, such as hospitals, call centers, courts, and so on, have a certain capacity available to serve customers.
+The performance of such systems is, in part, measured by the total number of jobs processed per year and the fraction of jobs processed within a certain time frame between receiving and closing the job.
+Here the problem is to organize the capacity such that the sojourn time, i.e., the typical time a job spends in the system, does not exceed some threshold.
+
+\newthought{Clearly, in all} these examples, the performance of the queueing system has to be monitored and controlled.
+Typically the following performance measures are relevant.
+\begin{enumerate}
+\item The fraction of time $p(n)$ that the system contains $n$ customers.
+ In particular, $1-p(0)$, i.e., the fraction of time the system contains jobs, is important, as this is a measure of the time-average occupancy of the servers, hence related to personnel cost.
+\item The fraction of customers $\pi(n)$ that `see upon arrival' the system with $n$ customers.
+  This measure relates to customer perception and lost sales, i.e., fractions of arriving customers that do not enter the system.
+\item The average, variance, and/or distribution of the waiting time.
+\item The average, variance, and/or distribution of the number of customers in the system.\
+\end{enumerate}
+In this book, we will be primarily concerned with making models of queueing systems such that we can compute or estimate these performance measures.
+
+\newthought{In~\cref{cha:single-stat-queu} we} start with constructing queueing systems in discrete time and continuous time.
+This serves three goals.
+First, construction is concrete, so that by specifying the rules to characterize the behavior of the system, you (the reader) develop essential modeling skills.
+Second, these rules can often be easily implemented in computer code and used to simulate actual queueing system.
+Simulation is in general the best way to analyze practical queueing systems, as realistic systems seldom yield to mathematics.
+Third, we will use sample-path arguments to develop the theoretical results of the rest of the book, and these sample paths are precisely what simulators produce.
+
+\newthought{Once it is} clear what queueing theory is about, the stage is set for a more mathematical treatment of queueing systems.
+In \cref{cha:fundamental-tools} we develop some necessary key results.
+For this, we use sample paths of queueing process as a guiding principle, and assume that sample paths capture the `normal' stochastic behavior of the system (with probability one.)
+In~\cref{cha:analytical-models} we use these tools to develop exact models for single-station queueing systems.
+% {cha:queu-contr-open} we extend our study to simple examples of queueing control and queueing networks.
+% Here we combine the material of the earlier chapters with other mathematical tools such as difference and differential equations, and non-negative matrices.
+% As such, the last chapter in particular provides a stepping stone to Markov chains, Markov decision theory, optimization and dynamic programming.
+In our discussions we mostly focus on obtaining an intuitive understanding of the analytical tools.
+For proofs and/or more extensive results we refer to the bibliography at the end of the book.
+
+\newthought{Notwithstanding the power} of simulation, it is often hard to obtain structural understanding of the behavior of queueing systems.
+Instead, mathematical models, whether exact or approximate, are useful to help reason about and improve queueing systems.
+In~\cref{cha:approximate-models} we use approximations and general results of probability theory to understand how production and service situations are affected by the system parameters such as service speed, batching rules, and outages.
+
+
+\newthought{While the main} text contains some examples and derivations, most of the examples are delegated to exercises.
+Also, some of these exercises are consistency checks between results derived for different queueing models, and thereby provide important relations between various parts of the text.
+We note in passing that, while such checks are trivial in principle, the algebra can be quite difficult at times.
+The exercises are not meant to be really easy; they should require (some) work.
+Hints and solutions to all problems are available at the end of the book.
+
+
+
+\input{trailer}
