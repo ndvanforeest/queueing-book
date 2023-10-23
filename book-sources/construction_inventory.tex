@@ -43,7 +43,7 @@ Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level
 \end{align*}
 Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_t'$.\sidenote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in the system.}
 
-\newthought{The dynamics of} the inventory can be simply constructed if we are given a set of period demands $\{D_t, t=1, 2, \ldots\}$ and order sizes $\{Q_t, t=0, 1, \ldots\}$, but first we we need to address a subtle point.
+\newthought{The dynamics of} the inventory can be simply constructed if we are given a set of period demands $\{D_t, t=1, 2, \ldots\}$ and order sizes $\{Q_t, t=0, 1, \ldots\}$, but first we need to address a subtle point.
 In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take~$L$ to be constant over time and independent of the number of outstanding orders.
 Then, when placing an order of size $Q_{t-L}$ at the start of period $t-L$ so that it arrives at the start of period~$t$,  the  \recall{inventory level} follows  the rules
 \begin{align}\label{eq:i5}

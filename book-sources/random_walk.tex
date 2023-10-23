@@ -24,7 +24,7 @@ If we drop this, we obtain a related stochastic process $\{Z_k, k=0,1,\ldots\}$ 
 \begin{equation}\label{eq:44}
  Z_k = Z_{k-1} + a_k - c_k.
 \end{equation}
-In fact, $\{Z_k\}$ is a random walk since~$Z$ makes jumps of size $a_k-c_k, k=1,\ldots$ where $\{a_k-c_k\}$ forms a a sequence of iid rvs.
+In fact, $\{Z_k\}$ is a random walk since~$Z$ makes jumps of size $a_k-c_k, k=1,\ldots$ where $\{a_k-c_k\}$ forms a sequence of iid rvs.
 Observe that $\{Z_k\}$ is `free', i.e., it can take positive and negative values, whereas $\{L_{k}\}$ is restricted to the non-negative integers.
 
 It is interesting to express $\{\L_k\}$ in terms of $\{Z_k\}$. From~\cref{eq:44}, it is evident that $a_k - c_k = Z_k - Z_{k-1}$, hence,
@@ -96,7 +96,7 @@ np.random.seed(3)
 # a is an array of bernoulli random variables
 # z is the random walk, i.e., z[i] = sum_{j=1}^i a[i]
 # zmin is the running minimum, i.e, \min{z(j), 0 \leq j \leq i}
-# q is is random walk reflected in the origin, i.e,
+# q is a random walk reflected in the origin, i.e,
 # q[i] = z[i] - \min{z(j), 0 \leq j \leq i}
 
 n = 30
