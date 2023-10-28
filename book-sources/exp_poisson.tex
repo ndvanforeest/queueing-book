@@ -33,7 +33,7 @@ And if we believe that this information is immaterial to our probabilistic model
 \begin{equation}\label{eq:29}
  \P{X > s+t \given X>s} = \P{X>t}.
 \end{equation}
-A rv~$X$ whose cdf satisfies this property is said to be \recall{memoryless}.
+A rv~$X$ whose cdf (cumulative distribution function) satisfies this property is said to be \recall{memoryless}.
 
 It is simple to see that when $X\sim \Exp{\lambda}$, i.e.,  $X$ is exponentially distributed, it is memoryless. If fact, as
 \begin{equation*}
@@ -54,8 +54,8 @@ Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cr
 \end{align}
 \end{subequations}
 
-If we have a sequence of interarrival times $\{X_{i}\}_{i=1}^{\infty}$, then we construct job (customer, patient) arrival times according to the rule $A_{k} = A_{k-1} + X_{k}$, starting at $A_{0} = 0$.
-When interarrival times are iid rvs and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
+If we have a sequence of interarrival times $\{X_{i}\}_{i=1}^{\infty}$, then we construct job\sidenote{or customer, patient} arrival times according to the rule $A_{k} = A_{k-1} + X_{k}$, starting at $A_{0} = 0$.
+When interarrival times are iid (independent and identically distributed) rvs (random variables) and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
 \begin{equation*}
  f_{A_{1}}(t) = f_{X} (t) = \lambda e^{-\lambda t} = \lambda \frac{(\lambda t)^{0}}{0!} e^{-\lambda t},
 \end{equation*}
@@ -110,7 +110,7 @@ For $k\geq 1$, taking the derivative with respect to~$t$ of the RHS of~\cref{eq:
 With recursion, we retrieve~\cref{eq:e-37}.
 
 
-Thus, if you find it reasonable to model inter-arrival times as memoryless, then the number of arrivals in an interval is necessarily Poisson distributed.
+Thus, if you find it reasonable to model inter-arrival times as memoryless rvs, then the number of arrivals in an interval is necessarily Poisson distributed.
 And, if you find it reasonable that the occurrence of an event in a small time interval is constant over time and independent from one interval to another, then the arrival process is Poisson, and the inter-arrival times are exponential.
 
 
@@ -155,9 +155,44 @@ Then the process of customers entering the shop is a Poisson process $N_{\lambda
 \end{align*}
 And $N_{\lambda p}$ has stationary and independent increments because $N_{\lambda}$ is a Poisson process.
 
+A final interesting, and useful, property of the Poisson process is the distribution of the arrivals an interal $[0,t]$ given that $N(t) = n$, say.
+In fact, if this event is true, the arrivals are uniformly distributed over the entire interval $[0,t]$.
+\begin{theorem}\label{thr:1}
+Conditional on the event $N(t)=n$, $t>0$, the distribution of the arrival times $\{A_{i}\}_{i=1}^{n}$ is the same as the distribution of the order statistic of $n$ iid rvs $\sim \Unif{[0,t]}$.
+\end{theorem}
+\begin{proof}
+We write for convience $\d t_i = [t_{i}, t_i + \d t]$, and similarly $\d(t_i-t_{i-1}) = [t_i-t_{i-1}, t_i-t_{i-1}+\d t]$. With this notation, $\P{X_i \in \d t_i} = \lambda e^{-\lambda t_i} \d t$ when $X_i\sim \Exp{\lambda}$ and $\P{U_i\in \d t_i } = \d t /t$ when $U_i\sim \Unif{[0,t]}$.
+We provide the proof for $N(t)=2$; the proof for the general case is nearly identical, but needs more notation.
+
+Consider first the Poisson process with $0\leq t_1<t_2 \leq  t$. Then,
+\begin{align*}
+  \P{A_1\in \d t_1, A_2\in \d t_2 | N(t)=2}
+= \frac{\P{A_1\in \d t_1, A_2\in \d t_2, A_3 > t}}{\P{N(t)=2}},
+\end{align*}
+because $N(t) = 2 \iff A_{2} \leq t < A_{3}$.
+For the numerator,
+\begin{align*}
+\P{A_1\in \d t_1, A_2\in \d t_2, A_3 > t}
+  &\stackrel1= \P{X_1\in \d t_1, X_2\in \d (t_2-t_1), X_3 > t-t_{2}} \\
+  &\stackrel2= \lambda e^{-\lambda t_1} \lambda e^{-\lambda (t_2-t_1)} e^{-\lambda (t-t_2)} \d t^{2}  \\
+  &\stackrel3= \lambda^{2} e^{-\lambda t} \d  t^{2},
+\end{align*}
+where  1 follows from the recursive relation  $A_{i} = A_{i-1} + X_{i}$; 2 because the $X_i$ are iid  $\sim \Exp{\lambda}$; 3 is algebra.
+Because $\P{N(t)=2} = (\lambda t)^2 e^{-\lambda t}/2!$, we find that
+$ \P{A_1\in \d t_1, A_2\in \d t_2 | N(t)=2} =  2!/t^{2}$.
+
+As for the iid uniform rvs, $\P{U_1\in \d t_1, U_2\in \d t_2} = \d t^2/ t^{2}$.
+However, there are $2!$ ways that the uniform rvs hit the set $\d t_1 \d t_{2}$, hence the probability that the \emph{order statistic} of $U_{1}, U_2$ lies in this set is $2!/t^{2}$.
+This equals the earlier conditional probablity.
+\end{proof}
+
+
+
 \newthought{Summarizing, the Poisson} process $N_{\lambda}$ and the exponential distribution are very closely related: a counting process $\{N_{\lambda}(t)\}$ is a \emph{Poisson process} with rate~$\lambda$ if and only if the inter-arrival times $\{X_k\}$ are iid and $X_{k} \sim \Exp{\lambda}$.
 Thus, if you find it reasonable to model inter-arrival times as memoryless, then the number of arrivals in an interval is necessarily Poisson distributed.
 And, if you find it reasonable that the occurrence of an event in a small time interval is constant over time and independent from one interval to another, then the arrival process is Poisson, and the inter-arrival times are exponential.
+
+
 
 
 

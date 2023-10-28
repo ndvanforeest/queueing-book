@@ -108,7 +108,7 @@ Before running the actual simulations, we need  two \pyth/ax/ objects to which w
 
 To get a feel for the variability inherent to stochastic systems, we plot a few different sample paths of the queue length process.
 Thus, we give $10$ different seeds to the random number generator, simulate the queue length for each different seed, and add each sample path to \pyth/ax1/.
-For the simulation, we take $a_{i}$ uniformly distributed on the numbers $\lambda-1, \lambda, \lambda +1$, where $\lambda=6$ represents the average number of jobs arriving in a period.
+For the simulation, we take $a_{i}$ uniformly distributed on the integers $\lambda-1, \lambda, \lambda +1$ with $\lambda=6$, so that $6$ jobs arrive on average in a period.
 As the function \pyth/rng.integers(l, h)/ generates iid uniformly distributed random deviates on $l, l+1, \ldots, h-1$, we should set $h=\lambda + 2$ instead of $h=\lambda +1$.
 The service capacity is constant and equal to $\mu=\lambda + 1 =7$, so the system must be stable.
 \inputminted[firstline=36, lastline=44]{python}{../code/discrete_simulations.py}

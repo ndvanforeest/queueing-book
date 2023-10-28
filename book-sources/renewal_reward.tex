@@ -107,7 +107,7 @@ As the inventory is operated under an $(s,S)$-policy, it is a system that moves 
 
 
 \newthought{The renewal reward} theorem finds an easy application in the analysis of the \recall{Economic Production Quantity} (EPQ) model which is an inventory system in which demand arrives at a fixed rate~$d$ and items are produced at constant rate~$r$ by a machine that can switch on and off.
-The inventory is under an $(s,S)$ policy, the leadtime $L=0$, the holding and backlogging cost are~$h$ and~$b$ per unit per time, and it costs~$k$ to switch on the machine.
+The inventory is under an $(s,S)$ policy, the leadtime $L=0$, the holding and backlogging cost are~$h$ and~$b$ per unit per time, and it costs~$K$ to switch on the machine.
 \cref{fig:renewal} shows a sample path of the inventory level.
 Let us use the ideas of renewal reward theory to find the policy parameters that minimize the long-run time average cost.
 
@@ -117,28 +117,28 @@ From~\cref{fig:renewal} it is simple to see that
   \begin{align*}
     t_1 &= \frac{S-s}{d}, & t_2 &= \frac{S-s}{r-d}, & T = t_1+t_{2},
   \end{align*}
-are, respectively, the time  to empty the inventory from level~$S$ to~$s$ and switch on production,  the time needed to replenish the inventory from level~$s$ to~$S$ and switch off production, and the duration of a full cycle.
-Writing  $T_+$ ($T_-$) for the amount of time that the inventory is positive (negative) during a cycle,  it follows that
+  are, respectively, the time to empty the inventory from level~$S$ to~$s$ and switch on production, the time needed to replenish the inventory from level~$s$ to~$S$ and switch off production, and the duration of a full cycle.
+Writing $T_+$ ($T_-$) for the amount of time that the inventory is positive (negative) during a cycle, it follows that
 \begin{align*}
 \frac{T_+}T &= \frac{S}{S-s},
 & \frac{T_-}T &= \frac{s}{S-s},
 &  \frac 1 T &= \frac{d}{S-s} \left(1-\frac d r\right).
 \end{align*}
-Using that the cycle holding and backlogging cost are proportional to the areas of the related triangles, we see that the average cost of one cycle  is given by
+Using that the holding and backlogging cost are proportional to the areas of the related triangles,  the average cost of one cycle becomes
 \begin{align*}
 g
 &=\frac{K}{T} +  b\frac{s}{2} \frac{T_-} T  + h\frac{S}{2} \frac{T_+}{T}.
 \end{align*}
-Substituting $T_{-}, T_{+}, T$, taking the partial derivatives with respect to~$s$ and~$S$ and solving for the optimal values gives
+Substituting the expressions of $T_{-}, T_{+}, T$ in terms of $s$ and $S$, taking the partial derivatives with respect to~$s$ and~$S$ and solving for the optimal values gives
 \begin{align}\label{eq:renewal1}
 g^{*} &= \sqrt{2Kd} \sqrt{\frac{hb}{h+b}}\sqrt{1-\frac d r}, & s^{*} &= \frac{g^{*}}b, & S^{*} = \frac{g^{*}}{h}.
 \end{align}
 Of course we need  $r\geq d$ for stability. Interestingly, when $r=d$, the cost $g^{*} = 0$.\sidenote{Why is that so?}
 
-The (perhaps) most important formula for practical inventory management is the Economic Order Quantity (EOQ) which follows from~\cref{eq:renewal1} by taking $r\to \infty$ and $b\to\infty$, which amount to saying that replenishments arrives immediately and backlogging is not allowed.
+The (perhaps) most important formula for practical inventory management is the Economic Order Quantity (EOQ) which follows from~\cref{eq:renewal1} by taking $r\to \infty$ and $b\to\infty$, which amount to saying that replenishments arrive immediately and backlogging is not allowed.
 This results in
 \begin{align*}
-g^{*}_{EOQ} &= \sqrt{2Kdh} & s^{*} &= 0, & Q^{*} = \frac{2Kd}{h},
+g^{*}_{EOQ} &= \sqrt{2Kdh} & s^{*} &= 0, & Q^{*} = \sqrt{\frac{2Kd}{h}},
 \end{align*}
 where we write $Q^{*}$  instead of $S^{*}$ to indicate that we order in fixed quantities.
 Note that the cost in these limits \emph{increases}.\sidenote{Because we add binding constraints to the optimization problem.}
