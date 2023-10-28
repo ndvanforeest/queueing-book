@@ -112,9 +112,9 @@ Thus, $p(n)$, $n\geq 1$, is just $p(0)$ times a constant, and this constant is b
 To determine $p(0)$ we can use the fact that the numbers $p(n)$ represent probabilities.
 Hence, from the normalizing condition $\sum_{n=0}^\infty p(n)=1$, we get $p(0) = G^{-1}$ with
 $G$ being the \emph{normalization constant}
-\begin{equation} \label{eq:20}
+\begin{equation*}
 G = 1+\sum_{n=0}^\infty \frac{\tilde \lambda(n)\tilde \lambda(n-1)\cdots\tilde \lambda(0)}{\mu(n+1)\mu(n)\cdots \mu(1)}.
-\end{equation}
+\end{equation*}
 
 Finally, once we have $p(n)$, it is easy to compute  the time-average\sidenote{It is important to realize that this is not necessarily the same as what jobs see upon arrival.} number of jobs in the system and the long-run fraction of time the system contains at least~$n$:
 \begin{align*}
@@ -169,7 +169,7 @@ For a more general approach, we focus on a single state and count how often this
 Specifically, define $I(n,t) = A(n-1,t) + D(n,t)$ as the number of times the queueing process enters state~$n$ either due to an arrival from state $n-1$ or due to a departure leaving~$n$ jobs behind. Similarly,  $O(n,t) = A(n,t) + D(n-1,t)$ counts how often state~$n$ is left either by an arrival (to state $n+1$) or a departure (to state $n-1$).
 
 
-Just like~\eqref{eq:97}, it is evident that $|I(n,t)-O(n,t)|\leq 1$, and this implies\sidenote{~\cref{ex:79}}
+Just like~\cref{eq:97}, it is evident that $|I(n,t)-O(n,t)|\leq 1$, and this implies\sidenote{~\cref{ex:79}}
 \begin{equation}\label{eq:104}
  \lambda(n-1)p(n-1)+\mu(n+1)p(n+1) = (\lambda(n)+\mu(n))p(n).
 \end{equation}

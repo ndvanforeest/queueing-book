@@ -1,17 +1,10 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%%\externaldocument{queueing-book}
+%\externaldocument{queueing-book}
 \input{header}
 
 \begin{document}
 
 \section{Inventory control, analytic results}
-
 
 In this section we establish a set of formulas by which we can compute several performance measures for the basestock, the $(Q,r)$ and the $(T,S)$ inventory models as functions of the policy parameter(S).
 Thus, with these formulas we can avoid simulation to obtain insight into the policy performance.
@@ -28,9 +21,9 @@ and likewise notation for $Q(i, j]$.
 
 \begin{lemma}\label{lem:1}
 Under a basestock policy with reorder level~$s$, if $\IP_{1} = S$, then for all periods~$t$,
-  \begin{equation}
+\begin{equation*}
     D[1, t) = Q(1, t],
-  \end{equation}
+\end{equation*}
 that is, all demand is either delivered or outstanding.
 \end{lemma}
 \begin{proof}
@@ -83,9 +76,9 @@ The ready rate follows directly from the relation $I'=S-X$:
 \end{equation}
 The two other  service levels can  only be computed numerically.\sidenote{To the extent, I know.}
 For the mean inventory level,
-\begin{equation}\label{eq:ai3}
+\begin{equation*}
 \E{I'(S)} = s + 1 - \theta = s + 1 - (L+1)\E D.
-\end{equation}
+\end{equation*}
 Noting that $I'^+(S) - I'^-(S) = I'(S)$,
 \begin{equation}
 \E{\IL'^+(S)} = \E{I'(S)} + \E{I'^-(S)} = S - \theta + \E{I'^-(S)}.
@@ -217,7 +210,7 @@ For the $(s,S)$ model we can take~$s$ to be the same as for the $(s,Q)$ model, a
 
   In continuous-review systems,  the notation $I_t$ corresponds to the inventory level as perceived by the~$i$th customer (observe that this is very different from the meaning of the $I_t$ for period-review systems).
 
-  Why is the ready rate $F(S)$ (and not $F(S)=F(s+1)$ as in \eqref{eq:13}) for continuous-review systems?
+  Why is the ready rate $F(S)$ (and not $F(S)=F(s+1)$ as in \cref{eq:13}) for continuous-review systems?
   \begin{solution}
     In continuous time, when $I_t=0$, the~$i$th demand `sees' an empty inventory. Hence, the~$i$th demand cannot be met from on-hand stock when $I_t=0$. Thus, only when $I_t>0$, this demand can be served. Therefore,
 \begin{align*}

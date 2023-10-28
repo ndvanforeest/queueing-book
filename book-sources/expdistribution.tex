@@ -30,8 +30,8 @@ and then we write $X\sim \Exp{\lambda}$. The following properties hold:\sidenote
   \begin{align}
   \E X &= \lambda^{-1},  &  %\label{eq:24}\\
 \V X &= \lambda^{-2}. %, \label{eq:26}\\
- %    C^2&= 1, \label{eq:27}\\
- % M_X(t) &= \frac{\lambda}{\lambda-t}, \quad t<\lambda.\label{eq:30}
+ %    C^2&= 1, \\
+ % M_X(t) &= \frac{\lambda}{\lambda-t}, \quad t<\lambda.
 \end{align}
 \end{subequations}
 
@@ -67,7 +67,7 @@ As such, geometric rvs are also memoryless, but in discrete time.
 To demonstrate this, consider a machine that produces items.
 An item fails with probability~$p$, and is correct with probability $q=1-p$, independent of the correctness of any other item.
 Let~$X$ be the number of items produced until a failure occurs.  Then $\P{X=m} =  p q^{m-1}$, from which easily follows that
-\begin{equation}  \label{eq:81}
+\begin{equation}
 \P{X>n+m\given X>m} = \frac{\P{X>n+m}}{\P{X>m}} = \frac{q^{n+m}}{q^m}=q^{n} = \P{X>n}.
 \end{equation}
 

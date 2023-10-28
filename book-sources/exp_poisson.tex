@@ -45,14 +45,10 @@ As a counter example, the life span of human beings is not memoryless: take~$X$ 
 Then $\P{X>99}æ$ was small, but not zero, but $\P{X>199 \given X>100} = 0$.
 
 Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cref{ex:11}}
-\begin{subequations}
-  \begin{align}
-  \E X &= \lambda^{-1},  &  %\label{eq:24}\\
-\V X &= \lambda^{-2}. %, \label{eq:26}\\
- %    C^2&= 1, \label{eq:27}\\
- % M_X(t) &= \frac{\lambda}{\lambda-t}, \quad t<\lambda.\label{eq:30}
-\end{align}
-\end{subequations}
+  \begin{align*}
+  \E X &= \lambda^{-1},  &
+\V X &= \lambda^{-2}.
+\end{align*}
 
 If we have a sequence of interarrival times $\{X_{i}\}_{i=1}^{\infty}$, then we construct job\sidenote{or customer, patient} arrival times according to the rule $A_{k} = A_{k-1} + X_{k}$, starting at $A_{0} = 0$.
 When interarrival times are iid (independent and identically distributed) rvs (random variables) and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
@@ -92,11 +88,10 @@ that is, $N(t) \sim \Pois{\lambda t}$, i.e., \recall{Poisson distributed} with p
 
 
 It is simple to see from~\cref{eq:e-9} that\sidenote{\cref{ex:pois-mgf}}
-\begin{align}
-\E{N(t)} &= \lambda t %,  \label{eq:11}\\
-%\E{(N(t))^2} &= \lambda^2 t^2 + \lambda t,\label{eq:19}\\
-& \V{N(t)} &= \lambda t. %\label{eq:21}
-\end{align}
+\begin{align*}
+\E{N(t)} &= \lambda t
+& \V{N(t)} &= \lambda t.
+\end{align*}
 
 
 
@@ -125,7 +120,7 @@ Independence means, roughly speaking, that knowing that $N(s,t]= n$, does not he
 Next, with small~$o$ notation\sidenote{A function $f(h) = o(h)$ when $f(h)/h \to 0$ as $h\to 0$, e.g., $x^{2} = o(x)$.}, if $t\ll 1$,
 \begin{subequations}\label{eq:32}
 \begin{align}
-\P{N( t) = 0} &= e^{-\lambda t} = 1-\lambda  t + o( t),  \label{eq:4}\\
+\P{N( t) = 0} &= e^{-\lambda t} = 1-\lambda  t + o( t), \\
 \P{N( t) = 1} &= \lambda t e^{-\lambda t} = \lambda t (1-\lambda t + o(t)) = \lambda  t + o( t), \label{eq:8} \\
 \P{N( t)  \geq 2} &= 1 - \P{N(t) = 0} - \P{N(t)= 1} \\
   &= 1 - (1-\lambda t) - \lambda t + o(t) = o(t). \label{eq:10}
@@ -146,7 +141,7 @@ Moreover, as $N_{\lambda}$ and $N_{\mu}$ have stationary and independent increme
 
 We can also \emph{split}, or \emph{thin}, a stream into several sub-streams.
 For instance, consider a stream of people passing by a shop as a Poisson process $N_\lambda$, and suppose that a customer decides to enter the shop as a Bernoulli distributed rv~$B$, independent of $N_{\lambda}$, with success probability~$p$ and failure probability $q=1-p$.
-Then the process of customers entering the shop is a Poisson process $N_{\lambda p}$ with rate $\lambda p$, because, from~\eqref{eq:32}, for $t\ll 1$,
+Then the process of customers entering the shop is a Poisson process $N_{\lambda p}$ with rate $\lambda p$, because, from~\cref{eq:32}, for $t\ll 1$,
 \begin{align*}
   \P{N_{\lambda p}(t) = 0 } &= \P{N_{\lambda}(t) = 0} +\P{N_{\lambda}(t) = 1}\P{B=0} \\
   &= 1- \lambda t + \lambda t q  + o(t) = 1 - \lambda p t + o(t),\\

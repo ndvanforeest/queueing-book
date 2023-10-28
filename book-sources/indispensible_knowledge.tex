@@ -85,11 +85,11 @@ since $f(x) = 0$ for $x<0$ and $f(x) = \lambda e^{-\lambda x}/2$ for $x>0$, but 
 You should be able to use indicator functions and integration by parts to show that $\E{X^2} = 2\int_0^\infty y G(y) \d y$, where $G(x) = 1- F(x)$, provided the second moment exists.
 
 For general random variables~$X$ and~$Y$:
-\begin{align}
-  \E{X+Y} &= \E X + \E Y, \label{eq:95}\\
+\begin{align*}
+  \E{X+Y} &= \E X + \E Y, \\
 \intertext{and, if~$X$ and~$Y$ are independent so that $\E{XY} = \E X \E Y$,}
-  \V{X+Y} &= \V X + \V Y. \label{eq:94}
-\end{align}
+  \V{X+Y} &= \V X + \V Y.
+\end{align*}
 
 Sometimes we use conditioning to compute  expectations and variances. In such cases we use Adam's and Eve's laws:
 \begin{align*}

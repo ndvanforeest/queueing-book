@@ -43,9 +43,9 @@ e^{-\lambda t} \frac{(\lambda t)^k}{k!},
 and we write $N(t)\sim \Pois{\lambda t}$.%\sidenote{\cref{ex:p2}}
 From this it is immediate that
 \begin{align}
-\E{N(t)} &= \lambda t %,  \label{eq:11}\\
-%\E{(N(t))^2} &= \lambda^2 t^2 + \lambda t,\label{eq:19}\\
-& \V{N(t)} &= \lambda t. %\label{eq:21}
+\E{N(t)} &= \lambda t
+%\E{(N(t))^2} &= \lambda^2 t^2 + \lambda t,\\
+& \V{N(t)} &= \lambda t.
 \end{align}
 %\end{subequations}
 
@@ -63,7 +63,7 @@ We next address a number of useful properties of the Poisson process.
 If $\Delta t\ll 1$ then for all $t\geq 0$,
 \begin{subequations}\label{eq:32}
 \begin{align}
-\P{N(t+\Delta t) = n \given N(t) = n} &= 1-\lambda \Delta t + o(\Delta t),  \label{eq:4}\\
+\P{N(t+\Delta t) = n \given N(t) = n} &= 1-\lambda \Delta t + o(\Delta t),  \\
 \P{N(t+\Delta t) = n+1 \given N(t) = n} &= \lambda \Delta t + o(\Delta t), \label{eq:8} \\
 \P{N(t+\Delta t) \geq n+2 \given N(t) = n} &= o(\Delta t).\label{eq:10}
 \end{align}

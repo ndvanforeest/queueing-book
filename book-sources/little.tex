@@ -42,10 +42,10 @@ can be interpreted as the total time that jobs have spent in the system up to ti
 
 
 \newthought{Consider a specific} time~$T$ at which the system is empty. At this point, any job $k\leq A(T)$ must have left the system, implying that $ \J_k = \int_0^T \1{A_k \leq s < D_k}\,\d s$ when $k\leq A(T)$, therefore,
-\begin{equation}\label{eq:111}
+\begin{equation*}
  \int_0^T \L(s)\, \d s  = \int_0^T \sum_{k=1}^{A(T)} \1{A_k \leq s < D_k}\, \d s
  = \sum_{k=1}^{A(T)}\int_0^T \1{A_k \leq s < D_k}\, \d s = \sum_{k=1}^{A(T)} \J_k.
-\end{equation}
+\end{equation*}
 
 Suppose now there exists an infinite sequence of  times $\{T_i\}$ at which the system is empty, i.e., $A(T_i) = D(T_i)$, and such that $T_i\to\infty$. In that case we can deduce that
 \begin{equation*}

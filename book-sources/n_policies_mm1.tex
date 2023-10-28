@@ -118,7 +118,7 @@ For the cost during the build up the queue, we use again a recursive procedure.
 Write $W(q)$ for the accumulated queueing cost\sidenote{Here~$W$ is not the waiting time in queue.}
 from the moment the server becomes idle up to the arrival time of the~$q$th job (the job that sees $q-1$ jobs in the system).
 Then,\sidenote{\cref{ex:nmm-4}}
-\begin{equation}\label{eq:99}
+\begin{equation}
   W(q) = W(q-1) +  h\frac{q-1}{\lambda}= h \frac{q(q-1)}{2\lambda}.
 \end{equation}
 
@@ -129,9 +129,9 @@ As the switching cost is~$K$, then, by the renewal-reward theorem, the time-aver
 \end{align*}
 
 Finding the optimal~$N$ is easy. Taking the derivative with respect to~$N$, just as if it is a continuous variable, setting the derivative to zero and solving for~$N$ gives\sidenote{The optimal value is $\pm 1$ this estimate.}
-\begin{equation}\label{eq:n-mm1:3}
+\begin{equation*}
   N^* \approx \sqrt{\frac{2\lambda(1-\rho)K}{h}}.
-\end{equation}
+\end{equation*}
 The expression for $N^*$, called the \emph{Economic Production Quantity (EPQ)}, is a famous result in inventory theory.
 Specifically, it is the optimal production quantity for a production-inventory system in which a machine switches on at cost~$K$ and items pay holding cost~$h$ per unit time.
 By taking $\E S \to 0$, hence $\rho \to 0$, we see that $N^*$ reduces to the \emph{Economic Order Quantity (EPQ)} $\sqrt{2\lambda K/h}$.

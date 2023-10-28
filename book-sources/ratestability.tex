@@ -24,9 +24,9 @@ We first develop the concepts for a queueing process with batch and service size
 \newthought{We first formalize} the arrival rate and departure rate in terms of the arrival and departure processes $\{A(t)\}$ and $\{D(t)\}$, c.f., \cref{sec:constr-gg1-queu}.
 The \recall{arrival rate} is the long-run average number of jobs that arrive per unit time along a sample path, i.e.,\sidenote{This limit does not necessarily exist if $A(t)$ is some pathological function.
 }
-\begin{equation}\label{eq:3}
+\begin{equation*}
  \lambda = \lim_{t\to\infty} \frac{A(t)}t.
-\end{equation}
+\end{equation*}
 Likewise, the \recall{departure rate} is
 \begin{equation}\label{eq:28}
  \delta = \lim_{t\to\infty} \frac{D(t)}t.
@@ -37,9 +37,9 @@ Henceforth, we assume that both limits exist, are finite, and $0<\lambda<\infty$
 \newthought{For the arrival rate,} suppose we are given a sequence of iid inter-arrival times $\{X_k\}$, each of which is distributed as the common rv~$X$.
 Then, by the definition of $A_{n}$, $\sum_{k=1}^n X_k = A_n$.
 We prove below that our assumptions imply that the average inter-arrival time $\E X$ between two consecutive jobs is equal to the \emph{inverse} of the arrival rate $\lambda$, i.e.,
-\begin{equation}\label{eq:54}
+\begin{equation*}
  \E X = \lim_{n\to\infty} \frac{1}n\sum_{k=1}^n X_k = \lim_{n\to\infty} \frac{A_{n}}{n} = \lim_{t\to\infty} \frac t{A(t)} = \frac 1 \lambda.
-\end{equation}
+\end{equation*}
 
 For the service rate of a \emph{single} server, take $S_k$ as the required service time of the~$k$th job served by the server, so that $U_n = \sum_{k=1}^n S_k$ is the total service time of the first~$n$ jobs.
 Similar to the definition of $A(t)$, we let $ U(t) = \max\{n: U_n \leq t\}$ and define the \recall{service}, or \recall{processing}, rate of a single server as
@@ -71,9 +71,9 @@ All accepted jobs are (eventually) served.
 To prevent all sorts of pathological situations, we do not consider cases in which $\lambda = \mu = \tilde \lambda$.
 
 In view of the above inequalities, we say that a system is \recall{rate-stable} if
-\begin{equation}\label{eq:84}
+\begin{equation*}
 \tilde \lambda = \delta.
-\end{equation}
+\end{equation*}
 In words: the system is rate-stable whenever in the long run jobs leave the system just as fast as they enter the system.
 
 Henceforth, we \emph{only} consider queueing systems that fall into cases 2--4, i.e.,  the system is rate stable and $\mu > \tilde \lambda$.
@@ -86,9 +86,9 @@ Note that $\lambda = \tilde \lambda$ when $A(t) = \tilde A(t)$, and then we mean
 \textrm{Server load } = \rho :=  \lambda \E S=\frac{\lambda}{\mu} = \frac{\E S}{E X}.
 \end{equation*}
 Next, we define the \recall{utilization} as
-\begin{equation}\label{eq:6}
+\begin{equation*}
 \textrm{Server utilization } = \tilde \lambda \E S = \frac{\tilde \lambda}{\mu},
-\end{equation}
+\end{equation*}
 as this involves the rate at which work enters the system, and by rate-stability, this is the work that is served.
 When $\lambda = \tilde \lambda$,  the load $\rho$ and the utilization are all equal, and we will use these terms interchangeably.
 However, when $\tilde \lambda < \lambda$  we need to be careful about the difference between load and utilization.

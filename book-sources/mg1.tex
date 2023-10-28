@@ -1,9 +1,3 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
 %\externaldocument{queueing-book}
 \input{header}
@@ -70,9 +64,9 @@ Then, as $t \to \infty$, $Y(t)/t$ converges to the  (time-average) remaining ser
 \E{S_r} = \frac{\lambda}2 \E{S^2}.
 \end{equation*}
 Replacing this expression in the above expression for $\E\W$, we obtain the \recall{Pollaczek-Khinchine formula}
-\begin{equation} \label{eq:710}
+\begin{equation*}
  \E{\W} = \frac 1 2 \frac{\lambda \E{S^2}}{1-\rho} =\frac{1 + C_s^2}2 \frac{\rho}{1-\rho} \E S,
-\end{equation}
+\end{equation*}
 where the second equation follows from  the observation that
 \begin{equation*}
 \frac{\E{S^2}}{(\E S)^2} =  \frac{\E{S^2} - (\E S)^{2} + (\E{S})^{2}}{(\E S)^2} = \frac{\V S + (\E S)^{2}}{(\E S)^{2}} = C_s^2 +1.
@@ -167,8 +161,3 @@ For the $G/G/1/1$ queue the PASTA property does not hold, hence $p(0)\neq \pi(0)
 
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
