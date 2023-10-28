@@ -80,9 +80,9 @@ For the mean inventory level,
 \E{I'(S)} = s + 1 - \theta = s + 1 - (L+1)\E D.
 \end{equation*}
 Noting that $I'^+(S) - I'^-(S) = I'(S)$,
-\begin{equation}
+\begin{equation*}
 \E{\IL'^+(S)} = \E{I'(S)} + \E{I'^-(S)} = S - \theta + \E{I'^-(S)}.
-\end{equation}
+\end{equation*}
 Since $I'^{-}(S) = [-I'(S)]^{+} = [X-S]^{+}$,  we obtain for the average backorder level
 \begin{equation}\label{eq:ia22}
 \E{\IL'^-(S)} =\sum_{k=0}^\infty (k- S)^+f(k).
@@ -91,9 +91,9 @@ Clearly, this summation runs to $\infty$, which is problematic for numerical pur
 \begin{lemma}
 \label{lem:3}
 The average end-of-period backlog is equal to
-\begin{equation}
+\begin{equation*}
    \E{\IL'^-(S)} = \theta - \sum_{j=0}^{s} G(j).
-\end{equation}
+\end{equation*}
 Mind, the~$s$ in the RHS is the reorder level $s=S-1$, not~$S$.
 \end{lemma}
 \begin{proof} Since $\sum_{j=0}^\infty \1{j< k-r - 1} = k-r -1$, from~\cref{eq:ia22}

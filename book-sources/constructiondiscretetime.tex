@@ -1,13 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
 
@@ -69,13 +61,13 @@ In the first case, the jobs can be served in period~$k$, in the latter case, the
 Since $\L_{k-1}$ is the system length at the \emph{end} of period $k-1$, it must also be the number of customers at the \emph{start} of period~$k$.
 Assuming that jobs arriving in period~$k$ cannot be served in period~$k$, the number of customers that depart in period~$k$ is therefore
 \begin{subequations}\label{eq:31}
-\begin{equation}
+\begin{equation*}
 d_k = \min\{\L_{k-1}, c_k\},
-\end{equation}
+\end{equation*}
 Now that we know the number of departures, the number at the end of period~$k$ is given by
-\begin{equation}
+\begin{equation*}
  \L_k = \L_{k-1} -d_k + a_k.
-\end{equation}
+\end{equation*}
 \end{subequations}
 Like this, if we are given $\L_0$ and numbers $\{a_{k}\}_{k=1}^{n}$ and $\{c_{k}\}_{k=1}^{n}$, we can obtain the numbers $\{L_{k}\}_{k=0}^{n}$ from this recursion.\sidenote{In a sense,~\cref{eq:31} is the $F = m a$ of a queueing system: Given initial conditions, we apply the rule at time $k-1$ to get the state at time~$k$, and so on.}
 

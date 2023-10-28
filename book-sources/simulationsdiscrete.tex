@@ -1,11 +1,4 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%%\externaldocument{queueing-book}
 \input{header}
 
 \begin{document}
@@ -162,9 +155,9 @@ Before doing this, we need a way to quantify \emph{relative }variability.
 To see the point, suppose the standard deviation of the time to serve a job is~$1$ minute.
 When the mean service time is 1 hour, we are inclined to call the service times very regular, while if the mean is just 1 minute, we would call it irregular.
 To capture this difference, we define the fundamentally important concept of \recall{square coefficient of variation (SCV)} of a random variable~$X$  as
-\begin{equation}
+\begin{equation*}
  C^2_{X}:= \frac{\V X}{(\E X)^2}.
-\end{equation}
+\end{equation*}
 
 
 Continuing with the simulation, we like to find a probability distribution for the services $\{c_{i}$ such that it has a specific mean $\mu$ and a SCV $c^{2}$.
@@ -485,8 +478,3 @@ print(L_dist)
 
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

@@ -1,16 +1,9 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
 
 \begin{document}
 
-\section{$M/M/1$ queue and its variations}
+\section{\texorpdfstring{$M/M/1$}{MM1} queue and its variations}
 \label{sec:mm1}
 
 
@@ -33,7 +26,7 @@ However, as in the general case arrivals need not enter, we consider
 Below, when all arrivals are accepted, we write $\tilde \lambda = \lambda$, but otherwise, we use~$\tilde \lambda$.
 
 
-\newthought{The \recall{$M/M/1$} queue} has  a constant arrival and service rate so that we take
+\newthought{The $M/M/1$ queue} has  a constant arrival and service rate so that we take
 \begin{align*}
 \lambda(n)&=\lambda, & \mu(n)&=\mu.
 \end{align*}
@@ -59,7 +52,7 @@ recall that $\E\Ls$ is the time-average number of jobs in service. Since $\E\L$ 
 
 
 
-\newthought{The \recall{$M/M/c$} queue} has~$c$ identical servers to process jobs.
+\newthought{The $M/M/c$ queue} has~$c$ identical servers to process jobs.
 To model this, set
 \begin{align*}
 \lambda(n) &= \lambda, & \mu(n) &= \mu \min\{n, c\}.
@@ -77,7 +70,7 @@ G &= \frac 1{p(0)} = \sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^c}{(1
 Note in particular that  $\E{\Ls} \neq \rho$.
 
 
-\newthought{The \recall{$M/M/1/K$} queue} blocks jobs when $L\geq K$.
+\newthought{The $M/M/1/K$ queue} blocks jobs when $L\geq K$.
 We can implement this by taking
 \begin{align*}
 \tilde \lambda(n) &= \lambda \1{n < K}, & \mu(n) &= \mu.
@@ -100,7 +93,7 @@ Moreover, since jobs are blocked, the utilization is no longer equal to the load
 \E\Ls = \sum_{n=0}^K \min\{n, 1\} p(n) = 1-p(0) = \frac{\lambda}{\mu} (1-p(K)).
 \end{equation}
 
-\newthought{The \recall{$M/M/c/c$} queue} blocks jobs when all of its~$c$ servers are occupied.\sidenote{This queueing model is also known as the Erlang~$B$ model.}
+\newthought{The $M/M/c/c$ queue} blocks jobs when all of its~$c$ servers are occupied.\sidenote{This queueing model is also known as the Erlang~$B$ model.}
 Thus, we take
 \begin{align*}
 \tilde \lambda(n) &= \lambda\1{n<c}, & \mu(n) &= n \mu.
@@ -123,7 +116,7 @@ The last two results are easy. Jobs either find a free server or are blocked, he
 Next, observing that $\lambda(1-p(c))$ is the rate of accepted jobs\sidenote{Since, by PASTA, a fraction $p(c)$ is lost.}, the utilization \emph{of the system} is $\lambda(1-p(c))/\mu$, and this in turn is equal to the average number of busy servers.
 
 
-\newthought{The \recall{$M/M/\infty$} queue} is simple to analyze, as is has \emph{ample} servers.
+\newthought{The $M/M/\infty$ queue} is simple to analyze, as is has \emph{ample} servers.
 Any job that arrives finds a free server, hence, its service  starts directly aft the arrival of a job.
 Therefore,
 \begin{align*}
@@ -169,7 +162,7 @@ As the steady-state probabilities depend heavily on the form of $\tilde \lambda(
 
 
 
-\newthought{The  \recall{$M/M/c/K$} queue} is a multiserver queue with blocking and is a simple generalization of the $M/M/c$ and $M/M/1/K$ queue.
+\newthought{The $M/M/c/K$ queue} is a multiserver queue with blocking and is a simple generalization of the $M/M/c$ and $M/M/1/K$ queue.
 Now,
 \begin{align*}
 \tilde \lambda(n) &= \lambda\1{n<K}, &\mu(n) &= \mu \min\{n, c\}.

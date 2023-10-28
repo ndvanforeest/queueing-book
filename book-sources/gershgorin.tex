@@ -1,10 +1,6 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
+\documentclass[queueing-book.tex]{subfiles}
 \input{header}
+\begin{document}
 
 
 \section{On $\lambda = \gamma + \lambda P$}
@@ -144,8 +140,3 @@ As $Q\geq 0$ element wise, we see that $0\leq Q^n < (1-\epsilon)^n$. And then $P
 % \end{exercise}
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

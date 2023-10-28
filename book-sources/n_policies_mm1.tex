@@ -1,8 +1,6 @@
-% arara: pdflatex
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
+\documentclass[queueing-book.tex]{subfiles}
 \input{header}
+\begin{document}
 
 \section{N-policies for the $M/M/1$ queue}
 \label{sec:n-policies}
@@ -67,9 +65,9 @@ It remains to solve for~$a$. Filling in $T(q)=aq$ gives
   a q = \alpha (aq + a) + \beta (a q - a) + 1/(\lambda+\mu).
 \end{equation*}
 Noticing that $\alpha + \beta = 1$, this reduces to $0 = a(\alpha - \beta) + 1/(\lambda + \mu)$. Solving this for~$a$ gives right away that $a = 1/(\mu-\lambda)$, and therefore
-\begin{equation}
+\begin{equation*}
 T(q) = \frac{q}{\mu-\lambda}.
-\end{equation}
+\end{equation*}
 
 We note that the solution of~\cref{eq:92} is unique once $T(0)$ is fixed. To see this, observe that in~\cref{eq:92}, $T(q+1)$ is a function of $T(q)$ and $T(q-1)$. Thus, $T(1)$ follows from $T(0)$, $T(2)$ from $T(1)$ and $T(0)$, and so on.
 
@@ -118,9 +116,9 @@ For the cost during the build up the queue, we use again a recursive procedure.
 Write $W(q)$ for the accumulated queueing cost\sidenote{Here~$W$ is not the waiting time in queue.}
 from the moment the server becomes idle up to the arrival time of the~$q$th job (the job that sees $q-1$ jobs in the system).
 Then,\sidenote{\cref{ex:nmm-4}}
-\begin{equation}
+\begin{equation*}
   W(q) = W(q-1) +  h\frac{q-1}{\lambda}= h \frac{q(q-1)}{2\lambda}.
-\end{equation}
+\end{equation*}
 
 It remains to assemble all results.
 As the switching cost is~$K$, then, by the renewal-reward theorem, the time-average cost of the~$N$-policy is equal to
@@ -193,9 +191,3 @@ Explain the  recursion for $W(q)$ and solve it.
 \end{exercise}
 
 \input{trailer}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

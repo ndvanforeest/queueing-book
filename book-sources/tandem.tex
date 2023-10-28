@@ -1,12 +1,8 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
-\section{$G/G/c$ Queues in Tandem}
+\section{\texorpdfstring{$G/G/c$}{GGc} Queues in Tandem}
 \label{sec:tandem-queues}
 
 
@@ -28,9 +24,9 @@ We obtain an  approximation for the SCV $C_{d}^2$ of the inter-departure times b
  C_{d}^2 \approx  (1-\rho^2) C_{a}^2 + \rho^2 C_{s}^2.
 \end{equation}
 For the $G/G/c$, i.e., a multiserver queue, there is the generalization
-\begin{equation}
+\begin{equation*}
  C_{d}^2 \approx 1 + (1-\rho^2)(C_{a}^2-1) + \frac{\rho^2}{\sqrt{c}}(C_{s}^2-1).
-\end{equation}
+\end{equation*}
 It is simple to see that this reduces to~\cref{eq:40} for the $G/G/1$ queue.
 
 Combining Sakasegawa's formula with this expression provides us with a very useful insight for a line of queues.
@@ -78,9 +74,3 @@ EJ1 + EJ2
 
 
 \input{trailer}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

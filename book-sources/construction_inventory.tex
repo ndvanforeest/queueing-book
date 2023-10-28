@@ -1,16 +1,6 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
-
-
 
 \section{Single-item Inventory Processes in Discrete Time}
 \label{sec:single-item-invent}
@@ -66,10 +56,10 @@ In other words, the difference between the inventory position and the inventory 
 Let us next study a number of rules that use the inventory position to compute order sizes; these policies differ only in the decision when to trigger an order and how much to order. Since these rules check the inventory position at the end of a period, we say that the inventory is under periodic review.
 
 
-\newthought{The \recall{basestock} policy} seems to be the simplest rule as it asks for a replenishment for each item demanded. Specifically, under a basestock policy, the  size of the order is given by\sidenote{Why is the second equality true?}
-\begin{equation}
+\newthought{The basestock policy} seems to be the simplest rule as it asks for a replenishment for each item demanded. Specifically, under a basestock policy, the  size of the order is given by\sidenote{Why is the second equality true?}
+\begin{equation*}
   Q_t = (s+1-\IP_{t-1}')\1{\IP_{t-1}' \leq s} = s+1-\IP_{t-1}',
-\end{equation}
+\end{equation*}
 where~$s$ is known as the \recall{reorder level}, and $s+1$ as the \recall{order-up-to} level.
 Note that the amount ordered depends on the \emph{end-of-period} inventory position, and that the inventory control policy uses the inventory position, not the inventory level. By combining this ordering rule with \cref{eq:b9}, we see that the $P_t=s+1$ for all~$t$.
 
@@ -172,9 +162,9 @@ To capture this in a formula, note first that a cycle ends in period~$t$ when $Q
 Second, there is still on-hand inventory at the start of period~$t$ when $I_{t-1}'\geq 0$.
 Thus, the number of cycles in which the inventory was non-negative must be $\sum_{t=L+1}^n \1{Q_{t-L}>0}\1{I_{t-1}'\geq 0}$.
 The cycle service level then follows from averaging over the total number of cycles $\sum_{t=L+1}^n \1{Q_{t-L}>0}$:
-\begin{equation}
+\begin{equation*}
 \alpha_c =  \frac{\sum_{t=L+1}^n \1{Q_{t-L}>0}\1{I_{t-1}'\geq 0}}{\sum_{t=L+1}^n \1{Q_{t-L}>0}}.
-\end{equation}
+\end{equation*}
 The cycle service measure is much used in practice because it is simple to execute: when a replenishment arrives, just register whether there is still on-hand stock.
 However, it is often not accurate, hence not  helpful to understand how many customers have been served from on-hand stock (which is actually what we want to know).
 

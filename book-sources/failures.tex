@@ -1,13 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
 \section{Server Failures}
@@ -378,8 +370,3 @@ When repair times are exponentially distributed with mean $\E{R}$ we have that  
 
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

@@ -1,13 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
 \section{Exponential Distribution}
@@ -67,9 +59,9 @@ As such, geometric rvs are also memoryless, but in discrete time.
 To demonstrate this, consider a machine that produces items.
 An item fails with probability~$p$, and is correct with probability $q=1-p$, independent of the correctness of any other item.
 Let~$X$ be the number of items produced until a failure occurs.  Then $\P{X=m} =  p q^{m-1}$, from which easily follows that
-\begin{equation}
+\begin{equation*}
 \P{X>n+m\given X>m} = \frac{\P{X>n+m}}{\P{X>m}} = \frac{q^{n+m}}{q^m}=q^{n} = \P{X>n}.
-\end{equation}
+\end{equation*}
 
 
 
@@ -258,8 +250,3 @@ $M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of~$X$ we obtain $\lambda/(\lambda+
 \end{exercise}
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

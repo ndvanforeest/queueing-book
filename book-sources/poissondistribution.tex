@@ -1,15 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
-% \documentclass[queueing-book.tex]{subfiles}
-% %\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
 \section{Poisson Distribution}\label{sec:poisson-distribution}
@@ -599,8 +589,3 @@ Recall that $p= \lambda t/ n$. Then, with~\cref{eq:76},
 % \end{exercise}
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

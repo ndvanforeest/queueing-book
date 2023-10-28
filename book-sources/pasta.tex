@@ -1,13 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
 \section{Poisson Arrivals See Time Averages}
@@ -21,9 +13,9 @@ Here we will discuss this property in more detail, and in the remainder of the b
 
 \newthought{Let us say} that the system is in \emph{state}~$n$ at time~$t$ when $L(t)=n$. Then define\sidenote{Note the $A_k-$; since $L(t)$ is right-continuous, we concentrate on what an \emph{arrival} sees just before it's arrival}
 \begin{subequations}\label{eq:rates_}
-\begin{equation}
+\begin{equation*}
  A(n,t) :=  \sum_{k=1}^\infty \1{A_k \leq t}\1{\L(A_k-) = n} = \sum_{k=1}^{A(t)}\1{\L(A_k-) = n}
-\end{equation}
+\end{equation*}
 as the number of arrivals up to time~$t$ that saw the system in state~$n$.\sidenote{\cref{ex:36},\cref{ex:38}}
 \begin{marginfigure}%[t]
 \begin{tikzpicture}[scale=0.5,
@@ -90,9 +82,9 @@ node (c3) at (6.3,2) {};
 \footnotesize{\emph{We subtracted $1/2$ from the graph of $A(1,t)$, for otherwise this  overlaps with the graph of~$Y$.}}
 \end{marginfigure}
 Next, let
-\begin{equation}
+\begin{equation*}
  Y(n,t) := \int_0^t \1{\L(s) = n} \d s
-\end{equation}
+\end{equation*}
 be the total time the system spends in state~$n$ during $[0,t]$, and
 \begin{equation} \label{eq:18}
  p(n,t) := \frac 1 t \int_0^t \1{\L(s) = n} \d s = \frac{Y(n,t)}t,
@@ -143,9 +135,9 @@ Thus, summing over~$n$ in~\cref{eq:13}, the overall arrival rate $\lambda$ is su
 \lambda = \sum_{n\in \mathcal{S}} \lambda(n)p(n),
 \end{equation}
 from which follows that
-\begin{equation}
+\begin{equation*}
 \pi(n) = \frac{\lambda(n)}{\lambda} p(n).
-\end{equation}
+\end{equation*}
 This in turn gives us a second  result of utmost importance:
 \begin{equation}\label{eq:pasta}
  \lambda(n) = \lambda \iff \pi(n) = p(n).
@@ -309,9 +301,3 @@ While~\cref{eq:wqes} is true for the $M/M/1$, it is \emph{not true for the $M/G/
 
 
 \input{trailer}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

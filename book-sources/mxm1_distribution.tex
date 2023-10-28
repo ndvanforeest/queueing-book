@@ -1,16 +1,8 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
-\section{$M^B/M/1$ Queue Length Distribution}\label{sec:batch-arrivals}
+\section{\texorpdfstring{$M^B/M/1$}{MBM1} Queue Length Distribution}\label{sec:batch-arrivals}
 
 
 In~\cref{sec:mxm1-queue:-expected,sec:mg1} we established the Pollaczek-Khinchine formula for the waiting times of the $M^B/M/1$ queue and the $M/G/1$ queue, respectively.
@@ -327,8 +319,3 @@ Thus, we can just as well count all jobs of size $>n-m$ along a sample path inst
 By level-crossing $\left|\sum_{m=0}^n A(m,n,t) - D(n,t)\right| \leq 1$, from which we obtain~\cref{eq:16} by combining this with the above, dividing by~$t$, and taking the limit $t\to\infty$.
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

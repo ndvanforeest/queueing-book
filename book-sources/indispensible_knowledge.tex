@@ -1,13 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
-
 \begin{document}
 
 \section{Indispensable knowledge}
@@ -33,9 +25,9 @@ We recall them here, and use them over and over in the rest of the book, mostly 
 %  \end{cases}
 %  \end{align}
 % With this, define
-% \begin{equation}
+% \begin{equation*}
 % [x]^+ = x \1{x\geq 0}.
-% \end{equation}
+% \end{equation*}
 
 The left and right limit of a function $f: \R\to \R$ are defined as
  \begin{align}

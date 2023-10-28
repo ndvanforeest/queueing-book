@@ -1,15 +1,5 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-% %\externaldocument{queueing-book}
 \input{header}
-
-\loadgeometry{normal}
-
 \begin{document}
 
 In the first section of this chapter we provide some high level motivation why to study queueing systems and an overview of the book. In the second we recall some notation and results of analysis and probability that we use throughout the book.
@@ -38,7 +28,7 @@ Service systems, such as hospitals, call centers, courts, and so on, have a cert
 The performance of such systems is, in part, measured by the total number of jobs processed per year and the fraction of jobs processed within a certain time frame between receiving and closing the job.
 Here the problem is to organize the capacity such that the sojourn time, i.e., the typical time a job spends in the system, does not exceed some threshold.
 
-\newthought{Clearly, in all} these examples, the performance of the queueing system has to be monitored and controlled.
+Clearly, in all these examples, the performance of the queueing system has to be monitored and controlled.
 Typically the following performance measures are relevant.
 \begin{enumerate}
 \item The fraction of time $p(n)$ that the system contains~$n$ customers.
@@ -50,29 +40,30 @@ Typically the following performance measures are relevant.
 \end{enumerate}
 In this book, we will be primarily concerned with making models of queueing systems such that we can compute or estimate these performance measures.
 
-\newthought{In~\cref{cha:single-stat-queu} we} start with constructing queueing systems in discrete time and continuous time.
+\newthought{\cref{cha:single-stat-queu} starts with} constructing queueing and inventory systems in discrete time, both examples of stochastic processes.
 This serves three goals.
 First, construction is concrete, so that by specifying the rules to characterize the behavior of the system, you (the reader) develop essential modeling skills.
-Second, these rules can often be easily implemented in computer code and used to simulate actual queueing system.
-Simulation is in general the best way to analyze practical queueing systems, as realistic systems seldom yield to mathematics.
+Second, these rules can often be easily implemented in computer code and used to simulate and control actual stochastic systems.
+Simulation is in general the best way to analyze practical stochastic systems, as realistic systems seldom yield to mathematics.
 Third, we will use sample-path arguments to develop the theoretical results of the rest of the book, and these sample paths are precisely what simulators produce.
 
-\newthought{Once it is} clear what queueing theory is about, the stage is set for a more mathematical treatment of queueing systems.
-In \cref{cha:fundamental-tools} we develop some necessary key results.
-For this, we use sample paths of queueing process as a guiding principle, and assume that sample paths capture the `normal' stochastic behavior of the system (with probability one.)
-In~\cref{cha:analytical-models} we use these tools to develop exact models for single-station queueing systems.
-% {cha:queu-contr-open} we extend our study to simple examples of queueing control and queueing networks.
-% Here we combine the material of the earlier chapters with other mathematical tools such as difference and differential equations, and non-negative matrices.
-% As such, the last chapter in particular provides a stepping stone to Markov chains, Markov decision theory, optimization and dynamic programming.
-In our discussions we mostly focus on obtaining an intuitive understanding of the analytical tools.
-For proofs and/or more extensive results we refer to the bibliography at the end of the book.
+In~\cref{cha:continuous-time} we move on to systems in continuous time and show how to set up simulation environments to construct sample paths. Once such environment is a discete event simulation. Nearly all professional simulation tools are built on the same principles.
 
-\newthought{Notwithstanding the power} of simulation, it is often hard to obtain structural understanding of the behavior of queueing systems.
+Once it is clear what queueing and inventory theory is about, the stage is set for a more mathematical treatment of such systems.
+In \cref{cha:fundamental-tools} we develop some necessary key results.
+For this, we use again sample paths of stochastic processes, and by assume that such sample paths capture the `normal' stochastic behavior, we can use the sample paths to estimate the  most important performance measures to analyze how the system performs.
+
+In~\cref{cha:analytical-models} we use these tools to develop exact models for single-station queueing systems.
+In our discussions we mostly focus on obtaining an intuitive understanding of the analytical tools.
+
+For most of the  proofs and/or more extensive results we refer to the bibliography at the end of the book.
+
+Notwithstanding the power of simulation, it is often hard to obtain structural understanding of the behavior of queueing systems.
 Instead, mathematical models, whether exact or approximate, are useful to help reason about and improve queueing systems.
 In~\cref{cha:approximate-models} we use approximations and general results of probability theory to understand how production and service situations are affected by the system parameters such as service speed, batching rules, and outages.
 
 
-\newthought{While the main} text contains some examples and derivations, most of the examples are delegated to exercises.
+\newthought{While the main} text contains many examples and derivations, a considerable number of examples are delegated to exercises.
 Also, some of these exercises are consistency checks between results derived for different queueing models, and thereby provide important relations between various parts of the text.
 We note in passing that, while such checks are trivial in principle, the algebra can be quite difficult at times.
 The exercises are not meant to be really easy; they should require (some) work.

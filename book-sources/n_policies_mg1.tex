@@ -1,16 +1,9 @@
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: pythontex: {verbose: yes, rerun: modified }
-% arara: pdflatex: { shell: yes, interaction: nonstopmode }
-% arara: clean: { extensions: [ aux, blg, idx, ilg, ind, log, out, pytxcode, rel, toc ] }
-% !arara: clean: { files: [ ans.tex, hint.tex] }
-
 \documentclass[queueing-book.tex]{subfiles}
-%\externaldocument{queueing-book}
 \input{header}
 
 \begin{document}
 
-\section{N-policies for the $M/G/1$ queue}
+\section{\texorpdfstring{$N$}{N}-policies for the \texorpdfstring{$M/G/1$}{MG1} queue}
 \label{sec:n-policies-mg1}
 
 
@@ -113,9 +106,9 @@ For the cost during the build up the queue, we use again a recursive procedure.
 Write $W(q)$ for the accumulated queueing cost\sidenote{Here~$W$ is not the waiting time in queue.}
 from the moment the server becomes idle up to the arrival time of the~$q$th job (the job that sees $q-1$ jobs in the system upon arrival).
 Then,\sidenote{\cref{ex:nmm-4}}
-\begin{equation}
+\begin{equation*}
   W(q) = W(q-1) +  h\frac{q-1}{\lambda}= h \frac{q(q-1)}{2\lambda}.
-\end{equation}
+\end{equation*}
 
 By combining all the above cost factors and using the renewal reward theorem, we find for the long-run average cost\sidenote{~\cref{ex:n-mg3}}
 \begin{equation}  \label{eq:100}
