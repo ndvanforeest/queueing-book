@@ -3,72 +3,12 @@
 
 \begin{document}
 
-\section{Simulations in discrete time}
+\section{General Behavior of Queueing Systems}
 \label{sec:simul-discr-time}
 
 
-In this section we first develop a simulation environment to analyze an inventory system and then a queueing system.
+In this section we develop a simulation environment to obtain insight into general behavior of queueing systems and make graphs of the evolution of queue length processes.
 
-\newthought{The Lighthouse Company} sells ceiling lamps and considers to use an $(s,S)$ policy to control the inventory since the replenishment cost, $K=50$ euro is relatively high. The company wants to use simulation to find sound values for~$s$  and~$S$.
-
-The details of the case are like this.
-Ceiling lamps sell at 100 Euro while the buying price is 40 Euro.
-The monthly holding cost is estimated to be $50\%$ of the buying price.
-To prevent customers from buying a lamp at a competitor (e.g., Internet sales), the Lighthouse Company offers a reduction of $20\%$ per day of the regular selling price when customers cannot be satisfied from on-hand stock.
-The pmf~$f$ of the daily demand is given by
-  \begin{align*}
-    f_{0} &= 1/6, &   f_{1} &= 1/5, &  f_{2}&= 1/4, &
-    f_{3} &= 1/8, &  f_{4} &= 11/120, &  f_{5} &= 1/6.
-  \end{align*}
-The leadtime $L=2$ days.
-
-With the code below we set up a simulation to estimate the performance measures for one specific $(s,S)$ policy.
-We go step by step, and provide explanations above the code to which it relates.\sidenote{You should use Google, or ChatGPT, to look up further information if necessary.}. You can copy the code to a file and it should run without problems (provided you copy all lines correctly).
-
-
-
-In python we often start with loading a set of modules.
-These contain specific functionality that not every Python program needs, hence these should only be loaded if required.
-The \pyth/numpy/ module offers support for numerical work.
-With \pyth/default_rng/ we can set up a random number generator and ensure to always get the same random deviates\sidenote{A random deviate is a sample taken from a distribution; it is not the same as a random variable.}
-by setting a seed.
-Next, \pyth/scipy.stats/ offers a nice class \pyth/rv_discete/ that we can use, among much other functionality, to generate random deviates of specific distribution.  Finally, \pyth/icecream/ offers a nice way to print things. I don't use it much, but it is nice to use at times.
-\inputminted[firstline=2, lastline=7]{python}{../code/ss_inventory_simulation.py} % modules
-
-The documentation of \pyth/rv_discrete/ that to make a distribution we have to provide two arrays of numbers, the first is the support of the rv, the second the pmf.
-\inputminted[firstline=11, lastline=13]{python}{../code/ss_inventory_simulation.py} % rvs
-
-
-
-\noindent Here are the other model parameters.
-Check in particular how we compute the cost parameters.\sidenote{Getting the units right is not always easy.}
-
-You should also check the line numbers at the left margins in the code blocks.
-Where the line numbers skip from one block to the next, the code in my python file has empty lines.
-
-\inputminted[firstline=17, lastline=22]{python}{../code/ss_inventory_simulation.py} % data
-
-\noindent
-We next compute the inventory positions and inventory levels.
-For ease we combine ~\cref{eq:i5} into single recursion to update $P_t'$, and likewise for $I_t'$.
-In the code, we write \pyth/Pp/ to say `Pprime', to recall that we mean the end-of-period inventory position.
-With regard to line 27, you should know that expressions like \pyth/(3 <= 4)/ evalutate to \pyth/True/ which in turn become~$1$ in computations. Thus, \pyth/Pp[t - 1] <= s)/ implements the indicator functions.\sidenote{Ask ChatGPT to explain such code, it's a great help.}
-Thus, We generate \pyth/N/ random deviates for the demand and use the random generator to ensure we get the same numbers every time we run the simulation.
-The first \pyth/for/ loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
-In the second loop we should protect against a simple error: it might happen that the number of periods over which we simule is smaller than~$L$.
-\inputminted[firstline=26, lastline=41]{python}{../code/ss_inventory_simulation.py} % simulation
-
-\noindent
-The last block of code computes the measures.
-The cycle service level~$\alpha_{c}$ is worth to study.\sidenote{Ask ChatGPT for explanation if you find this line hard.}
-We use slicing, which is a technique that is much used in python, but also in matlab.
-\inputminted[firstline=45, lastline=58]{python}{../code/ss_inventory_simulation.py} % results
-
-
-It remains to find good policy parameters, i.e., $s$ and~$S$.
-In principle this is simple: just change~$s$ and~$S$ over a range of values and see how that affects the performance measures.
-However, finding the overal \emph{optimal} parameters \emph{efficiently} is not easy.
-To minimize the cost, I have published an article on how to do that, but I did not study how to minimize average cost under some constraint on one of the service level measures, for instance.
 
 \newthought{We next turn} our attention to simulating a queueing system and obtain some general understanding of how such systems behave.
 The first point of a queueing system we should address is its stability.
@@ -76,46 +16,34 @@ Intuitively, when work arrives faster than it can be served, on average, the que
 To check this we show how to make~\cref{fig:drift} which contains the graph of the queue length process for a number of different arrival rates and capacities.
 
 
-We need to import some standard python libraries.
-\inputminted[firstline=1, lastline=2]{python}{../code/discrete_simulations.py}
-
-To make a pdf file with a plot that looks nice in \LaTeX\, we can use the \pyth/seaborn/ library and provide it with some extra options, such as good font sizes.
-However, while still designing a figure, I have this code commented out because it slows down the process.
-Only when I am satisfied with the result, I use this code to  export the result to a graph.
-\inputminted[firstline=3, lastline=16]{python}{../code/discrete_simulations.py}
+%\inputminted[firstline=2, lastline=3]{python}{../code/discrete_simulations.py} % modules
+%\inputminted[firstline=8, lastline=21]{python}{../code/discrete_simulations.py} % seaborn
 
 
-The python function  below simulates the queue length process for a given sequence of arrivals $a=(a_{0}, a_{1}, \ldots, a_{n})$ and service capacities $c = (c_{0}, c_{1}, \ldots, c_{n})$.
+We import the standard modules, cf.,~\cref{sec:simul-psych-case}.
+The next python function below simulates the queue length process for a given sequence of arrivals $a=(a_{0}, a_{1}, \ldots, a_{n})$ and service capacities $c = (c_{0}, c_{1}, \ldots, c_{n})$.
 We set $L_{0}$ to \pyth/L0/ and start simulating from time~$1$ onward.
 Thus, the values $a_{0}$ and $c_{0}$ remain unused.
 Note that for \pyth/d/ we assume that the jobs arriving in period~$i$ can be served in that same period.
-\inputminted[firstline=19, lastline=27]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=26, lastline=34]{python}{../code/discrete_simulations.py} % queuelength
 
 Next, we set the parameters for the simulation.
-\inputminted[firstline=30, lastline=33]{python}{../code/discrete_simulations.py}
-
-Before running the actual simulations, we need  two \pyth/ax/ objects to which we can add the graphs of the simulations.
-
-\inputminted[firstline=35, lastline=36]{python}{../code/discrete_simulations.py}
-
+\inputminted[firstline=40, lastline=43]{python}{../code/discrete_simulations.py} % setup
 
 To get a feel for the variability inherent to stochastic systems, we plot a few different sample paths of the queue length process.
 Thus, we give $10$ different seeds to the random number generator, simulate the queue length for each different seed, and add each sample path to \pyth/ax1/.
 For the simulation, we take $a_{i}$ uniformly distributed on the integers $\lambda-1, \lambda, \lambda +1$ with $\lambda=6$, so that $6$ jobs arrive on average in a period.
 As the function \pyth/rng.integers(l, h)/ generates iid uniformly distributed random deviates on $l, l+1, \ldots, h-1$, we should set $h=\lambda + 2$ instead of $h=\lambda +1$.
 The service capacity is constant and equal to $\mu=\lambda + 1 =7$, so the system must be stable.
-\inputminted[firstline=36, lastline=44]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=47, lastline=57]{python}{../code/discrete_simulations.py} % stability
 
 We repeat the simulation for a system in which $\mu=5$, hence we expect this to be unstable.
-\inputminted[firstline=46, lastline=54]{python}{../code/discrete_simulations.py}
-
-\noindent
 The last step is to write the figure to a file.
-The \pyth/tight_layout()/ function ensures that the labels of the axes are nicely formatted. \cref{fig:drift} shows the result of our work.
-\inputminted[firstline=57, lastline=58]{python}{../code/discrete_simulations.py}
+\cref{fig:drift} shows the result of our work.
+\inputminted[firstline=61, lastline=73]{python}{../code/discrete_simulations.py} % unstable
 
 
-\begin{figure}[tb]
+\begin{figure}[t]
 \centering
 \includegraphics{../figures/queue-discrete-time-stability.pdf}
 \caption{Drift of queue length process.
@@ -133,7 +61,7 @@ To see this in quantitative terms, we run a simulation, one with $\mu=6.5$ and a
 To do so, we need a sequence of random integers for~$c$ such that the mean is $mu=6.2$, say. One way to make such a sequence is to set $c_{i} = 6 + b_{i}$ where $b_{i}$ is a Bernoulli rv with success probability  $p=\mu - 6 = 0.2$.
 
 The code for this is simple because we don't need to make a graph this time. We just add the next code to the code above.
-\inputminted[firstline=60, lastline=69]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=78, lastline=87]{python}{../code/discrete_simulations.py} % meanvar
 The results are $\E L = 0.7$, $\V L = 1.1$ for $\mu=6.3$, and $\E L = 2.2$, $\V L = 5$ for $\mu=6.1$.
 (Here $\E L$ stands for the sample average $n^{-1}\sum_{i=1}^{n} L_{i}$, and likewise for $\V L$.\sidenote{We are in a state of sin here: the mean of a rv is not the same as its sample average.
 The strong law of large numbers makes a statement only about the limit; for small sample sizes, the difference can be quite large.})
@@ -169,14 +97,14 @@ Solving for~$b$ and~$p$ in terms of $\mu$ and $c^{2}$ gives that $p = 1 / (1 + c
 
 With this construction, we can fix $\E{c_{i}}=\mu$, but vary the SCV from one simulation to another.
 This next function implements the construction of a vector of rvs with the required properties.
-\inputminted[firstline=72, lastline=78]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=92, lastline=98]{python}{../code/discrete_simulations.py} % makecsv
 
 Now we can run the simulations and make graphs for $c^2=0.5, 1, 2$ for the periodic service capacities. The arrivals are constant.
-\inputminted[firstline=81, lastline=93]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=105, lastline=117]{python}{../code/discrete_simulations.py} % constant
 
 To see the effect of variability in both the arrivals and services, we make a second plot with the next code, and save the result to file.
 \cref{fig:scv} shows clearly that variability has quite an influence on the queueing behavior: the larger the SCV, the larger the excursions of the queue length.
-\inputminted[firstline=95, lastline=104]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=121, lastline=130]{python}{../code/discrete_simulations.py} % variable
 
 \begin{figure}[tb]
 \centering
@@ -209,16 +137,15 @@ To get some insight into such systems, we can simulate a chain of~$4$ stations i
 Jobs don't visit the same server, nor are lost or dropped somewhere half way the network.
 
 Since in a tandem network the departures of station~$i$ are fed as arrivals into station $i+1$, we have to update the function to compute the queue lengths a bit.
-\inputminted[firstline=107, lastline=116]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=135, lastline=144]{python}{../code/discrete_simulations.py} % tandem
 
 We next generate the arrivals at station 1, and the service capacities at each of the stations.
 Pay attention to the capacities: observe that station 2 has the slowest server.
 Note that if we use Poisson distributed service capacities, an integer amount of jobs is served each period, but the expected number served can be fractional.
-\inputminted[firstline=119, lastline=128]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=151, lastline=160]{python}{../code/discrete_simulations.py} % simtandem
 
 It remains to make the plots.
-
-\inputminted[firstline=130, lastline=148]{python}{../code/discrete_simulations.py}
+\inputminted[firstline=164, lastline=182]{python}{../code/discrete_simulations.py} % figtandem
 
 From~\cref{fig:tandem} we learn that the station with the slowest server typically has the most jobs in queue in front of it.
 This brings us to an interesting idea.

@@ -4,7 +4,7 @@
 
 
 
-\section{Queueing Processes in Discrete-Time}
+\section{Waiting for a Psychiatrist}
 \label{sec:constr-discr-time}
 
 
@@ -86,7 +86,7 @@ The duration of a period is taken to be a week.
 The average number of arrivals per period, based on data of the company, was slightly less than~12 per week; in the simulation we set it to $\lambda= 11.8$ per week.
 
 \newthought{Next, we model} the capacity in the form of a matrix such that row~$i$ corresponds to the weekly capacity of psychiatrist~$i$:
-\begin{equation*}
+\begin{equation}\label{eq:6}
  \begin{pmatrix}
  1 & 1 & 1 & \ldots\\
  1 & 1 & 1 & \ldots\\
@@ -94,7 +94,7 @@ The average number of arrivals per period, based on data of the company, was sli
  3 & 3 & 3 & \ldots\\
  9 & 9 & 9 & \ldots\\
  \end{pmatrix}.
-\end{equation*}
+\end{equation}
 Thus, psychiatrists 1, 2, and 3 do just one intake per week, the
 fourth does 3, and the fifth does 9 intakes per week. The sum over
 column~$k$ is the total service capacity for week~$k$ of all
@@ -102,7 +102,7 @@ psychiatrists together.
 
 With such a matrix it is simple to make other capacity schemes.
 A more balanced scheme would be like this:
-\begin{equation*}
+\begin{equation}\label{eq:9}
  \begin{pmatrix}
  2 & 2 & 2 & \ldots\\
  2 & 2 & 2 & \ldots\\
@@ -110,12 +110,12 @@ A more balanced scheme would be like this:
  4 & 4 & 4 & \ldots\\
  4 & 4 & 4 & \ldots\\
  \end{pmatrix}.
-\end{equation*}
+\end{equation}
 
 We include the effects of holidays by setting the capacity of one or some  psychiatrists to~$0$ in a certain week.
 Let us assume that every week just one psychiatrist is on leave such that the psychiatrists' holiday schemes rotate.
 To model this, we set the entries of the matrix as $C_{1,1}=C_{2,2}=\cdots=C_{1,6}=C_{2,7} =\cdots = 0$, i.e.,
-\begin{equation*}
+\begin{equation}\label{eq:11}
 C =
  \begin{pmatrix}
  0 & 2 & 2 & 2 & 2 & 0 & \ldots \\
@@ -124,10 +124,10 @@ C =
  4 & 4 & 4 & 0 & 4 & 4 & \ldots\\
  4 & 4 & 4 & 4 & 0 & 4 & \ldots\\
  \end{pmatrix}.
-\end{equation*}
+\end{equation}
 Hence, the total average capacity is $4/5 \cdot (2+2+3+4+4) = 12$ patients per week.
 There is another simple holiday scheme: when all psychiatrists take holiday in the same week--corresponds we  set  entire columns to zero, i.e., $C_{i,5}=C_{i,10}=\cdots=0$ for week~$5$, $10$:
-\begin{equation*}
+\begin{equation}\label{eq:19}
 C =
  \begin{pmatrix}
  2 & 2 & 2 & 2 & 0 &2 & 2 & \ldots \\
@@ -136,117 +136,26 @@ C =
  4 & 4 & 4 & 4 & 0 &4 & 4 & \ldots\\
  4 & 4 & 4 & 4 & 0 &0 & 4 & \ldots\\
  \end{pmatrix}.
-\end{equation*}
+\end{equation}
 Of course, random schemes are more likely, but these two are perhaps the simplest that result in the same average capacity.
 Note that we also apply these the unbalanced capacity plans to obtain four different possibilies.
 
 With these  models for the arrivals and the capacities, we  use the recursions~\cref{eq:31} to simulate the queue length process for the four different scenarios proposed by the psychiatrists: unbalanced versus balanced capacity, and spread out holidays versus simultaneous holidays.
 
-The results are shown in~\cref{fig:balanced}.
+The results are shown in~\cref{fig:psychiatrists}.
 We plot, for each period, the largest and the smallest queue that occurred under all four capacity plans that result from following the first and second suggestions of the psychiatrists.
 The graphs make clear that these suggestions hardly affect the behavior of the queue length process.
 
 
-
-\begin{marginfigure}
-\begin{pycode}[simulation]
-import numpy as np
-import matplotlib.pylab as plt
-import tikzplotlib
-from matplotlib import style
-
-import seaborn as sns
-
-sns.set_style("whitegrid")
-
-np.random.seed(3)
-a = np.random.poisson(11.8, 1000)
-
-
-def computeQ(a, C, Q0=0):  # initial queue length is 0
-    N = len(a)
-    Q = np.empty(N)  # make a list to store the values of  Q
-    d = np.empty(N)  # make a list to store the values of  d
-    Q[0] = Q0
-    for n in range(1, N):
-        d[n] = min(Q[n - 1] + a[n], C[n])
-        Q[n] = Q[n - 1] + a[n] - d[n]
-    return Q
-
-
-def unbalanced():
-    p = np.empty([5, len(a)])
-    p[0, :] = 1.0 * np.ones_like(a)
-    p[1, :] = 1.0 * np.ones_like(a)
-    p[2, :] = 1.0 * np.ones_like(a)
-    p[3, :] = 3.0 * np.ones_like(a)
-    p[4, :] = 9.0 * np.ones_like(a)
-    return p
-
-
-p = unbalanced()
-
-# holidays.
-for j in range(len(a)):
-    Id = j % 5
-    p[Id, j] = 0
-
-s = np.sum(p, axis=0)
-
-Qub = computeQ(a, s)
-
-
-def balanced():
-    p = np.empty([5, len(a)])
-    p[0, :] = 2.0 * np.ones_like(a)
-    p[1, :] = 2.0 * np.ones_like(a)
-    p[2, :] = 3.0 * np.ones_like(a)
-    p[3, :] = 4.0 * np.ones_like(a)
-    p[4, :] = 4.0 * np.ones_like(a)
-    return p
-
-
-p = balanced()
-
-for j in range(len(a)):
-    Id = j % 5
-    p[Id, j] = 0
-
-s = np.sum(p, axis=0)
-Qbb = computeQ(a, s)
-
-p = unbalanced()
-for j in range(int(len(a) / 5)):
-    p[:, 5 * j] = 0
-s = np.sum(p, axis=0)
-Quu = computeQ(a, s)
-
-p = balanced()
-for j in range(int(len(a) / 5)):
-    p[:, 5 * j] = 0
-s = np.sum(p, axis=0)
-Qbu = computeQ(a, s)
-
-mins = np.minimum.reduce([Qbb, Qub, Qbu, Quu])
-maxs = np.maximum.reduce([Qbb, Qub, Qbu, Quu])
-
-
-plt.figure(figsize=(10, 2))
-plt.plot(mins, label="min")
-plt.plot(maxs, label="max")
-# plt.plot(Qbb, label="bal cap, spread out")
-# plt.plot(Qub, label="unbal capacity, simul")
-# plt.plot(Qbu, label="bal cap, spread out")
-# plt.plot(Quu, label="unbal capacity, simul")
-plt.xlabel("time (weeks)")
-plt.legend(loc="upper left")  # , bbox_to_anchor=(1,1))
-print(tikzplotlib.get_tikz_code(axis_height='4.5cm', axis_width='6cm'))
-\end{pycode}
-\caption{Effect of capacity and holiday plans.
-Per time point  we plot the maximum and the minimum queue length under the policies.
-}
-\label{fig:balanced}
-\end{marginfigure}
+\begin{figure}[t]
+\centering
+\includegraphics{../figures/psychiatrists.pdf}
+\caption{Effect of capacity and holiday plans on the queue length $L$.
+The left panel shows the maximum and the minimum queue length under the different holiday and balancing policies.
+The right panel shows the queue length under the control rule~\cref{eq:103}.}
+\label{fig:psychiatrists}
+\end{figure}
+%\label{fig:intakes}
 
 
 
@@ -262,44 +171,9 @@ A simple rule is to let the capacity  for week~$k$ depend on the queue length of
 We can take  $e=1$ or~$2$, or perhaps a larger number; the larger~$e$, the larger the control we exercise. We can of course also adapt the thresholds 12 and 24.
 
 Let's consider three different control levels, $e=1$, $e=2$, and $e=5$; when $e=5$, each psychiatrist does one extra intake.
-The results, see~\cref{fig:intakes}, show a striking difference indeed.
+The results, see the right panel of~\cref{fig:psychiatrists}, show a striking difference indeed.
 The queue does not explode anymore;  already taking $e=1$ has a large influence.
 
-\begin{marginfigure}
-\begin{pycode}[simulation]
-def computeQExtra(a, c, e, Q0=0):  #  initial queue length is 0
-    N = len(a)
-    Q = [0] * N  # make a list to store the values of  Q
-    Q[0] = Q0
-    for n in range(1, N):
-        q = Q[n - 1]
-        if q < 12:
-            C = c - e
-        elif q >= 24:
-            C = c + e
-        Q[n] = max(q + a[n] - C, 0)
-    return Q
-
-
-np.random.seed(3)
-a = np.random.poisson(11.8, 1000)
-c = 12
-Q = computeQ(a, c * np.ones_like(a))
-Qe1 = computeQExtra(a, c, 1)
-Qe2 = computeQExtra(a, c, 2)
-Qe5 = computeQExtra(a, c, 5)
-
-plt.figure(figsize=(6, 2))
-plt.ylim(0, 200)
-plt.plot(Q, label="Q", color='black')
-plt.plot(Qe1, label="Qe1", color='green')
-plt.plot(Qe2, label="Qe2", color='blue')
-plt.plot(Qe5, label="Qe5", color='red')
-print(tikzplotlib.get_tikz_code(axis_height='4.5cm', axis_width='6cm'))
-\end{pycode}
-\caption{Controlling the number of intakes. The control rules keep the queue length around 20.}
-\label{fig:intakes}
-\end{marginfigure}
 
 
 This simulation experiment shows that changing holiday plans or spreading the work over multiple servers, i.e., psychiatrists, may not significantly affect the queueing behavior.
@@ -386,11 +260,10 @@ generates a system in which jobs can be served in the period they arrive.
 \begin{solution}
  \begin{align*}
  d_k &= \min\{\L_{k-1}+a_k, c_k\}, \\
- \L_k &= \L_{k-1} + a_k - d_k  = \L_{k-1} + a_k - \min\{\L_{k-1}+a_k, c_k\} \\
- &= \max\{\L_{k-1} + a_k - c_k, 0 \}.
+\L_k &= \L_{k-1} + a_k - d_k  = \L_{k-1} + a_k - \min\{\L_{k-1}+a_k, c_k\} \\
+&\stackrel1= -\min\{c_{k} - L_{k-1} - a_k, 0\} \stackrel2=  \max\{\L_{k-1} + a_k - c_k, 0 \},
  \end{align*}
-% When jobs cannot be served in the period in which they arrive, then
-% $\L_k = [\L_{k-1} - c_k]^+ + a_{k}$.
+ where 1 uses that $x - \min\{x, y\} = -\min\{0, y-x\}$ and 2 that $-\min\{x, 0\} = \max\{-x, 0\}$.
 \end{solution}
 \end{exercise}
 
@@ -443,8 +316,6 @@ serves  with two queues such that jobs in the first queue get priority over jobs
 \end{exercise}
 
 
-
-
 \begin{exercise}
  Consider \marginpar{Queues with reserved service capacity} a single-server that serves two parallel queues.
 Queue~$i$ has minimal guaranteed service capacity $r^i$ each  period, such that $c_k \geq r^1 + r^2$.
@@ -459,136 +330,5 @@ Queue~$i$ has minimal guaranteed service capacity $r^i$ each  period, such that 
 \end{solution}
 \end{exercise}
 
-
-\begin{exercise}\label{ex:l-118}
- Consider \marginpar{Queue with protected service capacity and lost capacity} a single-server that serves two parallel queues.
- Queue~$i$ receives a minimal service capacity $r^i$ every period.
- Reserved capacity unused for one queue cannot be used to serve the other queue.
- Any extra capacity beyond the reserved capacity, i.e, $c_k - r^2$,  is given to queue 1 with priority.
- Formulate the recursions.
-
-An example is  the operation room of a hospital.
-There is a weekly capacity, part of which is reserved for emergencies.
-It might not be possible to assign this reserved capacity to other patient groups, because it should be available at all times for emergency patients.
-A result of this is that unused capacity is lost.
-In practice it may not be as extreme as in the model, but still part
-of the unused capacity is lost. `Use it, or lose it' often applies to service capacity.
-\begin{solution}
- Queue 1 uses all capacity except $r^2$, queue 2 gets the left-over:
-  \begin{align*}
-    d^1_{ k} &= \min\{\L^1_{k-1}, c_k - r^2\}, \\
-    c^2_{ k} &= \min\{c_k-r^1, c_k-d^1{ k}\} = c_k - \max\{r^1, d^1_{ k}\}, \\
-    d^2_{ k} &= \min\{\L^2_{k-1}, c^2_k\}.
-  \end{align*}
-\end{solution}
-\end{exercise}
-
-
-
-
-\begin{exercise}\label{ex:l-119}
- Consider\marginpar{Tandem networks} a production network with two production stations in tandem, that is, the jobs processed at station 1 move at the end of  period~$k$ to station 2.
- What are the recursions?
-\begin{solution}
-  Let $a^1_k$ be the external arrivals at station 1, and the departures of station 1 are the arrivals at station 2: $a_k^2 = d_{k}^1$.
-  Thus,
-\begin{align*}
- d^i_k &= \min\{\L_{k-1}^i, c_k^i\}, & \L_k^i &= \L_{k-1}^i -d_k^i + a_k^i.
- \end{align*}
-\end{solution}
-\end{exercise}
-
-
-
-\begin{exercise}
- Consider\marginpar{Splitting streams} a paint mixing machine that produces products for two downstream packaging machines~$A$ and~$B$, each with its own queue.
-In the simplest model, the content of the queue at the mixing machine is proportional to the demands $\lambda^A$ and $\lambda^B$ for the packaging machines.
- Provide the recursions.
-\begin{solution}
-At  the mixing machine $d_k=\min\{L_k, c_k\}$. Therefore, in this very simple model, $a_k^A = d_k \lambda^A/(\lambda^A+\lambda^B)$, and likewise for the other downstream station.
-\end{solution}
-\end{exercise}
-
-
-
-
-% \begin{exercise}\label{ex:l-116}
-% Demand
-%  \marginpar{Cost models}
-% arriving at a single-server queue in a period can be served in that period.
-% At the start of  period~$k$, the server capacity is set to $c_k$ at cost $\beta c_k$.
-% A job charges~$h$ per period in the  system.
-% Make a  model that computes the cost for the first~$T$ periods.
-% \begin{hint}
-%   Use~\cref{ex:24} for the dynamics of $\{L_k\}$.
-% \end{hint}
-% \begin{solution} $\sum_{k=1}^T \left(\beta c_k + h \L_k\right)$.
-% \end{solution}
-% \end{exercise}
-
-
-\begin{exercise}\label{ex:n-policies}
-A machine \marginpar{Cost of an~$N$ policy.} can switch on and off. Suppose that the jobs that arrive in period~$k$ can be served in that period.
- If the system length hits~$N$ (becomes empty) in period~$k$, the machine switches on (off) in period $k+1$.
- It costs~$K$ to switch on the machine.
- There is also a cost $\beta$ per period when the machine is on, and it costs~$h$ per period per customer in the system.
-Make a  model to compute the cost for the first~$T$ periods.
-Assume the machine is  off at $k=0$.
-\begin{hint}
-  Introduce a variable $I_k\in\{0, 1\}$ to keep track of the state of the server.
-  Then, $I_{k+1} = \1{\L_k\geq N} + I_k \1{0<\L_k<N}$ implements the N-policy.
-  Now use~\cref{ex:50} to find $\{c_k\}$ and the switching cost.
-\end{hint}
-\begin{solution}
-$I_0 = 0$,  $d_k =\min\{\L_{k-1}+a_{k}, I_k c_k\}$, from which
-$\L_k$ and $I_{k+1}$ follow, and so on. Next,
- observing that the machine  switches on in period~$k$ iff
-$I_{k-1} = 0$ and $I_k=1$, the cost is
-\begin{equation*}
-\sum_{k=1}^T \left(\beta I_k + h \L_k + K[I_k - I_{k-1}]^+\right).
-\end{equation*}
-Interestingly, if arrivals cannot be served in the period in which they arrive, it might be that the system is never empty.
-For instance, if $a_{k}\sim\Unif{4, 10}$, then $L_{k}\geq a_{k} \geq 4$ for all~$k$.
-\end{solution}
-\end{exercise}
-
-\begin{exercise}
- One\marginpar{Queues with setup times. Hard exercise.}
- server serves two parallel queues, one at a time.
-After serving
- one queue until it is empty, the server moves to the other
- queue, which requires one period setup time.  Find the recursions.
-
-An example: a nurse takes blood samples at two departments in a hospital. It takes time to walk from one location to another. An interesting, but hard question: what rule would minimize average waiting time?
-\begin{hint}
-  Introduce an extra variable $p_k$ that specifies which queue is being served.
-  If $p_k=0$, the server is moving from one queue to the other, if $p_k=1$, the server is at queue 1, and if $p_k=2$ it is at queue~$2$. Develop a table with conditions on $L_k^i$ and $p_k$ to specify $p_{k+1}$.
-\end{hint}
-\begin{solution}
-  With $d_k^i = \min\{\L^i_{k-1}, c_k^i \1{p_k=i}\}$ we can specify the evolution of queue~$i$.
-  So it remains to deal with $p_{k+1}$.
-  For this, we use the following `truth table'. This can be implemented in code to specify what $p_{k+1}$ has to become.
-  \begin{center}
-\begin{tabular}{ccc|l}
- $\1{\L^1_k > 0}$ & $\1{\L_k^2 > 0}$ & $p_k$ & $p_{k+1}$ \\ \midrule
-0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 1 \\
-0 & 0 & 2 & 2 \\
-1 & 0 & 0 & 1 \\
-1 & 0 & 1 & 1 \\
-1 & 0 & 2 & 0 (switch over time)\\
-0 & 1 & 0 & 2 \\
-0 & 1 & 1 & 0 (switch over time)\\
-0 & 1 & 2 & 2 \\
-1 & 1 & 0 & 1 (to break ties) \\
-1 & 1 & 1 & 1 \\
-1 & 1 & 2 & 2 \\
-\end{tabular}
-  \end{center}
-
-  Here is an important warning: in such tables it is very, very easy to miss one (or more) cases.
-  Here, each of the indicators has 2 possible values, and $p_k$ has 3, so there are $2 \times 2\times 3 = 12$ cases, all of which are covered in the table.
-\end{solution}
-\end{exercise}
 
 \input{trailer}

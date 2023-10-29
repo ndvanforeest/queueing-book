@@ -26,19 +26,17 @@ Let us show how to we can do this.~\cref{fig:waitingdistribution} shows the resu
 
 Besides the regular libraries we load \pyth/pytictoc/ which allows us to time how long it takes to run certain parts of the code.
 The module \pyth/random_variables.py/ contains our code to handle the probabilistic arithmetic; we discuss that below.
-\inputminted[firstline=2, lastline=7]{python}{../code/waiting_time_distribution.py} % modules
-
-The next lines are needed for the \LaTeX\/ plots.
-\inputminted[firstline=11, lastline=24]{python}{../code/waiting_time_distribution.py} % seaborn
+We skip the lines that deal with \pyth/seaborn/ on how to make the \LaTeX\/ plots;
+\inputminted[firstline=2, lastline=6]{python}{../code/waiting_time_distribution.py} % modules
 
 In the recursions for~$W$ we use the $[\cdot]^{+}$ function. We also instantiate a \pyth/tictoc/ object and set it.
-\inputminted[firstline=29, lastline=34]{python}{../code/waiting_time_distribution.py} % tictoc
+\inputminted[firstline=30, lastline=35]{python}{../code/waiting_time_distribution.py} % tictoc
 
 
 An \pyth/RV/ object uses a dictionary to make the support and pmf of a rv; the keys of the dict represent possible outcomes, the values the associated  probabilities.
 Observe from the numbers below that the mean service time is larger than the mean interarrival time.
 This is on purpose to see later in the graphs how this affects the distribution of the waiting time and the departure time.
-\inputminted[firstline=38, lastline=39]{python}{../code/waiting_time_distribution.py} % rvs
+\inputminted[firstline=39, lastline=40]{python}{../code/waiting_time_distribution.py} % rvs
 
 The next few lines do the work to compute the distribution of $W_{30}$.
 We set the initial arrival and waiting time such that $\P{A_{0} = 0} =\P{W_{0} = 0} = 1$.
@@ -52,28 +50,28 @@ This helps much to understand how the maths and the code works.
 The call to \pyth/tic.toc()/ prints the time that elapsed between \pyth/tic.tic()/ and the `toc'.
 There is a final remark, we start the recursions at~$1$.
 The reason is that we want to compare this result to simulation and the simulation starts necessarily at~$1$.
-\inputminted[firstline=43, lastline=54]{python}{../code/waiting_time_distribution.py} % computedist
+\inputminted[firstline=44, lastline=55]{python}{../code/waiting_time_distribution.py} % computedist
 
 Let us now estimate the distribution of~$W$ by means of simulation.
 We compute from $W_{30}=0$ a number of \pyth/num_runs/ times and store the outcomes in the array \pyth/nth_waiting_time/.
 In the computations we let the departure times tag along.
 We use small letters for the variables to avoid a name clash with the capitals like \pyth/X/ we used earlier.
-\inputminted[firstline=58, lastline=78]{python}{../code/waiting_time_distribution.py} % simulation
+\inputminted[firstline=59, lastline=79]{python}{../code/waiting_time_distribution.py} % simulation
 
 
 Making the plots follows the same pattern as we did earlier.
 First we plot the cdfs of the departure times.
 The keyword \pyth/cumulative=True/ converts histogram (which is similar to a pmf) to a cdf.
-\inputminted[firstline=82, lastline=99]{python}{../code/waiting_time_distribution.py} % figdeparturetimes
+\inputminted[firstline=83, lastline=100]{python}{../code/waiting_time_distribution.py} % figdeparturetimes
 \noindent
 And next the waiting times.
-\inputminted[firstline=103, lastline=118]{python}{../code/waiting_time_distribution.py} % figwaitingtimes
-The last step is to save the plot to file. The
-\inputminted[firstline=122, lastline=123]{python}{../code/waiting_time_distribution.py} % figsave
+\inputminted[firstline=104, lastline=119]{python}{../code/waiting_time_distribution.py} % figwaitingtimes
+The last step is to save the plot to file.
+\inputminted[firstline=123, lastline=124]{python}{../code/waiting_time_distribution.py} % figsave
 
 
 
-\begin{figure}[tb]
+\begin{figure}[t]
 \centering
 \includegraphics{../figures/waiting_time_distribution.pdf}
 \caption{The cumulative distribution of the departure and waiting time of job $30$ with the interarrival and service times as mentioned in the text.
@@ -150,14 +148,14 @@ A nice python package that implements dependence in a correct way is \pyth/lea/.
 \newthought{As promissed above} we now discuss the code that implement the probabilistic arithmetic.
 By building everything from scratch, our understanding of the workings of libaries such as \pyth/lea/ or \pyth/scipy/ increases, but also of probablity theory itself.
 The code below adds typing information, which means that we specify what type of argument (such as float, or an int) is used.\sidenote{In simple scripts I tend not to add typing, but in code that I plan to use later at other places, I find this extra information helpful.}
-\inputminted[firstline=2, lastline=10]{python}{../code/random_variable.py} % modules
+\inputminted[firstline=2, lastline=9]{python}{../code/random_variable.py} % modules
 
 The meaning of the next variables will become clear later.
 \inputminted[firstline=15, lastline=17]{python}{../code/random_variable.py} % numbers
 
 The \pyth/RV/ class, which we build in the coming code blocks, stores the pmf and support of a rv, and offers many convenience methods such as \pyth/cdf/.
 We specify the support and pmf of a rv as a dictionary;  for instance, \mintinline{python}{{0: 1 / 3, 1: 2 /3 }} represents a biased coin with support $\{0, 1\}$ and pmf $p_{0} = 1/3$ and $p_{1} = 2/3$.  \pyth/RV/ use the pmf,  support and cdf as private members.
-\inputminted[firstline=22, lastline=33]{python}{../code/random_variable.py} % start of rv
+\inputminted[firstline=22, lastline=32]{python}{../code/random_variable.py} % start of rv
 
 
 Dealing with the pmf as a dictionary requires considerable care.
@@ -190,10 +188,10 @@ Once you understand this point, the next code is easy.
 We convert the keys of the dict given as an argument to \pyth/RV/ to fractions with a limited precision.
 As it may happen that the same key appears twice in the dict, we add the probabilities with the same key.
 We normalize to ensure that the values of the dict correspond to probabilities.
-\inputminted[firstline=37, lastline=47]{python}{../code/random_variable.py} % make pmf
+\inputminted[firstline=37, lastline=46]{python}{../code/random_variable.py} % make pmf
 
 To speed up some arithmetic, we need to run over the support such that the elements are decreasing in their pmfs; we use cache to ensure that the result is only computed once.
-\inputminted[firstline=51, lastline=59]{python}{../code/random_variable.py} % support
+\inputminted[firstline=51, lastline=58]{python}{../code/random_variable.py} % support
 
 From the pmf $\{p_{k}\}$ we want to compute the cdf, the survivor function, mean, variance and standard deviation.
 All this is easy once we realize that all this can be computed as $\E{f(X)}$ for suitable chosen functions~$f$.
@@ -205,20 +203,20 @@ def cdf_inefficient(self, x: float) -> float:
 \end{python}
 \noindent
 Here is the code to compute $\E{f(X)}$.
-\inputminted[firstline=63, lastline=66]{python}{../code/random_variable.py} % expected
+\inputminted[firstline=63, lastline=65]{python}{../code/random_variable.py} % expected
 
 However, computing the cdf with binary search via \pyth/np.searchsorted/ is much faster.
-\inputminted[firstline=70, lastline=77]{python}{../code/random_variable.py} % cdf
+\inputminted[firstline=70, lastline=76]{python}{../code/random_variable.py} % cdf
 
 With the code above, the next convenience methods are easy to implement.
 As an aside, in more professional code, we should check the input of \pyth/pmf/: if it is called with an element not in the support, it should give some proper error messages.
 To keep the code short, we don't include it.
-\inputminted[firstline=81, lastline=104]{python}{../code/random_variable.py} % convience
+\inputminted[firstline=81, lastline=103]{python}{../code/random_variable.py} % convience
 
 Additionally, we like to able to use our \pyth/RV/ class to generate random deviates that are distributed according to the cdf~$F$.
 Recall that if $U\sim \Unif{[0,1]}$, then $F^{-1}(U)$ has the required distribution, because $\P{F^{-1}(U) \leq x} = \P{U \leq F(x)} = F(x)$, where the last equality follows from the fact that~$U$ is uniform on $[0,1]$.
 Binary sort is useful and fast to compute the inverse $F^{-1}(U)$.
-\inputminted[firstline=108, lastline=113]{python}{../code/random_variable.py} % rvs
+\inputminted[firstline=108, lastline=112]{python}{../code/random_variable.py} % rvs
 
 
 We are nearly finished with the code, but we need to further elements.
@@ -226,7 +224,7 @@ To add or subtract two instances of \pyth/RV/s we utilize the general function \
 To call the plus and minus operator on two \pyth/RV/s we need to tell the class what to do when writing code like \pyth/X + Y/.
 The private methods \pyth/__add__/ and \pyth/__sub__/ achieve this.
 (Note that we build $X - Y $ as $X + (- Y)$.)
-\inputminted[firstline=117, lastline=123]{python}{../code/random_variable.py} % arithmetic
+\inputminted[firstline=117, lastline=122]{python}{../code/random_variable.py} % arithmetic
 
 Finding the pmf of the sum $Z=X+Y$ of two independent rvs~$X$ and~$Y$ with pmfs~$p$ and~$q$ requires  convolution like so
 \begin{equation*}
@@ -235,10 +233,10 @@ Finding the pmf of the sum $Z=X+Y$ of two independent rvs~$X$ and~$Y$ with pmfs~
 In python, we can implement this nicely with a \pyth/defaultdict/.
 Observe that here it becomes clear why we need a support with elements sorted in decreased pmf.
 Once the probabilities beome too small, we simply break the loop.
-\inputminted[firstline=128, lastline=139]{python}{../code/random_variable.py} % compose
+\inputminted[firstline=128, lastline=137]{python}{../code/random_variable.py} % compose
 
 Finally, we have to be able to compute  $f(X)$ for some function~$f$, for instance $[W_i + S_i - X_{i+1}]^{+}$ applies the  function $[\cdot]^{+}$ to a rv.
-\inputminted[firstline=144, lastline=151]{python}{../code/random_variable.py} % apply
+\inputminted[firstline=144, lastline=149]{python}{../code/random_variable.py} % apply
 
 
 \input{trailer}

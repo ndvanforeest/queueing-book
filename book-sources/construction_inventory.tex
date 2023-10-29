@@ -2,10 +2,8 @@
 \input{header}
 \begin{document}
 
-\section{Single-item Inventory Processes in Discrete Time}
+\section{Control of Single-item Inventory Systems}
 \label{sec:single-item-invent}
-
-\Opensolutionfile{ans}
 
 In this section we analyze, so called, single item inventory systems under \emph{periodic review}.
 As a simple example, think of boxes of macaroni on a supermarket shelf.
@@ -145,7 +143,7 @@ We can rewrite this into  a nice formula with a few interesting tricks.
 \end{equation*}
 \end{lemma}
 \begin{proof}
-Using in step 1 that $\min\{x, y\} = x - [x-y]^{+}]$, in step 2 that  $x - z^{+} = \min\{x, x-z\}$, in step 3~\cref{eq:i5}, in step 4 that $[\min\{x, y\}]^{+} = \min\{x^+, y^{+}\}$ and $[-I_t]^{+} = I_t^{-}$, we get
+Using in step 1 that $\min\{x, y\} = x - [x-y]^{+}$, in step 2 that  $x - z^{+} = \min\{x, x-z\}$, in step 3~\cref{eq:i5}, in step 4 that $[\min\{x, y\}]^{+} = \min\{x^+, y^{+}\}$ and $[-I_t]^{+} = I_t^{-}$, we get
 \begin{align*}
    \min\{D_{t}, \IL_{t}^{+}\}
   &\stackrel1= D_t - [D_t-\IL_{t}^{+}]^{+}\\
@@ -181,11 +179,8 @@ All in all, many businesses struggle with how to organize \emph{capacity} and \e
 
 \begin{exercise}
 Here is check to see whether you understand the definitions.
-  \begin{enumerate}
-  \item Does the inventory level or the inventory position trigger the orders?
-  \item Does the inventory level or the inventory position depend on the lead time?
-  \item Is there a difference inventory position and inventory level when $L=0$?
-  \end{enumerate}
+Does the inventory level or the inventory position trigger the orders? Does the inventory level or the inventory position depend on the lead time?
+Is there a difference inventory position and inventory level when $L=0$?
   \begin{solution}
     Only $\IP'$ triggers the orders and only $\IL$ depends on the leadtime~$L$. When $L=0$, the inventory position and level coincide.
   \end{solution}
@@ -243,8 +238,3 @@ A_t &= \IL_{t} - L_t & \text{accepted demand}\\
 
 
 \input{trailer}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
