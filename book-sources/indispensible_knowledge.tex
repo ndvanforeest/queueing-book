@@ -66,7 +66,13 @@ Eq.~\cref{eq:66} is known as the \recall{LOTUS (law of the unconscious statistic
 Let~$X$ be a continuous non-negative random variable with pdf~$f$.
 We write $ \E{X} = \int_0^\infty x f(x) \d x$ for the expectation of~$X$. By LOTUS, $\E{g(X)} = \int_0^\infty g(x) f(x) \d x$.
 
-Sometimes we write $\int \d F(x)$ rather than $\int f(x) \d x$. The reason behind this notation has to do with jumps in the cdf~$F$. As an example, suppose the rv~$X$ is such that $\P{X\leq x} = 0$ for $x<0$, $\P{X=0} = 1/2$, and $\P{X\leq x} = (2-e^{-\lambda x})/2$ for $x>0$. Then~$X$ does not have a pdf~$f$ everywhere, in particular, $F$ makes a jump of size $1/2$ at~$0$. For such mixed rvs, we write $\d F(x)$ to include the jumps and the continuous part in an integral. To see how this works, consider some general continuous function~$g$. Then, for the~$X$ above,
+Sometimes we write $\int \d F(x)$ rather than $\int f(x) \d x$.
+The reason behind this notation has to do with jumps in the cdf~$F$.
+As an example, suppose the rv~$X$ is such that $\P{X\leq x} = 0$ for $x<0$, $\P{X=0} = 1/2$, and $\P{X\leq x} = (2-e^{-\lambda x})/2$ for $x>0$.
+Then~$X$ does not have a pdf~$f$ everywhere, in particular, $F$ makes a jump of size $1/2$ at~$0$.
+For such mixed rvs, we write $\d F(x)$ to include the jumps and the continuous part in an integral.
+To see how this works, consider some general continuous function~$g$.
+Then, for the~$X$ above,
 \begin{align*}
 \E{g(X)} &= \int_{-\infty}^{0-} g(x) f(x) \d x + g(0)/2 + \int_{0+}^{\infty} g(x) f(x) \d x \\
  &= g(0)/2 + 1/2 \int_{0+}^{\infty} g(x) \lambda e^{-\lambda x} \d x,
