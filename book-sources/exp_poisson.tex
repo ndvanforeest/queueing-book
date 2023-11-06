@@ -9,13 +9,13 @@
 
 A queueing system contains one or more servers to serve jobs or customers that arrive to the system.
 In this section we make a model for the arrival process that is the most useful for queueing systems.
-In particular, we show how the exponential and gamma distribution relate to the Poisson distribution, and we use the memoryless property of job interarrival times to motivate these distributions.
+In particular, we show how the exponential and gamma distribution relate to the Poisson distribution, and we use the memoryless property of job inter-arrival times to motivate these distributions.
 
 
 
 \newthought{The timescales} that are relevant for queueing systems range roughly from minutes to a week\sidenote{With exceptions, naturally.}.
 On such timescales it seems is reasonable to model inter-arrival times of jobs as memoryless.
-For instance, if~$X$ is the interarrival time between two patients with a broken arm at the emergency room of a hospital, what can we say about the time the next patient with a broken arm arrives if somebody tells us that an hour earlier a similar patient arrived?
+For instance, if~$X$ is the inter-arrival time between two patients with a broken arm at the emergency room of a hospital, what can we say about the time the next patient with a broken arm arrives if somebody tells us that an hour earlier a similar patient arrived?
 Not much, as most of us will agree.
 Similarly, suppose that the average time between the sales of some shirt in a clothes shop is 5 minutes, and the shop owner informs us that no shirt has been sold the past 7 minutes.
 Does that knowledge imply that the next shirt must be sold within the next minute?
@@ -45,8 +45,8 @@ Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cr
 \V X &= \lambda^{-2}.
 \end{align*}
 
-If we have a sequence of interarrival times $\{X_{i}\}_{i=1}^{\infty}$, then we construct job\sidenote{or customer, patient} arrival times according to the rule $A_{k} = A_{k-1} + X_{k}$, starting at $A_{0} = 0$.
-When interarrival times are iid (independent and identically distributed) rvs (random variables) and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
+If we have a sequence of inter-arrival times $\{X_{i}\}_{i=1}^{\infty}$, then we construct job\sidenote{or customer, patient} arrival times according to the rule $A_{k} = A_{k-1} + X_{k}$, starting at $A_{0} = 0$.
+When inter-arrival times are iid (independent and identically distributed) rvs (random variables) and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
 \begin{equation*}
  f_{A_{1}}(t) = f_{X} (t) = \lambda e^{-\lambda t} = \lambda \frac{(\lambda t)^{0}}{0!} e^{-\lambda t},
 \end{equation*}

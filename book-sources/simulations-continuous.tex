@@ -15,7 +15,7 @@ In \cref{sec:discr-event-simul} we will deal with the details of discrete event 
 
 \newthought{The dynamics of} the single server queue in continuous time is given by the recursions in~\cref{eq:qc-3}.
 The relating code is simple, but there are two small details we should solve.
-First, suppose we specify the interarrival times~$X$ as a numpy vector, and we compute the arrival times~$A$ as the \pyv{cumsum} of~$X$.
+First, suppose we specify the inter-arrival times~$X$ as a numpy vector, and we compute the arrival times~$A$ as the \pyv{cumsum} of~$X$.
 \begin{python}
 import numpy as np
 

@@ -34,7 +34,7 @@ In the recursions for~$W$ we use the $[\cdot]^{+}$ function. We also instantiate
 
 
 An \pyth/RV/ object uses a dictionary to make the support and pmf of a rv; the keys of the dict represent possible outcomes, the values the associated  probabilities.
-Observe from the numbers below that the mean service time is larger than the mean interarrival time.
+Observe from the numbers below that the mean service time is larger than the mean inter-arrival time.
 This is on purpose to see later in the graphs how this affects the distribution of the waiting time and the departure time.
 \inputminted[firstline=39, lastline=40]{python}{../code/waiting_time_distribution.py} % rvs
 
@@ -74,7 +74,7 @@ The last step is to save the plot to file.
 \begin{figure}[t]
 \centering
 \includegraphics{../figures/waiting_time_distribution.pdf}
-\caption{The cumulative distribution of the departure and waiting time of job $30$ with the interarrival and service times as mentioned in the text.
+\caption{The cumulative distribution of the departure and waiting time of job $30$ with the inter-arrival and service times as mentioned in the text.
 Observe that the distribution shifts to the right because the queue is not stable.
 The results of theory and simulation are similar.}
 \label{fig:waitingdistribution}
