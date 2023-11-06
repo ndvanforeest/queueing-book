@@ -24,16 +24,16 @@ One is to repeat the recursions many different times with different seeds and ma
 There is however, another way that is directly based on arithmetic with the pmfs of~$X$ and~$S$.
 Let us show how to we can do this.~\cref{fig:waitingdistribution} shows the result of the code below.
 
-Besides the regular libraries we load \pyth/pytictoc/ which allows us to time how long it takes to run certain parts of the code.
-The module \pyth/random_variables.py/ contains our code to handle the probabilistic arithmetic; we discuss that below.
-We skip the lines that deal with \pyth/seaborn/ on how to make the \LaTeX\/ plots;
+Besides the regular libraries we load \mintinline{python}{pytictoc} which allows us to time how long it takes to run certain parts of the code.
+The module \mintinline{python}{random_variables.py} contains our code to handle the probabilistic arithmetic; we discuss that below.
+We skip the lines that deal with \mintinline{python}{seaborn} on how to make the \LaTeX\/ plots;
 \inputminted[firstline=2, lastline=6]{python}{../code/waiting_time_distribution.py} % modules
 
-In the recursions for~$W$ we use the $[\cdot]^{+}$ function. We also instantiate a \pyth/tictoc/ object and set it.
+In the recursions for~$W$ we use the $[\cdot]^{+}$ function. We also instantiate a \mintinline{python}{tictoc} object and set it.
 \inputminted[firstline=30, lastline=35]{python}{../code/waiting_time_distribution.py} % tictoc
 
 
-An \pyth/RV/ object uses a dictionary to make the support and pmf of a rv; the keys of the dict represent possible outcomes, the values the associated  probabilities.
+An \mintinline{python}{RV} object uses a dictionary to make the support and pmf of a rv; the keys of the dict represent possible outcomes, the values the associated  probabilities.
 Observe from the numbers below that the mean service time is larger than the mean inter-arrival time.
 This is on purpose to see later in the graphs how this affects the distribution of the waiting time and the departure time.
 \inputminted[firstline=39, lastline=40]{python}{../code/waiting_time_distribution.py} % rvs
@@ -41,27 +41,27 @@ This is on purpose to see later in the graphs how this affects the distribution 
 The next few lines do the work to compute the distribution of $W_{30}$.
 We set the initial arrival and waiting time such that $\P{A_{0} = 0} =\P{W_{0} = 0} = 1$.
 Then, by writing \pyth\A += X\, we compute by means of convolution the distribution of the rv $A+X$.
-This is done implicitly by \emph{overloading} the $+$ operator such that it works on \pyth/RV/ objects.
+This is done implicitly by \emph{overloading} the $+$ operator such that it works on \mintinline{python}{RV} objects.
 Below we will discuss operator overloading in a bit more detail.
 In a similar way we compute $W+S-X$.
 Finally, we need to apply the `plus'-function.
 Note how concise this code is and close it stays to the mathematical formulation of the recursions.
 This helps much to understand how the maths and the code works.
-The call to \pyth/tic.toc()/ prints the time that elapsed between \pyth/tic.tic()/ and the `toc'.
+The call to \mintinline{python}{tic.toc()} prints the time that elapsed between \mintinline{python}{tic.tic()} and the `toc'.
 There is a final remark, we start the recursions at~$1$.
 The reason is that we want to compare this result to simulation and the simulation starts necessarily at~$1$.
 \inputminted[firstline=44, lastline=55]{python}{../code/waiting_time_distribution.py} % computedist
 
 Let us now estimate the distribution of~$W$ by means of simulation.
-We compute from $W_{30}=0$ a number of \pyth/num_runs/ times and store the outcomes in the array \pyth/nth_waiting_time/.
+We compute from $W_{30}=0$ a number of \mintinline{python}{num_runs} times and store the outcomes in the array \mintinline{python}{nth_waiting_time}.
 In the computations we let the departure times tag along.
-We use small letters for the variables to avoid a name clash with the capitals like \pyth/X/ we used earlier.
+We use small letters for the variables to avoid a name clash with the capitals like \mintinline{python}{X} we used earlier.
 \inputminted[firstline=59, lastline=79]{python}{../code/waiting_time_distribution.py} % simulation
 
 
 Making the plots follows the same pattern as we did earlier.
 First we plot the cdfs of the departure times.
-The keyword \pyth/cumulative=True/ converts histogram (which is similar to a pmf) to a cdf.
+The keyword \mintinline{python}{cumulative=True} converts histogram (which is similar to a pmf) to a cdf.
 \inputminted[firstline=83, lastline=100]{python}{../code/waiting_time_distribution.py} % figdeparturetimes
 \noindent
 And next the waiting times.
@@ -80,7 +80,7 @@ The results of theory and simulation are similar.}
 \label{fig:waitingdistribution}
 \end{figure}
 
-Finally, to plot the pmf instead of the cdf, we change the \pyth/cdf/ in \pyth/pmf/ and remove the lines with \pyth/cumulative=True/. Running the code again gives~\cref{fig:waitingdistributionpmfgood}.
+Finally, to plot the pmf instead of the cdf, we change the \mintinline{python}{cdf} in \mintinline{python}{pmf} and remove the lines with \mintinline{python}{cumulative=True}. Running the code again gives~\cref{fig:waitingdistributionpmfgood}.
 
 \begin{figure}[tb]
 \centering
@@ -115,7 +115,7 @@ for i in range(1, horizon):
     D = rv.compose_function(max, D, A) + S
 \end{python}
 \noindent In fact, this is wrong for a subtle reason.
-As will become clear from the implementation, the code in \pyth/random_variable.py/ assumes that the rvs are \emph{independent}!
+As will become clear from the implementation, the code in \mintinline{python}{random_variable.py} assumes that the rvs are \emph{independent}!
 However, $D_{i}$ and $A_{i-1}$ are dependent.\sidenote{Dependent is the same as not independent.}
 To see this, observe from~\cref{fig:waitingdistribution} that $\P{D_{30} \leq 150} > 0$, but $\P{D_{30} \leq 150| A_{30} > 151} = 0$ while still $\P{A_{30} > 151} > 0$.
 
@@ -126,7 +126,7 @@ To prevent making such mistakes (when it is important) it helps to check the res
 If the results do not agree, there is an error (which may be simple or hard to find).
 
 And this brings us to another conceptual mistake in the code that computes (but in the wrong way as we will see)
-the distribution of the deparure times with the statement \pyth/D = A + W + S/.
+the distribution of the deparure times with the statement \mintinline{python}{D = A + W + S}.
 Let us check~\cref{fig:waitingdistribution} carefully.
 The ecdf (empirical cdf) obtained by simulution starts to increases later than the cdf of~$D$ but increases faster.
 The variance of the  simulated departure times must therefore be smaller.
@@ -140,21 +140,21 @@ Similarly, suppose that $t< S_{1}$, but $N(t) = 30$.
 Then all jobs, except the first, wait.
 In conclusion, $A_{30}$ and $W_{30}$ are dependent, hence $D_{30}$ cannot be computed as simply as the code suggests.
 In fact, its computation requires a careful build up of the dependency structure of the rvs involved.
-A nice python package that implements dependence in a correct way is \pyth/lea/.
+A nice python package that implements dependence in a correct way is \mintinline{python}{lea}.
 
 
 
 
 \newthought{As promissed above} we now discuss the code that implement the probabilistic arithmetic.
-By building everything from scratch, our understanding of the workings of libaries such as \pyth/lea/ or \pyth/scipy/ increases, but also of probablity theory itself.
+By building everything from scratch, our understanding of the workings of libaries such as \mintinline{python}{lea} or \mintinline{python}{scipy} increases, but also of probablity theory itself.
 The code below adds typing information, which means that we specify what type of argument (such as float, or an int) is used.\sidenote{In simple scripts I tend not to add typing, but in code that I plan to use later at other places, I find this extra information helpful.}
 \inputminted[firstline=2, lastline=9]{python}{../code/random_variable.py} % modules
 
 The meaning of the next variables will become clear later.
 \inputminted[firstline=15, lastline=17]{python}{../code/random_variable.py} % numbers
 
-The \pyth/RV/ class, which we build in the coming code blocks, stores the pmf and support of a rv, and offers many convenience methods such as \pyth/cdf/.
-We specify the support and pmf of a rv as a dictionary;  for instance, \mintinline{python}{{0: 1 / 3, 1: 2 /3 }} represents a biased coin with support $\{0, 1\}$ and pmf $p_{0} = 1/3$ and $p_{1} = 2/3$.  \pyth/RV/ use the pmf,  support and cdf as private members.
+The \mintinline{python}{RV} class, which we build in the coming code blocks, stores the pmf and support of a rv, and offers many convenience methods such as \mintinline{python}{cdf}.
+We specify the support and pmf of a rv as a dictionary;  for instance, \mintinline{python}{{0: 1 / 3, 1: 2 /3 }} represents a biased coin with support $\{0, 1\}$ and pmf $p_{0} = 1/3$ and $p_{1} = 2/3$.  \mintinline{python}{RV} use the pmf,  support and cdf as private members.
 \inputminted[firstline=22, lastline=32]{python}{../code/random_variable.py} % start of rv
 
 
@@ -169,7 +169,7 @@ res[1/3] += 1
 res[1 - 2 / 3] += 1
 res
 \end{pyconsole}
-\noindent The dictionary \pyth/res/ suddenly contains two elements rather than just one.
+\noindent The dictionary \mintinline{python}{res} suddenly contains two elements rather than just one.
 Inspecting the last digit of the keys, we see that in one number the last digit is a~$7$ and in the other it is a~$3$.
 So, for a \emph{computer} $1-2/3 \neq 1/3$.
 This is not something specific to python; the problem lies in the fact that general numbers in~$\R$ cannot be represented as floating point numbers.
@@ -185,7 +185,7 @@ a, b, a == b
 \end{pyconsole}
 
 Once you understand this point, the next code is easy.
-We convert the keys of the dict given as an argument to \pyth/RV/ to fractions with a limited precision.
+We convert the keys of the dict given as an argument to \mintinline{python}{RV} to fractions with a limited precision.
 As it may happen that the same key appears twice in the dict, we add the probabilities with the same key.
 We normalize to ensure that the values of the dict correspond to probabilities.
 \inputminted[firstline=37, lastline=46]{python}{../code/random_variable.py} % make pmf
@@ -196,7 +196,7 @@ To speed up some arithmetic, we need to run over the support such that the eleme
 From the pmf $\{p_{k}\}$ we want to compute the cdf, the survivor function, mean, variance and standard deviation.
 All this is easy once we realize that all this can be computed as $\E{f(X)}$ for suitable chosen functions~$f$.
 For instance, by taking $f(x) = \1{x\leq y}$, the cdf $F(x) = \E{f(x)} = \sum_{k} \1{k \leq x} p_{k}$.
-Below is an inefficient method to compute the cdf using \pyth\E/:\sidenote{Check the web on \pyth/lambda/.}: \pyth/lambda x: x <= y/.
+Below is an inefficient method to compute the cdf using \pyth\E/:\sidenote{Check the web on \mintinline{python}{lambda}.}: \mintinline{python}{lambda x: x <= y}.
 \begin{python}
 def cdf_inefficient(self, x: float) -> float:
     return self.E(lambda y: y <= x)
@@ -205,24 +205,24 @@ def cdf_inefficient(self, x: float) -> float:
 Here is the code to compute $\E{f(X)}$.
 \inputminted[firstline=63, lastline=65]{python}{../code/random_variable.py} % expected
 
-However, computing the cdf with binary search via \pyth/np.searchsorted/ is much faster.
+However, computing the cdf with binary search via \mintinline{python}{np.searchsorted} is much faster.
 \inputminted[firstline=70, lastline=76]{python}{../code/random_variable.py} % cdf
 
 With the code above, the next convenience methods are easy to implement.
-As an aside, in more professional code, we should check the input of \pyth/pmf/: if it is called with an element not in the support, it should give some proper error messages.
+As an aside, in more professional code, we should check the input of \mintinline{python}{pmf}: if it is called with an element not in the support, it should give some proper error messages.
 To keep the code short, we don't include it.
 \inputminted[firstline=81, lastline=103]{python}{../code/random_variable.py} % convience
 
-Additionally, we like to able to use our \pyth/RV/ class to generate random deviates that are distributed according to the cdf~$F$.
+Additionally, we like to able to use our \mintinline{python}{RV} class to generate random deviates that are distributed according to the cdf~$F$.
 Recall that if $U\sim \Unif{[0,1]}$, then $F^{-1}(U)$ has the required distribution, because $\P{F^{-1}(U) \leq x} = \P{U \leq F(x)} = F(x)$, where the last equality follows from the fact that~$U$ is uniform on $[0,1]$.
 Binary sort is useful and fast to compute the inverse $F^{-1}(U)$.
 \inputminted[firstline=108, lastline=112]{python}{../code/random_variable.py} % rvs
 
 
 We are nearly finished with the code, but we need to further elements.
-To add or subtract two instances of \pyth/RV/s we utilize the general function \pyth/compose_function/, see below, that returns the composition under a function~$f$ of two independent random variables.
-To call the plus and minus operator on two \pyth/RV/s we need to tell the class what to do when writing code like \pyth/X + Y/.
-The private methods \pyth/__add__/ and \pyth/__sub__/ achieve this.
+To add or subtract two instances of \mintinline{python}{RV}s we utilize the general function \mintinline{python}{compose_function}, see below, that returns the composition under a function~$f$ of two independent random variables.
+To call the plus and minus operator on two \mintinline{python}{RV}s we need to tell the class what to do when writing code like \mintinline{python}{X + Y}.
+The private methods \mintinline{python}{__add__} and \mintinline{python}{__sub__} achieve this.
 (Note that we build $X - Y $ as $X + (- Y)$.)
 \inputminted[firstline=117, lastline=122]{python}{../code/random_variable.py} % arithmetic
 
@@ -230,7 +230,7 @@ Finding the pmf of the sum $Z=X+Y$ of two independent rvs~$X$ and~$Y$ with pmfs~
 \begin{equation*}
 \P{Z=k} = \sum_{i}\sum_j \1{i+j=k} p_i q_{j}.
 \end{equation*}
-In python, we can implement this nicely with a \pyth/defaultdict/.
+In python, we can implement this nicely with a \mintinline{python}{defaultdict}.
 Observe that here it becomes clear why we need a support with elements sorted in decreased pmf.
 Once the probabilities beome too small, we simply break the loop.
 \inputminted[firstline=128, lastline=137]{python}{../code/random_variable.py} % compose

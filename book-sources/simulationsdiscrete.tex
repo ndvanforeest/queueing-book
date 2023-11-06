@@ -22,18 +22,18 @@ To check this we show how to make~\cref{fig:drift} which contains the graph of t
 
 We import the standard modules, cf.,~\cref{sec:simul-psych-case}.
 The next python function below simulates the queue length process for a given sequence of arrivals $a=(a_{0}, a_{1}, \ldots, a_{n})$ and service capacities $c = (c_{0}, c_{1}, \ldots, c_{n})$.
-We set $L_{0}$ to \pyth/L0/ and start simulating from time~$1$ onward.
+We set $L_{0}$ to \mintinline{python}{L0} and start simulating from time~$1$ onward.
 Thus, the values $a_{0}$ and $c_{0}$ remain unused.
-Note that for \pyth/d/ we assume that the jobs arriving in period~$i$ can be served in that same period.
+Note that for \mintinline{python}{d} we assume that the jobs arriving in period~$i$ can be served in that same period.
 \inputminted[firstline=26, lastline=34]{python}{../code/discrete_simulations.py} % queuelength
 
 Next, we set the parameters for the simulation.
 \inputminted[firstline=40, lastline=43]{python}{../code/discrete_simulations.py} % setup
 
 To get a feel for the variability inherent to stochastic systems, we plot a few different sample paths of the queue length process.
-Thus, we give $10$ different seeds to the random number generator, simulate the queue length for each different seed, and add each sample path to \pyth/ax1/.
+Thus, we give $10$ different seeds to the random number generator, simulate the queue length for each different seed, and add each sample path to \mintinline{python}{ax1}.
 For the simulation, we take $a_{i}$ uniformly distributed on the integers $\lambda-1, \lambda, \lambda +1$ with $\lambda=6$, so that~$6$ jobs arrive on average in a period.
-As the function \pyth/rng.integers(l, h)/ generates iid uniformly distributed random deviates on $l, l+1, \ldots, h-1$, we should set $h=\lambda + 2$ instead of $h=\lambda +1$.
+As the function \mintinline{python}{rng.integers(l, h)} generates iid uniformly distributed random deviates on $l, l+1, \ldots, h-1$, we should set $h=\lambda + 2$ instead of $h=\lambda +1$.
 The service capacity is constant and equal to $\mu=\lambda + 1 =7$, so the system must be stable.
 \inputminted[firstline=47, lastline=57]{python}{../code/discrete_simulations.py} % stability
 
@@ -68,7 +68,7 @@ The strong law of large numbers makes a statement only about the limit; for smal
 Indeed, the mean queue length increases when service capacity becomes tighter.
 
 Suppose we cannot serve jobs in the period in which they arrive.
-Then we use the code \pyth/d = min(c[i], L[i - 1])/ to update \pyth/d/.
+Then we use the code \mintinline{python}{d = min(c[i], L[i - 1])} to update \mintinline{python}{d}.
 In this case, $\E L = 8.1$, $\V L = 6$ when $\mu=6.1$.
 Not serving jobs in the period they arrive has a non-negligible effect on the queue length.
 Clearly, being a bit flexible when dealing with customers can the queue quite considerably.
@@ -371,7 +371,7 @@ Consider \marginpar{Performance measures obtained by sampling in  discrete-time 
 Provide a simulation to estimate  $\P{\L\leq m}$ for a situation in which  the first job of the batch sees $L_{k-1} - d_k$ jobs in the system,
 the second sees $L_{k-1}-d_k + 1$ jobs, and so on.
 \begin{solution}
-The idea is like this. The dictionary \pyth/L_count/ counts the number of jobs that see~$0$, $1$, and so on, in the system.
+The idea is like this. The dictionary \mintinline{python}{L_count} counts the number of jobs that see~$0$, $1$, and so on, in the system.
 
 Here is the code. As an aside, it was hard to make it this simple.\marginpar{See  the web what a defaultdict does.}
 \begin{python}

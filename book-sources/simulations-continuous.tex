@@ -137,8 +137,8 @@ For this to work, we form events of type $(t, \Delta)$ where~$t$ is arrival or d
 To sort the events, we form two lists of events and merge them.
 
 There is technical, but important, detail involved.
-The function \pyv{heapq.merge} returns a generator, not a list, but \pyth/heapq.heapify/ expects a list instead of a generator.
-To convert the generator obtained from \pyth/heapq.merge/ we apply \pyv{list} to this generator, and then pass the resulting list to \pyv{heapq.heapify}.
+The function \pyv{heapq.merge} returns a generator, not a list, but \mintinline{python}{heapq.heapify} expects a list instead of a generator.
+To convert the generator obtained from \mintinline{python}{heapq.merge} we apply \pyv{list} to this generator, and then pass the resulting list to \pyv{heapq.heapify}.
 \begin{python}
 arrivals = [[t, 1] for t in A[1:]]
 departures = [[t, 1] for t in D[1:]]

@@ -27,11 +27,11 @@ We go step by step, and provide explanations above the code to which it relates.
 
 
 Most of the next modules should by now be familiar to you.
-\pyth/scipy.stats/ offers a nice class \pyth/rv_discete/ that we can use, among much other functionality, to generate random deviates of specific distribution.
-Finally, \pyth/icecream/ provides some more overview of what is printed than the regular \pyth/print()/ function.
+\mintinline{python}{scipy.stats} offers a nice class \mintinline{python}{rv_discete} that we can use, among much other functionality, to generate random deviates of specific distribution.
+Finally, \mintinline{python}{icecream} provides some more overview of what is printed than the regular \mintinline{python}{print()} function.
 \inputminted[firstline=2, lastline=7]{python}{../code/ss_inventory_simulation.py} % modules
 
-The documentation of \pyth/rv_discrete/ that to make a distribution we have to provide two arrays of numbers, the first is the support of the rv, the second the pmf.
+The documentation of \mintinline{python}{rv_discrete} that to make a distribution we have to provide two arrays of numbers, the first is the support of the rv, the second the pmf.
 \inputminted[firstline=11, lastline=13]{python}{../code/ss_inventory_simulation.py} % rvs
 
 
@@ -47,10 +47,10 @@ Where the line numbers skip from one block to the next, the code in my python fi
 \noindent
 We next compute the inventory positions and inventory levels.
 For ease we combine ~\cref{eq:i5} into single recursion to update $P_t'$, and likewise for $I_t'$.
-In the code, we write \pyth/Pp/ to say `Pprime', to recall that we mean the end-of-period inventory position.
-With regard to line 27, you should know that expressions like \pyth/(3 <= 4)/ evalutate to \pyth/True/ which in turn become~$1$ in computations. Thus, \pyth/Pp[t - 1] <= s)/ implements the indicator functions.\sidenote{Ask ChatGPT to explain such code, it's a great help.}
-Thus, We generate \pyth/N/ random deviates for the demand and use the random generator to ensure we get the same numbers every time we run the simulation.
-The first \pyth/for/ loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
+In the code, we write \mintinline{python}{Pp} to say `Pprime', to recall that we mean the end-of-period inventory position.
+With regard to line 27, you should know that expressions like \mintinline{python}{(3 <= 4)} evalutate to \mintinline{python}{True} which in turn become~$1$ in computations. Thus, \mintinline{python}{Pp[t - 1] <= s)} implements the indicator functions.\sidenote{Ask ChatGPT to explain such code, it's a great help.}
+Thus, We generate \mintinline{python}{N} random deviates for the demand and use the random generator to ensure we get the same numbers every time we run the simulation.
+The first \mintinline{python}{for} loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
 In the second loop we should protect against a simple error: it might happen that the number of periods over which we simule is smaller than~$L$.
 \inputminted[firstline=26, lastline=41]{python}{../code/ss_inventory_simulation.py} % simulation
 
