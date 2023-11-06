@@ -1,0 +1,71 @@
+\documentclass[queueing-book.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{Simulating Inventory Systems}
+\label{sec:simul-invent-syst}
+
+In this section we first develop a simulation environment to analyze an inventory system.
+
+\newthought{The Lighthouse Company} sells ceiling lamps and considers to use an $(s,S)$ policy to control the inventory since the replenishment cost, $K=50$ euro is relatively high. The company wants to use simulation to find sound values for~$s$  and~$S$.
+
+The details of the case are like this.
+Ceiling lamps sell at 100 Euro while the buying price is 40 Euro.
+The monthly holding cost is estimated to be $50\%$ of the buying price.
+To prevent customers from buying a lamp at a competitor (e.g., Internet sales), the Lighthouse Company offers a reduction of $20\%$ per day of the regular selling price when customers cannot be satisfied from on-hand stock.
+The pmf~$f$ of the daily demand is given by
+  \begin{align*}
+    f_{0} &= 1/6, &   f_{1} &= 1/5, &  f_{2}&= 1/4, &
+    f_{3} &= 1/8, &  f_{4} &= 11/120, &  f_{5} &= 1/6.
+  \end{align*}
+The leadtime $L=2$ days.
+
+With the code below we set up a simulation to estimate the performance measures for one specific $(s,S)$ policy.
+We go step by step, and provide explanations above the code to which it relates.\sidenote{You should use Google, or ChatGPT, to look up further information if necessary.}. You can copy the code to a file and it should run without problems (provided you copy all lines correctly).
+
+
+
+Most of the next modules should by now be familiar to you.
+\pyth/scipy.stats/ offers a nice class \pyth/rv_discete/ that we can use, among much other functionality, to generate random deviates of specific distribution.
+Finally, \pyth/icecream/ provides some more overview of what is printed than the regular \pyth/print()/ function.
+\inputminted[firstline=2, lastline=7]{python}{../code/ss_inventory_simulation.py} % modules
+
+The documentation of \pyth/rv_discrete/ that to make a distribution we have to provide two arrays of numbers, the first is the support of the rv, the second the pmf.
+\inputminted[firstline=11, lastline=13]{python}{../code/ss_inventory_simulation.py} % rvs
+
+
+
+\noindent Here are the other model parameters.
+Check in particular how we compute the cost parameters.\sidenote{Getting the units right is not always easy.}
+
+You should also check the line numbers at the left margins in the code blocks.
+Where the line numbers skip from one block to the next, the code in my python file has empty lines.
+
+\inputminted[firstline=17, lastline=22]{python}{../code/ss_inventory_simulation.py} % data
+
+\noindent
+We next compute the inventory positions and inventory levels.
+For ease we combine ~\cref{eq:i5} into single recursion to update $P_t'$, and likewise for $I_t'$.
+In the code, we write \pyth/Pp/ to say `Pprime', to recall that we mean the end-of-period inventory position.
+With regard to line 27, you should know that expressions like \pyth/(3 <= 4)/ evalutate to \pyth/True/ which in turn become~$1$ in computations. Thus, \pyth/Pp[t - 1] <= s)/ implements the indicator functions.\sidenote{Ask ChatGPT to explain such code, it's a great help.}
+Thus, We generate \pyth/N/ random deviates for the demand and use the random generator to ensure we get the same numbers every time we run the simulation.
+The first \pyth/for/ loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
+In the second loop we should protect against a simple error: it might happen that the number of periods over which we simule is smaller than~$L$.
+\inputminted[firstline=26, lastline=41]{python}{../code/ss_inventory_simulation.py} % simulation
+
+\noindent
+The last block of code computes the measures.
+The cycle service level~$\alpha_{c}$ is worth to study.\sidenote{Ask ChatGPT for explanation if you find this line hard.}
+We use slicing, which is a technique that is much used in python, but also in matlab.
+\inputminted[firstline=45, lastline=58]{python}{../code/ss_inventory_simulation.py} % results
+
+
+It remains to find good policy parameters, i.e., $s$ and~$S$.
+In principle this is simple: just change~$s$ and~$S$ over a range of values and see how that affects the performance measures.
+However, finding the overal \emph{optimal} parameters \emph{efficiently} is not easy.
+To minimize the cost, I have published an article on how to do that, but I did not study how to minimize average cost under some constraint on one of the service level measures, for instance.
+
+
+
+\input{trailer}
