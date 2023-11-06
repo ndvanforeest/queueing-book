@@ -30,14 +30,21 @@ And if we believe that this information is immaterial to our probabilistic model
 \end{equation}
 A rv~$X$ whose cdf (cumulative distribution function) satisfies this property is said to be \recall{memoryless}.
 
-It is simple to see that when $X\sim \Exp{\lambda}$, i.e.,  $X$ is exponentially distributed, it is memoryless. If fact, as
-\begin{equation*}
- \P{X \leq t} = 1- e^{-\lambda t},
-\end{equation*}
-$\P{X>t} = e^{-\lambda t}$. Now fill this in~\cref{eq:29}, use the standard formula for conditional probability, and note that $e^{-\lambda t + s}/e^{-\lambda s} = e^{-\lambda t}$.
-Notably, the reverse is also true: when a continuous memoryless rv is memoryless it is necessarily exponential\sidenote{For a proof, see \citet[Appendix 3]{yushkevich69:_markov_proces}}.
+\begin{theorem}
+The rv $X\sim \Exp{\lambda}$ iff $X$ is memoryless.
+\end{theorem}
+\begin{proof}
+$\implies$ Observing that $\P{X \leq t} = 1- e^{-\lambda t} \implies \P{X>t} = e^{-\lambda t}$,
+\begin{align*}
+ \P{X > s+t \given X>s} &\stackrel1= \frac{\P{X>s+t}}{\P{X>s}} = \frac{e^{-\lambda(t+s)}}{e^{-\lambda s}} \\
+  &= e^{-\lambda t} =\P{X>t},
+\end{align*}
+where 1 follows from the standard formula for conditional probability and that $\{X>t+s\} \subset \{X>s\}$.
+Next, $\impliedby$,  this is slightly more difficult, so we skip it. \sidenote{For a proof, see \citet[Appendix 3]{yushkevich69:_markov_proces}}
+\end{proof}
+
 As a counter example, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s= 100$ and $t = 99$ years.
-Then $\P{X>99}æ$ was small, but not zero, but $\P{X>199 \given X>100} = 0$.
+Then $\P{X>99}$ was small, but not zero, but $\P{X>199 \given X>100} = 0$.
 
 Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cref{ex:11}}
   \begin{align*}
@@ -262,7 +269,7 @@ hence $\E Z = (\lambda+\mu)^{-1}$.
 $\{\min\{X, S\}>x\} =\{X>x\} \cap\{S> x\}$.
 \end{hint}
 \begin{solution}
-$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as  $X$ and~$S$ independent.
+$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as~$X$ and~$S$ independent.
 \end{solution}
 \end{exercise}
 
