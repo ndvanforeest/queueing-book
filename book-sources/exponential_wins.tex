@@ -63,7 +63,7 @@ we  ensure to always get the same random deviates\sidenote{A random deviate is a
 
 We next generate a number of inter-arrival times in the following way.
 The matrix $X$ has \mintinline{python}{num_patients} rows and \mintinline{python}{num_periods} columns.
-Row $k$ of $X$ corresponds to the inter-arrival times of patient~$k$. Each inter-arrival time is $\Unif{[0.9, 1.1]}$.
+Row~$k$ of~$X$ corresponds to the inter-arrival times of patient~$k$. Each inter-arrival time is $\Unif{[0.9, 1.1]}$.
 With these inter-arrival times, the arrival times for patient $k$ are $A_{i}^{k} = A_{i-1}^{k} + X_{i}^{k}$, with $A_0^{k}=0$.
 
 The \mintinline{python}{cumsum} along a row, i.e., along \mintinline{python}{axis=1}, of a matrix adds up elements one by one along a row.
