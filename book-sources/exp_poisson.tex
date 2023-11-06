@@ -148,7 +148,7 @@ And $N_{\lambda p}$ has stationary and independent increments because $N_{\lambd
 A final interesting, and useful, property of the Poisson process is the distribution of the arrivals an interal $[0,t]$ given that $N(t) = n$, say.
 In fact, if this event is true, the arrivals are uniformly distributed over the entire interval $[0,t]$.
 \begin{theorem}\label{thr:1}
-Conditional on the event $N(t)=n$, $t>0$, the distribution of the arrival times $\{A_{i}\}_{i=1}^{n}$ is the same as the distribution of the order statistic of $n$ iid rvs $\sim \Unif{[0,t]}$.
+Conditional on the event $N(t)=n$, $t>0$, the distribution of the arrival times $\{A_{i}\}_{i=1}^{n}$ is the same as the distribution of the order statistic of~$n$ iid rvs $\sim \Unif{[0,t]}$.
 \end{theorem}
 \begin{proof}
 We write for convience $\d t_i = [t_{i}, t_i + \d t]$, and similarly $\d(t_i-t_{i-1}) = [t_i-t_{i-1}, t_i-t_{i-1}+\d t]$. With this notation, $\P{X_i \in \d t_i} = \lambda e^{-\lambda t_i} \d t$ when $X_i\sim \Exp{\lambda}$ and $\P{U_i\in \d t_i } = \d t /t$ when $U_i\sim \Unif{[0,t]}$.

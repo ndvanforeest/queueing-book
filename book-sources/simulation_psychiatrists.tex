@@ -17,12 +17,12 @@ Recall that we compute the queue length recursively by first computing the numbe
 The next function follows this logic.
 It  first forms an empty array \pyth/L/ to store all the queue lengths.
 Then it applies the recursion by means of a for loop. The loop has to start at $n=1$ because it `looks back' at $L_{n-1}$.
-For generality, we can provide an optional queue level \pyth/L0/ if we want the queue to start at another level than $0$.
+For generality, we can provide an optional queue level \pyth/L0/ if we want the queue to start at another level than~$0$.
 \inputminted[firstline=27, lastline=34]{python}{../code/psychiatrists.py} % simple queue
 
 
 Now we make the capacity schemes.
-The first step is to form an array with $5$ rows such that each row corresponds to the weekly capacities of each psychiatrist.
+The first step is to form an array with~$5$ rows such that each row corresponds to the weekly capacities of each psychiatrist.
 Since python starts numbering at 0, instead of 1, the row with index 0 corresponds to the first psychiatrist.
 We can set all values of the entire row with index 0 with notation like \pyth/p[0, :]]/ where the semicolon refers all indices of the columns.\sidenote{It evokes the dots in mathematical notation like $i = 1, 2, \ldots$} Next, \pyth/np.ones(n)/ makes a row array of just ones. For each psychiatrist, we fill the related row in \pyth/p/ with the appropriate capacity of that specific psychiatrist. The result is a matrix that looks like the one in~\cref{eq:6}.
 \inputminted[firstline=57, lastline=64]{python}{../code/psychiatrists.py} % unbalanced
@@ -33,13 +33,13 @@ The next function builds the matrix~\cref{eq:9}
 Now we change a capacity matrix such that it includes a certain holiday pattern.
 This function spreads the holidays over week so that we obtain~\cref{eq:11}.
 The operator $\%$ computes the remainder after division, for example $ 17 \% 5 = 2$.
-In the for loop, the variable $j$ moves one column per iteration, and it cycles over the rows from $0$ to $4$.
+In the for loop, the variable~$j$ moves one column per iteration, and it cycles over the rows from~$0$ to~$4$.
 The \pyth/shape[0]/ returns the number of columns of a matrix.
 And, finally, the function does not need to return \pyth/p/ because the change is \emph{in-place}.\sidenote{Look on the web what is meant by a change `in place'.} Here we return it so that all functions work in the same way.
 \inputminted[firstline=85, lastline=89]{python}{../code/psychiatrists.py} % spread
 
 In the case of synchronized holidays, we set all capacities in one column to zero, cf.~\cref{eq:19}.
-The \pyth/range/ function moves from $0$ to the end, in steps of $5$, so it gives $0, 5, 10, \ldots$.
+The \pyth/range/ function moves from~$0$ to the end, in steps of~$5$, so it gives $0, 5, 10, \ldots$.
 \inputminted[firstline=96, lastline=99]{python}{../code/psychiatrists.py} % synchronized
 
 
@@ -49,17 +49,17 @@ The \pyth/range/ function moves from $0$ to the end, in steps of $5$, so it give
 
 We have four capacity scenarios.
 In the first scenario, the capacity is balanced, and the holiday plans are spread over the weeks.
-The weekly capacity $c_{i}$ is equal to the sum over all rows in \pyth/p/ that correspond to week $i$. This is established by summing over \pyth/axis=0/ in \pyth/p/.
+The weekly capacity $c_{i}$ is equal to the sum over all rows in \pyth/p/ that correspond to week~$i$. This is established by summing over \pyth/axis=0/ in \pyth/p/.
 For instance, in~\cref{eq:11}, the capacity for the first week is $0+2+3+4+4$.
-Once we have the weekly capacities stored in \pyth/c/, we can use the recursion for $l$ to compute the queue lengths at the end of each week.
+Once we have the weekly capacities stored in \pyth/c/, we can use the recursion for~$l$ to compute the queue lengths at the end of each week.
 The other scenarios work likewise.
 \inputminted[firstline=113, lastline=131]{python}{../code/psychiatrists.py} % scenarios
 
 
-The code above suffices to make the left panel of~\cref{fig:psychiatrists}. For the right panel we need  control rule~\cref{eq:103}. This works nearly the same as the regular recursion for $L$, but now we add or subtract an extra capacity \pyth/e/ to the weekly capacity given in the array $c$.
+The code above suffices to make the left panel of~\cref{fig:psychiatrists}. For the right panel we need  control rule~\cref{eq:103}. This works nearly the same as the regular recursion for~$L$, but now we add or subtract an extra capacity \pyth/e/ to the weekly capacity given in the array~$c$.
 \inputminted[firstline=41, lastline=50]{python}{../code/psychiatrists.py} % control
 
-We simulate the effect on $L$ for various control rules. We take $e=1$, $e=2$ and $e=5$.
+We simulate the effect on~$L$ for various control rules. We take $e=1$, $e=2$ and $e=5$.
 \inputminted[firstline=136, lastline=141]{python}{../code/psychiatrists.py} % plusminus
 
 \newthought{Finally, we can} make a figure.
