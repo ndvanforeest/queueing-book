@@ -5,7 +5,6 @@
 
 \section{Fighting the Exponential Distribution is Futile}
 
-
 Perhaps the mathematical arguments presented in the preceding section have not fully convinced you of the universality of the exponential distribution and its discrete counterpart, the Poisson distribution.
 To enhance your understanding, let's use simulation to see how the exponential distribution emerges as a sort of law of nature.
 
@@ -53,17 +52,17 @@ Here, and elsewhere, we place comments \emph{above} the code to which it relates
 
 \inputminted[firstline=2, lastline=3]{python}{../code/IBD_simulations.py} % modules
 
-To make a pdf file with a plot that looks nice in \LaTeX\, we  use the \mintinline{python}{seaborn} library and provide it with some extra options, such as good font sizes.\sidenote{While designing a figure, I comment out this code because it slows down the script.}.
-\inputminted[firstline=9, lastline=22]{python}{../code/IBD_simulations.py} % seaborn
+To make a pdf file with a plot that looks nice in \LaTeX\, we  use the \mintinline{python}{seaborn} library and provide it with some extra options, such as good font sizes.\sidenote{While designing a figure, I comment out this code because running \LaTeX\/ slows down the script.}.
+\inputminted[firstline=9, lastline=24]{python}{../code/IBD_simulations.py} % seaborn
 
 
-The simulation enviroment will contain \mintinline{python}{num_patients} patients and last for \mintinline{python}{num_periods} half years.
+The simulation environment will contain \mintinline{python}{num_patients} patients and last for \mintinline{python}{num_periods} half years.
 With \mintinline{python}{default_rng} we can set up a random number generator and by setting a seed (here to $3$, but any number would do)
 we  ensure to always get the same random deviates\sidenote{A random deviate is a sample taken from a distribution; it is not the same as a random variable.}
-\inputminted[firstline=27, lastline=29]{python}{../code/IBD_simulations.py} % expdata
+\inputminted[firstline=29, lastline=31]{python}{../code/IBD_simulations.py} % expdata
 
 We next generate a number of inter-arrival times in the following way.
-The matrix $X$ has \mintinline{python}{num_patients} rows and \mintinline{python}{num_periods} colums.
+The matrix $X$ has \mintinline{python}{num_patients} rows and \mintinline{python}{num_periods} columns.
 Row $k$ of $X$ corresponds to the inter-arrival times of patient~$k$. Each inter-arrival time is $\Unif{[0.9, 1.1]}$.
 With these inter-arrival times, the arrival times for patient $k$ are $A_{i}^{k} = A_{i-1}^{k} + X_{i}^{k}$, with $A_0^{k}=0$.
 
@@ -74,7 +73,7 @@ To ensure that the first row of \mintinline{python}{A} is zero, so that all pati
 However, by setting the first column of inter-arrivals $X$ to zero, we effectively remove one arrival.
 Thus, we should generate \mintinline{python}{num_periods + 1} of inter-arrival times.
 
-\inputminted[firstline=33, lastline=35]{python}{../code/IBD_simulations.py} % inter-arrivals
+\inputminted[firstline=35, lastline=37]{python}{../code/IBD_simulations.py} % inter-arrivals
 
 
 We need an environment to control the plots.
@@ -83,7 +82,7 @@ The \mintinline{python}{axes} object contains a list of \mintinline{python}{ax} 
 As is apparent from~\cref{fig:unitoexp}, we have a matrix of 4 \mintinline{python}{ax} objects.
 For easy reference in the code below, we flatten\sidenote{Once again, ask ChatGPT for further explanation.}
 the \mintinline{python}{axes} object and unpack it to the four separate objects \mintinline{python}{ax1}, $\ldots$, \mintinline{python}{ax4}.
-\inputminted[firstline=40, lastline=41]{python}{../code/IBD_simulations.py} % expfiguresetup
+\inputminted[firstline=42, lastline=43]{python}{../code/IBD_simulations.py} % expfiguresetup
 
 Next we build the left upper panel of \cref{fig:unitoexp}.
 Each row contains a number of dots, each of which corresponds to an arrival event of a patient.
@@ -93,14 +92,14 @@ The for loop adds the dots of each patient to the upper left panel referenced to
 To beautify the plot, we give a few options to the plot command.
 We don't want the dots to be connected by lines, so that we set the linestyle \mintinline{python}{ls='None'}.
 The marker style is a dot, the markersize \mintinline{python}{ms=0.2} and the color is black.\sidenote{I often use the abbreviations offered by matplotlib as it saves time.}
-\inputminted[firstline=45, lastline=49]{python}{../code/IBD_simulations.py} % plotuniforms
+\inputminted[firstline=47, lastline=51]{python}{../code/IBD_simulations.py} % plotuniforms
 
 
 We plot the arrivals as seen by the planner as a jitterplot, that is, we add small random noise to the data points along the $y$-axis.
 By spreading out the points slightly, the jitter plot allows for a clearer visualization of the distribution of individual points.
 We plot the dots at $y=0$ plus a jittering distributed as $\sim\Unif{[-1/2, 1/2]}$.
-Without the jitter we would just see small line segments instead of the somewhat rectanggular shapes.
-\inputminted[firstline=53, lastline=56]{python}{../code/IBD_simulations.py} % plotjitter
+Without the jitter we would just see small line segments instead of the somewhat rectangular shapes.
+\inputminted[firstline=55, lastline=58]{python}{../code/IBD_simulations.py} % plotjitter
 
 
 \newthought{Our next task} is to estimate the density of inter-arrival times as observed by the planner, and plot this in the right panel of \cref{fig:unitoexp}.
@@ -108,18 +107,18 @@ Recall that each row of the matrix $A$ contains the arrival times of one specifi
 By flatting $A$ we obtain all arrival times in one long list.
 By sorting, we obtain the arrival times in order of time.
 Finally, inter-arrival times for the planner are the times between the elements of this list of arrivals.
-\inputminted[firstline=61, lastline=62]{python}{../code/IBD_simulations.py} % allarrivals
+\inputminted[firstline=63, lastline=64]{python}{../code/IBD_simulations.py} % allarrivals
 
 We assemble all inter-arrival times in $X$ in bins.
 As we have $\lambda=50$ arrivals per day, the mean inter-arrival time is $1/\lambda = 1/50$.
 The pdf of exponential distribution is $\lambda e^{-\lambda x}$.
 To see the tail of the pdf in the plot, we take $5$ times the mean, i.e, $5/50 = 0.02$, as the support for the bins.
 We then plot the histogram, i.e., the number of hits in each bin, on \mintinline{python}{ax2}, and the pdf.
-\inputminted[firstline=66, lastline=70]{python}{../code/IBD_simulations.py} % compare-with-exp
+\inputminted[firstline=68, lastline=72]{python}{../code/IBD_simulations.py} % compare-with-exp
 
 Before explaining how to make the second row in \cref{fig:unitoexp}, here is the code to save the figure.
 The \mintinline{python}{tight_layout()} function ensures that the labels of the axes are nicely formatted.
-\inputminted[firstline=101, lastline=102]{python}{../code/IBD_simulations.py} % export-exp-figure
+\inputminted[firstline=103, lastline=104]{python}{../code/IBD_simulations.py} % export-exp-figure
 
 \begin{figure}[t]
 \centering
@@ -139,13 +138,13 @@ But still, even when starting with very unrealistic arrival times, we see that t
 
 
 To repair for these unnatural starting times, we set the initial arrival time of each patient uniformly on $[0,1]$.
-\inputminted[firstline=76, lastline=76]{python}{../code/IBD_simulations.py} % uniformize
+\inputminted[firstline=78, lastline=78]{python}{../code/IBD_simulations.py} % uniformize
 
 With this change, we run the above code again, but write the plots \mintinline{python}{ax3} and \mintinline{python}{ax4} to obtain the lower left and right panels of ~\cref{fig:unitoexp}.
-Now we see that the exponential distribution is an excelent fit, and the jitter rectangles overlap right from the start.
+Now we see that the exponential distribution is an excellent fit, and the jitter rectangles overlap right from the start.
 
-In conclusion, if many patients arrive to the hospitial and each adds some small variation to the inter-arrival times, the hospital sees exponential inter-arrival tiems for the population.
+In conclusion, if many patients arrive to the hospital and each adds some small variation to the inter-arrival times, the hospital sees exponential inter-arrival times for the population.
 Clearly, this is not specific to hospitals: it applies to any system that serves a large pool of customers, each arriving with some variation.
-Thus, the exponential distribution is an important modelling device for nearly any service and production systems; we use it often in the sequel.
+Thus, the exponential distribution is an important modeling device for nearly any service and production systems; we use it often in the sequel.
 
 \input{trailer}
