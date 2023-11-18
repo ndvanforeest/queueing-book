@@ -148,4 +148,107 @@ In conclusion, if many patients arrive to the hospital and each adds some small 
 Clearly, this is not specific to hospitals: it applies to any system that serves a large pool of customers, each arriving with some variation.
 Thus, the exponential distribution is an important modeling device for nearly any service and production systems; we use it often in the sequel.
 
+\newthought{It remains to} provide proofs for the claims we make above.
+The proofs are nice because they combine order statistics, the beta distribution, first-step analysis, and some infinitesimal calculus to give the reasoning a heuristic flavor.
+However, if you are not interested in probability theory, skip the rest of the section.
+
+We first prove the lower part of~\cref{fig:unitoexp}.
+Consider iid rvs $\{U_k\}_{k=1}^{\infty}$ such that $U_{k}\sim \Unif{[0,1]}$, and write the order statistic of $\{U_k\}_{i=1}^{n}$ as $0<Y^{n}_1 < Y^n_2 < \cdots < Y_n^{n}<1$.
+(We neglect the probability of simultaneous arrivals; these have probability zero.)
+Thus, if the $U_{k}$ represent the arrival times of~$n$ patients, the order statistic represents the ordered sequence of arrivals as seen by the hospital.
+By taking $Y_0^{n} = 0, Y_{n+1}^n=1$, we define the size of the gaps as seen by the hospital as $X_{k}^{n} = Y_k^n - Y_{k-1}^{n}$, $k=1, \ldots, n+1$.
+
+
+When the size $n$ of the population increases, the size of the first gap, i.e., the arrival time of the first patient, will be more and more like an exponentially distributed rv.
+
+\begin{lemma}
+\begin{equation*}
+\lim_{n\to\infty} \P{n X^n_1 \leq x} = \lim_{n\to\infty} \P{n Y^n_1 \leq x} =1- e^{-x}.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+The probability that the smallest of $n$ rvs is less than some $x$ is the same as $1$ minus the probability that all $n$ rvs are larger than $x$.
+Therefore,
+\begin{align*}
+  \P{ Y^n_1 \leq x/n}
+  &= 1 -  \P{\min\{U_{1}, \cdots, U_{n}\} > x/n} = 1 - (1-x/n)^{n},
+\end{align*}
+because $\P{U_{i} > x/n} = 1-x/n$, and the $u_{i}$ are iid.
+The RHS converges to $1-e^{-x}$ as $n\to \infty$.
+Finally, from the definition, it is obvious that $X_1^n = Y_1^n - Y_0^{n} = Y_1^{n}$.
+\end{proof}
+
+
+We next show that all gaps have the same density.
+From the proof of the previous lemma, we have that $\P{X_1^n \leq r} = 1- (1-r)^{n}$, therefore, $f_{X_{1}^{n}}(r) \d r = \P{X_1^n \in [r, r + \d x]} = n (1-r)^{n-1} \d r$.
+By symmetry, $f_{X_{n+1}^{n}}(r) \d r = n(1-r)^{n-1} \d r$,  hence $X_1^n \sim X_{n+1}^{n}$. It remains to deal with the intermediate gaps.
+
+\begin{lemma}
+For $r\in (0, 1)$, the density of the $k$th gap, $k=2, \ldots, n-1$,  is $f_{X_{k}^n}(r) = n (1-r)^{n-1}$.
+\end{lemma}
+\begin{proof}
+The probability of the event $Y_1^n < Y_2^n < \cdots < Y_{k-2}^n < Y_{k-1}^n \in [x, x+ \d x] < Y_k^n \in [y, y+\d y] < Y_{k+1}^{n} < \cdots Y_n^{n}$ is given
+\begin{align*}
+  f_{Y_{k-1}^n, Y_k^n}(x, y) \d x \d y = \frac{n!}{(k-2)!(n-k)!} x^{k-2} (1-y)^{n-k} \d x \d y.
+\end{align*}
+With this, the probability that $X_k^{n} \in [r, r+\d r]$ becomes
+\begin{align*}
+  f_{X_{k}^n}(r) \d r = \d r \int_{0}^{1-r}  f_{Y_{k-1}^n, Y_k^n}(x, x+r) \d x.
+\end{align*}
+Substitute the expression for the density $f_{Y_{k-1}^n, Y_k^n}$, but drop the factorials for the moment,
+\begin{align*}
+ \int_{0}^{1-r}  x^{k-2} (1-r-x)^{n-k} \d x
+  &= (1-r)^{n-1}\int_0^{1-r} \left(\frac{x}{1-r}\right)^{k-2} \left( \frac{1-r - x}{1-r}\right)^{n-k} \\
+  &= (1-r)^{n-1}\int_0^1 x^{k-2}(1-x)^{n-k} \d x \\
+  &= (1-r)^{n-1} \frac{(k-2)!(n-k)!}{(n-k + k-2 + 1)!},
+\end{align*}
+where we use the normalization constant of  the $\beta$ distribution to compute the integral. Canceling the factorials gives the result.
+\end{proof}
+
+
+Combining the above two lemmas leads straightaway to the next theorem.
+\begin{theorem}
+Let $n$ jobs arrive at a station such that the arrival times are iid rvs $U_{k}\sim \Unif{[0,a]}$, then all interarrival times (the gaps) $\{X_{k}^{n}\{_{k=0}^{n+1}$ as seen by the server, i.e., as obtained from the order statistic of $\{U_{k}\}_{k=1}^{n}$, have the same distribution, i.e., $X_i^n \sim X_k^{n}$ for all $0\leq i,k \leq n$.
+When the size $n$ of the population, $X_k^{n}$ is approximately $\sim \Exp{a/n}$.
+\end{theorem}
+
+
+We next provide the formal background for the insights of the upper part of~\cref{fig:unitoexp}.
+We consider only the day that a patient visits the hospital (the time on a day is of no importance), and assume that there are $n$ days on average between two successive visits.
+For example, suppose the interarrival time $X$ (in days) of a patient to visit the hospital is such that $\P{X=n-1} = \P{X=n+1}=1/2$.
+Then, if the process starts on day $0$ and $X_{1} = n-1$, the next visit will be on day $n-1$, but if $X_{1}=n+1$, the next visit will be on day $1$ of the next half year.
+By looking at the process like this, the patient \emph{moves on a circle} with $n$ states, and with every move the patient moves with probability $1/2$ one state to the left or to the right on the circle.
+
+\begin{theorem}\label{thr:2}
+Let $\alpha_k(i) = \P{A_k=i}$ be the probability that the $k$th arrival is on the $i$th day, where $A_{i} = (A_{i-1} + X_{i}) \bmod n$, i.e, $A_{i}$ lives on the circle space $\{0, 1, \ldots, n-1\}$.
+If $\{X_{k}\}_{k=1}^{\infty}$ is a set of iid rvs such that $\E{X_{k}} < \infty$ and $\sup_{i}\P{X_{k} =i} < 1$, then, for all $i$, $\alpha_k(i) \to 1/n$ as $k\to\infty$.
+\end{theorem}
+
+\begin{proof}
+We impose the condition $\E{X_{k}}<\infty$ to prevent to having to deal with $A_{k} = \infty$ for some finite $k$.
+For the moment, take $\P{X_{k} = 1}=p \in (0, 1)$ and $\P{X_{k}=-1} = q=1-p$.
+By first-step analysis,
+\begin{equation*}
+\alpha_{k+1}(i) = p \alpha_k(i-1) + q \alpha_k(i+1).
+\end{equation*}
+Clearly, if $\alpha_{k}(i)=1/n$ for all $i$, then $\alpha_{k+1}(i) = 1/n$ as well.
+
+However, if not all $\alpha_{k}(\cdot)$ are equal, then as there are a finite number of states, there must be at least one state $i$ such that $\alpha_k(i-1) < \alpha_k(i) \geq \alpha_k(i+1)$.
+But then, on the next step
+\begin{equation*}
+\alpha_{k+1}(i) = p \alpha_k(i-1) + p \alpha_k(i+1) < \alpha_k(i).
+\end{equation*}
+In particular, the largest $\alpha_{k}$ becomes smaller and, by symmetry, the smallest $\alpha_{k}$ becomes larger.
+
+The argument is easy to generalize. Let $\P{X=j} = p_{j}$. By assumption $p_{j} \in (0, 1)$. Then, $\E{\alpha_k(i+X)} = \sum_{j} p_{j} \alpha_k(i+j) < \alpha_k(i)$ if $\alpha_k(i) \geq \alpha_{k}(\cdot)$ and there is at least one $j$ such that $\alpha_k(i+j) < \alpha_k(i)$ and $p_{j} > 0$.
+Thus, in general, any  maximum become strictly smaller, and by the same reasoning,  any minimum becomes strictly larger.
+Finally, the minimum and the maximum cannot cross after any step, because an average over a set of numbers cannot be smaller than the smallest number in that set.
+
+All in all, this implies that $\alpha_k(i) \to 1/n$ for all $i$ as $k\to \infty$.
+\end{proof}
+
+Clearly, the proof applies to any $n=1, 2, \ldots$.
+With some additional (technical) effort it can be generalized to the circle $[0, 1)]$ on the reals.
+The ideas of the proofs for~\cref{thr:2} are used in potential theory and complex analysis, and the limiting function distribution is known as a harmonic function.
+
 \input{trailer}
