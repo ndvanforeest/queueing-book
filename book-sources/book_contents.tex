@@ -13,7 +13,7 @@ This work\ is licensed by the University of Groningen under a
 \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
 
 
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{0}
 \tableofcontents
 
 \loadgeometry{tufte}
@@ -27,8 +27,12 @@ This work\ is licensed by the University of Groningen under a
 
 \mainmatter
 
+\part{Core Material}
+
 \chapter{Introduction}
 \label{cha:introduction}
+
+
 
 \subfile{preliminaries.tex}
 \subfile{exp_poisson.tex}
@@ -175,7 +179,6 @@ In passing, we use some interesting results of probability theory and the Poisso
 \subfile{failures.tex}
 \subfile{tandem.tex}
 
-
 % \chapter{Queueing Control and Open Networks}
 % \label{cha:queu-contr-open}
 
@@ -196,13 +199,24 @@ In passing, we use some interesting results of probability theory and the Poisso
 % \subfile{open_single_class.tex}
 % \subfile{gershgorin.tex}
 
+\part{Challenges for Interested Students}
+
+\subfile{/home/nicky/vakken/erratic/one_die_multiple_children/one_die_multiple_children}
+\subfile{/home/nicky/vakken/erratic/mum_and_mmm/mum_and_mmm}
+\subfile{/home/nicky/vakken/erratic/vickrey_auctions/vickrey}
+
+
+\part{Hints and Solutions}
+
 \opt{all-solutions-at-end}{
 \Closesolutionfile{hint}
 \Closesolutionfile{ans}
 \loadgeometry{normal}
-\chapter{Hints}
+\chapter*{Hints}
+\addcontentsline{toc}{chapter}{Hints}
 \input{hint}
-\chapter{Solutions}
+\chapter*{Solutions}
+\addcontentsline{toc}{chapter}{Solutions}
 \input{ans}
 }
 

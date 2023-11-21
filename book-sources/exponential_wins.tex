@@ -212,8 +212,12 @@ Let $n$ jobs arrive at a station such that the arrival times are iid rvs $U_{k}\
 When the size $n$ of the population, $X_k^{n}$ is approximately $\sim \Exp{a/n}$.
 \end{theorem}
 
+There is one point that remains.
+It is given that $\{U_{k}\}_{i=1}^{n}\}$ are uniform on $[0,1]$, but what is the distribution off the arrival on the next interval $[1,2]]$?
+As it happens, after having discussed the next topic, this will be easy to answer.
 
-We next provide the formal background for the insights of the upper part of~\cref{fig:unitoexp}.
+
+\newthought{We next provide} the formal background for the insights of the upper part of~\cref{fig:unitoexp}.
 We consider only the day that a patient visits the hospital (the time on a day is of no importance), and assume that there are $n$ days on average between two successive visits.
 For example, suppose the interarrival time $X$ (in days) of a patient to visit the hospital is such that $\P{X=n-1} = \P{X=n+1}=1/2$.
 Then, if the process starts on day $0$ and $X_{1} = n-1$, the next visit will be on day $n-1$, but if $X_{1}=n+1$, the next visit will be on day $1$ of the next half year.
@@ -249,6 +253,33 @@ All in all, this implies that $\alpha_k(i) \to 1/n$ for all $i$ as $k\to \infty$
 
 Clearly, the proof applies to any $n=1, 2, \ldots$.
 With some additional (technical) effort it can be generalized to the circle $[0, 1)]$ on the reals.
-The ideas of the proofs for~\cref{thr:2} are used in potential theory and complex analysis, and the limiting function distribution is known as a harmonic function.
+To see how, consider a continuous function $f$ on the unit circle $C$.
+As the circle is compact and $f$ continuous, $f$ achieves its maximum $f(\bar x)$ at $\bar x$, say.
+Suppose for some $\epsilon>0$ there is set $A_{\epsilon} = \{x \in C: f(x) \leq f(x + \bar x) -\epsilon\}$ such that $\P{A_{\epsilon}} > 0$.
+(If there is no such set for any $\epsilon$, then $f$ is a constant.)
+But then, $\E{f(x+X)} \leq (f(\bar x) -\epsilon) \P{A_{\epsilon}} + f(\bar x) (1-\P{A_{\epsilon}}) < f(\bar x)$.
+Clearly, taking an average over $f$ makes the maximum smaller, and likewise the minimum larger.
+
+Interstingly, the ideas of the proofs for~\cref{thr:2} are used in potential theory and complex analysis, and the limiting function distribution is known as a harmonic function.
+
+
+Finally, how about the distribution of the fractional part of $Z=U+V$ when $U, V$ independent and unifom on $[0,1]]$?
+
+\begin{theorem}
+Let $Z=\sum_{i}^{n} U_{i}$ for $n$ idd rvs $U_{i}\sim \Unif{[0,1]}$, and $\lfloor x \rfloor$  the integer part of $x\in \R$.
+The fractional part of $Z$ is $Z-\lfloor Z \rfloor \sim \Unif{[0,1]}$.
+\end{theorem}
+\begin{proof}
+Realizing that the density of the sum of two uniform rvs on $[0,1]$ is a triangle with base $[0,2]$ and height $1$,
+\begin{align*}
+\P{U_{1} +U_{2}- \lfloor U_{1}+U_{2} \rfloor \leq x} &= \P{U_{1} +U_{2}\leq x} + \P{1\leq U_{1} + U_{2}\leq 1 + x} \\
+  &= x^{2}/2 +  (1/2 - (1-x)^{2} /2) = x.
+\end{align*}
+Therefore, the fractional part of the sum of two uniform rvs is uniform on $[0,1]$.
+We can apply this idea term by term, from left to right, and arrive at the conclusion.
+\end{proof}
+
+
+
 
 \input{trailer}
