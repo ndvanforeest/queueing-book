@@ -12,8 +12,16 @@
 This work\ is licensed by the University of Groningen under a
 \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
 
+% Table des matières avec seulement les chapitres
+\etocsettocstyle{\section*{Contents}}{}
+\etocsettocdepth{chapter}
+\tableofcontents
 
-\setcounter{tocdepth}{0}
+\newpage
+
+% Table des matières avec les chapitres et les sections
+\etocsettocstyle{\section*{Contents in Detail}}{}
+\etocsettocdepth{section}
 \tableofcontents
 
 \loadgeometry{tufte}
@@ -33,10 +41,10 @@ This work\ is licensed by the University of Groningen under a
 \label{cha:introduction}
 
 
-
 \subfile{preliminaries.tex}
 \subfile{exp_poisson.tex}
 \subfile{exponential_wins.tex}
+\subfile{probabilistic_arithmetic.tex}
 
 \chapter{Construction of Simple Discrete time Stochastic Processes}
 \label{cha:single-stat-queu}
@@ -83,8 +91,8 @@ If we want to include more complicated rules to control queueing systems, we nee
 
 \subfile{constructioncontinuoustime.tex}
 %\subfile{expdistribution.tex}
+\subfile{waiting_time_distribution.tex}
 \subfile{simulations-continuous.tex}
-\subfile{probabilistic_arithmetic.tex}
 \subfile{discrete-event-simulation.tex}
 
 
@@ -127,18 +135,18 @@ As we will see, many performance measures for queueing systems depend on the dis
 In this chapter we use the concepts of~\cref{cha:fundamental-tools} to model and analyze many queueing systems in steady state.
 With sample-path analysis and level-crossing, we show in~\cref{sec:mm1} that is simple to derive useful expressions for performance measures of the $M/M/1$ and many of its variations.
 
-In~\cref{sec:mnmn1} we combine level-crossing with Little's law and PASTA to compute the most important performance measures for numerous queueing examples.
+% In~\cref{sec:mnmn1} we combine level-crossing with Little's law and PASTA to compute the most important performance measures for numerous queueing examples.
 
 
-Next, in \cref{sec:mxm1-queue:-expected} and~\cref{sec:mg1}, We focus on finding the expected waiting time for batch queues and the $M/G/1$ queue.
-In the last two sections of this chapter we derive expressions for the queue length distributions of the batch queue and the $M/G/1$ queue.
+% Next, in \cref{sec:mxm1-queue:-expected} and~\cref{sec:mg1}, We focus on finding the expected waiting time for batch queues and the $M/G/1$ queue.
+% In the last two sections of this chapter we derive expressions for the queue length distributions of the batch queue and the $M/G/1$ queue.
 
 
 \subfile{mm1.tex}
 \subfile{mnmn1_applications.tex}
 \subfile{mxm1_pk.tex}
-\subfile{mg1.tex}
-\subfile{mxm1_distribution.tex}
+%\subfile{mg1.tex}
+%\subfile{mxm1_distribution.tex}
 %\subfile{mg1_distribution.tex}
 \subfile{n_policies_mg1.tex}
 \subfile{inventory_analysis}
@@ -199,11 +207,12 @@ In passing, we use some interesting results of probability theory and the Poisso
 % \subfile{open_single_class.tex}
 % \subfile{gershgorin.tex}
 
-\part{Challenges for Interested Students}
+% \part{Challenges for Interested Students}
 
-\subfile{/home/nicky/vakken/erratic/one_die_multiple_children/one_die_multiple_children}
-\subfile{/home/nicky/vakken/erratic/mum_and_mmm/mum_and_mmm}
-\subfile{/home/nicky/vakken/erratic/vickrey_auctions/vickrey}
+% \subfile{/home/nicky/vakken/erratic/one_die_multiple_children/one_die_multiple_children}
+% \subfile{/home/nicky/vakken/erratic/mum_and_mmm/mum_and_mmm}
+% \subfile{/home/nicky/vakken/erratic/vickrey_auctions/vickrey}
+% \subfile{/home/nicky/vakken/erratic/complex_graphs/complex_graphs}
 
 
 \part{Hints and Solutions}

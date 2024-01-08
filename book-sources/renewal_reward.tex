@@ -15,11 +15,17 @@ In this section we prove this extremely useful theorem, and in the exercises we 
 
 \newthought{We are given} a sequence of strictly increasing epochs $0=T_0 < T_1 < T_2 < \cdots$ such that $T_k\to\infty$ as $k\to\infty$, and a non-decreasing right-continuous (deterministic) function $t\to Y(t)$ with $Y(0)=0$.
 Let $N(t) = \sum_{k=1}^{\infty} \1{T_k\leq t}$ count the number of epochs that occurred during $(0, t]$, and $X_k = Y(T_k)-Y(T_{k-1})$ be the increment of $Y(t)$ during $(T_{k-1}, T_{k}]$.\sidenote{Here $X_k$ is not necessary an inter-arrival time between two jobs.}
-The renewal reward theorem says the following.
-Assume the limit $\lambda=\lim_{t\to\infty}N(t)/t$ exist with $0<\lambda<\infty$.
-Then, the limit $Y=\lim_{t\to\infty}Y(t)/t$ exists iff $X = \lim_{n\to\infty} n^{-1}\sum_{k=1}^{n}X_{k}$ exist, and in that case, $Y=\lambda X$.
 \cref{fig:renewal} shows graphically how all concepts relate.
 
+
+
+\begin{theorem}[Renewal Reward Theorem, $Y=\lambda X$]
+Assume  that the limit $\lambda=\lim_{t\to\infty}N(t)/t$ exists with $0<\lambda<\infty$.
+Then, the limit $Y=\lim_{t\to\infty}Y(t)/t$ exists iff $X = \lim_{n\to\infty} n^{-1}\sum_{k=1}^{n}X_{k}$ exists, in which
+ case, $Y=\lambda X$.
+\end{theorem}
+
+\begin{proof}
 To see why this is true, we copy an idea of~\cref{sec:rate-stability}. Just as with the relation between $A(t)$ and $A_{A(t)}$, we have here that  $T_{N(t)} \leq t < T_{N(t)+1}$. As $Y(\cdot)$ is non-decreasing,
 \begin{equation*}
   Y(T_{N(t)}) \leq Y(t) < Y(T_{N(t)+1}),
@@ -28,8 +34,10 @@ hence
 \begin{align*}
 \frac{N(t)}{t} \frac{Y(T_{N(t)})}{N(t)}  &\leq \frac{Y(t)} t < \frac{Y(T_{N(t)+1})}{t} \frac{N(t)+1}{N(t)}.
 \end{align*}
-Noting that $Y(T_{N(t)}) = \sum_{k=1}^{N(t)} X_{k}$,  and using the assumption that  $N(t)/t \to \lambda$ we conclude that  $Y(t)/t \to Y$ iff
- $(N(t))^{-1}\sum_{k=1}^{N(t)} X_{k} \to X$, and if (one of the) limits exists, $Y=\lambda X$.
+Noting that $Y(T_{N(t)}) = \sum_{k=1}^{N(t)} X_{k}$, and using the assumption that $N(t)/t \to \lambda$ we conclude that $Y(t)/t \to Y$ iff $(N(t))^{-1}\sum_{k=1}^{N(t)} X_{k} \to X$.
+If one of these limits exists, the other exists, hence $Y=\lambda X$.
+\end{proof}
+
 
 
 

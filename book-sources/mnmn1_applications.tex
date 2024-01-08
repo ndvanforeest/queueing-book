@@ -159,12 +159,12 @@ Why is it reasonable to model this queueing system as a $M/M/1$ queue?
 
 Measurements show that $\E \W = 6$ minute, and $\lambda=5$ per minute.
 What are the service rate and utilization?
-Calculate $\E{\Q}$, $\E \L$.
+Calculate $\E{\QQ}$, $\E \L$.
 
 There should be a sufficient number of seatings so that all waiting customers can sit down at least 90 percent of the time.
 How many seatings should there minimally be? What would you advice to the municipality?
 \begin{hint}
-  $\E{\Q}$ follows right away from an application of Little's law.
+  $\E{\QQ}$ follows right away from an application of Little's law.
   For the other quantities we need to find $\E S$.
   Use the expression for  $\E\W$ for the $M/M/1$ queue to solve for $\rho$. Then, since $\lambda$ is known, $\E S$ follows.
 \end{hint}
@@ -226,8 +226,8 @@ The average queue is huge: hire an extra employee.
 
 \begin{exercise} The smallest barber shop in town works alone and has two chairs for waiting customers.
  Six jobs arrive per hour, and the barber needs 12 minutes for a hair cut. We model this, for ease, as an $M/M/1/3$ queue.
- Estimate $\E{\Q}$ and the average number of customers served per hour.
- Then, estimate $\E{\Q}$ when the barber hires another location that allows for 3 extra chairs.
+ Estimate $\E{\QQ}$ and the average number of customers served per hour.
+ Then, estimate $\E{\QQ}$ when the barber hires another location that allows for 3 extra chairs.
  Quantity the effect on the number of customers served per hour.
 \begin{solution}
 This is an $M/M/1/3$ queue: there is room for 1 customer in service and two in queue.
@@ -281,7 +281,7 @@ Measurements show that the number of arrivals per hour is well captured by the a
 \pyv{labda = np.array([10.0, 10.0, 20.0, 20.0, 5.0])}.
 The pizza oven can contain two pizzas, and it takes 2 minutes to bake a pizza. We model the system as an $M/M/2$ queue.
 
-Calculate the steady state probabilities, and from this  the average arrival rate. Then, find $\E \L$, $\E{\Q}$, $\E \J$ and $\E{\W}$.
+Calculate the steady state probabilities, and from this  the average arrival rate. Then, find $\E \L$, $\E{\QQ}$, $\E \J$ and $\E{\W}$.
 \begin{solution}
 The computations.
 \begin{pyconsole}[pizza]
@@ -416,14 +416,14 @@ The \emph{invariant}  $3 = T + L -G$ becomes $0 = T + L -G$. This implies that $
 %  The system starts with $a_0$ batches in queue.
 
 
-% Consider the arrival of taxi~$k$. Let this taxi see $\Q_{s,k}$  riders at the head of the line. Let~$b$ be the index of the first group in the queue, hence group $b-1$ stands at the head of the line. Then,
+% Consider the arrival of taxi~$k$. Let this taxi see $\QQ_{s,k}$  riders at the head of the line. Let~$b$ be the index of the first group in the queue, hence group $b-1$ stands at the head of the line. Then,
 % \begin{align*}
-% d_k &= \min\{\Q_{s,k}, 4\}, &\text{riders served by taxi~$k$}, \\
-% \Q_{s}' &= \Q_{s,k} - d_k, &\text{riders remaining behind at head of line}, \\
-% \Q_k' &= \Q_k + a_{k+1}, &\text{groups waiting just before arrival taxi $k+1$}, \\
-% h_k &= \1{\Q_s'=0}\1{\Q_k'>0} & \text{If $h_k=1$ a group can move to the head of the line}, \\
-% \Q_{k+1} &= \Q_k' - h_k& \text{queue of groups seen by taxi $k+1$}, \\
-% \Q_{s, k+1} &=  h_k B_b& \text{riders at head of the line seen by taxi $k+1$}, \\
+% d_k &= \min\{\QQ_{s,k}, 4\}, &\text{riders served by taxi~$k$}, \\
+% \QQ_{s}' &= \QQ_{s,k} - d_k, &\text{riders remaining behind at head of line}, \\
+% \QQ_k' &= \QQ_k + a_{k+1}, &\text{groups waiting just before arrival taxi $k+1$}, \\
+% h_k &= \1{\QQ_s'=0}\1{\QQ_k'>0} & \text{If $h_k=1$ a group can move to the head of the line}, \\
+% \QQ_{k+1} &= \QQ_k' - h_k& \text{queue of groups seen by taxi $k+1$}, \\
+% \QQ_{s, k+1} &=  h_k B_b& \text{riders at head of the line seen by taxi $k+1$}, \\
 % b &= b + h_k & \text{increase index of served batches by one}, \\
 % \end{align*}
 

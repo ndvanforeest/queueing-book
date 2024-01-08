@@ -37,7 +37,7 @@ Assume that the hospital has just~$50$ regular patients.
 Each patient plans the time to the next appointment uniformly on the interval $[0.9 , 1.1]$, independent of previous times and other patients.
 Like this, we model a patient's inter-arrival time between two consecutive appointments as  half a year (100 days) plus or minus 10 days ($[0.9, 1.1] \times 100 = [90, 110]$).
 The question of interest is to estimate the distribution of the inter-arrival times between any two patients \emph{as seen by the planner} of the hospital.
-Of course, when there would be just one patient, this is easy, the planner sees $\sim [0.9, 1.1]$. But what happens for many patients?
+Of course, when there would be just one patient, this is easy, the planner sees $\sim \Unif{[0.9, 1.1]}$. But what happens for many patients?
 
 We will use simulation to obtain insight into this question.
 The answer will be given in~\cref{fig:unitoexp}.
@@ -78,9 +78,8 @@ Thus, we should generate \mintinline{python}{num_periods + 1} of inter-arrival t
 
 
 We need an environment to control the plots.
-The \mintinline{python}{fig} object can be thought of as a canvas on which you will draw your plots.
-The \mintinline{python}{axes} object contains a list of \mintinline{python}{ax} objects, each representing a single plot within the figure.
-As is apparent from~\cref{fig:unitoexp}, we have a matrix of 4 \mintinline{python}{ax} objects.
+The \mintinline{python}{fig} object can be thought of as a canvas on which we draw the plots, and \mintinline{python}{axes} is a list of \mintinline{python}{ax} objects, each representing a single plot within the figure.
+As is apparent from~\cref{fig:unitoexp}, we have a matrix of four \mintinline{python}{ax} objects.
 For easy reference in the code below, we flatten\sidenote{Once again, ask ChatGPT for further explanation.}
 the \mintinline{python}{axes} object and unpack it to the four separate objects \mintinline{python}{ax1}, $\ldots$, \mintinline{python}{ax4}.
 \inputminted[firstline=42, lastline=43]{python}{../code/IBD_simulations.py} % expfiguresetup
@@ -122,8 +121,9 @@ The \mintinline{python}{tight_layout()} function ensures that the labels of the 
 \inputminted[firstline=103, lastline=104]{python}{../code/IBD_simulations.py} % export-exp-figure
 
 \begin{figure}[t]
-\centering
+\begin{center}
 \includegraphics{../figures/IBD_exponential.pdf}
+\end{center}
 \caption{How the uniform distribution leads to the exponential distribution.}
 \label{fig:unitoexp}
 \end{figure}
@@ -148,8 +148,9 @@ In conclusion, if many patients arrive to the hospital and each adds some small 
 Clearly, this is not specific to hospitals: it applies to any system that serves a large pool of customers, each arriving with some variation.
 Thus, the exponential distribution is an important modeling device for nearly any service and production systems; we use it often in the sequel.
 
-\newthought{It remains to} provide proofs for the claims we make above.
+\newthought{It remains to} prove the claims we made above.
 The proofs are nice because they combine order statistics, the beta distribution, first-step analysis, and some infinitesimal calculus to give the reasoning a heuristic flavor.
+Finally, we discuss an important smoothing property of taking expectations. This idea is of relevancy too in data science when using  moving averages.
 However, if you are not interested in probability theory, skip the rest of the section.
 
 We first prove the lower part of~\cref{fig:unitoexp}.
@@ -213,29 +214,32 @@ When the size $n$ of the population, $X_k^{n}$ is approximately $\sim \Exp{a/n}$
 \end{theorem}
 
 There is one point that remains.
-It is given that $\{U_{k}\}_{i=1}^{n}\}$ are uniform on $[0,1]$, but what is the distribution off the arrival on the next interval $[1,2]]$?
+It is given that $\{U_{k}\}_{i=1}^{n}\}$ are uniform on $[0,1]$, but what is the distribution of the arrival on the next interval $[1,2]]$?
 As it happens, after having discussed the next topic, this will be easy to answer.
 
 
 \newthought{We next provide} the formal background for the insights of the upper part of~\cref{fig:unitoexp}.
-We consider only the day that a patient visits the hospital (the time on a day is of no importance), and assume that there are $n$ days on average between two successive visits.
-For example, suppose the interarrival time $X$ (in days) of a patient to visit the hospital is such that $\P{X=n-1} = \P{X=n+1}=1/2$.
-Then, if the process starts on day $0$ and $X_{1} = n-1$, the next visit will be on day $n-1$, but if $X_{1}=n+1$, the next visit will be on day $1$ of the next half year.
-By looking at the process like this, the patient \emph{moves on a circle} with $n$ states, and with every move the patient moves with probability $1/2$ one state to the left or to the right on the circle.
+We consider only the day that a patient visits the hospital (the time on a day is of no importance), and assume that there are $C$ days on average between two successive visits.
+For example, suppose the interarrival time $X$ (in days) of a patient to visit the hospital is such that $\P{X=C-1} = \P{X=C} = \P{X=C+1}=1/3$.
+Then, if the process starts on day $0$ and $X = C-1$, the next visit will be on day $C-1$, but if $X=C+1$, the next visit will be on day $1$ of the next half year.
+By looking at the process like this, the patient \emph{moves on a circle} with $C$ states, and with every move the patient moves with probability $1/3$ one state to the left or to the right on the circle, or stays put. We call $C$ the cycle length.
+(There is a subtle, small problem when $\P{X=C-1} = \P{X=C} = 1/2$ and the cycle length is $10$.
+As $10$ is a multiple of $2$, the visit happens either on even or odd days.
+By making $\P{X = 0} > 0$ we prevent this behavior.)
 
 \begin{theorem}\label{thr:2}
-Let $\alpha_k(i) = \P{A_k=i}$ be the probability that the $k$th arrival is on the $i$th day, where $A_{i} = (A_{i-1} + X_{i}) \bmod n$, i.e, $A_{i}$ lives on the circle space $\{0, 1, \ldots, n-1\}$.
-If $\{X_{k}\}_{k=1}^{\infty}$ is a set of iid rvs such that $\E{X_{k}} < \infty$ and $\sup_{i}\P{X_{k} =i} < 1$, then, for all $i$, $\alpha_k(i) \to 1/n$ as $k\to\infty$.
+Let $\alpha_k(i) = \P{A_k=i}$ be the probability that the $k$th arrival is on the $i$th day, where $A_{i} = (A_{i-1} + X_{i}) \bmod C$, i.e, $A_{i}$ lives on the circle space $\{0, 1, \ldots, C-1\}$.
+If $\{X_{k}\}_{k=1}^{\infty}$ is a set of iid rvs such that $\E{X_{k}} < \infty$ and $\sup_{i}\P{X_{k} =i} < 1$, then, for all $i$, $\alpha_k(i) \to 1/C$ as $k\to\infty$.
 \end{theorem}
 
 \begin{proof}
 We impose the condition $\E{X_{k}}<\infty$ to prevent to having to deal with $A_{k} = \infty$ for some finite $k$.
-For the moment, take $\P{X_{k} = 1}=p \in (0, 1)$ and $\P{X_{k}=-1} = q=1-p$.
+For the moment, take $\P{X_{k} = 1}=p \in (0, 1)$ and $\P{X_{k}=-1} = q=1-p$, and let $C$ be odd.
 By first-step analysis,
 \begin{equation*}
 \alpha_{k+1}(i) = p \alpha_k(i-1) + q \alpha_k(i+1).
 \end{equation*}
-Clearly, if $\alpha_{k}(i)=1/n$ for all $i$, then $\alpha_{k+1}(i) = 1/n$ as well.
+Clearly, if $\alpha_{k}(i)=1/C$ for all $i$, then $\alpha_{k+1}(i) = 1/C$ as well.
 
 However, if not all $\alpha_{k}(\cdot)$ are equal, then as there are a finite number of states, there must be at least one state $i$ such that $\alpha_k(i-1) < \alpha_k(i) \geq \alpha_k(i+1)$.
 But then, on the next step
@@ -244,15 +248,18 @@ But then, on the next step
 \end{equation*}
 In particular, the largest $\alpha_{k}$ becomes smaller and, by symmetry, the smallest $\alpha_{k}$ becomes larger.
 
-The argument is easy to generalize. Let $\P{X=j} = p_{j}$. By assumption $p_{j} \in (0, 1)$. Then, $\E{\alpha_k(i+X)} = \sum_{j} p_{j} \alpha_k(i+j) < \alpha_k(i)$ if $\alpha_k(i) \geq \alpha_{k}(\cdot)$ and there is at least one $j$ such that $\alpha_k(i+j) < \alpha_k(i)$ and $p_{j} > 0$.
-Thus, in general, any  maximum become strictly smaller, and by the same reasoning,  any minimum becomes strictly larger.
+The argument is easy to generalize.
+Let $\P{X=j} = p_{j}$.
+By assumption $p_{j} \in (0, 1)$.
+Then, $\E{\alpha_k(i+X)} = \sum_{j} p_{j} \alpha_k(i+j) < \alpha_k(i)$ if $\alpha_k(i) \geq \alpha_{k}(\cdot)$ and there is at least one $j$ such that $\alpha_k(i+j) < \alpha_k(i)$ and $p_{j} > 0$.
+Thus, in general, any maximum become strictly smaller, and by the same reasoning, any minimum becomes strictly larger.
 Finally, the minimum and the maximum cannot cross after any step, because an average over a set of numbers cannot be smaller than the smallest number in that set.
 
-All in all, this implies that $\alpha_k(i) \to 1/n$ for all $i$ as $k\to \infty$.
+All in all, this implies that $\alpha_k(i) \to 1/C$ for all $i$ as $k\to \infty$.
 \end{proof}
 
-Clearly, the proof applies to any $n=1, 2, \ldots$.
-With some additional (technical) effort it can be generalized to the circle $[0, 1)]$ on the reals.
+Clearly, the proof\sidenote{We might need  some conditions to prevent trivial periodic behavior.} applies to any $C=1, 2, \ldots$
+With some additional (technical) effort it can be generalized to the circle $[0, 1)$ on the reals.
 To see how, consider a continuous function $f$ on the unit circle $C$.
 As the circle is compact and $f$ continuous, $f$ achieves its maximum $f(\bar x)$ at $\bar x$, say.
 Suppose for some $\epsilon>0$ there is set $A_{\epsilon} = \{x \in C: f(x) \leq f(x + \bar x) -\epsilon\}$ such that $\P{A_{\epsilon}} > 0$.
@@ -260,10 +267,10 @@ Suppose for some $\epsilon>0$ there is set $A_{\epsilon} = \{x \in C: f(x) \leq 
 But then, $\E{f(x+X)} \leq (f(\bar x) -\epsilon) \P{A_{\epsilon}} + f(\bar x) (1-\P{A_{\epsilon}}) < f(\bar x)$.
 Clearly, taking an average over $f$ makes the maximum smaller, and likewise the minimum larger.
 
-Interstingly, the ideas of the proofs for~\cref{thr:2} are used in potential theory and complex analysis, and the limiting function distribution is known as a harmonic function.
+Interestingly, the ideas of the proofs for~\cref{thr:2} are used in potential theory and complex analysis, and the limiting function distribution is known as a harmonic function.
 
 
-Finally, how about the distribution of the fractional part of $Z=U+V$ when $U, V$ independent and unifom on $[0,1]]$?
+Finally, how about the distribution of the fractional part of $Z=U+V$ when $U, V$ are independent and uniform on $[0,1]]$?
 
 \begin{theorem}
 Let $Z=\sum_{i}^{n} U_{i}$ for $n$ idd rvs $U_{i}\sim \Unif{[0,1]}$, and $\lfloor x \rfloor$  the integer part of $x\in \R$.
@@ -279,6 +286,36 @@ Therefore, the fractional part of the sum of two uniform rvs is uniform on $[0,1
 We can apply this idea term by term, from left to right, and arrive at the conclusion.
 \end{proof}
 
+
+\newthought{How fast is} the convergence to the uniform distribution?
+There is theory for this, but here we use some numerical experiments to investigate this issue.
+In the next section we develop a class \texttt{RV} that can carry out all sorts of operations on random variables such as $X + Y$, but can also apply functions to random variables.
+In the present case we want to apply the function $x \to x \bmod C$ where $C$ is the length of the cycle
+
+I like to write (and read) code that resembles the mathematical operations I write on paper.
+For this purpose I build the next function that overloads the modulo operation to handle ints and floats in the regular way, but treats \texttt{RV} in a specific way, cf., the next section.
+
+\inputminted[firstline=8, lastline=18]{python}{../code/exp_convergence.py} % modfunction
+
+We next compute the position iteratively $\sum_{i=1}^{n} S_{i} \bmod C$ where the step size is $S\sim\Unif{\{-1, 0, 1\}}$.
+The position starts at $0$. Oberve that the \texttt{+} operator is overloaded so that it can add two objects of type \texttt{RV}. We keep track of the position with the smallest and the largest probability.
+
+\inputminted[firstline=25, lastline=36]{python}{../code/exp_convergence.py} % minsmax
+
+This code makes the left panel in~\cref{fig:conv-speed}; the right panel is made in the same way. The caption discusses our findings.
+\inputminted[firstline=49, lastline=56]{python}{../code/exp_convergence.py} % onefig
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics{../figures/exp_convergence.pdf}
+\caption{Convergence speed of the time between two visits to the hostipal.
+In the left panel the cycle length $C=5$, in the right $C=10$.
+The largest and the smallest probability on the circle converge to $1/C$.
+The larger $C$, the longer it takes for the sequence of visits to converge to uniform interarrival times, from the perspective of the hospital.}
+\label{fig:conv-speed}
+\end{figure}
 
 
 

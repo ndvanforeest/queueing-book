@@ -3,17 +3,24 @@
 
 \begin{document}
 
-\section{\texorpdfstring{$N$}{N}-policies for the \texorpdfstring{$M/G/1$}{MG1} queue}
+\section{\texorpdfstring{$M/G/1$}{MG1} queue and \texorpdfstring{$N$}{N}-policies}
 \label{sec:n-policies-mg1}
 
 
 
-In the queueing systems we analyzed up to now, the server is always present to start serving jobs at the moment they arrive.
+When the service times are not really well approximated by the exponential distribution, but arrivals are still Poisson and there is one server, the $M/G/1$ queue is a suitable model.
+In this section we will study this queueing process when subjected to a control policy and obtain as corollaries two fundamental results: the Economic Production Quantity (EPQ) formula for the optimal order quantity in an inventory system and the Pollaczek-Khinchine (PK) formula for the average waiting time of an $M/G/1$ queue.
+Secondly, we use sample path and the renewal reward arguments to rederive the PK formula.
+
+
+
+\newthought{In the queueing} systems we analyzed up to now, the server is always present to start serving jobs at the moment they arrive.
 However, in cases in which there is a cost associated with changing the server from idle to busy, this condition is typically not satisfied.
 For instance, the cost to heat up an oven after being idle can be quite significant; in other cases, the operator of a machine has to move from one machine to another, which takes time.
 
 
-\newthought{To reduce the} average cost, we can use an~$N$-policy\sidenote{\cref{ex:n-policies}}, which works as follows.
+
+To reduce the average cost, we can use an~$N$-policy\sidenote{\cref{ex:n-policies}}, which works as follows.
 As soon as the system becomes empty,\sidenote{and the server idle} the server switches off.
 Then it waits until~$N$ jobs have arrived,\sidenote{or~$N$ or more items in case of batch arrivals} and then it switches on.
 The server processes jobs until the system is empty again, then switches off, and remains idle until~$N$ new jobs have arrived, and so on, cycle after cycle.
@@ -63,8 +70,6 @@ It is clear that $T(0)=0$, hence $b=0$.\sidenote{If the system is empty, it take
 Substituting $a q$ into~\cref{eq:33} gives $q a =\E S + aq + a\E Y - a$.
 Noting that $\E Y = \lambda \E S,$\sidenote{\cref{eq:38}} and solving for~$a$ we find~(\cref{eq:n-pol-2}).
 We note that the solution of~\cref{eq:33} is unique once $T(0)$ is fixed.
-To see this, observe that in~\cref{eq:33}, $T(q+1)$ is a function of $T(q)$ and $T(q-1)$.
-Thus, $T(1)$ follows from $T(0)$, $T(2)$ from $T(1)$ and $T(0)$, and so on.
 
 
 
@@ -115,15 +120,101 @@ By combining all the above cost factors and using the renewal reward theorem, we
     \frac{W(N) + K + V(N)}{C(N)}
     = h \frac{1+ C_s^2}2 \frac{\rho^2}{1-\rho} + h \rho + h \frac{N-1}2 + K \frac{\lambda(1-\rho)}N.
 \end{equation}
-From this, the PK-formula follows directly.\sidenote{~\cref{ex:69}}
+This formula provides us with two corner-stone results, one in inventory theory, the other in queueing.
 
-Finding the optimal~$N$ is easy. Taking the derivative with respect to~$N$, just as if it is a continuous variable, setting the derivative to zero and solving for~$N$ gives\sidenote{The optimal value is $\pm 1$ this estimate.}
+\begin{theorem}[Economic Production Quantity (EPQ) formula]
+Consider a production-inventory system in which a machine switches on at cost~$K$ and items pay holding cost~$h$ per unit time.
+The optimal production quantity is,  up to rounding,
 \begin{equation*}
-  N^* \approx \sqrt{\frac{2\lambda(1-\rho)K}{h}}.
+  N^* = \sqrt{\frac{2\lambda(1-\rho)K}{h}}.
 \end{equation*}
-The expression for $N^*$, called the \emph{Economic Production Quantity (EPQ)}, is a famous result in inventory theory.
-Specifically, it is the optimal production quantity for a production-inventory system in which a machine switches on at cost~$K$ and items pay holding cost~$h$ per unit time.
-By taking $\E S \to 0$, hence $\rho \to 0$, we see that $N^*$ reduces to the \emph{Economic Order Quantity (EPQ)} $\sqrt{2\lambda K/h}$.
+\end{theorem}
+\begin{proof}
+In~\cref{eq:100} take the derivative with respect to~$N$, just as if it is a continuous variable.
+Set the derivative to zero and solve for ~$N$.
+\end{proof}
+
+\begin{corollary}[Economic Order Quantity (EOQ) formula]
+If the machine has infinite production speed, the EPQ reduces to $N^{*} = \sqrt{2\lambda K/h}$, i.e., the EOQ.
+\end{corollary}
+\begin{proof}
+In the EPQ formula,  take $\E S \to 0$ so that $\rho \to 0$.
+\end{proof}
+
+\begin{theorem}[Pollaczek-Khinchine (PK) formula]
+The expected waiting time of the $M/G/1$ queue is given by
+\begin{equation*}
+ \E{\W} = \frac 1 2 \frac{\lambda \E{S^2}}{1-\rho} =\frac{1 + C_s^2}2 \frac{\rho}{1-\rho} \E S.
+\end{equation*}
+\end{theorem}
+\begin{proof}
+In the $M/G/1$ queue, waiting customers pay $h=1$ per unit time per customer, and the setup cost $K=0$. Hence, it is optimal to take $N=1$ in~\cref{eq:100}.
+Next, recall that $\E \L = \E\QQ + \E\Ls$, and $\E \QQ = \lambda \E\W$ and $\E \Ls = \lambda \E S$. Now,  realize that the LHS in~\cref{eq:100} is $\E \L$, while the RHS is $\E\QQ + \E\Ls$.
+\end{proof}
+
+
+\newthought{Let us rederive} the PK formula by starting from the simple observation that before an arriving job gets access to the server, it first has to wait until the job in service (if any) completes, and then it has wait for the queue to be cleared.\sidenote{Compare the derivation leading to~\cref{eq:96}.}
+From PASTA it follows that $\E{\W} = \E{S_r} + \E{\QQ} \E S$, where $\E{S_r}$ is the (time-)average remaining service time of the job in service.
+With Little's law $\E \QQ = \lambda \E\W$ and writing $\rho = \lambda \E S$, we find that
+\begin{equation*}
+ \E{\W} = \frac{\E{S_r}}{1-\rho}.
+\end{equation*}
+
+To make further progress we need to find an expression for $\E{S_r}$ when~$S$ is a generally distributed service time.
+\sidenote{For the $M/M/1$ queue, $\E{S_r} = \rho\E S$, but not for the $M/G/1$ queue.}
+For this, we use the renewal reward theorem, just as in~\cref{sec:mxm1-queue:-expected}.
+
+\begin{theorem}
+The remaining service time as observed by an arrival is
+\begin{equation*}
+\E{S_r} = \frac{\lambda}2 \E{S^2},
+\end{equation*}
+provided the second moment of the (generic) service time $S$ exists.
+\end{theorem}
+\begin{proof}
+Consider the~$k$th job of some sample path of the $M/G/1$ queueing process.
+Let the job's service start\sidenote{Usually  $\tilde A_{k} > A_{k}$.} at time $\tilde A_k$, so that it departs at time $D_k=\tilde A_k + S_k$, see~\cref{fig:mg1remainingservicetime}.
+At time~$s$,  the remaining service time of job~$k$ is
+$(D_k-s)\1{\tilde A_k \leq s < D_k}$.
+\begin{marginfigure}
+\begin{tikzpicture}[scale=1,
+ open/.style={shape=circle, fill=white, inner sep=1pt, draw, node contents=},
+ closed/.style={shape=circle, fill=black, inner sep=1pt, draw, node contents=}]
+ \draw (-1,0) -- (4,0);
+ %x\draw (1,0) -- (3,0) node[midway, fill=white] {$s$};
+ \draw node (c1) at (0,3) [closed, label={}]
+ node (c2) at (3,0)[open, label={}]
+ (c1) to (c2);
+ \draw[dotted] (0,0) -- (0,3) node[midway, rotate=90, fill=white] {$S_k$};
+ \node[below] at (0,0) {$\tilde A_k$};
+ \node[below] at (3,0) {$D_k$};
+
+ \draw[<->, dotted] (0.75,0) -- (0.75,2.25) node[midway,fill=white,rotate=90] {$D_k-s$};
+ \node[below] at (0.75,0) {$s$};
+ \end{tikzpicture}
+ \caption{Remaining service time.}
+ \label{fig:mg1remainingservicetime}
+\end{marginfigure}
+More generally, at time~$s$, the number of departures is $D(s)$.
+Thus, $D(s)+1$ is the index of the first job to depart after time~$s$, and its departure time is $D_{D(s)+1}$.
+Consequently, the remaining service time at time~$s$ is $D_{D(s)+1}-s$, provided this job is in service.
+All in all, the total remaining service time as seen by the server up to time~$t$ is given by
+ \begin{equation*}
+ Y(t) = \int_0^t (D_{D(s)+1}-s)\1{A_{D(s)+1} \leq s \leq D_{D(s)+1}} \d s
+ \end{equation*}
+As $t \to \infty$, $Y(t)/t \to \E{S_{r}}$, i.e., the  (time-average) remaining service time.
+
+ We also see in \cref{fig:mg1remainingservicetime} that $Y(D_k) - Y(D_{k-1}) =:X_k$ is the area under the triangle.
+ By choosing $T_k=D_k$ in the renewal-reward theorem as the epochs to inspect $Y(\cdot)$, $X=\lim_{n\to\infty} \frac{1}{n}\sum_{k=1}^n S_k^2/ 2 = \E{S^2}/2$.
+ By the renewal-reward theorem, $Y=\delta X$, but $\delta = \lambda$,\sidenote{By rate-stability.} and therefore
+\end{proof}
+
+
+
+Replacing this expression in the above expression for $\E\W$, we obtain the PK formula from observing that
+\begin{equation*}
+\frac{\E{S^2}}{(\E S)^2} =  \frac{\E{S^2} - (\E S)^{2} + (\E{S})^{2}}{(\E S)^2} = \frac{\V S + (\E S)^{2}}{(\E S)^{2}} = C_s^2 +1.
+\end{equation*}
 
 
 
@@ -148,6 +239,22 @@ Explain intuitively that the system is rate-stable for any~$N$.
   The total number $A(t)$ of job that arrive during $[0,t]$ does not depend on~$N$.
   Thus, in~\cref{eq:2a}, $\sum_{k=1}^{A(t)}S_k$ does not depend on~$N$.
   Now use rate-stability.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:l-241}
+ Consider a workstation with just one machine.
+ We model the job arrival process as a Poisson process with rate $\lambda=3$ per day.
+ The average service time $\E S = 2$ hours, $C^2_s = 1/2$, and the shop is open for 8 hours per day.
+Show that  $\E{\W} = 4.5h$. What would you propose to reduce $\E \W$ to 2h?
+\begin{solution}
+$\rho = \lambda \E S = (3/8)\cdot 2 = 3/4$, $\E{\W} = 4.5$ h.
+If we were able to reduce all service variability, i.e., $C_s^2=0$, then still $\E \W = 3$h.
+Hence, we have to increase capacity, or reduce $\E S$.
+Another possibility is to plan the arrival of jobs such that $C_a^2=0$.
+However, typically this is not possible.
+Would you accept that the supermarket plans your visits?
 \end{solution}
 \end{exercise}
 
@@ -192,41 +299,41 @@ Note that the queueing cost is $hq$ per unit time when there are~$q$ jobs in the
 \end{solution}
 \end{exercise}
 
-\begin{exercise}\label{ex:nmm5}
-Explain for the $M/M/1$ that $V(1)/C(1) = h \E \L$, where
-\begin{equation*}
-C(1)=\E{I} + \E{U} = 1/\lambda + T(1).
-\end{equation*}
-\begin{hint}
-  What is the cost of one cycle? What is the duration of one cycle? Use the renewal reward theorem.
-\end{hint}
-\begin{solution}
-Consider a cycle that results under the $N=1$ policy.
-A cycle starts when the server becomes empty.
-Then we wait until a job arrives, the server switches on (since $N=1$), and a busy period~$U$ starts.
-Once the system becomes empty again, the server switches off again, and the cycle is complete.
-The $C(1)$ as defined in the problem description is therefore the expected duration of the cycle.
+% \begin{exercise}\label{ex:nmm5}
+% Explain for the $M/M/1$ that $V(1)/C(1) = h \E \L$, where
+% \begin{equation*}
+% C(1)=\E{I} + \E{U} = 1/\lambda + T(1).
+% \end{equation*}
+% \begin{hint}
+%   What is the cost of one cycle? What is the duration of one cycle? Use the renewal reward theorem.
+% \end{hint}
+% \begin{solution}
+% Consider a cycle that results under the $N=1$ policy.
+% A cycle starts when the server becomes empty.
+% Then we wait until a job arrives, the server switches on (since $N=1$), and a busy period~$U$ starts.
+% Once the system becomes empty again, the server switches off again, and the cycle is complete.
+% The $C(1)$ as defined in the problem description is therefore the expected duration of the cycle.
 
-The cost of the jobs in the system during one cycle must be $V(1)$.
-By the renewal-reward theorem, the time-average cost is then $V(1)/C(1)$.
+% The cost of the jobs in the system during one cycle must be $V(1)$.
+% By the renewal-reward theorem, the time-average cost is then $V(1)/C(1)$.
 
-If the time-average number of jobs in the system is $\E\L$, and each job pays~$h$ per unit time, the time-average cost must be $h \E\L$.
+% If the time-average number of jobs in the system is $\E\L$, and each job pays~$h$ per unit time, the time-average cost must be $h \E\L$.
 
-The result follows.
-\end{solution}
-\end{exercise}
+% The result follows.
+% \end{solution}
+% \end{exercise}
 
-\begin{exercise}\label{ex:62}
-Show for the $M/M/1$ queue that $V(1)/C(1) = h \rho/(1-\rho).$
-\begin{solution}
-\begin{align*}
-  \frac{V(1)}{1/\lambda + T(1)}
-  &= \frac{a+b}{1/\lambda + 1/(\mu-\lambda)}
-= \left(\frac h 2 \frac 1 {\mu -\lambda} + \frac h 2 \frac{\lambda + \mu}{(\mu - \lambda)^2}\right)\frac{\lambda(\mu-\lambda)}{\mu}\\
-&=\frac{h}2 \rho \left(1 + \frac{\lambda+\mu}{\mu-\lambda}\right) = \frac{h}{2} \rho \frac{2\mu}{\mu-\lambda}  = h \frac{\rho}{1-\rho}.
-\end{align*}
-\end{solution}
-\end{exercise}
+% \begin{exercise}\label{ex:62}
+% Show for the $M/M/1$ queue that $V(1)/C(1) = h \rho/(1-\rho).$
+% \begin{solution}
+% \begin{align*}
+%   \frac{V(1)}{1/\lambda + T(1)}
+%   &= \frac{a+b}{1/\lambda + 1/(\mu-\lambda)}
+% = \left(\frac h 2 \frac 1 {\mu -\lambda} + \frac h 2 \frac{\lambda + \mu}{(\mu - \lambda)^2}\right)\frac{\lambda(\mu-\lambda)}{\mu}\\
+% &=\frac{h}2 \rho \left(1 + \frac{\lambda+\mu}{\mu-\lambda}\right) = \frac{h}{2} \rho \frac{2\mu}{\mu-\lambda}  = h \frac{\rho}{1-\rho}.
+% \end{align*}
+% \end{solution}
+% \end{exercise}
 
 \begin{exercise}\label{ex:68}
 Simplify $a q^2 +b q = a\E{(q+Y-1)^2} + b\E{q+Y-1}+ U(q)$, and assemble powers in~$q$ to obtain:
@@ -272,27 +379,17 @@ Divide now both sides by $1-\E Y$.
 \end{solution}
 \end{exercise}
 
-\begin{exercise}
- Check  that $V(q)$ reduces to that of the $M/M/1$ queue.
-\begin{solution}
-  For~$a$, multiply the numerator and denominator by $\mu=1/ \E S$.
-  For~$b$, multiply by $\mu^2 = 1/(\E S)^2$, use that $C_s^1=1$ because the service times are exponentially distributed, and note that
-  \begin{equation*}
-    \frac{1+\rho}{1-\rho} = \frac{\mu + \lambda}{\mu-\lambda}.
-  \end{equation*}
-\end{solution}
-\end{exercise}
+% \begin{exercise}
+%  Check  that $V(q)$ reduces to that of the $M/M/1$ queue.
+% \begin{solution}
+%   For~$a$, multiply the numerator and denominator by $\mu=1/ \E S$.
+%   For~$b$, multiply by $\mu^2 = 1/(\E S)^2$, use that $C_s^1=1$ because the service times are exponentially distributed, and note that
+%   \begin{equation*}
+%     \frac{1+\rho}{1-\rho} = \frac{\mu + \lambda}{\mu-\lambda}.
+%   \end{equation*}
+% \end{solution}
+% \end{exercise}
 
-
-\begin{exercise}\label{ex:69}
-Derive the PK formula from~\cref{eq:100}.
-\begin{hint}
-Take  $K=0$ and $N=1$, and realize that the LHS is $h\E \L$.
-\end{hint}
-\begin{solution}
-$h\E \L = h \E\Q + h \E\Ls$. $\E \Q = \lambda \E\W$ and $\E \Ls = \lambda \E S$.
-\end{solution}
-\end{exercise}
 
 
 \begin{exercise}\label{ex:n-mg3}
@@ -324,5 +421,51 @@ Derive~\cref{eq:100}.
 %   Then $H(s)$ is the cost due from $H(s-\delta)$ onward plus the probability of a job arriving during $\delta$ times the cost paid to this job; the rest we neglect. The rest of the steps are as in the derivation of $U_{q}(s)$.
 % \end{solution}
 % \end{exercise}
+
+
+
+
+
+
+\begin{exercise}\label{ex:5}
+Show for the $M/G/1$ that $\E{S_r} = \rho \E{S_r\given S_r>0}$.  As consequence, for the $M/M/1$ queue, $\E{S_{r}} \neq \E S$; why not?
+\begin{hint}
+Use the PASTA property. Realize that when estimating $\E{S_r}$ along a sample path, $S_r=0$ for jobs that arrive at an empty system.
+\end{hint}
+\begin{solution}
+ The probability to find the server busy upon arrival is $\rho$, and only jobs that find the server occupied see a positive remaining service time $S_r>0$.
+\begin{equation*}
+\E{S_r} = \rho \E{S_r\given S_r >0} + (1-\rho) \E{S_r\given S_r = 0} = \rho \E{S_r\given S_r>0}.
+\end{equation*}
+For the $M/M/1$, service times are memoryless, hence, $\E{S_r \given S_r>0} = \E S$, and this implies that $\E{S_r} = \rho \E S$ for the $M/M/1$ queue.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+Compare  the expected waiting time of the $M/D/1$ queue to that of the $M/M/1$ queue. %$\E{\W(M/D/1)}$ to $\E{\W(M/M/1)}$.
+\begin{hint}
+Use that $\V S=0$ for the $M/D/1$ queue and $C_{s}^{2} = 1$ for the $M/M/1$ queue.
+\end{hint}
+\begin{solution}
+$\V S = 0 \implies C_s^2 = 0 \implies \E{\W_{M/D/1}} = {\E{\W_{M/M/1}}}/2$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}
+ Compute $\E\J$ for the $M/G/1$ queue with $S\sim U[0,\alpha]$.
+\begin{solution}
+ \begin{align*}
+\E S &= \alpha/2, & \E{S^2} &= \int_0^\alpha x^2 \d x/\alpha = \alpha^2/3,\\
+\V S &= \alpha^2/3 - \alpha^2/4= \alpha^2/12, & C_s^2 &= (\alpha^2/12)/(\alpha^2/4) = 1/3,\\
+\rho &= \lambda \alpha/2,\\
+\E{\W} &= \frac{1+C_s^2}2 \frac{\lambda \alpha/2}{1-\lambda \alpha/2}\frac \alpha2, &
+\E \J &= \E{\W} + \frac \alpha2.
+ \end{align*}
+\end{solution}
+\end{exercise}
+
+
 
 \input{trailer}

@@ -46,7 +46,7 @@ The load and the utilization are equal since all jobs are accepted, hence served
 \end{align}
 recall that $\E\Ls$ is the time-average number of jobs in service. Since $\E\L$ is the number in the system, we see that for the number of jobs in queue,
 \begin{equation*}
-\E \Q = \E \L - \E{\Ls} = \frac{\rho^2}{1-\rho}.
+\E \QQ = \E \L - \E{\Ls} = \frac{\rho^2}{1-\rho}.
 \end{equation*}
 
 
@@ -56,7 +56,7 @@ To model this, set
 \begin{align*}
 \lambda(n) &= \lambda, & \mu(n) &= \mu \min\{n, c\}.
 \end{align*}
-It is possible\sidenote{\cref{ex:7}} to derive closed form expressions for $\E \Q$ and $p(n)$.
+It is possible\sidenote{\cref{ex:7}} to derive closed form expressions for $\E \QQ$ and $p(n)$.
 I don't find them really useful.
 It is much easier to use the code for the $M/M/c/K$ below, and compute the performance measures for various large values for $K$.
 When $K$ is so large that the measures hardly change, then for all practical purposes, $\P{L=K}$ is negligible.
@@ -113,7 +113,7 @@ Take $\rho = \lambda/(c \mu)$. When $n<c$, $\lambda p(n) = (n+1)\mu p(n+1)$, hen
 \end{align*}
 The normalization constant follows  as $G = \sum_{n=0}^{c}p(n)$. As there are as many servers as jobs and, jobs get rejected at rate $1-p(c)$, by PASTA,
  \begin{align*}
-   \E \Q &= 0, & \E \Ls &= \frac{\lambda}{\mu} \left(1- p(c)\right).
+   \E \QQ &= 0, & \E \Ls &= \frac{\lambda}{\mu} \left(1- p(c)\right).
 \end{align*}
 % Observing that $\lambda(1-p(c))$ is the rate of accepted jobs, the utilization \emph{of the system} is $\lambda(1-p(c))/\mu$, and this must be equal to the average number $\E{L_{s}}$ of busy servers.
 
@@ -124,7 +124,7 @@ Therefore,
 \begin{align*}
 \lambda(n)&=\lambda, & \mu(n) &= n \mu.
 \end{align*}
-By taking the limit $c\to \infty$ in the expressions of the $M/M/c/c$ queue (or the $M/M/c/c$ queue) we get
+By taking the limit $c\to \infty$ in the expressions of the $M/M/c$ queue\sidenote{or the $M/M/c/c$ queue.} we get
 \begin{align*}
   p(n) &= e^{-\lambda/\mu} \frac{(\lambda/\mu)^n}{n!}, & \E Q&=0, & \E \L = \E \Ls = \frac \lambda \mu.
 \end{align*}
@@ -213,13 +213,13 @@ print(EL, EQ + ELs) # check
 
 
 \begin{exercise}
- Explain that for the $M/M/1$ queue $\E{\Q} = \sum_{n=1}^\infty (n-1)\pi(n)$ and use this to find that $\E{\Q}=\rho^2/(1-\rho)$.
+ Explain that for the $M/M/1$ queue $\E{\QQ} = \sum_{n=1}^\infty (n-1)\pi(n)$ and use this to find that $\E{\QQ}=\rho^2/(1-\rho)$.
 \begin{solution}
  The fraction of time the system contains~$n$ jobs is $\pi(n)$ (by
  PASTA). When the system contains $n>0$ jobs, the number in queue
  is one less, i.e., $n-1$.
 \begin{align*}
-\E{\Q}
+\E{\QQ}
 &= \sum_{n=1}^\infty (n-1)\pi(n)
 =\sum_{n=1}^\infty n\pi(n) -\sum_{n=1}^\infty \pi(n)
 = \E\L - (1-\pi(0)) = \E\L - \rho.
@@ -280,7 +280,7 @@ Derive the following expressions for the  $M/M/c$ queue:
   \rho & = \frac{\lambda}{ c\mu},\\
 p(n) &= \frac 1 {G} \frac{1}{\prod_{k=1}^{n}\min\{c, k\}}(c\rho)^{n} , \quad n\geq 1,\\
 G &= \frac 1{p(0)} = \sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^c}{(1-\rho)c!}, \label{eq:501}\\
-\E{\Q} &= \sum_{n=c}^\infty (n-c) p(n) = \frac{(c\rho)^c}{c! G}\frac{\rho}{(1-\rho)^2}\\
+\E{\QQ} &= \sum_{n=c}^\infty (n-c) p(n) = \frac{(c\rho)^c}{c! G}\frac{\rho}{(1-\rho)^2}\\
 \end{align}
 \end{subequations}
 
@@ -314,7 +314,7 @@ p(0)\frac{(c\rho)^c}{c!(1-\rho)}.
 \end{align*}
 Next, for $n\geq c$, note that $p(n) = (c \rho)^{n}/(c^{n-c}c!) = c^{c} \rho^{n}/c!$, so that
 \begin{align*}
- \E{\Q}
+ \E{\QQ}
 &=\sum_{n=c}^\infty (n-c) p(n)
 =\sum_{n=c}^\infty (n-c) \frac{c^c}{c!}\rho^{n} p(0) \\
 &=\frac{c^c\rho^c}{G c!} \sum_{n=c}^\infty (n-c) \rho^{n-c}

@@ -15,10 +15,17 @@ from numpy.random import default_rng
 max_denominator = 1_000_000
 thres = 1e-16  # Reject probabilities smaller than this.
 seed = 3
+
+
+def toFrac(x: float | int | Fraction):
+    """ "Convert x to fraction of specified precision."""
+    return Fraction(x).limit_denominator(max_denominator)
+
+
 # block numbers
 
 
-# block start of rv
+# block startofrv
 class RV:
 
     """
@@ -29,28 +36,39 @@ class RV:
     def __init__(self, pmf: dict[float, float]):
         self._pmf = self.make_pmf(pmf)
         self._support = np.array(sorted(self._pmf.keys()))
-        self._cdf = np.cumsum([self._pmf[k] for k in self.support()])
+        self._cdf = np.cumsum([self._pmf[k] for k in self._support])
 
-    # block start of rv
+    # block startofrv
 
-    # block make pmf
+    # block makepmf
     def make_pmf(self, pmf):
         res: dict[Fraction, float] = defaultdict(float)
         for k, pk in pmf.items():
-            if pk >= thres:
-                res[Fraction(k).limit_denominator(max_denominator)] += pk
+            res[toFrac(k)] += pk if pk >= thres else 0
         return self.normalize(res)
 
     def normalize(self, pmf):
-        norm = sum((pmf.values()))
+        norm = sum(pmf.values())
         return {k: pk / norm for k, pk in pmf.items()}
 
-    # block make pmf
+    # block makepmf
 
-    # block support
+    # block pmf
+    def pmf(self, x: float | int | Fraction) -> float:
+        return self._pmf.get(toFrac(x), 0)
+
     def support(self) -> np.ndarray:
         return self._support
 
+    def __len__(self):
+        return len(self._pmf)
+
+    def __repr__(self):
+        return "".join(f"{k}: {self._pmf[k]}, " for k in self._support)
+
+    # block pmf
+
+    # block support
     @cache
     def sortedsupport(self) -> np.array:
         """Return the support sorted in decreasing order of the pmf."""
@@ -58,13 +76,6 @@ class RV:
         return np.array([k for k, v in S])
 
     # block support
-
-    # block expected
-    def E(self, f: Callable[[float], float]) -> float:
-        """Compute E(f(X))"""
-        return sum(f(i) * self.pmf(i) for i in self.support())
-
-    # block expected
 
     # block cdf
     @cache
@@ -75,17 +86,20 @@ class RV:
             return 1
         return self._cdf[np.searchsorted(self._support, x)]
 
-    # block cdf
-
-    # block convience
-    @cache
-    def pmf(self, k: Fraction) -> float:
-        return self._pmf[k]
-
-    @cache
     def sf(self, x: float) -> float:
         """Survivor function"""
         return 1 - self.cdf(x)
+
+    # block cdf
+
+    # block expected
+    def E(self, f: Callable[[float], float]) -> float:
+        """Compute E(f(X))"""
+        return sum(f(i) * self.pmf(i) for i in self.support())
+
+    # block expected
+
+    # block convience
 
     @cache
     def mean(self) -> float:
@@ -99,29 +113,39 @@ class RV:
     def sdv(self) -> float:
         return np.sqrt(self.var())
 
-    def __len__(self):
-        return len(self._pmf)
-
     # block convience
 
     # block rvs
-    def rvs(self, size: int = 1, rng=default_rng(seed)) -> np.ndarray:
+    def rvs(self, size: int = 1, random_state=default_rng(seed)) -> np.ndarray:
         """Generate an array with "size" number of random deviates."""
-        U: np.ndarray = rng.uniform(size=size)
+        U: np.ndarray = random_state.uniform(size=size)
         pos: np.ndarray = np.searchsorted(self._cdf, U)
         return self.support()[pos].astype(float)
 
     # block rvs
 
     # block arithmetic
+
     def __add__(self, other: 'RV') -> 'RV':
+        other = convert(other)
         return compose_function(operator.add, self, other)
 
     def __sub__(self, other: 'RV') -> 'RV':
+        other = convert(other)
         rv = RV({-k: other.pmf(k) for k in other.support()})
         return self + rv
 
     # block arithmetic
+
+    # block sums
+    def __radd__(self, other):
+        # support sum([rv for i in ...])
+        return self.__add__(convert(other))
+
+    def __rsub__(self, other: 'RV') -> 'RV':
+        return convert(other).__sub__(self)  # realize that a - b \neq b - a
+
+    # block sums
 
 
 # block compose
@@ -150,3 +174,47 @@ def apply_function(f: Callable[[float], float], X: RV) -> RV:
 
 
 # block apply
+
+
+# block convert
+def convert(rv):
+    """Check and convert to rv if necessary"""
+    match rv:
+        case RV():
+            return rv
+        case int():
+            return RV({rv: 1})  # An int is a shift.
+        case float():
+            return RV({rv: 1})  # A float is a shift too.
+        case _:
+            raise ValueError("Unknown type passed as a RV")
+
+
+# block convert
+
+
+# block tests
+def tests():
+    U = rv.RV({1: 1})
+    V = rv.RV({2: 1})
+    X = rv.RV({1: 1 / 3, 2: 2 / 3})
+    Y = rv.RV({1: 1 / 2, 2: 1 / 2})
+
+    assert np.all((U + X).support() == np.array([2, 3]))
+    assert (U + V).pmf(2) == 0
+    assert (U + V).pmf(3) == 1
+    assert np.isclose(U.var(), 0)
+    assert np.isclose(X.pmf(0.99999999999), 1 / 3)
+    assert np.isclose(X.mean(), 1 / 3 + 2 * 2 / 3)
+    assert np.isclose(X.sf(1), 2 / 3)
+
+
+# block tests
+
+
+def main():
+    tests()
+
+
+if __name__ == '__main__':
+    main()

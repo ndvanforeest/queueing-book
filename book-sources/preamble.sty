@@ -50,10 +50,21 @@
 %\usepackage{comment}
 
 
+% Widen figure captions
+\usepackage{caption}
+\captionsetup{margin={0cm, -5cm},font={small, sl},labelfont=sc}
+\captionsetup[figure]{name=Fig.}
+
+
 \usepackage[capitalize]{cleveref}
 \crefname{equation}{}{}
-\crefname{theorem}{theorem}{theorems}
-\Crefname{theorem}{Theorem}{Theorems}
+\crefname{figure}{Fig.}{Figs.}
+\Crefname{figure}{Fig.}{Figs.}
+\crefname{theorem}{Th.}{Ths.}
+\Crefname{theorem}{Th.}{Ths.}
+\crefname{lemam}{Lem.}{Lems.}
+\Crefname{lemma}{Lem.}{Lems.}
+\crefname{corollary}{Cor.}{Cors.}
 \crefformat{exercise}{[#2#1#3]}
 \crefformat{marginexercise}{[#2#1#3]}
 \crefrangeformat{exercise}{[#3#1#4] to~[#5#2#6]}
@@ -108,6 +119,7 @@
 \theoremstyle{definition}
 \newtheorem{exercise}{Ex}[section]
 \newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
 \newtheorem{theorem}{Theorem}[section]
 
 \usepackage{chngcntr}
@@ -158,6 +170,7 @@
 
 
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -176,10 +189,12 @@
 \newcommand{\V}[1]{\,\mathsf{V}\left[#1\right]}
 \renewcommand{\d}[1]{\,\textrm{d}#1}
 \newcommand{\1}[1]{\,\mathbb{1}_{#1}} % indicator
+\newcommand{\supp}[1]{\mathrm{supp}\left(#1\right)}
+
 \renewcommand{\TH}{\mathrm{TH}} % indicator
 
 
-\newcommand{\Q}{Q} % queue length
+\newcommand{\QQ}{Q} % queue length
 \renewcommand{\L}{L} % number in system
 \newcommand{\J}{J} % sojourn time
 \newcommand{\U}{U} % busy time

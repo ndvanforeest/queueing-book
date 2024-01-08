@@ -165,7 +165,7 @@ If $a_{n}$ is independent of $\{a_i\}_{i=1}^{n-1}$, hence of $L_{n-1}$ (because 
 However, PASTA does not hold when $a_{n}$ depends on $L_{n-1}$. For instance, if $a_{n}=0$ when $L_{n-1}>0$, and $c_{k}\sim \Bern{d}$ for some small probability~$d$, then $\pi(1) = 0$, but $\P{L_{n-1}=0} > 0$ in general.
 
 
-\newthought{Actually, with just} PASTA, Little's law and memorylessness we can already achieve quite a few interesting results for the $M/M/1$ queue.\sidenote{For the $M/G/1$ queue, things are bit subtler, see \cref{ex:l-216} and~\cref{sec:mg1}.}
+\newthought{Actually, with just} PASTA, Little's law and memorylessness we can already achieve quite a few interesting results for the $M/M/1$ queue.\sidenote{For the $M/G/1$ queue, things are bit subtler, see \cref{ex:l-216} and~\cref{sec:n-policies-mg1}.}
 First observe that
 \begin{equation*}
  \E\J = \E \L \E S + \E S = \lambda \E \J \E S + \E S= \rho \E \J + \E S,
@@ -179,8 +179,8 @@ and then step by step,
 \begin{align}
  \E \L &= \lambda \E\J = \frac{\lambda \E S}{1-\rho} = \frac\rho{1-\rho}, \\
  \E{\W} &= \E L \E S = \frac{\rho}{1-\rho} \E S  (= \E J - \E S) \label{eq:wqes}\\
- \E{\Q} &= \lambda \E{\W} = \frac{\rho^2}{1-\rho}, \\
- \E{\Ls} &= \E \L - \E{\Q} = \frac{\rho}{1-\rho} - \frac{\rho^2}{1-\rho} = \rho,
+ \E{\QQ} &= \lambda \E{\W} = \frac{\rho^2}{1-\rho}, \\
+ \E{\Ls} &= \E \L - \E{\QQ} = \frac{\rho}{1-\rho} - \frac{\rho^2}{1-\rho} = \rho,
 \end{align}
 \end{subequations}
 

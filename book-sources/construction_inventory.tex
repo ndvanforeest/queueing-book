@@ -45,7 +45,7 @@ In the latter case, $I^{-}_t = \max\{-I_t, 0\}$ is the \recall{backlogged} deman
 
 Clearly, if we would use the inventory level to determine when and how much the order, we might be too late in placing orders, due to the leadtime. To compensate for this, we use the  \recall{inventory position} which updates according to the rule
 \begin{align}\label{eq:b9}
-  \IP_t &= \IP_{t-1}+Q_t, & \IP_t' = \IP_{t}- D_t.
+  \IP_t &= \IP_{t-1}' + Q_t, & \IP_t' = \IP_{t}- D_t.
 \end{align}
 Thus, the inventory position includes the outstanding orders, hence accounts for items under way to cover future demand.
 In other words, the difference between the inventory position and the inventory level is that in the former we immediately include all orders `in the books', but these orders physically arrive~$L$ periods later, and only then they can be used to meet demand.
@@ -109,35 +109,36 @@ Clearly, when we have a (simulated) sequence of period demands $D_{1}, D_{2}, \l
 It remains to develop a number of measures to assess how the inventory control rule performs, in particular to see how costs depend on the policy parameters.
 
 \newthought{For cost computations} we need to make a choice when to account for the period cost of inventory and backlog.
-Here we choose to charge~$b$ Euro for each demand in backlog at the end of the period and~$h$ per item on hand.
+Here we choose to charge~$b$ Euro for each demand in backlog  and~$h$ per item on hand at the start of the period.
 If there is a cost~$K$ per time we place an order, the average cost up to time~$n$ becomes
 \begin{align*}
-K q' + h I_t'^+ + b I_t'^-,
+K q + h I_t^+ + b I_t^-,
 \end{align*}
 where
 \begin{align*}
-  q'&= \frac 1n \sum_{t=1}^n \1{Q_{t}'>0}  &
-  I'^+ &= \frac 1n \sum_{t=1}^n \IL_t'^+  &
-  I'^-- &= \frac 1n \sum_{t=1}^n \IL_t'^-,
+  q&= \frac 1n \sum_{t=1}^n \1{Q_{t}>0}  &
+  I^+ &= \frac 1n \sum_{t=1}^n \IL_t^+  &
+  I^-- &= \frac 1n \sum_{t=1}^n \IL_t^-,
 \end{align*}
 which, implicitly, depend on the inventory policy. Clearly, we can search for the policy by running (many) simulations for various policies and compute the average cost for each scenario.
 
 \newthought{Service levels} form a set of  measures to quantify the extent to which demand is met. Here we discuss three different such measures.
 The \recall{ready rate} is the fraction of periods in which the end-of-period inventory is not negative, i.e.,
 \begin{equation*}
-\alpha :=   \frac 1n \sum_{t=1}^n \1{\IL_t' \geq 0}.
+\alpha :=   \frac 1n \sum_{t=1}^n \1{\IL_t \geq 0}.
 \end{equation*}
 
 The \recall{fill rate} $\beta$ relates to the fraction of demand satisfied from on-hand stock.
-Observe first that at period~$i$ as much as possible of the demand $D_{t}$ is satisfied.
+Observe first that at period~$t$ as much as possible of the demand $D_{t}$ is satisfied.
 It seems that this should be equal to $\min\{D_{t}, I_{t}\}$, but $I_{t}$ might be negative.
 Thus, we should take $\min\{D_{t}, \IL_{t}^{+}\}$ instead, and with this we define the fill rate as
-\begin{equation*}
+\begin{equation}\label{eq:c24}
     \beta :=  \frac{\sum_{t=1}^n \min\{D_t, \IL_t^{+}\}}{\sum_{t=1}^n D_t}.
-\end{equation*}
+\end{equation}
 We can rewrite this into  a nice formula with a few interesting tricks.
 
-\begin{lemma} The fill rate equals
+\begin{lemma}\label{lem:4}
+The fill rate equals
 \begin{equation*}
     \beta = 1 - \frac{\sum_{t=1}^n \min\{D_t, \IL_t'^-\}}{\sum_{t=1}^n D_t}.
 \end{equation*}
@@ -232,6 +233,51 @@ L_t &= (\IL_t-D_t)^- = \IL_t'^- & \text{lost demand}\\
 A_t &= \IL_{t} - L_t & \text{accepted demand}\\
 \IP_t' &= \IP_{t} - A_t, &\text{subtract the accepted demand}\\
 \IL_t' &= \IL_{t} - A_t, &\text{subtract the accepted demand}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}[Inventory control]\label{ex:l-183}
+The recursions used in the
+ exercises above can also be applied to analyze inventory control
+ policies. Consider a production system that can produce maximally
+ $M_k$ items per week during normal working hours, and maximally
+ $N_k$ items during extra (weekend and evening) hours. Let, for
+ period $k$,
+ \begin{align*}
+ D_k &= \text{Demand in week $k$}, \\
+ S_k &= \text{Sales, i.e., number of items sold, in week $k$}, \\
+ r_k &= \text{Revenue per item sold in week $k$}, \\
+ X_k &= \text{Number of items produced in week $k$ during normal hours}, \\
+ Y_k &= \text{Number of items produced in week $k$ during extra hours}, \\
+ c_k &= \text{Production cost per item during normal hours}, \\
+ d_k &= \text{Production cost per item during extra hours}, \\
+ h_k &= \text{Holding cost per item, due at the end of week $k$}, \\
+ I_k &= \text{On hand inventory level at the end of week $k$}. \\
+ \end{align*}
+ Management needs a production plan that specifies for the next $T$ weeks the number of items to be produced per week.
+ Formulate this problem as an LP problem, taking into account the inventory dynamics.
+ Assume that demand must be met from on-hand inventory.
+\begin{hint}
+Formulate the decision variables/controls, the
+ objective and the constraints.
+\end{hint}
+\begin{solution}
+ The decision variables are $X_k$, $Y_k$ and $S_k$ (note, it is not
+ necessary to meet all demand: the production cost and profit
+ may vary per period). The objective is
+ \begin{equation*}
+ \max \sum_{k=1}^T (r_kS_k -c_k X_k - d_k Y_k - h_k I_k).
+ \end{equation*}
+The constraints are
+\begin{align*}
+ 0&\leq S_k \leq D_k, \\
+ 0&\leq X_k \leq M_k, \\
+ 0&\leq Y_k \leq N_k, \\
+ I_k&=I_{k-1}+X_k+Y_k - S_k. \\
+I_k &\geq 0.
 \end{align*}
 \end{solution}
 \end{exercise}

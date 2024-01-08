@@ -146,11 +146,11 @@ Once we have the arrival and departure processes, it is easy to compute the \rec
  \L(t) = A(t) - D(t) + \L(0),
 \end{equation}
 where $\L(0)$ is the number of jobs in the system at time $t=0$; typically we assume that $\L(0)=0$.
-Recalling that in a queueing system, a job can either be in queue or in service, we distinguish between the number of jobs in the system $\L(t)$, the number of jobs in queue $\Q(t)$, and the number in service $\Ls(t)$.
-Clearly, $\L(t) = \Q(t) + \Ls(t)$.  Sometimes we write  $\tilde A(t)$ for the number of jobs that departed from the queue up to time~$t$; it follows that $\Ls(t) = \tilde A(t) - D(t) = \L(t) - \Q(t)$.
+Recalling that in a queueing system, a job can either be in queue or in service, we distinguish between the number of jobs in the system $\L(t)$, the number of jobs in queue $\QQ(t)$, and the number in service $\Ls(t)$.
+Clearly, $\L(t) = \QQ(t) + \Ls(t)$.  Sometimes we write  $\tilde A(t)$ for the number of jobs that departed from the queue up to time~$t$; it follows that $\Ls(t) = \tilde A(t) - D(t) = \L(t) - \QQ(t)$.
 
 
-It is important to realize that the queue length process $\{Q(t)\}$ at general time moments~$t$ can be quite different from the queue length process $\{ \Q(A_k-)\}$ as observed by arriving jobs.\sidenote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
+It is important to realize that the queue length process $\{Q(t)\}$ at general time moments~$t$ can be quite different from the queue length process $\{ \QQ(A_k-)\}$ as observed by arriving jobs.\sidenote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
 
 
 \begin{figure}[t]
@@ -212,8 +212,51 @@ Here is the expression\sidenote{See~\cref{ex:l-150}.}
  V(t)= [\J_{A(t)} - (t-A_{A(t)})]^+.
  \end{equation}
 
+ \newthought{\cref{fig:inv_queue} explains graphically} the relation between between a pro\-duc\-tion-inventory and queueing systems.
+When a job arrives in the queueing system, the virtual workload~$V(t)$ increases by the service time of the job.
+In production-inventory system, a machine replenishes the inventory at some finite speed.
+When a customer arrives, the inventory $I(t)$ decreases by the demand size of the customer.
+Like this, customer demands in the inventory system are service time of a job in a queueing system.
+Hence, in the figure, the demand size $D_1$ of the first customer corresponds to a production time of duration $S_1=D_1$, and so on.
+Thus, even though in the inventory system, customers do not have to wait, their demands spawn production times at the machine (a server) who replenishes the consumed items.
+
+Assume now that the inventory process is controlled by an order-up-to policy: produce (refill the inventory) as long as the inventory level is below $S$ and stop otherwise.
+Then the figure shows that the inventory level $I(t)$ is equal to $S-V(t)$, where $V(t)$ is the virtual waiting time of the related queueing system.
+
+Thus, in general terms, in a queueing system or an inventory system, there is always `something' or `somebody' waiting.
+Items in a supermarket are produced ahead of the moment they are `consumed', hence they `wait' for customers.
+In a queueing system, customers are waiting while their product is `produced' by the server.
+When there are no customers in a queueing system, the server waits until a new customers comes along.
+Thus, queueing and inventory theory are both focused on the distribution of waiting times, either by customers, servers, or items, hence both are related branches of (applied) probability theory and stochastic operations research.
 
 
+\begin{figure}[t]
+\begin{center}
+\begin{tikzpicture}[yscale=0.5]
+\draw[->] (0,0) -- coordinate (x axis mid) (8.5,0);
+\draw[->] (0,0) -- coordinate (y axis mid) (0,10.5);
+\node[below=0.2cm] at (x axis mid) {$t$};
+
+\draw plot coordinates {(1,0) (1,2) (2,1) (2,4) (4,2) (4,4.2) (7.5,0)};
+\node[left] at (7,2.5) {$V(t)$};
+\node[fill=white, rotate=90] at (1,1) {$S_1$};
+\node[fill=white, rotate=90] at (2,2.5) {$S_2$};
+\node[fill=white, rotate=90] at (4,3.) {$S_3$};
+
+\node at (7,5) {$V(t)=S-I(t)$};
+
+\draw[dotted] (0,10)--(8.5,10);
+\node[left] at (0,10) {$S$};
+\node[left] at (7,7.5) {$I(t)$};
+\draw plot coordinates {(1,10) (1,8) (2,9) (2,6) (4,8) (4,6.0) (7.5,10)};
+\node[fill=white, rotate=90] at (1,9) {$D_1$};
+\node[fill=white, rotate=90] at (2,7.5) {$D_2$};
+\node[fill=white, rotate=90] at (4,7) {$D_3$};
+\end{tikzpicture}
+\caption{
+The relation between a production-inventory system and queueing. Here $I(t)$ models the evolution of the inventory level in an inventory system, while $V(t)$ shows the virtual workload, and $S$ is the order-up-to level. When a customer requires $D_1$ items, say, it takes a server of a time $S_1=D_1$ to produce these items. Thus, demands at the inventory system convert into production times in a queueing system. When the inventory is always replenished to level $S$, then the shortage of the inventory level relative to $S$, i.e., $S-I(t)$, becomes the workload $V(t)$ for the server in terms of amount of items or production time.} \label{fig:inv_queue}
+\end{center}
+\end{figure}
 
 
 
