@@ -1,0 +1,35 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Asmussen(2003)]{Asmussen2003}
+S.~Asmussen.
+\newblock \emph{Applied Probability and Queues}.
+\newblock Springer-Verlag, Berlin, 2003.
+
+\bibitem[El-Taha and
+  {Stidham~Jr.}(1998)]{el-taha98:_sampl_path_analy_queuein_system}
+M.~El-Taha and S.~{Stidham~Jr.}
+\newblock \emph{Sample-Path Analysis of Queueing Systems}.
+\newblock Kluwer Academic Publishers, 1998.
+
+\bibitem[Hopp and Spearman(2008)]{hopp08:_factor_physic}
+W.J. Hopp and M.L. Spearman.
+\newblock \emph{Factory Physics}.
+\newblock Waveland Press, Inc., 3rd edition, 2008.
+
+\bibitem[{V}an Foreest and Kilic(2023)]{foreest23}
+N.~D. {V}an Foreest and O.A. Kilic.
+\newblock An intuitive approach to inventory control with optimal stopping.
+\newblock \emph{European Journal of Operational Research}, 311\penalty0
+  (3):\penalty0 921--924, 2023.
+
+\bibitem[Yushkevich and Dynkin(1969)]{yushkevich69:_markov_proces}
+A.A. Yushkevich and E.B. Dynkin.
+\newblock \emph{Markov Processes: Theorems and Problems}.
+\newblock Plenum Press, 1969.
+
+\end{thebibliography}
