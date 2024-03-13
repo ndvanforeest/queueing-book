@@ -1,0 +1,264 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Simulating the Psychiatrists Case}
+\label{sec:simul-psych-case}
+
+In the previous section we showed how to analyze a case in four psychiatrists act as four parallel servers that process a queue of potential patients waiting for an intake.
+Moreover, we suggested a good rule to control the queue length.
+In this section we provide the python code we used for the simulation, in other words, we will make~\cref{fig:psychiatrists}.
+
+
+\newthought{We need the} next modules.
+\inputminted[firstline=2, lastline=7]{python}{../code/psychiatrists.py} % modules
+
+Recall that we compute the queue length recursively by first computing the number of departures $d = \min\{L_{n-1}+a_{n}, c_{n}\}$ and then $L_{n} = L_{n-1}+a_n-d$.
+The next function follows this logic.
+It  first forms an empty array \mintinline{python}{L} to store all the queue lengths.
+Then it applies the recursion by means of a for loop. The loop has to start at $n=1$ because it `looks back' at $L_{n-1}$.
+For generality, we can provide an optional queue level \mintinline{python}{L0} if we want the queue to start at another level than~$0$.
+\inputminted[firstline=30, lastline=37]{python}{../code/psychiatrists.py} % simple queue
+
+
+Now we make the capacity schemes.
+The first step is to form an array with~$5$ rows such that each row corresponds to the weekly capacities of each psychiatrist.
+Since python starts numbering at 0, instead of 1, the row with index 0 corresponds to the first psychiatrist.
+We can set all values of the entire row with index 0 with notation like \mintinline{python}{p[0, :]]} where the semicolon refers all indices of the columns.\sidenote{It evokes the dots in mathematical notation like $i = 1, 2, \ldots$} Next, \mintinline{python}{np.ones(n)} makes a row array of just ones. For each psychiatrist, we fill the related row in \mintinline{python}{p} with the appropriate capacity of that specific psychiatrist. The result is a matrix that looks like the one in~\cref{eq:6}.
+\inputminted[firstline=60, lastline=67]{python}{../code/psychiatrists.py} % unbalanced
+
+The next function builds the matrix~\cref{eq:9}
+\inputminted[firstline=74, lastline=81]{python}{../code/psychiatrists.py} % Balanced
+
+Now we change a capacity matrix such that it includes a certain holiday pattern.
+This function spreads the holidays over week so that we obtain~\cref{eq:11}.
+The operator $\%$ computes the remainder after division, for example $ 17 \% 5 = 2$.
+In the for loop, the variable~$j$ moves one column per iteration, and it cycles over the rows from~$0$ to~$4$.
+The \mintinline{python}{shape[0]} returns the number of columns of a matrix.
+And, finally, the function does not need to return \mintinline{python}{p} because the change is \emph{in-place}.\sidenote{Look on the web what is meant by a change `in place'.} Here we return it so that all functions work in the same way.
+\inputminted[firstline=88, lastline=92]{python}{../code/psychiatrists.py} % spread
+
+In the case of synchronized holidays, we set all capacities in one column to zero, cf.~\cref{eq:19}.
+The \mintinline{python}{range} function moves from~$0$ to the end, in steps of~$5$, so it gives $0, 5, 10, \ldots$.
+\inputminted[firstline=99, lastline=102]{python}{../code/psychiatrists.py} % synchronized
+
+
+\newthought{Now all is} prepared to start the simulation. We set the seed of the random generator, and simulate \mintinline{python}{num_weeks} of Poisson distributed weekly arrivals. The matrix \mintinline{python}{L} will contain the queue lengths, one row for each different scenario.
+
+\inputminted[firstline=109, lastline=112]{python}{../code/psychiatrists.py} % start sim
+
+We have four capacity scenarios.
+In the first scenario, the capacity is balanced, and the holiday plans are spread over the weeks.
+The weekly capacity $c_{i}$ is equal to the sum over all rows in \mintinline{python}{p} that correspond to week~$i$. This is established by summing over \mintinline{python}{axis=0} in \mintinline{python}{p}.
+For instance, in~\cref{eq:11}, the capacity for the first week is $0+2+3+4+4$.
+Once we have the weekly capacities stored in \mintinline{python}{c}, we can use the recursion for~$l$ to compute the queue lengths at the end of each week.
+The other scenarios work likewise.
+\inputminted[firstline=116, lastline=134]{python}{../code/psychiatrists.py} % scenarios
+
+
+The code above suffices to make the left panel of~\cref{fig:psychiatrists}. For the right panel we need  control rule~\cref{eq:103}. This works nearly the same as the regular recursion for~$L$, but now we add or subtract an extra capacity \mintinline{python}{e} to the weekly capacity given in the array~$c$.
+\inputminted[firstline=44, lastline=53]{python}{../code/psychiatrists.py} % control
+
+We simulate the effect on~$L$ for various control rules. We take $e=1$, $e=2$ and $e=5$.
+\inputminted[firstline=139, lastline=144]{python}{../code/psychiatrists.py} % plusminus
+
+\newthought{Finally, we can} make a figure.
+It's easy to find on the web what is \mintinline{python}{ax1} and the other commands.
+Note, \mintinline{python}{L.min(axis=0)} computes the minimum queue length per week, and \mintinline{python}{L.max(axis=0)} the maximum.
+\inputminted[firstline=149, lastline=166]{python}{../code/psychiatrists.py} % figures
+
+
+\newthought{For real life} situations the recursions can become quite intricate.
+A nurse\sidenote{This example is a somewhat simplified case from a bachelor thesis.}
+takes blood samples at two departments in a hospital.
+It takes time to walk from one location to another.
+The nurse serves all patients in one location, then moves to the other location, serves all patients there, and walks the first location, and so on.
+
+The  recursions can be found by introducing an extra variable $p_k$ that specifies the production state of the nurse.
+If $p_k=0$, the nurse serves the first queue, if $p_k=1$ s/he nurse moves from queue 1 to queue 2, if $p_k=2$ s/he serves queue 2.
+Finally, if $p_k=3$ the nurse moves from queue 2 to queue 1. Thus, the production state cycles from $0\to 1\to 2\to 3 \to 0$.
+
+\begin{minted}{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+rng = np.random.default_rng(3)
+
+num_weeks = 40
+a1 = rng.poisson(1, size=num_weeks)
+a2 = rng.poisson(3, size=num_weeks)
+c1 = rng.poisson(3, size=num_weeks)
+c2 = rng.poisson(5, size=num_weeks)
+
+L1 = np.zeros(num_weeks)
+L2 = np.zeros(num_weeks)
+p = np.zeros(num_weeks, dtype=int)  # production state
+
+for k in range(1, num_weeks):
+    p[k] = p[k - 1]
+    p[k] += (p[k - 1] == 0) * (L1[k - 1] == 0) + (p[k - 1] == 1)
+    p[k] += (p[k - 1] == 2) * (L2[k - 1] == 0) - 3 * (p[k - 1] == 3)
+    d1 = min(L1[k - 1] + a1[k], c1[k] * (p[k] == 0))
+    d2 = min(L2[k - 1] + a2[k], c2[k] * (p[k] == 2))
+    L1[k] = L1[k - 1] + a1[k] - d1
+    L2[k] = L2[k - 1] + a2[k] - d2
+
+xx = range(num_weeks)
+plt.step(xx, L1, where="pre", label="L1")
+plt.step(xx, L2, where="pre", label="L2")
+plt.step(xx, p, ":", where="pre", label="P")
+plt.legend()
+plt.savefig("nurses.pdf")
+\end{minted}
+
+
+
+\begin{truefalse}
+If we find the average queue length too large, then we must increase the average service rate to decrease average queue length.
+    \begin{solution}
+        False. We can also block jobs.
+    \end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}[2.2]
+We consider a discrete-time queueing system with $a_k$ the number of arrivals in period $k$, and $c_k$ the service capacity. Let
+\begin{align*}
+d_k &= \min\{L_{k-1}, c_k\}, & L_k &= L_{k-1} -d_k + a_k.
+\end{align*}
+Take $a_k \sim \Pois{2}$, $c_k\sim \Pois{1}$, and $L_0 = 0$. Claim:  $\P{L_{10000} \geq 100} \leq 1/2$.
+\begin{solution}
+False.
+Since two jobs arrive, in expectation, per period, and one leaves, the queue length increases with a speed of 1 job per period (again in expectation). After 10000 periods, the system must contain about 10000 jobs. As the Poisson disctribution has a small relative variability (if $X\sim \Pois{\lambda}$, then $\V X / (\E X))^{2} = 1/\lambda$) the probability that $L_{10000}< 100$ is exceedingly small.
+\end{solution}
+\end{truefalse}
+
+
+
+\begin{truefalse}\label{ex:l-118}
+ Consider a single-server that serves two parallel queues.
+ Queue~$i$ receives a minimal service capacity $r^i$ every period.
+ Reserved capacity unused for one queue cannot be used to serve the other queue.
+ Any extra capacity beyond the reserved capacity, i.e, $c_k - r^2$,  is given to queue 1 with priority.
+ Claim: these  recursions are correct.
+\begin{minted}{python}
+r1, r2 = 9, 1
+
+L1 = np.zeros(num_weeks)
+L2 = np.zeros(num_weeks)
+for k in range(1, num_weeks):
+    d1 = min(L1[k - 1], c[k] - r2)
+    c2 = c[k] - d1
+    d2 = min(L2[k - 1], c2)
+    L1[k] = L1[k - 1] + a1[k] - d1
+    L2[k] = L2[k - 1] + a2[k] - d2
+\end{minted}
+ An example is the operation room of a hospital.
+There is a weekly capacity, part of which is reserved for emergencies.
+It might not be possible to assign this reserved capacity to other patient groups, because it should be available at all times for emergency patients.
+A result of this is that unused capacity is lost.
+In practice it may not be as extreme as in the model, but still part of the unused capacity is lost.
+`Use it, or lose it' often applies to service capacity.
+\begin{solution}
+It is false. The next line should replace the code for $c2$.
+\begin{minted}{python}
+c2 = c[k] - max(r1, d1)
+\end{minted}
+The problem with the code of the question is that the reserved capacity for the first queue is not used in the computation of the capacity available for the second queue.
+\end{solution}
+\end{truefalse}
+
+
+
+% \begin{exercise}\label{ex:l-119}
+%  Consider\marginpar{Tandem networks} a production network with two production stations in tandem, that is, the jobs processed at station 1 move at the end of  period~$k$ to station 2.
+%  What are the recursions?
+% \begin{solution}
+%   Let $a^1_k$ be the external arrivals at station 1, and the departures of station 1 are the arrivals at station 2: $a_k^2 = d_{k}^1$.
+%   Thus,
+% \begin{align*}
+%  d^i_k &= \min\{\L_{k-1}^i, c_k^i\}, & \L_k^i &= \L_{k-1}^i -d_k^i + a_k^i.
+%  \end{align*}
+% \end{solution}
+% \end{exercise}
+
+
+
+% \begin{exercise}
+%  Consider\marginpar{Splitting streams} a paint mixing machine that produces products for two downstream packaging machines~$A$ and~$B$, each with its own queue.
+% In the simplest model, the content of the queue at the mixing machine is proportional to the demands $\lambda^A$ and $\lambda^B$ for the packaging machines.
+%  Provide the recursions.
+% \begin{solution}
+% At  the mixing machine $d_k=\min\{L_k, c_k\}$. Therefore, in this very simple model, $a_k^A = d_k \lambda^A/(\lambda^A+\lambda^B)$, and likewise for the other downstream station.
+% \end{solution}
+% \end{exercise}
+
+
+\begin{exercise}\label{ex:n-policies}
+A machine \marginpar{Cost of an~$N$ policy.} can switch on and off. Suppose that the jobs that arrive in period~$k$ can be served in that period.
+ If the system length hits~$N$ (becomes empty) in period~$k$, the machine switches on (off) in period $k+1$.
+Make the recursions.
+Assume the machine is  off at $k=0$.
+\begin{hint}
+  Introduce a variable $I_k\in\{0, 1\}$ to keep track of the state of the server.
+  Then, $I_{k+1} = \1{\L_k\geq N} + I_k \1{0<\L_k<N}$ implements the N-policy.
+\end{hint}
+\begin{solution}
+Think about the hint. Understanding the state variable $I_{k}$ is the hardest part.
+\begin{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+rng = np.random.default_rng(3)
+
+num_weeks = 40
+a = rng.poisson(1, size=num_weeks)
+c = rng.poisson(5, size=num_weeks)
+N = 20
+
+L = np.zeros(num_weeks)
+I = np.zeros(num_weeks)  # on or not
+
+for k in range(1, num_weeks):
+    I[k] = (L[k - 1] >= N) + I[k - 1] * (0 < L[k - 1] < N)
+    c[k] *= I[k]
+    d = min(L[k - 1], c[k])
+    L[k] = L[k - 1] + a[k] - d
+
+
+xx = range(num_weeks)
+plt.step(xx, L, where="pre")
+plt.step(xx, N * I, ":", where="pre")
+plt.savefig("N-policy.pdf")
+\end{python}
+Note that when arrivals cannot be served in the period in which they arrive, it might be that the system is never empty.
+For instance, if $a_{k}\sim\Unif{4, 10}$, then $L_{k}\geq a_{k} \geq 4$ for all~$k$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}
+In the setting of the previous exercise, suppse  it costs~$K$ to switch on the machine.
+ There is also a cost $\beta$ per period when the machine is on, and it costs~$h$ per period per customer in the system.
+Can you make a  model to compute the total cost for the first~$T$ periods?
+\begin{solution}
+The last line is the next code most interesting.
+Ask chatgpt to explain it to you if you find it hard (I did it, to check.
+The answer is real good.)
+\begin{python}
+beta = 0.5
+K = 50
+h = 1
+
+
+cost = beta * I.sum()
+cost += h * L.sum()
+cost += K * (I[1:] > I[:-1])
+\end{python}
+\end{solution}
+\end{exercise}
+
+
+
+\input{trailer}

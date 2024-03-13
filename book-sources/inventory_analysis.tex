@@ -1,0 +1,271 @@
+\documentclass[stochastic-or.tex]{subfiles}
+%\externaldocument{queueing-book}
+\input{header}
+
+\begin{document}
+
+\section{Inventory control, analytic results}
+\label{sec:invent-contr-analyt}
+
+In this section we establish a set of formulas by which we can compute several performance measures for the single-item inventory systems discussed in~\cref{sec:single-item-invent}.
+With these formulas we can avoid simulation to obtain insight into the performance of the basestock, the $(Q,r)$ and the $(T,S)$ inventory control policies as function of the policy parameters. However,
+we will not deal with the $(s,S)$ policy because this is a bit too difficult for these notes.\sidenote{For those interested in a proof of the optimality of $(s,S)$ poliicies and an algorithm to compute the optimal policy parameters see~\citet{foreest23}.}
+
+We need some practical notation.
+The period demands $\{D_{i}\}$ are assumed to be iid rvs.
+Write
+\begin{align*}
+  D(i, j] &= \sum_{k=i+1}^{j} D_k, &   D[i, j] &= D_{i} + D(i, j],  &   D[i, j) &= D[i, j] - D_{j},
+\end{align*}
+and likewise for the amount of out-standing reorders $Q(i, j]$.
+
+
+We assume that the leadtime $L$ is constant and a multiple of the period duration.
+Since the period demand are iid rvs, the rvs $\{D[t-L, t)\}_{t=1}^{\infty}$ have the same distribution.\sidenote{Mind, they are not necessarily independent.}
+Let us write~$F$ for the common cdf and let $X\sim F$.
+Occasionally we write $\theta = \E X = L \E D$.
+From~$F$ we obtain easiy the pmf~$f$ and the survivor function $G=1-F$.
+
+
+\newthought{For the basetock} model in discrete time, recall from~\cref{eq:b9} that the start-of-period inventory position $P_{t}$ is always equal to the order-up-to level $S=s+1$ and the end-of-period inventory position $P_t' = S - D_{t}$.
+
+
+\begin{lemma}\label{lem:1}
+Under a basestock policy with reorder level~$s$ and order-up-to-level, if $\IL_{1} = S$, then for all periods~$t$,
+\begin{equation*}
+    D[1, t) = Q(1, t],
+\end{equation*}
+that is, all demand is either delivered or outstanding.
+\end{lemma}
+\begin{proof}
+Using the recursion for the inventory position under the basestock policy repeatedly,
+\begin{align*}
+    \IP_t
+&= \IP_{t-1} -D_{t-1}+ Q_t  \\
+&= \IP_{t-2} -D_{t-2} - D_{t-1}+  Q_{t-1}+ Q_t  \\
+&= \IP_1 - D[1, t) +     Q(1, t].
+\end{align*}
+The proof is finished by realizing that $\IP_{t} = S$ for all~$t\geq 1$ if $\IL_1=S$.
+\end{proof}
+
+We can use this lemma to obtain a useful result.
+\begin{lemma}\label{lem:2}
+Under a basestock policy, if the inventory starts at $\IL_{1} = S$ and there are no outstanding orders of period $t \leq 1$, then for all periods~$t\geq 1$,
+  \begin{align*}
+    \IL_t&= S - D[t-L, t), &  \IL_t'&= \IL_{t} - D_{t} = S - D[t-L, t].
+  \end{align*}
+In words, items not on-hand must be on order.
+\end{lemma}
+\begin{proof}
+Using the recursion for the inventory level and the assumptions,
+\begin{align*}
+  \IL_{t}
+&= \IL_{t-1} -D_{t-1}+ Q_{t-L} \\
+&= \IL_{t-2}- D_{t-2}  - D_{t-1} +Q_{t-L-1} + Q_{t-L}\\
+&= \IL_{1}- D[1, t) + Q(1, t-L] \\
+&= S - D[t-L, t),
+\end{align*}
+where we apply~\cref{lem:1} to $Q(1, t-L]$ in the last step.
+\end{proof}
+
+\cref{lem:2} implies the following theorem.
+This theorem allows us to use the rv $I(S)$ to define performance measures analogous to the sample path performance measures introduced in~\cref{sec:single-item-invent}.
+\begin{theorem}
+The rvs $\{\IL_{t}\}_{t=1}^{\infty}$ are identically distributed\sidenote{But not necessary independent} as the rv $\IL(S) = S - X$ with $X=\sum_{i=1}^{L-1} D_{i}$.
+\end{theorem}
+
+The ready rate follows directly from the relation $I' = I- D$:
+\begin{equation}
+\label{eq:5}
+\alpha(S) =  \P{I'(S)\geq 0} = \P{X+D\leq S}.
+\end{equation}
+For the fill rate, note that $I^{+} = \max\{I, 0\}$. By taking expectations in~\cref{eq:c24},  we obtain
+\begin{equation*}
+\beta(S) = \frac{\E{\min\{D, I^{+}(S)\}}}{\E D}.
+\end{equation*}
+The cycle service level seems to difficult to express in terms of simple expectations.
+
+
+The mean inventory level follows from $I(P) = S - X$:
+\begin{equation*}
+\E{I(S)} = S - \E X = S - \theta = S - L\E D.
+\end{equation*}
+Noting that $I^+(S) - I^-(S) = I(S)$,
+\begin{equation*}
+\E{\IL^+(S)} = \E{I(S)} + \E{I^-(S)} = S - \theta + \E{I^-(S)}.
+\end{equation*}
+Next, since $I^{-}(S) = [-I(S)]^{+} = [X-S]^{+}$,  we obtain for the average backorder level
+\begin{equation}\label{eq:ia22}
+\E{\IL^-(S)} =\sum_{k=0}^\infty (k- S)^+f(k).
+\end{equation}
+Clearly, this summation runs to $\infty$ if the support of $D$ is unbounded.
+As this unpractical for numerical purposes, we rewrite it to a numerically manageable form in~\cref{lem:3} below.
+Finally, with these expressions the average inventory cost becomes
+\begin{equation*}
+c(S) =  h \E{I^{+}(S)} +  b \E{I^-(S)} = h \E{I(S)} +  (h+b) \E{I^-(S)}.
+\end{equation*}
+
+
+
+\begin{lemma}
+\label{lem:3}
+The average backlog is equal to
+\begin{equation*}
+   \E{\IL^-(S)} = \theta - \sum_{j=0}^{S-1} G(j).
+\end{equation*}
+\end{lemma}
+\begin{proof} Since $\sum_{j=0}^\infty \1{j< k-r - 1} = k-r -1$, from~\cref{eq:ia22}
+\begin{align*}
+   \sum_{k=S}^\infty (k-S) f(k)
+   &= \sum_{k=S}^\infty\sum_{j=0}^\infty \1{j < k-S}\, f(k)   =
+    \sum_{j=0}^\infty \sum_{k=S}^\infty \1{k > j +S}\, f(k)\\
+   &= \sum_{j=0}^\infty  G(j+S)
+   = \sum_{j=0}^\infty  G(j) - \sum_{j=0}^{S-1} G(j).
+\end{align*}
+Because $\sum_{t=0}^\infty G(i) = \theta$ the claim follows.
+\end{proof}
+
+\begin{theorem}
+The cost function $S\to c(S)$ is convex and coercive. Thus, the optimal order-up-to level $S = \argmin\{c(i) : i \in \supp{X}\}$.
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+
+
+
+Here is an illustration how to code the Lighthouse Company example of~\cref{sec:single-item-invent}.
+With random variable class we built earlier, our code can stay nearly in one-to-one correspondance with the mathematical definitions above.
+\inputminted[firstline=2, lastline=5]{python}{../code/lighthouse.py} % modules
+
+The basestock policy follows straightaway once we realize that $\IL(S) = S - X$, and that $\IL^{+}$ and $\IL^{-}$ are derived random variables.
+\inputminted[firstline=11, lastline=43]{python}{../code/lighthouse.py} % basestock
+We instantiate it like this.
+\inputminted[firstline=50, lastline=58]{python}{../code/lighthouse.py} % parameters
+Some tests, which, out of habit, we should not skip. Realize that this serves not only as a test of the implementation, but also  of the above algebra.
+\inputminted[firstline=62, lastline=67]{python}{../code/lighthouse.py} % basetests
+To run it, use the next example code.
+\inputminted[firstline=71, lastline=73]{python}{../code/lighthouse.py} % runit
+
+
+
+\newthought{We now turn} to the $(s, Q)$ model.
+There is a nice way to relate the $(Q,r)$ system to a number of basestock systems.
+To see this, imagine two animals, a squirrel that observes the $(Q,r)$ system at the end of each period, and a bear that only wakes up when the inventory position right at the start of the interval equals~$k \in \{r+1, \ldots r+Q\}$ and hibernates otherwise.
+Clearly, from the bear's point of view, the system behaves as a basestock system with order-up-to level~$k$.
+More generally, we can associate a different bear to each different order-up-to level, so that always exactly one bear is awake, and the rest sleeps.
+To combine the statistics as observed by the bears and the statistics as observed by the squirrel, we need to know for each~$k$ the average fraction of periods the inventory position $\IP_{t} = k$.
+For instance, is the squirrel  knows\sidenote{We assume that the limit over all sample paths $\{\IP_{t}\}$ exists almost surely, so that we can invoke the strong law of large numbers.}
+\begin{equation*}
+\pi_{k} = \lim_{T\to \infty} \frac{1}{T} \sum_{t=1}^{T}\1{\IP_t = k},
+\end{equation*}
+then it can retrieve the ready rate $\sum_{k=r+1}^{Q+r} \pi_k \alpha(k)$ from the ready rates $\alpha(k)$ as seen by the bears.
+
+
+\begin{theorem}\label{thr:3}
+Under the $(Q,r)$ policy the inventory position $\IP \sim \Unif{r+1, \ldots, r+Q}$ in stationarity,  that is, $\pi_{k} = \P{\IP = k} = 1/Q$ for $k=r+1, \ldots, r+Q$. Consequently, $\IL$ is distributed as $\IP-X$.
+\end{theorem}
+\begin{proof}
+For ease take $Q=3, r=0$, so that the inventory position $\IP$ cycles between the levels $1, 2$ and~$3$.\sidenote{The proof is the same for general~$Q$ and~$r$, but needs a bit more notation.}
+We can use level crossing arguments as follows.
+Write $p_{i} = \P{D\in \{i, 3+i, 6+i, \ldots\}}$ for the probability that the period demand is a multiple of~$3$ offset by~$i$, $i=0, 1, 2$.
+Suppose that, at the start of period~$t$, the position $\IP_{t} = 3$.
+Since we order in multiples of $Q=3$, the probability $\P{\IP_{t+1} =3|\IP_{t}=3} = p_{0}$, i.e., equal to the probability that $D_{t}$ is a multiple of~$3$.
+Likewise, $\P{\IP_{t+1} = 2|\IP_t=3} = p_{1}$, and $\P{\IP_{t+1} = 1|\IP_t=3} = p_{2}$.
+However, again because we order in multiples of~$Q$, $\P{\IP_{t+1} = 1|\IP_t=2} = p_{1}$, and similarly for the other possibities.
+Therefore, we can use level-crossing to conclude that on the long run, $(p_{1}+p_2)\pi_{3} = p_2\pi_{2} + p_1 \pi_{1}$.
+But, because of the $(Q,r)$ ordering rule, we can cyclically change $\pi_{1}, \pi_{2}$ and $\pi_{3}$ in this equality.
+The only solution that is compatible with symmetry is that $\pi_{i} = 1/3$ for all~$i$.
+\end{proof}
+
+With the above theorem, the ready rate for the $(Q,r)$ model can be computed with the formula
+\begin{align}
+   \alpha(Q,r) = \frac1Q \sum_{k=r}^{r+Q-1} \alpha(k), % = \frac1Q \sum_{k=s}^{s+Q-1} F(k+1)
+\end{align}
+where $\alpha(k)$ is the ready rate  of the basestock model with reorder level~$k$. Interestingly, the ready rate of the $(Q,r)$ policy can be expressed in terms of the
+average backlog of the basestock model.
+
+\begin{lemma}
+The ready rate of the $(Q,r)$ model is equal to
+\begin{align}
+   \alpha(Q,r) = 1 - \frac1Q(\E{I^{-}(r-1)} - \E{I^{-}(r+Q-1)}).
+\end{align}
+\end{lemma}
+\begin{proof}
+From~\cref{eq:5}, and the fact that $G(k) = 1- F(k)$,
+\begin{align*}
+\sum_{k=r+1}^{r+Q} \alpha(k)
+  &=  \sum_{k=r+1}^{r+Q} F(k)
+  =  \sum_{k=0}^{r+Q} F(k)  -  \sum_{k=0}^{r} F(k) \\
+  &= Q - \sum_{k=0}^{r+Q} G(k)  +  \sum_{k=0}^{r} G(k).
+%  &= Q + \E{I^{-}(r+Q)} -  \E{I^{-}(r)}.
+\end{align*}
+Dividing by~$Q$ and using~\cref{lem:3} gives the result.
+\end{proof}
+
+For the average inventory level,
+\begin{align*}
+   \E{I(Q,r)}
+   &= \frac1Q\sum_{t=r+1}^{r+Q} \E{I(i)}
+     = \frac1Q\sum_{t=r+1}^{r+Q} (i - \theta)
+   = \frac{Q+1}2 + r - \theta,
+\end{align*}
+The  expected number of back-orders $\E{I^-(Q,r)}$ and expected on-hand inventory $\E{I^+(Q,r)}$ can be found be equivalent summations.
+Finally, with~$h$ and~$b$ the holding and backorder cost per item per period,  the total average cost becomes
+\begin{equation*}
+c(Q,r) = K\frac{\E D}{Q} + h \E{I(Q,r)} +  (b+h) \E{I^-(Q,r)}.
+\end{equation*}
+With regard to the first term, note that $\E D$ is average demand per period, so $\E D / Q$ is the order frequency.
+
+
+It remains to find good values for~$r$ and~$Q$.
+There are some fast algorithms available to compute optimal $r$ and $Q$, but  we don't discuss these here.
+A simple work around is to carry out a full grid search over a (reasonable) set of pairs of~$r$ and~$Q$.
+Another simple heuristic is to take $Q=\sqrt{2\E{D}K/h}$, i.e., the EOQ value, and then search for~$r$ such that the total average cost is minimal.
+With similar methods we can search for an $r$ such that the $\alpha$ or $\beta$ service level criteria are met.
+
+To code the above, we use the random variable class again so that our  implementation can stay on a high level. Note how the code uses~\cref{thr:3}.
+If you compare the implementation of the basestock and the $(Q,r)$ classes, you'll see how much they resemble each other.
+\inputminted[firstline=78, lastline=114]{python}{../code/lighthouse.py} % qr
+To run it, use the next example code.
+\inputminted[firstline=121, lastline=124]{python}{../code/lighthouse.py} % runqr
+
+
+\begin{truefalse}
+Customers of fast-food restaurants prefer to be served from stock.
+For this reason such restaurants often use a `produce-up-to' policy: When the on-hand inventory $I$ is equal or lower than some threshold $S-1$, the company produces items until the inventory level equals $S$ again.
+The level $S$ is known as the order-up-to level, and $S-1$ as the reorder level.
+
+Suppose that customers arrive as a Poisson process with rate $\lambda$
+and the production times of single items are iid and exponentially
+distributed with parameter $\mu$. Assume also that customers who
+cannot be served from on-hand stock are backlogged, that is, they wait
+until their item has been produced.
+
+The average on-hand inventory level is $S$ minus the average number of jobs at the cook. i.e., $\E{I} = \sum_{i=0}^{S} (S-i) p(i)$.
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+\begin{exercise}
+Here is a subtle problem, that you should think about, and \emph{memorize}.
+In these notes so far, we have been concerned with \emph{periodic-review} systems: at the end of period~$i$, we check the inventory $I_t'$.
+Hence, if $I_t'\geq 0$, all demand must have been satisfied.
+
+  In continuous-review systems,  the notation $I_t$ corresponds to the inventory level as perceived by the~$i$th customer (observe that this is very different from the meaning of the $I_t$ for periodic-review systems).
+
+  Why is the ready rate $F(S)$ (and not $F(S)=F(s+1)$ as in \cref{eq:13}) for continuous-review systems?
+  \begin{solution}
+    In continuous time, when $I_t=0$, the~$i$th demand `sees' an empty inventory. Hence, the~$i$th demand cannot be met from on-hand stock when $I_t=0$. Thus, only when $I_t>0$, this demand can be served. Therefore,
+\begin{align*}
+   \alpha(s) &= \P{\IL_t > 0} \\
+   &= \P{r+1 - D[i-L, i] > 0} \\
+   &= \P{D[i-L, i] <  r+1} \\
+   &= \P{D[i-L, i] \leq  r} \\
+   & = F(r).
+\end{align*}
+  \end{solution}
+\end{exercise}
+
+\input{trailer}

@@ -1,0 +1,95 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{Simulating Inventory Systems}
+\label{sec:simul-invent-syst}
+
+In this section we develop a simulation environment to analyze a single-time inventory system controlled by an $(s,S)$-policy.
+
+\newthought{The Lighthouse Company} sells ceiling lamps and considers to use an $(s,S)$ policy to control the inventory since the replenishment cost, $K=50$ euro is relatively high. The company wants to use simulation to find sound values for~$s$  and~$S$.
+
+The details of the case are like this.
+Ceiling lamps sell at 100 Euro while the buying price is 40 Euro.
+The monthly holding cost is estimated to be $50\%$ of the buying price.
+To prevent customers from buying a lamp at a competitor (e.g., Internet sales), the Lighthouse Company offers a reduction of $20\%$ per day of the regular selling price when customers cannot be satisfied from on-hand stock.
+The pmf~$f$ of the daily demand is given by
+  \begin{align*}
+    f_{0} &= 1/6, &   f_{1} &= 1/5, &  f_{2}&= 1/4, &
+    f_{3} &= 1/8, &  f_{4} &= 11/120, &  f_{5} &= 1/6.
+  \end{align*}
+The leadtime $L=2$ days.
+
+\newthought{With the code} below we set up a simulation to estimate the performance measures for one specific $(s,S)$ policy.
+We go step by step, and provide explanations above the code to which it relates.
+You can copy the code to a file and it should run without problems (provided you copy all lines correctly).
+
+
+
+Most of the next modules should by now be familiar to you. \mintinline{python}{icecream} offers nice printing functionality.
+\inputminted[firstline=2, lastline=6]{python}{../code/ss_inventory_simulation.py} % modules
+
+
+
+Here are the model parameters.
+The daily demand is a \texttt{RV}.
+Check in particular how we compute the cost parameters.\sidenote{Getting the units right is not always easy.}
+
+\inputminted[firstline=12, lastline=19]{python}{../code/ss_inventory_simulation.py} % data2
+
+We next compute the inventory positions and inventory levels.
+We generate \mintinline{python}{N} random deviates for the demand and pass a random generator to ensure to get the same numbers for every simulation run.
+For ease we combine ~\cref{eq:i5} into a single recursion for $P_t$, and likewise for $I_t$.
+Expressions like \mintinline{python}{(3 <= 4)} evalutate to \mintinline{python}{True} which in turn become~$1$ in computations.
+Thus, \mintinline{python}{(Pprime <= s)} implements the indicator function.\sidenote{The indicator $\1{A} = 0$ if the event~$A$ occurs, and~$0$ otherwise.}.
+The first \mintinline{python}{for} loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
+In the second loop we should protect against a simple error: it might happen that the number of periods over which we simule is smaller than~$L$.
+\inputminted[firstline=23, lastline=40]{python}{../code/ss_inventory_simulation.py} % simulation
+
+The last block of code computes the measures.
+The cycle service level~$\alpha_{c}$ is worth to study.\sidenote{Ask ChatGPT for explanation if you find this line hard.}
+We use slicing, which is a technique  much used in python, but also in matlab.
+\inputminted[firstline=44, lastline=57]{python}{../code/ss_inventory_simulation.py} % results
+
+
+\newthought{It remains to} find good policy parameters, i.e., $s$ and~$S$.
+In principle this is simple: just change~$s$ and~$S$ over a range of values and see how that affects the performance measures.
+However, finding the optimal parameters \emph{efficiently} is not easy.
+To minimize the cost, I have published an article on how to do that (for the interested: the optimality proof and computations depend on martingales, renewal reward theory and optimal stopping).
+However, I did not study how to minimize average cost under some constraint on one of the service level measures, for instance.
+
+
+
+\begin{exercise}
+Which inventory rule does the next code implement? What are the policy parameters?
+\begin{python}
+import numpy as np
+
+gen = np.random.default_rng(seed=42)
+
+L = 2
+n = 100
+Q_size = 10
+s = 20
+labda = 3
+D = gen.poisson(labda, size=n)
+
+Pp = np.zeros_like(D)
+Qp = np.zeros_like(D)
+for t in range(1, len(D)):
+    Qp[t] = Q_size * (Pp[t - 1] <= s)
+    Pp[t] = Pp[t - 1] + Q[t] - D[t]
+
+Ip = np.zeros_like(D)
+for t in range(L, len(D)):
+    Ip[t] = Ip[t - 1] + Q[t - L] - D[t]
+\end{python}
+\begin{solution}
+The $(Q,r)$ rule with $Q=10$ and $r=s=20$.
+\end{solution}
+\end{exercise}
+
+
+
+\input{trailer}

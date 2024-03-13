@@ -1,0 +1,386 @@
+#+title: Probabilistic Arithmetic
+#+author: Nicky D. van Foreest
+#+date: 2022:05:07
+#+latex_header: \input{header.tex}
+
+#+include: preamble.org
+#+PROPERTY: header-args:python :session :eval no-export :exports both :results output code
+
+#+STARTUP: indent
+#+STARTUP: showall
+
+#+name: sec:comp-with-rand
+* Probabilistic Arithmetic
+\label{sec:prob_artithmetic}
+
+In these lecture notes we will use quite a lot of programming (in Python) to demonstrate how to obtain numerical insight into the stochastic processes under study.
+However, rather than being satisfied with a hacky, sloppy, ugly software product, we will develop clean and concise code that matches the language we use to express our ideas to model and analyze stochastic systems.
+More generally, by focusing on /patterns/, coding becomes a very interesting intellectual challenge, and using a good /language/ helps us prevent making subtle errors.
+To demonstrate how this process works, we will build a python class to deal with /probabilistic arithmetic/; in the sequel we will use this class numerous times.
+You should read the code well: your understanding of coding, probability theory and numerical analysis will deepen quite a bit.
+
+{{{newthought(Let us start)}}} with making explicit by what we mean by a pattern.
+As a first pattern, consider the $+$ operator.
+We know how to compute $3+5$, i.e., on the positive integers, but this does not suffice to compute $1/2 + 1/3$.
+To add fractions, we need to give a new interpretation to the symbol $+$: start with making the denominators the same and then add the numerators.
+Once we have this, we can compute $3.15 + 3.15$.
+If fact, as the denominators are the same, we start with the last digits, i.e., $5+5$.
+Since there is an overflow, we carry the overflow to the next digit, and we move one digit to the left.
+In other words, to add decimal fractions, we add from `right to left'.
+However, this procedure does not work to compute $\sqrt 2 + \sqrt 2$: as $\sqrt 2$ has no last digit we cannot work from right to left.
+Thus, to add general real numbers, we need to rethink the meaning $+$ again.
+For this, we first define the number $\sqrt 2$ properly as $\sup\{x \in \Q : x^{2} \leq 2\}$, and with this idea we define $\sqrt 2 + \sqrt 2$ as $\sup\{x + y : x, y \in \Q, x, y \leq \sqrt 2\}$.
+Next, we need to define addition for complex numbers, vectors, matrices, \ldots Thus, the $+$ operator is \emph{overloaded} time and again so that it applies in different fields.
+
+In our case, we want to write $X+Y$ for independent discrete random variables $X$ and $Y$, and in that case addition should  mean that
+#+name: eq:pa1
+\begin{equation}
+\P{X+Y=z} = \sum_{i} \sum_{j} p_{i} q_{j} \1{i+j=z},
+\end{equation}
+where $p_{i} = \P{X=i}$ and $q_j = \P{Y=j}$.
+In other words, by writing $Z=X+Y$ we mean that we want to obtain the pmf of $Z$ in terms of the pmfs of $X$ and $Y$.
+In general, the first pattern is to see how to support /operator overloading/.
+
+
+This brings us to a second pattern.
+Observe that the expression $X+Y$ combines two rvs $X$ and $Y$ and then applies some function.
+Similarly, the operations $X-Y$, $XY$, $\max\{X, Y\}$, are all functions applied to two independent rvs.
+What we actually need is a \emph{method} to compute the pmf of the random variable $f(X,Y)$, where $f$ is some general \emph{binary} function (i.e., a function that depends on two arguments).
+
+We identify a third pattern when we realize that to compute $\V X$, we need $\E{X^{2}}$.
+But $\E{X^{2}}$ is the expectation of the rv $g(X)$ where $g:x \to x^{2}$.
+So, we also need a method to compute the pmf of the rv $g(X)$, where now $g$ is some general \emph{unary} function (i.e., a function that depends on one argument).
+
+In summary, we want to build code  that allows operator overloading for rvs, next to the application of unary and binary functions.
+
+We now discuss, step by step, elegant and generic code to handle probabilistic arithmetic. However, we first need to introduce some computer science concepts.
+
+
+{{{newthought(A useful data structure)}}} to store the pmf of a discrete rv is a dict.
+#+begin_src python :results none
+X = {1: 1/2, 2: 1/2}
+Y = {1: 1/2, 2: 1/2}
+#+end_src
+
+Let us use [[eq:pa1]] to compute the pmf of $Z=X+Y$.
+#+begin_src python
+Z = {}
+for i, p in X.items():
+    for j, q in Y.items():
+        Z[i + j] = p * q
+print("The keys: ", Z.keys())
+print("The values: ", Z.values())
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+The keys:  dict_keys([2, 3, 4])
+The values:  dict_values([0.25, 0.25, 0.25])
+#+end_src
+
+Here is something wrong: the pmf of $Z=3$ is not $1/2$, as it should.
+The reason is that ~Z[3]~ gets overwritten by using ~=~.
+Actually, we need something that adds probabilities, rather than just setting it, as is done here by the ~=~.
+The correct datastructure is a ~defaultdict(float)~ with provides a default value of $0$ when a key in the dict is missing.
+#+begin_src python
+from collections import defaultdict
+
+Z = defaultdict(float)
+for i, p in X.items():
+    for j, q in Y.items():
+        Z[i + j] += p * q # note the +=
+print(Z)
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+defaultdict(<class 'float'>, {2: 0.25, 3: 0.5, 4: 0.25})
+#+end_src
+
+Now the result is correct.
+Note that we use the operator ~+=~ which is a very convenient way to add up things.
+To see why it is useful consider the next code.
+In particular, the third line is a much cleaner (shorter) way to add $3$ to the variable name.
+#+begin_src python :results none
+very_long_variable = 3
+very_long_variable = very_long_variable + 3
+very_long_variable += 3
+#+end_src
+
+Dealing with the pmf as a dictionary requires some care, though.
+An example helps to understand the problem.
+I suppose you agree that $1/3 = 1-2/3$, so let's see what happens if we run the next code.
+#+begin_src python
+Z = defaultdict(float)
+Z[1/3] = 1
+Z[1 - 2 / 3] += 1
+print(Z.keys())
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+dict_keys([0.3333333333333333, 0.33333333333333337])
+#+end_src
+
+The dictionary ~Z~ suddenly contains two elements rather than just one.
+Inspecting the last digit of the keys, we see that in one number the last digit is a $7$ and in the other it is a $3$.
+So, for a /computer/ $1-2/3 \neq 1/3$.
+By the way, this is not something specific to python; the problem lies in the fact that general numbers in $\R$ cannot be represented as floating point numbers.
+
+To get around this, we round the elements of the support to a fixed precision so that we can use fractions instead of floats.
+This works well as demonstrated by this code.
+#+begin_src python
+from fractions import Fraction
+
+a, b = 1 / 3, 1 - 2 / 3
+af = Fraction(a).limit_denominator(1000)
+bf = Fraction(b).limit_denominator(1000)
+print(a == b, af == bf)
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+False True
+#+end_src
+
+Another useful concept is the so-called /lambda/ function.
+Sometimes functions are so short and simple that we simply don't want to bother to give them a name.
+For such cases, the $\lambda$ functions serves as /anonymous function/.
+For instance, to apply the function ~lambda x: 3 * x~ to the number ~8~, it should be be put between braces.
+Below we will use anonymous functions frequently.
+#+begin_src python
+print((lambda x: 3 * x)(8))
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+24
+#+end_src
+
+Code often becomes better to read and understand when using short, powerful functions. One such function is ~sum~.
+#+begin_src python
+print(sum(x for x in [1, 2, 3]))
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+6
+#+end_src
+
+There is a small catch though.
+The ~sum~ needs a starting element.
+To see this, consider the next code and output; we will discuss it next.
+#+begin_src python :results output raw
+print(sum(x for x in "dog"))
+#+end_src
+
+#+begin_src python
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+#+end_src
+
+So, we pass ~x~ as a string, and then ~sum~ fails, telling us that it cannot add an ~int~ and a ~str~.
+But where does the ~int~ come from in the first place?
+As it turns out, ~sum~ starts from a default value $0$ and then sums from left to right.
+In other words, the above summation over the list ~[1, 2, 3]~ expands to $0 + 1 + 2 + 3$.
+This clarifies the error:  the sum ~0 + "dog"~ is not well defined.
+Below we point out when this problem becomes relevant.
+
+The final general concept is /caching/.
+By caching it is possible to store the result of a function in a dictionary rather than evaluating the function body again on a second call of the function.
+For simple functions this is not necessary, but when the evaluation requires substantial numerical work, caching decreases computation times beyond imagination (milli-seconds versus more than a century for the same result.)
+#+begin_src python
+from functools import cache
+
+@cache
+def f(x):
+    print("The body of the function is called.")
+    return 8 * x
+
+
+print(f(3))
+print(f(3))
+#+end_src
+
+#+RESULTS:
+#+begin_src python
+The body of the function is called.
+24
+24
+#+end_src
+
+Clearly, the print statement in the function is just called once, so ~@cache~ stores the output of ~f~ and does not evaluate the body of ~f~ for a second time.
+
+
+
+{{{newthought(We now turn)}}} to building a python class to work in a convenient way with random variables.
+.
+We start with loading a number of modules that provides functionality we certainly do not want to build ourselves; this would be too complicated and too much work.
+We also load the ~typing~ module because our code below adds typing information, which means that we specify what type of argument (such as float, or int) is used.{{{sidenote(In simple scripts I tend not to add typing. However in code that I plan to use at other places I find this extra information helpful.)}}}
+#+INCLUDE: "../code/random_variable.py" src python :lines "2-10" ## modules
+
+The meaning of the next variables will become clear later.
+The function ~toFrac~ is a convenience function to hide how to convert a float to a fraction of the desired precision.
+If we want to change the precision at a later stage, or want to change the conversion, we only have to change the code here.
+#+INCLUDE: "../code/random_variable.py" src python :lines "15-23" ## numbers
+
+The ~RV~ class, which we build in the coming code blocks, stores the pmf and the support of a rv as a dictionary; for instance, ~{0: 1 / 3, 1: 2 /3 }~ represents a biased coin with support $\{0, 1\}$ and pmf $p_{0} = 1/3$ and $p_{1} = 2/3$. ~RV~ uses ~_pmf~, ~_support~ and ~_cdf~ as private members.
+
+#+INCLUDE: "../code/random_variable.py" src python :lines "29-40" ## startofrv
+
+
+To make the pmf we use ~Fraction~ and ~defaultdict~ for the reasons mentioned earlier.
+As we do not include outcome whose probabilities are too small, we need to normalize at the end.
+
+#+INCLUDE: "../code/random_variable.py" src python :lines "44-53" ## makepmf
+
+The next methods provide access the pmf and the support, and the number of elements in the pmf.
+When ~x~ is not in the support, the pmf is $0$.
+#+INCLUDE: "../code/random_variable.py" src python :lines "57-68" ## pmf
+
+Computing the cdf with binary search via ~np.searchsorted~ works really fast.
+With the cdf, the survivor function follows immediately. We don't have to cache it, because ~cdf~ already uses caching.
+#+INCLUDE: "../code/random_variable.py" src python :lines "81-92" ## cdf
+
+
+The computation of the mean, variance and standard deviation becomes easy once we realize that all these functions can be expressed in terms of the /pattern/ $\E{f(X)}$ for suitable chosen functions $f$.
+In passing, we remark that by taking $f(x) = \1{x\leq y}$, the cdf $F(x) = \E{f(x)} = \sum_{k} \1{k \leq x} p_{k}$.
+However, this is not efficient as compared to the binary search used above.
+#+INCLUDE: "../code/random_variable.py" src python :lines "96-99" ## expected
+
+With the expectation, the mean, variance and standard deviation follow from simple $\lambda$ functions. .
+#+INCLUDE: "../code/random_variable.py" src python :lines "103-114" ## convenience
+
+The method ~sortedsupport~ of ~RV~ sorts the elements in the support in decreasing order the probability. Below we explain why we need this.
+#+INCLUDE: "../code/random_variable.py" src python :lines "72-77" ## support
+
+
+Additionally, we like to use our ~RV~ class to generate random deviates that distributed according to the cdf $F$.
+Recall that if $U\sim \Unif{[0,1]}$, then $F^{-1}(U)$ has the required distribution, because
+\begin{equation*}
+\P{F^{-1}(U) \leq x} = \P{U \leq F(x)} = F(x),
+\end{equation*}
+where the last equality follows from the fact that $U$ is uniform on $[0,1]$.
+Binary sort is a fast algorithm to compute the inverse $F^{-1}(U)$.
+#+INCLUDE: "../code/random_variable.py" src python :lines "118-123" ## rvs
+
+
+We are nearly finished with the code, but we need two further elements.
+To add or subtract two instances of ~RV~ the class needs to know what to do when writing code like ~X + Y~ or ~X - Y~.
+The private method ~__add__~ achieves this by calling ~compose_function~, which is defined below to compute $f(X, Y)$ for general $f$.
+Subtraction uses  ~__sub__~, and implements it as ~X + (- Y)~.
+#+INCLUDE: "../code/random_variable.py" src python :lines "127-136" ## arithmetic
+
+What happens if we would write ~2 + X~ to mean that the support of ~X~ needs to be shifted two steps to the right?
+{{{sidenote(We are once again overloading the ~+~ operator.)}}}
+Actually, we can catch this in our framework by interpreting the number $2$ as a random variable $Y$ with all probability mass concentrated on the number $2$, i.e.
+$\P{Y=2} = 1$. So, if we convert ints and floats, by means of a function ~convert~, to random variables,  we are done. Observe that we already used ~convert~ in ~__add__~ and ~__sub__~.
+#+INCLUDE: "../code/random_variable.py" src python :lines "179-190" ## convert
+
+
+Next, we want to support the ~+=~ and ~-=~ operators, so that we can write ~X -= Y~.
+At later stages we might also want to add many random variables with code like ~sum(X for _ in range(5))~.
+To support this, we have to provide ~sum~ with an initial element to start the summations; recall the earlier ~TypeError~.
+The next two methods enable this functionality for both cases.
+
+#+INCLUDE: "../code/random_variable.py" src python :lines "140-146" ## sums
+
+This finishes the ~RV~ class.
+
+{{{newthought(The two remaining)}}} patterns are binary and unary functions.
+To illustrate, finding the pmf of the sum $Z=X+Y$ of two independent rvs $X$ and $Y$ with pmfs $p$ and $q$ requires convolution like so.{{{sidenote(There is a much faster method based on Fast Fourier transforms;  we don't discuss that here.)}}}
+\begin{equation*}
+\P{Z=k} = \sum_{i}\sum_j \1{i+j=k} p_i q_{j}.
+\end{equation*}
+With general functions it works in precisely the same way.
+#+INCLUDE: "../code/random_variable.py" src python :lines "151-161" ## compose
+
+Observe that we break the inner ~for~ loop when the probability becomes too small.
+This rule assumes that the order in which the elements in the support pass by are in decreasing order of pmf.
+The method ~sortedsupport~ of ~RV~ ensures that this is the case.
+
+#+INCLUDE: "../code/random_variable.py" src python :lines "72-77" ## support
+
+Finally, here is the implementation of the application of unary functtions to an ~RV~.
+#+INCLUDE: "../code/random_variable.py" src python :lines "167-173" ## apply
+
+{{{newthought(As a matter)}}} of good conduct, let us include some tests.
+For professional use, the coverage of the tests is too small, but the point I want to make is that a software project (no matter how simple) is only complete /after/  passing the tests, /not/ before.
+#+INCLUDE: "../code/random_variable.py" src python :lines "196-209" ## tests
+
+
+#+begin_truefalse
+Claim: this program prints 40.
+#+begin_src python
+norm = 5
+x = [100, 20, 30, 40]
+y = {i: x[i] // norm for i in range(len((x)))}
+print(y[3])
+#+end_src
+#+begin_solution
+False.
+#+end_solution
+#+end_truefalse
+
+Ensure you understand the next code really well.
+Here are some demonstrations to show you how easy it is to make small modifications to test your understanding of probability in general, and coding in particular.
+
+#+begin_truefalse
+Claim: if we apply this function to two independent rvs $X$ and $Y$ and take ~f(i,j) = i/j~, we get a ~RV~ that represents $Z=X/Y$.
+#+begin_src python
+def compose_function(f: Callable[[float, float], float], X: RV, Y: RV) -> RV:
+    """Make the rv f(X, Y) for the independent rvs X and Y."""
+    c: defaultdict[float, float] = defaultdict(float)
+    for i in X.sortedsupport():
+        for j in Y.sortedsupport():
+            p = X.pmf(i) * Y.pmf(j)
+            c[i, j] += p
+            if p <= thres:
+                break
+    return RV(c)
+#+end_src
+#+begin_solution
+False. The line ~c[i, j] += p~ is wrong. Check the real code to see the difference.
+
+Here is a possible variation on this question.
+Claim: if we apply this function to two independent rvs $X$ and $Y$ and take ~f(i,j) = i/j~, we get a ~RV~ that represents $Z=X/Y$.
+#+begin_src python
+def compose_function(f: Callable[[float, float], float], X: RV, Y: RV) -> RV:
+    """Make the rv f(X, Y) for the independent rvs X and Y."""
+    c: defaultdict[float, float] = defaultdict(float)
+    for i in X.support():
+        for j in Y.support():
+            p = X.pmf(i) * Y.pmf(j)
+            c[f(i, j)] += p
+    return RV(c)
+This one is True, but the code is less efficient than the real code.
+
+Yet another variation is to write ~p = X.pmf(i) / Y.pmf(j)~. This is of course completely wrong.
+#+end_src
+#+end_solution
+#+end_truefalse
+
+#+begin_truefalse
+Let the random variable $X$ have cumulative distribution function $F_X$ and let $U\sim\text{Unif}(0,1)$. Claim: $F(F^{-1}(U))\sim\text{Unif}(0,1)$.
+#+begin_solution
+False:  not true for non continuous CDFs.
+#+end_solution
+#+end_truefalse
+
+#+begin_truefalse
+    If $X$ and $Y$ are two independent rvs with support $\{0, 1, 2, \ldots\}$ and probability mass functions $f_X$ and $f_Y$ respectively. Claim:
+    $$\mathbb{P}(X-Y\le k)=\sum_{i=0}^{\infty}\sum_{i=0}^{\infty}1\{i-j\le k\}f_X(i)f_Y(j).$$
+#+begin_solution
+False. Check the index of the second summation.
+#+end_solution
+#+end_truefalse
+
+
+#+begin_exercise
+Consult the website of RealPython to improve your understanding of ~defaultdict~, the ~lambda~ function, caching, and classes.
+If you are interested in somewhat more abstract code, read also about decorators to see how caching is implemented.
+Of course, you can also ask ChatGPT to explain these concepts: I use it a lot myself and I still learn from the solutions it offers.
+However, the explanations on RealPython are better and more instructive.
+#+begin_solution
+Type on the Google prompt: `realpython defaultdict', click on the link that appears.  Then read and think hard. Recall, coding involves intellectual effort.
+#+end_solution
+#+end_exercise

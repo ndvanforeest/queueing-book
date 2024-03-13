@@ -1,0 +1,135 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Little's Law}
+\label{sec:littles-law}
+
+There exists a fascinating connection, known as \emph{Little's law}, between the average sojourn time of a job in an input-output system and the long-run time-average number of jobs within that system.
+To heuristically understand this relationship let's consider an illustrative example.
+Imagine a highway segment between points A and B spanning 100 km.
+Every minute, one car enters the highway, and each car maintains a constant speed of 50 km/h.
+Now, since each car spends 2 hours\sidenote{100 km $/$ 50 km/h = 2 hours} on the highway, there must be $120$ cars\sidenote{2 h $\times$ 60 min/h $\times$ 1 car/min = 120 cars.}
+on the highway simultaneously.
+The objective in this section is to demonstrate that under a few simple conditions this relation generalizes to stochastic systems, in which case it takes the form $\E L = \lambda \E J$, i.e., the average number of `things' in a system is the rate at which these `things' arrive times the average time they spend in the system.\sidenote{Use the physical dimensions of the components of Little's law to check that $\E{\J} \neq \lambda \E{\L}$.}
+
+
+Define for the $k$th job the indicator function $I_k(s) := \1{A_{k}\leq s < D_{k}}$ to say that $I_{k}(s) =1$ if job~$k$ is present in the system at time~$s$ and zero otherwise.
+Consequently, $\int_{0}^{t} I_k(t) \d s$ represents the total time job~$k$ has spent in the system until time~$t$, and
+\begin{align*}
+\J_k &= \int_0^\infty I_k(s)\d s, &  \L(t) &= \sum_{k=1}^\infty I_k(t),
+\end{align*}
+are, respectively,  the sojourn time of the~$k$th job and the number of jobs in the system at time~$t$.
+
+\begin{theorem}[Little's Law, $\E L = \lambda \E J$]
+If $\delta = \lambda < \infty$, and $\frac{1}{n}\sum_{k=1}^{n} J_{k} \to \E J < \infty$  as $n\to \infty$, i.e., this limit exists and is finite, then the limit $\E L := \lim_{t\to\infty} \frac{1}{t}\int_{0}^{t}L(s)\d s$ exists, and $\E L = \lambda \E J$.
+\end{theorem}
+\begin{proof}
+There are three ways to  charge job $k$ for the service it gets:  just after departure, for the amount of service it received up to $t$, or right upon arrival.
+A comparison of the costs of these three charging schemes shows that
+\begin{equation*}
+J_{k} \1{D_k\leq t} \leq \int_0^t I_k(s) \d s \leq J_k \1{A_k \leq t}.
+\end{equation*}
+Taking the sum over this inequality gives\sidenote{Observe that $\sum_{k=1}^{\infty} J_k \1{D_k\leq t} = \sum_{k=1}^{D(t)} J_{k}$ and likewise for $A(t)$.}
+\begin{equation*}
+\frac{1}{t} \sum_{k=1}^{D(t)} J_k \leq \frac{1}{t}\int_0^t \sum_{k=1}^{\infty} I_k(s) \d s = \int_{0}^{t}L(s) \d s \leq \frac{1}{t}\sum_{k=1}^{A(t)} J_{k}.
+\end{equation*}
+By using the assumptions, for the LHS,
+\begin{equation*}
+\frac{1}{t} \sum_{k=1}^{D(t)} J_k = \frac{D(t)}{t}\frac{1}{D(t)} \sum_{k=1}^{D(t)}J_k \to \delta \E J;
+\end{equation*}
+likewise  the RHS $\to \lambda \E J$.
+Next, as $\delta = \lambda< \infty$, the limits of the LHS and RHS are the same.
+Consequently, the limit $\frac{1}{t}\int_{0}^t L(s) \d s \to \E L$ exists, and $\lambda \E J = \E L$.
+\end{proof}
+
+The conditions are somewhat subtle: $\delta = \lambda < \infty$ does not imply that $\lim_{n\to\infty} \frac{1}{n}\sum_{k=1}^{n} J_{k} < \infty$, even if this limit exists.
+For instance, consider a single server queue, take $A_k = k$, and $S_k = 1$ if $k$ is not a square but $S_k = 2$ if $k$ is a square.
+Then for very large $k$, $D_k \sim k - \sqrt k$.
+Hence, $D_k/k\to1$.
+However, for large $s$, $L(s) = A(s) - D(s) \approx \sqrt s$, so that $t^{-1}\int_0^t\sqrt s \d s \to \infty$ as $t\to \infty$.
+
+\begin{truefalse}
+Claim: Little's law states  for a rate-stable $G/G/1$ queue that $\E{J}=\lambda\E{L}$.
+\begin{solution}
+False
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: for Little's law to be true for any input-output system we claim,  the equality
+\begin{equation*}
+ \int_0^T L(s)\, \d s = \sum_{k=1}^{A(T)} W_k
+\end{equation*}
+must hold for  all $T\geq 0$.
+\begin{solution}
+False. The equality  only holds at times $T$ at which the system is empty.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Consider the server of the $G/G/1$ queue as a system by itself.
+The time jobs stay in this system is $\E S$, and jobs arrive at rate $\lambda$.
+Claim: It follows from Little's law that the fraction of time the server is busy is $\lambda \E S$.
+\begin{solution} True,~\cref{ex:37}.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+ Suppose there are 10 jobs present at the $M/M/1$ queue with arrival rate $\lambda=3$ and service rate $\mu=4$ per hour.
+Claim:  The time to clear the system follows from Little's law and is $3\cdot 10 = 30$ hours.
+\begin{solution}
+False.
+\end{solution}
+\end{truefalse}
+
+\begin{exercise}\label{ex:37}
+Think of all servers of the (stable) $G/G/c$ queue as being put in a box.
+Jobs enter the box at rate $\lambda$ and stay $\E S$ in this box.
+Use Little's law to conclude that the time-average number of busy server is $\E{\Ls} = \lambda \E S$.
+\begin{hint}
+Recall that $\lim_{t\to\infty} t^{-1}\int_0^t \Ls(s)\d s$ is the time-average number of servers busy up to~$t$.
+\end{hint}
+\begin{solution}
+Since the queue is stable by assumption, jobs depart at rate $\lambda$, hence any job enters and leaves the box that contains the~$c$ servers.
+The average time a job spends in the box is $\E S$.
+By Little's law, the average number in the box is $\E\Ls = \lambda \E S$.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+Let's take `life' itself as an input-output system, and ask how many people are born and die in the Netherlands per week.
+For ease, assume that in 2023 the Netherlands has 16 M inhabitants, and people have an expected lifetime (i.e., the time they remain in the system called `life') of 80 years.
+With Little's law we conclude that the rate $\lambda$ into the system (i.e., people born) is $16 M/80 = 0.2 M $ per year.
+Again for ease, if a year has 50 weeks, there are 4000 births per week.
+If the size of the population remains about constant, also around 4000 people die per week.
+
+As it turns out, the death rate in 2023 is about 2900 per week.
+This is much lower than the above estimate, and a more precise computation does not close the gap.
+Can you explain this paradoxical difference?
+
+\begin{hint}
+What happens if the population increases?
+\end{hint}
+\begin{solution}
+Let's make a very simple model to clarify the problem.
+We start with an initial population size of~$A$.
+Then assume that each and every individual dies after exactly 80 years (and does not live a day longer).
+Moreover, assume that the population increases by $1\%$ per year.
+Then, after 79 years, the size of the population is $A \sum_{k=0}^{79}(1.01)^{k}$.
+If we assume (as we do when we apply Little's law) that each year contains the same amount of people, then the number of people per year equals:
+\begin{equation*}
+\frac{A}{80}\sum_{k=0}^{79} (1.01)^k = \frac{A}{80} \frac{(1.01)^{80}}{1.01-1} = 1.5 A.
+\end{equation*}
+However, after 80 years, just~$A$ people die, not $1.5 A$.
+Interestingly, $4000/1.5 = 2700$, which is quite a bit closer to 2900 per week.
+
+In conclusion, we should apply Little's law with caution; in particular, when we just consider stretches of time in which we know that the population increases (or decreases) on average, Little's law does not hold.
+
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}

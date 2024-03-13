@@ -1,0 +1,341 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Discrete Event Simulations}
+\label{sec:discr-event-simul}
+
+
+
+The queueing and inventory systems in the previous sections were relatively simple to simulate.
+If, however, we need to analyze more difficult situations we need discrete event simulators, and to demonstrate how that works we will build such a simulator for a single station multi-server queue.
+We first provide a recursion in mathematical terms, and then discuss its shortcomings.
+This serves as motivation to set up a simulator with classes and an event stack.
+
+
+
+\newthought{Let us next} construct a multiserver FIFO queue in which the service of the first job in line starts when a server becomes free; if a server is free when a job arrives, the job's service  starts right away.
+
+Suppose there are~$c$ servers available, each with its own waiting line, like in a supermarket.
+When job~$k$ arrives, it sees a waiting time $w_{k}(i)$ at line~$i$; write $w_k = (w_{k}(1), \ldots, w_{k}(c))$ for the vector of waiting times. In other words, if job $k$ would join line $i$, it would have a waiting time of $w_{k}(i)$.
+Of course, the job selects the line with the shortest waiting time.\sidenote{This is not necessarily the same as the shortest queue.}
+Thus, it selects line $s_k = \argmin\{w_{k}(i) : i=1,\ldots, c\}$.
+
+To formulate a recursion for $w_{k}$, let $e(i)$ be the~$i$th unit vector\sidenote{A 1 at place~$i$ and zeros elsewhere.}, and $\mathbf{1} = (1,\ldots, 1)$.
+The waiting time of job $k-1$ becomes $\W_{k-1} = w_{k-1}(s_{k-1})$, and, in analogy with~\cref{eq:56}, the vector $w_k$ updates as
+\begin{align*}
+  s_{k-1} &= \argmin_{i \in \{1, \ldots, c\}}\{w_{k-1}(i)\},&
+  w_{k} &= [w_{k-1} + S_{k-1} e(s_{k-1}) - X_{k}\mathbf{1}]^+,
+\end{align*}
+where $[\cdot]^+$ applies element-wise.
+
+
+It is useful to analyze the algorithmic complexity of this algorithm.
+For job $k-1$, we need to find the minimum in $w_{k-1}$, and compute and subtract $X_{k}\mathbf{1}$.
+The number of computational operations for this is $2c$, as $w_k$ and~$\mathbf{1}$ contain~$c$ elements.
+For a simulation with~$N$ jobs, the total amount of operations is therefore $2c \times N$.
+However, by using a different implementation,\sidenote{With event stacks.} the complexity can be reduced to $N\times \log_2{c}$, which is considerably faster when~$c$ and~$N$ are large.
+
+
+% %\begin{exercise}\label{ex:23}
+% \
+% Here is my solution in python.
+
+% \begin{listing}[htb]
+% \begin{python}
+% import numpy as np
+
+% m = 3
+% N = 10
+
+% one = np.ones(m, dtype=int)  #  vector with ones
+
+% X = np.ones(N + 1, dtype=int)
+% S = 5 * np.ones(N, dtype=int)
+% w = np.zeros(m, dtype=int)
+% W = J = A = D = 0
+
+% for k in range(1, N):
+%     s = w.argmin()  # server chosen
+%     W = w[s]  # waiting time
+%     J = W + S[k]  # sojourn time
+%     A += X[k]  # arrival time
+%     D = A + J  # departure time
+%     print(k, S[k], W, w)
+%     # now update w
+%     w[s] += S[k]
+%     w = np.maximum(0, w - X[k + 1] * one)
+% \end{python}
+% \caption{The bla}
+% \end{listing}
+
+\newthought{We now turn} to developing a simulator for the multi-server queue step by step. We organize the code by means of classes. There are many reasons for this, but one is that this allows us to represent `things' of the `real world' in code that mimics the properties and behavior of the real world object.
+
+The Server is our first class.
+We implement this as a dataclass because the server is a very simple class with just two attributes: an id and a service rate so that we can allow for speed differences between servers.\sidenote{A lower service rate means that jobs are served at a slower rate.}
+We add the class method \mintinline{python}{__lt__} to be able to compare two servers based on their relative rates, and select a free server based on its rate.
+Specifically, since we prefer a fast server over a slow server, we  use the inequality as shown.
+\inputminted[label=server.py]{python}{../code/event_stacks/server.py}
+
+
+The next class is the Servers class and represents a pool of free servers.
+We subclass Servers from a list so that we can use this list for the heapq algoritms to push and pop servers.
+When a job leaves the queue, Servers will assign a server to the job based on the preferences expressed by the \mintinline{python}{__lt__} method of the Server class.
+We push to the servers heap any server that becomes idle after finishing a job,.
+Finally, we add the convenience methods \mintinline{python}{num_free} and \mintinline{python}{is_server_available} as these are easier to understand and read than their implementations in terms of \mintinline{python}{len}.
+\inputminted[label=servers.py]{python}{../code/event_stacks/servers.py}
+
+
+The Job class speaks mostly for itself.
+The service time will be the job's load divided by the speed of the server that serves the job.
+As the service time depends on the server, and since the servers can have different speeds, we cannot compute the service time at the start of the simulation.
+The job keeps a reference to the server that handles the job.
+The other attributes are used for the statistics at the end of the simulation.
+We implement the sojourn time and waiting time as a \mintinline{python}{property}, as this allows us to address them in the same way as, for instance, the departure time.
+The \mintinline{python}{__lt__} method determines which job to select from the queue when a service can start.
+As it is now, we select jobs in FIFO sequence.
+If, however, we would prefer a LIFO\sidenote{LIFO = last in first out} queue, we only have to reverse the direction of the inequality.
+Another simple rule is Shortest Processing Time First.
+To use this, change the inequality to this \mintinline{python}{self.load < other.load}.
+
+There is one detail.
+We might want to store jobs in a set or a dict, and this requires to be able to distinguish one job from another.
+For this reason we give the option \mintinline{python}{eq=True} to the data class and include a \mintinline{python}{__hash__} method.
+\inputminted[label=job.py]{python}{../code/event_stacks/job.py}
+
+The fourth class is the Queue class.
+This is also a subclass from a list so that we can use the queue as a heap in itself, and use the \mintinline{python}{__lt__} method of the Job class to select a job from the queue and send that job to the servers to be served.
+\inputminted[label=queues.py]{python}{../code/event_stacks/queues.py}
+
+An Event is just a time and job attached to it. The \mintinline{python}{__lt__} method specifies how to order events. Clearly, this must be by time.
+We subclass the event class to an ArrivalEvent and a DepartureEvent, because during the simulation we need to distinguish the type of event.
+\inputminted[label=event.py]{python}{../code/event_stacks/event.py}
+
+The events class is a heapqueue and sorts the events in time. In a way, once you realize a heapqueue offers the functionality to order, remove and insert events, the core of discrete event simulation is easy indeed.
+\inputminted[label=events.py]{python}{../code/event_stacks/events.py}
+
+The Statistics class does what its name says.
+We subclass it from a list, because with a list we can keep the sequence of the jobs in which the jobs depart from the server.
+\inputminted[label=stats.py]{python}{../code/event_stacks/stats.py}
+
+
+The last class we need is the Simulator itself.\sidenote{Study it carefully.}
+We need references to the events, queue, stats and servers.
+The attribute \mintinline{python}{now} keeps track of the time: it points to the time of the event the simulator is currently treating.
+When starting the simulation, we send a list of jobs to the simulator which then pushes an ArrivalEvent  to the event stack for each job.
+
+When a job service starts, the \mintinline{python}{serve_job} method asks for a free server, and assigns this server to the job.
+Then it computes the job service time and departure time, and pushes a DepartureEvent to the event stack to inform the simulator later that a job is finished.
+
+The \mintinline{python}{run} method starts by checking whether there are still events to do, and if so, it pops an event from the event stack.
+Then it retrieves the time and stores it as \mintinline{python}{now}, and gets the job attached to the event.
+If the event is an ArrivalEvent, the job must have just arrived and can be served if a server is free, otherwise the job is queued.
+When the event is a DepartureEvent, the server that served the job becomes free and is pushed to the stack of free servers.
+The departing job is pushed to the statistics tracker.
+If there is still work in the queue, a service can start for the job that is at the head of the queue.
+
+\inputminted[label=simulator.py]{python}{../code/event_stacks/simulator.py}
+
+\newthought{It remains to} actually try out the simulation.
+Later, in~\cref{sec:mm1}, we provide a set of formulas for the so-called $M/M/c$ queue which is a queueing process in which the iid inter-arrival times $X_i\sim\Exp{\lambda}$, the iid service times $S_{i}\sim\Exp{\mu}$, with $\mu > \lambda$, and there are~$c$ identical servers.
+These formulas give exact results for the expected waiting time and related KPIs, so this model serves as a perfect benchmark for our simulator.
+We use the next code for the test.
+The code for the $M/M/c$ queue is contained in a separate python file with the name \mintinline{python}{mmc.py}; you can find it on github.
+
+For the generation of the data for the simulation we follow the same logic as in~\cref{sec:simul-cont-time}.
+\inputminted[label=test-mmc.py]{python}{../code/event_stacks/test_mmc.py}
+
+Here is the output. The simulator seems to pass the test.
+\begin{verbatim}
+W:  0.044123468095817915 0.04090909090909091
+J:  0.2952268030097956 0.2909090909090909
+Q:  0.1467146714671467 0.12272727272727273
+\end{verbatim}
+
+Let us now demonstrate with a few examples how flexible this simulation environment actually is.
+
+
+\newthought{Suppose we have} three different servers with rates~$1$, $0.1$ and $0.01$, respectively, and we like to select the fastest server whenever multiple servers are free.
+As it turns out, our simulation supports this already, not a single line has to change. The Servers class acts as a heap, and popping occurs with the preference as expressed by the \mintinline{python}{__lt__} method of the Server class.
+
+Here are some interesting experiments.
+\inputminted[label=multiple-speeds.py]{python}{../code/event_stacks/multiple_speeds.py}
+This is the output when $\lambda=3$ and $\mu=4$.\sidenote{The value in the code may be different from this, because I used the same code for different experiments.}
+\begin{verbatim}
+W:  0.4178019854514783 0.75
+J:  1.2386226229512027 1.0
+Q:  1.2715271527152716 2.25
+\end{verbatim}
+This is interesting, for several reasons.
+In the multi-server case the second and third server add just a little bit of service capacity.
+For this reason we compare the result to the $M/M/1$ queue, with just one server working at rate~$1$.
+We see that the average queue length is smaller in the multi-server station, but the sojourn time is larger.
+The reason must be that some jobs end up at a slow server.
+To see  what fraction that is, we use the \mintinline{python}{Counter}. After simulating, we get this.
+\begin{verbatim}
+Counter({0: 8772, 1: 1136, 2: 91})
+\end{verbatim}
+Obviously, a significant number of jobs gets assigned to a slow server.
+
+We might wonder whether we should use the extra capacity offered by the slow servers.
+Perhaps we should only do this when the queueing times become really large.
+So, let's increase the load of the jobs by changing $\mu=4$ to  $\mu=3.1$. We get the following results.
+\begin{verbatim}
+W:  2.0385311552319467 9.677419354838683
+J:  2.971938896180861 9.999999999999973
+Q:  6.165616561656166 29.03225806451605
+Counter({0: 9615, 1: 357, 2: 27})
+\end{verbatim}
+And now it becomes very clear that the extra capacity helps. Interestingly, the fraction of jobs served by the fastest server is \emph{larger} than when the load is smaller.
+
+Another interesting rule to select servers could be based on the cost of running the server.
+For instance, it may be that some servers use less energy than others, so that an operator has a preference for the cheaper servers.
+We will the analysis of this rule (and variations)  to you to pursue.
+
+\newthought{In some queueing} systems, some jobs have priority over others, like in a hospital.
+With the next job class we can implement this behavior.
+As a priority job is just a job with a priority, it suffices to subclass the job class from above and change the ordering rule.
+The ordering rule is simple: when jobs have the same priority, they should be sorted according to FIFO, otherwise according to priority (here lower priority is better).
+\inputminted[label=priority-job.py]{python}{../code/event_stacks/priority_job.py}
+
+
+
+
+The queue class is already a heap, so needs no change.
+
+Here is how to use it.
+\inputminted[label=priority-jobs.py]{python}{../code/event_stacks/priority_jobs.py}
+And this is the result.
+\begin{verbatim}
+W:  4.6978119398356775 4.6875
+J:  5.01121142029712 5.0
+Q:  14.089830898308984 14.0625
+Priority: 0, EW: 1.92
+Priority: 1, EW: 29.38
+\end{verbatim}
+For the population as a whole there is no difference in average waiting time (which is according to our intuition), but the lower priority jobs perceive much longer waiting times.
+
+
+\newthought{With this code} environment you have all the tools available to simulate and analyze many different queueing (and inventory) systems.
+
+For instance, when jobs have due-dates, we might want to serve the job that has the smallest due-date to minimize the probability of that job being late.
+Then we have to add a due-date attribute to jobs, and use that in the method \mintinline{python}{__lt__}  to compare jobs.
+Of course, there are many other different scheduling rules possible.
+
+A more complicated example is how to handle business and economy class customers at a check-in desk at an airport.
+Ofter there is one server strictly allocated to business class customers, and there are~$c$, say, servers strictly used by the economy class customers.
+Another way to organize the server allocation could be like this.
+When the business server is free, this server takes just one economy customer in service (assuming there is such a customer in queue).
+When, after this service, there is still no business customer in queue, the business server serves another economy customer.
+Once a business customer arrives, the business server finishes the economy customer (if there is any in service), and then serves the business customer.
+We use a similar policy for serving business customers if there are free economy servers.
+The problem is, of course, to analyze the performance of this adapted policy.
+By how much do the waiting times of the business customers increase, and by how much do the waiting times of the economony class customers decrease? Perhaps  we can remove a server, thereby making the tickets cheaper.
+
+It may not be simple to make the necessary adaptions.
+Different customer queues may be necessary, we might have multiple stations, but the basic interaction with an event stack remains the same.
+
+
+\begin{truefalse}
+Claim: this class implements a sorting rule in which jobs with the same priority are served in LIFO order.
+\begin{minted}{python}
+class PriorityJob(Job):
+    priority: int = 0
+
+    def __lt__(self, other):
+        if self.priority == other.priority:
+            return self.arrival_time < other.arrival_time
+        else:
+            return self.priority > other.priority
+\end{minted}
+\begin{solution}
+False. Compare with the example code.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: this part of simulator class handles the arrival of jobs correctly.
+\begin{minted}{python}
+class Simulation:
+    def run(self):
+        while not self.events.is_empty():
+            event = self.events.pop()
+            self.now, job = event.time, event.job
+            if isinstance(event, ArrivalEvent):
+                self.queue.push(job)
+                self.serve_job(job)
+\end{minted}
+\begin{solution}
+False. Compare with the correct code.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: this part of simulator class handles the serving of jobs correctly.
+\begin{minted}{python}
+class Simulation:
+    def serve_job(self, job):
+        server = self.servers.pop()
+        job.server = server
+        job.service_time = job.load / server.rate
+        job.departure_time = self.now + job.service_time
+        job.queue_length = self.queue.length()
+        job.free_servers = self.servers.num_free()
+        self.events.push(DepartureEvent(job.departure_time, job))
+\end{minted}
+\begin{solution}
+True. Compare with the correct code.
+
+An interesting variation. Claim: the job keeps a statistic of the number of free servers as seen just prior to arrival. This claim is False, because the code first pops a server from the pool of free servers, and then sets the \pythoninline{job.free_servers} attribute.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: this part of simulator class handles the process of departing jobs correctly.
+\begin{minted}{python}
+class Simulation:
+    def run(self):
+        while not self.events.is_empty():
+            if isinstance(event, DepartureEvent):
+                self.servers.push(job.server)
+                if not self.queue.is_empty():
+                    job = self.queue.pop()
+                    self.serve_job(job)
+\end{minted}
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+
+\begin{exercise}
+Consult the website of RealPython to obtain a better understanding of
+\begin{enumerate}
+\item classes
+\item dataclasses
+\item heapq
+\item deque
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+There are some advantages to subclassing  Queue from \mintinline{python}{deque}. What are these?
+\begin{solution}
+Give this string to ChatGPT: `What is the advantage of a python deque over a heapq. Discuss the algorithmic efficiency too.'
+\end{solution}
+\end{exercise}
+
+% \begin{exercise}
+%   Consider   a multiserver queue with~$m$ servers.
+%   Suppose that at some time~$t$ it happens that $\tilde A(t) - D(t) < m$, where $\tilde A(t)$ is the number of jobs that departed from the queue up to time~$t$, but $A(t) - D(t) > m$.
+%   How can this occur?
+% \begin{solution}
+%   In this case, there are servers idling while there are still customers in queue.
+%   If such events occur, the server is not work-conservative.
+% \end{solution}
+% \end{exercise}
+
+
+\textbf{Reminder for year 2425; for students of 2324, just skip this remark}. In the previous code, we let the queue and the event stack interact directly. When generalizing this to queueing networks, we need to put a dispatcher between the event stack, and the stations. And we need to include routing information in the jobs. The dispatcher should use this routing information. \textbf{End of reminder.}
+
+\input{trailer}

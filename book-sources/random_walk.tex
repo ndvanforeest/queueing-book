@@ -1,0 +1,212 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Queueing Processes as Regulated Random Walks}
+\label{sec:queu-proc-as}
+
+
+In this section, we provide an elegant construction of a queueing process based on  \emph{random walk}.
+This serves two goals.
+The first is to show that queueing theory is essentially based on concepts of fundamental interest in probability theory (the random walk), hence is strongly related to many other applications of random walks, such as finance, inventory theory, and insurance theory.
+The second goal is to show that it is (very) hard to characterize the transient behavior of a queueing process in mathematical terms.
+Thus, in the rest of the book we will only study queueing systems in steady-state, by which we mean that we consider the long-run average time limits of the system, cf., \cref{sec:rate-stability}.
+
+
+
+
+\newthought{In the construction} of discrete-time queueing processes as set out in~\cref{sec:constr-discr-time}, we are given two sequences of iid rvs: the number of arrivals $\{a_k\}$ and the service capacities $\{c_k\}$ per period, and we use these sequences to construct the number of jobs in the system with the recursion\sidenote{\cref{ex:24}} $L_k = [L_{k-1} +a_k- c_{k}]^+$.
+It is clear that the use of the $[\cdot]^{+}$ operator complicates the computation.
+If we drop this, we obtain a related stochastic process $\{Z_k, k=0,1,\ldots\}$ with $Z_k$ given by
+\begin{equation}\label{eq:44}
+ Z_k = Z_{k-1} + a_k - c_k.
+\end{equation}
+In fact, $\{Z_k\}$ is a random walk since~$Z$ makes jumps of size $a_k-c_k, k=1,\ldots$ where $\{a_k-c_k\}$ forms a sequence of iid rvs.
+Observe that $\{Z_k\}$ is `free', i.e., it can take positive and negative values, whereas $\{L_{k}\}$ is restricted to the non-negative integers.
+
+It is interesting to express $\{\L_k\}$ in terms of $\{Z_k\}$. From~\cref{eq:44}, it is evident that $a_k - c_k = Z_k - Z_{k-1}$, hence,
+\begin{equation*}
+ L_k = [L_{k-1} +a_k- c_{k}]^+ = [L_{k-1} +Z_k- Z_{k-1}]^+.
+\end{equation*}
+It follows that  $L_k - Z_{k} = \max\{\L_{k-1} - Z_{k-1}, -Z_k\}$,
+and, by completing the recursion,\sidenote{\cref{ex:l-133}} we obtain
+\begin{equation}\label{eq:reich1}
+ L_k = Z_k - \left(\min_{1\leq i \leq k} Z_i\right)\wedge 0,
+\end{equation}
+where $a\wedge b = \min\{a,b\}$.
+
+This recursion for $L_k$ leads to nice graphs.
+In~\cref{fig:random_bernoulli} we take $a_k \sim \Bern{0.3}$ and $c_k \sim \Bern{0.4}$.
+\begin{marginfigure}
+\begin{pycode}
+import numpy as np
+from scipy.stats import bernoulli
+import matplotlib.pylab as plt
+import tikzplotlib
+from matplotlib import style
+style.use('ggplot')
+
+np.random.seed(3)
+
+n = 30
+a = bernoulli(0.3).rvs(n)
+a[0] = 0
+s = bernoulli(0.4).rvs(n)
+z = a.cumsum() - s.cumsum()  # z is the random walk
+zmin = np.minimum.accumulate(z)
+q = z - zmin  # reflection
+
+fig = plt.figure()
+plt.plot(z, 'o-', markersize=2, label="Z")
+plt.plot(q, 'o-', markersize=4, label='L')
+plt.legend(loc='lower left')
+plt.xlabel('Time')
+plt.legend(loc='lower left')
+
+
+print(tikzplotlib.get_tikz_code(axis_height='5.5cm', axis_width='6cm'))
+\end{pycode}
+\caption{An instance of~\cref{eq:44}.}
+\label{fig:random_bernoulli}
+\end{marginfigure}
+We can clearly see that $L_k$ is equal to $Z_k$ minus the minimum of $Z_{i}, i\leq k$.
+
+
+In~\cref{fig:random_walk}, $a_k\sim \Bern{0.49}$ so that the random walk behaves according to
+\begin{equation}\label{eq:35}
+ Z_k = Z_{k-1} + 2 a_k -1.
+\end{equation}
+Thus, if $a_k=1$, the random walk increases by one step, while if $a_k=0$, the random walk decreases by one step, so that $Z_k \neq Z_{k-1}$ always. Observe that this is slightly different from a random walk that satisfies~\cref{eq:44}; there, $Z_{k}=Z_{k-1}$, if $a_k=c_k$.
+
+\begin{marginfigure}
+\begin{pycode}
+import numpy as np
+from scipy.stats import bernoulli
+import matplotlib.pylab as plt
+import tikzplotlib
+from matplotlib import style
+style.use('ggplot')
+
+np.random.seed(3)
+
+# make a random walk with steps up and down.
+# a is an array of bernoulli random variables
+# z is the random walk, i.e., z[i] = sum_{j=1}^i a[i]
+# zmin is the running minimum, i.e, \min{z(j), 0 \leq j \leq i}
+# q is a random walk reflected in the origin, i.e,
+# q[i] = z[i] - \min{z(j), 0 \leq j \leq i}
+
+n = 30
+a = 2*bernoulli(0.49).rvs(n)-1
+a[0] = 0
+z = a.cumsum()
+zmin = np.minimum.accumulate(z)
+q = z-zmin
+
+fig = plt.figure()
+plt.plot(z, 'o-', markersize=2, label="Z")
+plt.plot(q, 'o-', markersize=4, label='L')
+
+plt.xlabel('Time')
+plt.legend(loc='lower left')
+print(tikzplotlib.get_tikz_code(axis_height='5.5cm', axis_width='6cm'))
+\end{pycode}
+\caption{An instance of~\cref{eq:35}.}
+\label{fig:random_walk}
+\end{marginfigure}
+
+
+
+
+\newthought{What can we} say about the transient (time-dependent) behavior of $\{\L_k\}$ with the above?
+To obtain insight into this question, let us suppose that $a_k\sim \Pois{\lambda}$ and $c_k \sim \Pois{\mu}$.
+\begin{equation*}
+ Z_k = Z_0+N_{\lambda, k} - N_{\mu, k}.
+\end{equation*}
+Writing $Z_0=m$ and with a bit of work, we can show\sidenote{\cref{ex:l-134}} that\sidenote{Note that the difference of two Poisson random variables is not Poisson, in contrast to the sum.}
+\begin{equation}\label{eq:rw2}
+ \PP{m}{Z_k=n}
+= e^{-(\lambda+\mu)k} (\lambda k)^{n-m} \sum_{j=0}^\infty
+\frac{(\lambda\mu k^2)^j} {j!(n-m+j)!}.
+\end{equation}
+It is apparent that only formally the distribution of $L_{k}$ can be obtained from this and~\cref{eq:reich1}, but we will not obtain a simple expression.
+Consequently, we cannot find useful expressions for $\P{L_k=n}$ as a function of~$n$.
+
+Now, as it turns out, $\{Z_k\}$ is about the simplest queueing system to analyze; other queueing systems are (much) more complicated.
+But if we have to give up our attempts to analyze the time-dependent behavior of this queueing process, we can better contend ourselves with the analysis of queueing systems in the long-run time limit, i.e., as $t\to\infty$. This we will do henceforth.
+
+
+\begin{exercise}\label{ex:l-133}
+Show that $L_k$ satisfies~\cref{eq:reich1}.
+%the relation $L_k = Z_k - \min_{1\leq i \leq k} Z_i\wedge 0$.
+\begin{hint}
+  Use recursion and use subsequently,
+$\max\{\max\{a,b\}, c\} = \max\{a,b,c\}$, $L_0 = Z_0$, $\max\{-a, -b \} = -\min\{a,b\}$.
+\end{hint}
+\begin{solution}
+From the recursion and the hints,
+\begin{equation*}
+ \begin{split}
+ L_k - Z_{k}
+% &= \max\{\L_{k-1} - Z_{k-1}, -Z_k\} \\
+&= \max\{\max\{\L_{k-2} - Z_{k-2}, -Z_{k-1}\}, -Z_k\} \\
+&= \max\{\L_{k-2} - Z_{k-2}, -Z_{k-1}, -Z_k\} \\
+&= \max\{\L_{0} - Z_{0}, -Z_1, \ldots, -Z_k\} \\
+&= \max\{0, -Z_1, \ldots, -Z_k\} \\
+&= - \min\{0, Z_1, \ldots, Z_k\}.
+ \end{split}
+ \end{equation*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:l-134}
+ Show that, when $Z_0=m$,  $\P{Z_k=n}$ satisfies~\cref{eq:rw2}.
+% \begin{equation*}
+%  \P{Z_k=n}
+% = e^{-(\lambda+\mu)k} (\lambda k)^{n-m} \sum_{j=0}^\infty
+% \frac{(\lambda\mu k^2)^j} {j!(n-m+j)!}.
+% \end{equation*}
+ \begin{hint}
+Use the ideas of~\cref{ex:l-103}.
+ \end{hint}
+\begin{solution}
+With the hint,
+\begin{align*}
+ \PP{m}{Z_k=n}
+&= \P{m+N_{\lambda, k } - N_{\mu, k} = n }
+= \P{N_{\lambda, k} = n - m + N_{\mu, k}} \\
+&= \sum_{j=0}^\infty \P{N_{\lambda, k}  =  n - m + j, N_{\mu, k} =j}
+= \sum_{j=0}^\infty e^{-\lambda k} \frac{(\lambda k )^{n - m + j}}{(n-m+j)!} e^{-\mu k} \frac{(\mu k )^j}{j!} \\
+&= e^{-(\lambda+\mu)k} (\lambda k)^{n-m} \sum_{j=0}^\infty  \frac{(\lambda\mu k^2)^j} {j!(n-m+j)!}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+
+\begin{exercise}\label{ex:l-147}
+ Suppose\marginpar{When we start with a really large queue, we characterize the time to clear the system in~\cref{sec:n-policies-mg1}.}
+ for the $G/G/1$ that a job sees~$n$ jobs in the system upon arrival.
+ Use the central limit theorem to estimate the distribution of the waiting time in queue for this job.
+\begin{hint}
+ Let $W_{n} = \sum_{k=1}^n S_k$.
+ Since $\{S_k\}$ are assumed to be iid\ for the $G/G/1$ queue, $W_{n}$ has mean $\mu_n = n \E S$ and $\sigma_n^2 = n\V S$.
+\end{hint}
+\begin{solution} Under conditions you can find on the internet, $(W_{n} - \mu_n)/\sigma_n \to N \sim \Norm{0,1}$ as $n\to \infty$,
+ where $\Norm{0,1}$ denotes the standard normal distribution, i.e., the normal distribution with $\mu=0$ and $\sigma^2=1$. But then
+ \begin{align*}
+ \frac{\W_{n} - \mu_n}{\sigma_n} &\approx N \iff  W_{n} \approx \mu_{n} + \sigma_n N.
+ \end{align*}
+Hence, $ W_{n}$ must be approximately distributed as $\Norm{\mu_n,\sigma_n^2} = \Norm{n\E S, n \V S}$.
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,242 @@
+\title{Sample Path Analysis  and Simulation  of Stochastic Systems}
+\author{Nicky D. van  Foreest}
+
+\begin{document}
+\frontmatter
+\maketitle
+
+\noindent
+\href{https://creativecommons.org/licenses/by-sa/4.0/}{\ccbysa} \\
+This work\ is licensed by the University of Groningen under a
+\href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
+
+% Table des matières avec seulement les chapitres
+\etocsettocstyle{\section*{Contents}}{}
+\etocsettocdepth{chapter}
+\tableofcontents
+
+\newpage
+
+% Table des matières avec les chapitres et les sections
+\etocsettocstyle{\section*{Contents in Detail}}{}
+\etocsettocdepth{section}
+\tableofcontents
+
+\loadgeometry{tufte}
+
+
+\Opensolutionfile{hint}
+\Opensolutionfile{ans}
+
+
+\mainmatter
+
+\chapter{Introduction}
+\label{cha:introduction}
+
+
+\subfile{preliminaries.tex}
+\subfile{exp_poisson.tex}
+\subfile{exponential_wins.tex}
+\subfile{probabilistic_arithmetic.tex}
+
+\chapter{Construction of Simple Discrete time Stochastic Processes}
+\label{cha:single-stat-queu}
+
+
+The first step to analyze stochastic processes is to model it.
+And for this, there is often not a better start than to build a simulation model for such processes.
+For this reason, the aim of  this chapter is to teach you how to construct  and simulate simple queueing and inventory processes.
+
+In~\cref{sec:constr-discr-time} we build discrete-time models of queueing systems, which means that we use the number of jobs that arrive and can be served in fixed periods of time to construct the queueing process.
+Such a period can be an hour, or a day; in fact, any amount of time that makes sense in the context in which the model will be used.
+% Typically, we model the number of arrivals and potential services as random variables, and in many practical settings it is reasonable to take the number of arrivals in a period as Poisson distributed.
+% This being the case, we consider the Poisson distribution in~\cref{sec:poisson-distribution}, and once we have an understanding of this process, we can use random number generators to generate (Poisson distributed) random numbers of arrivals and services to drive the simulator.
+\cref{sec:single-item-invent} presents suitable recursions for single-item inventories and demonstrates in particular how to design good rules to control stochastic inventory systems.
+Once we have some nice models for these two common stochastic processes, we demonstrate in \cref{sec:simul-psych-case,sec:simul-invent-syst,sec:simul-discr-time} in detail how to set up simulations in python, compute important performance measures and make graphs of the processes as a function of time.
+
+%As will become apparent, both types of constructing queueing processes, the discrete-time and continuous-time models, are easy to implement as computer programs.
+%In passing, we develop a number of performance measures to provide insight into the (transient and long-run average) behavior of queueing processes.
+
+
+\subfile{constructiondiscretetime.tex}
+\subfile{simulation_psychiatrists.tex}
+%\subfile{poissondistribution.tex}
+\subfile{construction_inventory.tex}
+\subfile{simulation_inventory.tex}
+\subfile{simulationsdiscrete.tex}
+
+\chapter{Construction of Simple Continuous time Stochastic Processes}
+\label{cha:continuous-time}
+
+In~\cref{sec:constr-gg1-queu} we focus on constructing queueing processes in continuous time.
+This contruction shows that a queueing system can be characterized by just a few elements; \cref{sec:kendalls-notation} develops highly useful notation for this purpose.
+\cref{sec:simul-cont-time} demonstrates how to implement the recursions in python and make plots.
+The models of these two sections are clean and nice, but do not allow to model and simulate complicated systems.
+If we want to study more complicated (rules to control) stochastic  systems, we need discrete event simulation.
+That will be the topic of~\cref{sec:discr-event-simul}.
+
+
+
+\subfile{constructioncontinuoustime.tex}
+\subfile{kendall.tex}
+\subfile{waiting_time_distribution.tex}
+\subfile{simulations-continuous.tex}
+\subfile{discrete-event-simulation.tex}
+
+
+% \subfile{random_walk.tex}
+
+
+
+
+\chapter{Fundamental tools}
+\label{cha:fundamental-tools}
+
+With the tools developed in~\cref{cha:single-stat-queu} and~\cref{cha:continuous-time} we can \emph{simulate} very general stochastic processes.
+While this is very useful, reasoning about (properties of) queueing and inventory systems is simpler with formulas and models;  in this chapter we make a start with that.
+
+The mathematical characterization of the \emph{transient behavior} of stochastic systems is extremely complicated, so henceforth we focus on the \emph{long-run time average} behavior. For this the arrival and service rate play a crucial role. % in capturing our intuition regarding the behavior of queueing systems.
+In particular, a queueing or inventory system is only stable when demand can be served at a higher rate than they arrive.
+Once we have established the stability, we  define performance measures such as the long-run average waiting time.
+
+We next derive some results that are fundamental to analyze any stochastic process.
+These results are based on \emph{sample-paths}, i.e., realizations of the simulation of such systems, and form an elegant and unifying principle between the constructions of \cref{cha:single-stat-queu} and \cref{cha:continuous-time} and the theoretical results we will consider henceforth.
+To illustrate the relations between all concepts we provide two mind-maps at the end of the chapter.
+Here we keep the discussion in these notes mostly at an intuitive level; we refer to \cite{el-taha98:_sampl_path_analy_queuein_system} for proofs and further background.
+
+
+\subfile{ratestability.tex}
+\subfile{limitingperfmeasures.tex}
+\subfile{renewal_reward.tex}
+\subfile{little.tex}
+\subfile{pasta.tex}
+\subfile{levelcrossing.tex}
+\subfile{figure_summaries_1.tex}
+
+\chapter{Exact Models}
+\label{cha:analytical-models}
+
+% As we will see, many performance measures for queueing systems depend on the distribution of the inter-arrival times and the service times.
+% To distinguish between the most important different models we use the notation of~\cref{sec:kendalls-notation}.
+
+In this chapter we use the concepts of~\cref{cha:fundamental-tools} to model and analyze many single station queueing systems in steady state.
+With sample-path analysis and level-crossing, we show in~\cref{sec:mm1} we consider the $M/M/1$ and simple variations.
+Then, in~\cref{sec:mnmn1}, we analyze a supermarket case to demonstrate how all tools come together.
+\cref{sec:mxm1-queue:-expected} deals with batch arrivals.
+In \cref{fig:mg1remainingservicetime} we consider a simple example of a queueing system under a control rule.
+This leads us to a famous formula for the expectated waiting time of the $M/G/1$ queue. Finaly, \cref{sec:invent-contr-analyt} provides models for the control of some inventory systems.
+
+% In~\cref{sec:mnmn1} we combine level-crossing with Little's law and PASTA to compute the most important performance measures for numerous queueing examples.
+
+
+% Next, in \cref{sec:mxm1-queue:-expected} and~\cref{sec:mg1}, We focus on finding the expected waiting time for batch queues and the $M/G/1$ queue.
+% In the last two sections of this chapter we derive expressions for the queue length distributions of the batch queue and the $M/G/1$ queue.
+
+
+\subfile{mm1.tex}
+\subfile{mnmn1_applications.tex}
+\subfile{mxm1_pk.tex}
+%\subfile{mg1.tex}
+%\subfile{mxm1_distribution.tex}
+%\subfile{mg1_distribution.tex}
+\subfile{n_policies_mg1.tex}
+\subfile{inventory_analysis}
+
+\chapter{Approximate Models}
+\label{cha:approximate-models}
+
+
+In the previous two chapters we learned how to construct and simulate queueing processes.
+Simulation is a powerful tool but one of its limitations is that it does not easily provide insight into structural behavior of systems.
+For this we need theoretical models, and the derivation of such models form the contents of the remainder of the book.
+
+
+\newthought{In this chapter} we discuss two formulas that might be considered as the most important formulas to understand the behavior of queueing systems.
+The first is Sakasegawa's formula that approximates the expected queueing time in a $G/G/c$ queue; the second characterizes the propagation of variability through a tandem network of $G/G/c$ queues.
+With a bit of exaggeration, we can  say that the entire philosophy behind lean manufacturing and the world-famous Toyota production system are based on the principles that can be derived from these two formulas.
+
+Here we take these formulas for granted, but focus on the insights they provide into the performance of queueing systems and how to use them to guide improvement procedures for production and service systems.
+
+
+In~\cref{sec:gg1} we introduce Sakasegawa's formula and discuss the main insights it offers.
+Then we illustrate how to use this formula to estimate waiting times in three queueing settings in which the service process is interrupted.
+In the first case,~\cref{sec:setups-batch-proc}, the server has to produce jobs from different families, and there is a change-over time required to switch from one production family to another.
+As such setups reduce the time the server is available, the load must increase.
+In fact, to reduce the load, the server produces in batches of fixed sizes.
+In the second case, in~\cref{sec:non-preempt-interr}, the server sometimes requires small adjustments, for instance, to prevent the production quality to degrade below a certain level.
+Clearly, such adjustments are typically not required during a job's service; however, they can occur \emph{between} any two jobs.
+As a consequence, the number of jobs served between two such adjustments (or setups) is not constant, hence different from batch production where  batch sizes are constant.
+In the third example, in~\cref{sec:preempt-interr-serv}, quality problems or break downs can occur \emph{during} a job's service.
+These make job service times more variable, which leads to longer expected queueing times.
+In the final~\cref{sec:tandem-queues}, we concentrate on tandem queues.
+
+In passing, we use some interesting results of probability theory and the Poisson process.
+
+\subfile{sakasegawa.tex}
+\subfile{setup_times.tex}
+\subfile{adjustments.tex}
+\subfile{failures.tex}
+\subfile{tandem.tex}
+
+% \chapter{Queueing Control and Open Networks}
+% \label{cha:queu-contr-open}
+
+% In this chapter we study two topics: the control of an $M/G/1$ by an~$N$-policy in~\cref{sec:n-policies-mg1}, and open networks of $M/M/c$ stations in~\cref{sec:jackson-networks}.
+% As we will see, the analysis of the network involves an equation of the type $\lambda = \gamma + \lambda P$, where $\lambda$ and $\gamma$ are (lying) vectors and~$P$ is a (stochastic) matrix.
+% We concentrate in~\cref{sec:lambda-=-gamma} on the solution of this equation.
+% The analysis in this chapter illustrates many tools and results of the previous chapters; as such, everything comes together here.
+
+% We point out that the techniques developed in this chapter extend (way) beyond just queueing theory; they are worth memorizing.
+% The concepts we introduce here can for instance be generalized to (optimal) stopping problems, which find many applications beyond queueing, such as in finance, inventory theory, decision theory, and so on.
+% As another set of extensions, it is possible to make the matrix~$P$ and the vector $\gamma$ depend on an action one can take in certain states.
+% This idea underlies Markov decision theory, which in turn provides the theoretical basis of a number of machine learning tools such as~$Q$ learning and reinforcement learning.
+% Thus, while this chapter closes our journey on the study of queueing systems, it is a first step toward a much longer journey on the diverse applications of probability theory.
+
+
+
+%\subfile{n_policies_mm1.tex}
+% \subfile{open_single_class.tex}
+% \subfile{gershgorin.tex}
+
+% \part{Challenges for Interested Students}
+
+% \subfile{/home/nicky/vakken/erratic/one_die_multiple_children/one_die_multiple_children}
+% \subfile{/home/nicky/vakken/erratic/mum_and_mmm/mum_and_mmm}
+% \subfile{/home/nicky/vakken/erratic/vickrey_auctions/vickrey}
+% \subfile{/home/nicky/vakken/erratic/complex_graphs/complex_graphs}
+
+
+%\part{Hints and Solutions}
+
+\Closesolutionfile{hint}
+\Closesolutionfile{ans}
+\loadgeometry{normal}
+\chapter*{Hints}
+\addcontentsline{toc}{chapter}{Hints}
+\input{hint}
+\chapter*{Solutions}
+\addcontentsline{toc}{chapter}{Solutions}
+\input{ans}
+
+
+\backmatter
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\phantomsection
+\bibliographystyle{plainnat}
+\bibliography{biblio_nicky,foreest}
+
+
+\chapter{Notation}
+\label{sec:notation}
+\subfile{notation.tex}
+
+
+
+% \addcontentsline{toc}{chapter}{Index}
+% \phantomsection
+% \printindex
+
+
+\end{document}

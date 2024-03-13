@@ -1,0 +1,229 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Server Adjustments}
+\label{sec:non-preempt-interr}
+
+
+In~\cref{sec:setups-batch-proc} we study the effect of setup times between batches of jobs.
+There are, however, other reasons to interrupt the server from serving jobs that are in queue.
+For instance,  when a knife in a cutting machine becomes blunt, an operator has to stop the machine to replace the knife.
+Another example is a medical doctor who  has to make a number of unexpected phone calls between seeing two patients.
+All such small (maintenance) tasks can be carried out in between jobs, but it is often hard to predict when they are required.
+Therefore, the number of jobs\sidenote{Compare this to a batch of jobs.} served between any two tasks\sidenote{And compare a task to a setup.}
+is no longer constant.
+But we know from Sakasegawa's formula that randomness in service times affects queueing times, and we also know from~\cref{eq:60} that the batch size affects the service time.
+Hence, such unplanned tasks must have a negative effect on sojourn times.
+
+We refer to this type of interruption as a server \emph{adjustment}.
+It is important to realize that setups and adjustments are \recall{non-preemptive outages}, i.e., they occur \emph{between} jobs, not \emph{during} job service times. \cref{sec:preempt-interr-serv} deals with the latter set of outages.
+
+
+In this section we develop a simple model to understand the impact of adjustments on job sojourn times; we use the same notation as in~\cref{sec:setups-batch-proc} and follow the same line of reasoning.
+With this model, we can analyze a number of trade-offs, such doing fewer, but longer adjustments, or planning adjustments instead just waiting until it becomes necessary at an unexpected moment.\sidenote{~\cref{ex:104}} With the model we can make graphs of the sojourn time as a function of adjustment rate, so that we can optimize for the adjustment rate.
+
+
+\newthought{Let us write} $F_{i}$ for the Bernouilli rv that, when equal to~$1$, indicates that job~$i$ requires an adjustment, and, when~$0$, the adjustment is not necessary.
+We assume that $\{F_{i}\}$ is a set of iid rvs, distributed as the common rv~$F$ such that $\P{F=1} = p = 1-\P{F=0}$.
+Thus, with constant probability~$p$ an adjustment occurs between any two jobs.
+As a consequence, the number of jobs served between two consequtive adjustments is a geometric rv~$B$ such that $\E{B} = 1/p$, and~$B$ is memoryless.\sidenote{In practice, we measure the average number of jobs $\E B$ served between a number of adjustments, and take $p=1/\E B$.}
+We further assume that the adjustment times $\{R_{i}\}$ are iid rvs, distributed as the common rv~$R$ with mean $\E R$ and variance $\V R$.
+Finally, we assume that the net processing times $\{S_{0,i}\}$, $\{R_{i}\}$ and $\{F_{i}\}$ are independent.
+
+\newthought{To compute $\E\W$} with Sakasegawa's formula, we only have to find out how the adjustments affect the  mean $\E S$ and SCV $C_s^2$ of the effective processing time.
+As the adjustments have no influence on the job arrival process, $\lambda$ and $C_a^{2}$ remain the same.
+
+In the exercises we show that the average effective processing time is
+\begin{equation} \label{eq:88}
+ \E{S} = \E{S_0} + p \E R = \E{S_0} + \frac{\E R}{\E B},
+\end{equation}
+and its  variance is
+\begin{equation}\label{eq:89}
+  \begin{split}
+ \V{S}
+&= \V{S_0} + p\V{R} + p (1-p)(\E R)^2 \\
+&= \V{S_0} + \frac{\V R}{\E B} + (\E R)^2\frac{C_B^2}{\E B},
+ \end{split}
+\end{equation}
+where $C_B^2$ is the SCV of the runlength~$B$.
+By dividing $\V S$ by $(\E S)^{2}$ we obtainx $C_{S}^{2}$.
+
+Assuming there is one server,  we can now  fill in Sakasegewa's formula!
+
+
+\newthought{Before considering some} examples, let us compare the results of this model to those of~\cref{sec:non-preempt-interr}.
+The expected effective service time is the same: an amount $\E R/ \E B$ gets added to the net processing time $\E{S_0}$.
+However, the impact on the variance is different.
+By comparing~\cref{eq:60} to~\cref{eq:89} we see that the latter has an extra (positive) term.
+This supports our intuition: Unexpected interruptions have a larger effect on variability than expected (planned) interruptions.
+
+The first few exercises demonstrate how to do apply the above, the rest are concerned with deriving~\cref{eq:88} and \cref{eq:89}.
+
+\begin{truefalse}
+    The number of jobs served between two consecutive adjustments follows a Poisson distribution.
+    \begin{solution}
+        False.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+A repair shop is considering to buy a new CNC machine.
+There are two options available, the Yamazaki and the Haas.
+The Haas is less reliable and it breaks down every week on average.
+It can however easily be fixed by running through the control checklist, which takes 60 minutes.
+The Yamazaki breaks down about once a month, but it is much more complicated to fix and takes 3.5 hours.
+The time till a break down is memoryless and the machines have the same service rate.
+Claim: The Yamazaki is better from a queueing perspective.
+    \begin{solution}
+        False. Having fewer but larger breakdowns increases the variance more. This is bad from a queueing perspective.
+    \end{solution}
+\end{truefalse}
+
+\begin{exercise}\label{ex:l-255}
+Jobs arrive as a Poisson process with rate $\lambda=9$ per working day.
+The machine works two~$8$ hour shifts a day.
+Work not processed on a day is carried over to the next day.
+Job service times are 1.5 hours, on average, with standard deviation of $0.5$ hours.
+Outages occur on average between $30$ jobs.
+The average duration of an outage is~$5$ hours and has a standard deviation of~$2$ hours.
+Compute $\E\J$.
+\begin{hint}
+ Get the units right.  Compute the load, and then the rest.
+\end{hint}
+\begin{solution}
+First we determine the load.
+\begin{pyconsole}
+EB = 30
+p = 1 / EB
+ES0 = 1.5
+labda = 9.0 / (2 * 8)  # arrival rate per hour
+ER = 5.0
+ES = ES0 + p * ER
+ES
+rho = labda * ES
+rho
+\end{pyconsole}
+So, at least the system is stable.
+\begin{pyconsole}
+VS0 = 0.5 * 0.5
+VR = 2.0 * 2.0
+VS = VS0 + p * VR + p * (1 - p) * ER * ER
+VS
+Ce2 = VS / (ES * ES)
+Ce2
+\end{pyconsole}
+And now we can fill in the waiting time formula.
+\begin{pyconsole}
+Ca2 = 1  # Poisson arrivals
+EW = (Ca2 + Ce2) / 2 * rho / (1 - rho) * ES
+EW
+EJ = EW + ES
+EJ
+\end{pyconsole}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:104}
+In the setting of~\cref{ex:l-255} we can perhaps choose to do an adjustment after every 20 jobs.
+For simplicity, assume that then adjustments never occur at random.
+Also assume that an adjustment takes less time, for instance $4.5$ hour and are constant.
+What is $\E\J$ now?
+\begin{hint}
+Realize that we now deal with setups and batch processing.
+\end{hint}
+\begin{solution}
+We can use the model of~\cref{sec:setups-batch-proc}.
+\begin{pyconsole}
+B = 20
+ER = 4.5
+VR = 0
+ES = ES0 + ER / B
+ES
+rho = labda * ES
+rho
+VS = VS0 + VR / B
+Ce2 = VS / (ES * ES)
+Ce2
+EW = (Ca2 + Ce2) / 2 * rho / (1 - rho) * ES
+EW
+EJ = EW + ES
+EJ
+\end{pyconsole}
+Comparing this to the results of~\cref{ex:l-255}, we see that the load becomes somewhat higher. Since $\rho$ becomes close to one, doing adjustments regularly is not a good idea.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}
+The easiest way to derive the expressions for $\E S$ and $\V S$ is to use Adam's and Eve's rule\sidenote{$\V{Y} = \E{\V{Y|X}} + \V{\E{Y|X}}$.}. Try it.
+\begin{solution}
+Applying adam's and Eve's is  straightforward, but the details require attention. Using independence where necessary (and allowed by our assumptions),
+\begin{align*}
+  \E{S|F} &= \E{S_{0} + R F|F} = \E{S_{0}} + F \E{R}, \\
+  \E S &= \E{\E{S|F}} = \E{S_{0}} + \E F \E{R} = \E{S_{0}} + p \E{R}, \\
+  \V{\E{S|F}} &= \V{\E{S_{0}} + F \E{R}} = (\E R)^2 \V F = (\E R)^2 p (1-p), \\
+  \V{S|F} &=\V{S_0 + R F|F} = \V{S_{0}} + F \V R,\\
+  \E{\V{S|F}} &= \V{S_0} + p \V R, \\
+  \V S &= \E{V{S|F}} + \V{\E{S|F}} = \V{S_{0}} + p \V R + p(1-p)(\E R)^{2}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+% The rest of the exercises derive the same results without using Adam's and Eve's law.
+% You can skip this if the previous exercise works for you.
+
+% \begin{exercise}\label{ex:l-256}
+% The effective processing time $S = S_{0} + R F$.
+% Use this to derive \cref{eq:88}.
+% \begin{solution}
+% Taking expectations and using the independence of~$R$ and~$F$ gives the result.
+%  % \begin{equation*}
+%  % \E{S} = (1-p)\E{S_0} + p (\E{R} + \E{S_0}) = \E{S_0}  + p \E{R}.
+%  % \end{equation*}
+% \end{solution}
+% \end{exercise}
+
+% \begin{exercise}\label{ex:78}
+% Recall that $\V X = \E{X^2} - (\E X)^{2}$ for any random variable. Hence, for $\V S$ we need $\E{S^{2}}$.   Show that
+%  \begin{equation*}
+%  \E{S^2} = \E{S_0^2} + 2 p \E{S_0} \E R + p \E{R^2}.
+%  \end{equation*}
+%  \begin{hint}
+%  Recall that $F^2= F$. Expand the square, use that $S_0$, $R$ and~$F$ are independent. Finally, $\E{\1{F=1}} = p$.
+%  \end{hint}
+% \begin{solution}
+
+%  \begin{align*}
+%  \E{S^2}
+% &= \E{(S_0+R F)^{2}} \\
+% &=\E{S_0^2 + 2 S_0 R F + R^2 F} \\
+% &=  \E{S_0^2} + 2 p \E{S_0} \E R + p \E{R^2}.
+%  \end{align*}
+% \end{solution}
+% \end{exercise}
+
+% \begin{exercise}\label{ex:l-257}
+% Derive \cref{eq:89}.
+% \begin{hint}
+%  First compute $\E{S^2}$. See~\cref{ex:78}. Don't make the error to assume that,  since~$R$ and~$F$ are independent,  $V{R F} = \V R \V{F} = \V R p (1-p)$.
+% \end{hint}
+% \begin{solution}
+%  \begin{equation*}
+%  \begin{split}
+% \V{S}
+% &=\E{S^2} - (\E{S})^2 \\
+% &= \E{S_0^2} + 2 p \E{S_0} \E R + p \E{R^2} \\
+% &\quad - (\E{S_0})^2 - 2p \E{S_0}\E R - (p \E R)^2\\
+% &= \V{S_0} + p(\E{R^2} - (\E R)^2) + (\E R)^2p (1-p) \\
+% &= \V{S_0} + p\V R + (\E R)^2p (1-p) \\
+% &= \V{S_0} + p\V R + p^3 (\E R)^2\frac{1-p}{p^2} \\
+% &= \V{S_0} + p\V R + p^3 (\E R)^2 \V B\\
+% &= \V{S_0} + p\V R + p (\E R)^2 C^2_B.
+%  \end{split}
+%  \end{equation*}
+%  Now replace~$p$ by $1/\E B$.
+% \end{solution}
+% \end{exercise}
+
+\input{trailer}

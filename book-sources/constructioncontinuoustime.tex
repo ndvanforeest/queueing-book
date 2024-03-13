@@ -1,0 +1,550 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+
+\section{Queueing Process in Continuous Time}
+\label{sec:constr-gg1-queu}
+
+In~\cref{sec:constr-discr-time} we modeled time as progressing in discrete chunks.
+However, we can also model queueing systems in continuous time, so that jobs can arrive at any moment in time and have arbitrary service times.
+In this section, we develop a set of recursions to construct the waiting times of jobs served in the sequence in which the jobs arrive, i.e., according to the FIFO scheduling rule.
+First we concentrate on a situation in which there is single server available; at the end we extend this to multiple servers.
+
+
+\newthought{Let's imagine that} a machine starts working on a one-hour job at 9 am, and there is no job in queue.
+When the next job arrives before $10$ am, this second job has to wait in queue until the first job finishes at 10 am.
+If, however, this second job arrives after 10 am, it finds the server free, so that its service can start right at the moment of arrival.
+
+More generally, suppose we are given an (ordered) sequence of \emph{arrival times} $\{A_{k}\}$ and a set of iid \emph{service times} $\{S_{k}\}$, such that job~$k$ arrives at time $A_{k}$ and needs an amount $S_{k}$ of service.
+Then we can compute the sequence of departure times $\{D_{k}\}$ from the recursions\sidenote{Note that we assume that job~$k$ `reveals' its service time at the moment it arrives.}
+\begin{align}\label{eq:qc-3}
+\tilde A_{k}&= \max\{A_k, D_{k-1}\}, & D_{k} &= \tilde A_{k} +S_k = \max\{A_{k}, D_{k-1}\} + S_{k},
+\end{align}
+where $\tilde A_{k}$ is the time a job moves from the queue to the server.
+Why is this true?
+The service of job~$k$ cannot start before it arrives, hence,  $\tilde A_k \geq A_k$.
+Moreover,  job~$k$ cannot leave the queue before job $k-1$ left the server. Thus, the service of job~$k$ can also not start before $D_{k-1}$.
+
+Once $A_{k}$ and $D_{k}$ are known, we can compute the \recall{sojourn time} and the  \recall{waiting time} as
+\begin{align*}
+\J_k &= D_{k} - A_k, & \W_k &= \tilde A_k - A_k = J_{k} - S_{k};
+ \end{align*}
+ thus, $\W_{k}$ is the time the job spends in queue (but not at the server), and $\J_{k}$ is the total amount of time job~$k$ spends in the system.
+\cref{fig:waitingtimegg1} shows how the above concepts relate to each other.
+
+
+\begin{figure}[t]
+% \centering
+
+\begin{tikzpicture}[yscale=1,xscale=1,
+ open/.style={shape=circle, fill=white, inner sep=1pt, draw, node contents=},
+ closed/.style={shape=circle, fill=black, inner sep=1pt, draw, node contents=}]
+\draw (-1,0)--(12,0);
+
+\draw
+node (c1) at (0,3) {}
+node (Wk) at (1,2) [open, label={}]
+(c1) to (Wk);
+
+%\node[below] (Ak) at (1,-0.4) {$A_k$};
+\draw[dotted] (1,0) -- (Wk) node[midway,fill=white,rotate=90] {$\W_{k-1}$};
+\node (Sk) at (1,5) [closed, label={}];
+\node (Ak1) at (5,1) [open, label={}];
+%\node[above] at (4,0) {$D_k$};
+%\draw[dotted,<->] (1, -0.25)--(3,-0.25) node[midway, fill=white] {$\W_{k}$};
+%\draw[dotted,<->] (3, -0.25)--(6,-0.25) node[midway, fill=white] {$S_k$};
+\draw[dashed] (1, 2)--(3,0);
+
+\draw[|-|]
+node[left] (c1) at (1,-0.5) {$A_{k-1}$}
+node[right] (c2) at (6,-0.5) {$D_{k-1}$}
+(c1) -- (c2)
+node[midway, fill=white] {$\J_{k-1}$};
+
+\draw[dotted] (Wk) -- (Sk) node[midway,fill=white,rotate=90] {$S_{k-1}$};
+\draw[dashed] (Ak1) -- (6,0); % node[midway,fill=white,rotate=90] {$S_k$};
+
+\draw[-] (Sk) to (Ak1);
+\node (Sk1) at (5,3) [closed, label={}];
+\draw[dotted] (Ak1) -- (Sk1) node[midway,fill=white,rotate=90] {$S_{k}$};
+\draw[dotted] (5,0) -- (Ak1);
+\draw (Sk1) -- (8,0);
+
+\draw[|-|]
+node[left] (c1) at (5,-1) {$A_{k}$}
+node[right] (c2) at (8,-1) {$D_{k}$}
+(c1) -- (c2)
+node[midway,  xshift=0.9cm, fill=white] {$\J_{k}$};
+
+
+\draw (9,2) -- (11,0);
+
+\draw[dotted]
+node (c1) at (9,0) [open, label={}]
+node (c2) at (9,2) [closed, label={}]
+(c1) -- (c2)
+node[midway, fill=white, rotate=90] {$S_{k+1}$};
+
+\draw[|-|]
+node[left] (c1) at (9,-1.5) {$A_{k+1}$}
+node[right] (c2) at (11,-1.5) {$D_{k+1}$}
+(c1) -- (c2)
+node[midway, fill=white] {$\J_{k+1}$};
+
+\draw[|-|]
+node[left] (c1) at (1,-1.5) {$A_{k-1}$}
+node[right] (c2) at (5,-1.5) {$A_{k}$}
+(c1) -- (c2)
+node[midway, fill=white] {$X_{k}$};
+\end{tikzpicture}
+\caption{Construction of the single-server queue in continuous time. The sojourn time is the time a job remains in the system, hence equals the sum of the waiting time and the service time.
+The virtual waiting time process~$V$ is shown by the solid lines with slope~$-1$. Note that right after the arrival of job~$k$, the virtual waiting time $V(A_{k}) = J_{k}$.}
+ \label{fig:waitingtimegg1}
+\end{figure}
+
+
+\newthought{While it is }often simple to measure arrival times in practical situations, it is a bit harder to generate $\{A_{k}\}$ directly with a simulator. Instead, in simulation we let a random number generator produce a set of iid rvs $\{X_{k}\}$ that represent the \recall{inter-arrival times} between jobs. The arrival times can then be computed recursively with the rule
+\begin{align}\label{eq:qc-4}
+ A_k &= A_{k-1} + X_k, &   A_{0} = 0.
+ \end{align}
+
+Interestingly, if  $\{X_{k}\}$ and $\{S_{k}\}$ are given, we don't need to first compute $\{A_{k}\}$ and $\{D_{k}\}$  to find the sojourn times and waiting  times. In fact,
+suppose that job $k-1$ has to wait a time $\W_{k-1}$ in queue and then adds its service time $S_{k-1}$ to the waiting time, so that its sojourn time $\J_{k-1} =\W_{k-1}+ S_{k-1}$. If a time $X_k$ elapses between the arrival time of job $k-1$ and~$k$, then job~$k$ has to wait in queue,\sidenote{$[x]^{+} := \max\{x, 0\}$}
+\begin{align}\label{eq:56}
+ \W_{k} &= [\J_{k-1} -X_k]^+, & \J_{k} &= \W_{k} + S_{k}, & W_{0} &= 0.
+\end{align}
+%With this recursion it is easy to compute   waiting times $\{\W_k\}$ and sojourn times $\{J_{k}\}$.
+If we only need  $\J_k$ or $\W_{k}$ then the next rules suffice:
+\begin{align}\label{eq:59}
+\J_{k} &= [\J_{k-1} - X_k]^+ + S_k, & J_{0} &=0, \\
+\W_{k} &= [\W_{k-1} + S_{k-1}- X_k]^+, & W_{0} &=0.
+\end{align}
+
+Henceforth, we  make the  implicit assumption  that  $\{X_k\}$ are iid,  $\{S_k\}$ are iid, and $\{X_k\}$ are independent of $\{S_k\}$.
+
+\newthought{We will see} later that we need the state of the system at arbitrary moments in time, not just at arrival moments.
+The number of arrivals $A(t)$ as a \emph{function of time} $t$ can be computed from $\{A_{k}\}$ as
+\begin{equation} \label{eq:2}
+ A(t) = \max\{k: A_k \leq t\} = \sum_{k=1}^{\infty}\1{A_k\leq t}.
+\end{equation}
+Observe that the function $t\to A(t)$ is right-continuous\sidenote{A function~$f$ if right-continuous if, for all~$x$, $f(x) = f(x+) := \lim_{y\downarrow x} f(y)$.}.
+
+In turn, we can retrieve the arrival times $\{A_{k}\}$ from the sequence of numbers $\{A(t)\}$.
+For instance, if we know that $A(s) = k-1$ and $A(t) = k$, then the arrival time $A_k$ of the~$k$th job must lie somewhere in $(s,t]$.
+Specifically,
+\begin{equation*}
+ A_k = \min\{t: A(t) \geq k\}, \quad A_0 = 0.
+\end{equation*}
+And if we have $\{A_{k}\}$,  the inter-arrival times follow from $X_k = A_k - A_{k-1}$. So, with the above recursions and definitions, we can convert into each other the arrival times, the inter-arrival times and the number of arrivals as a function of time. It just depends on what our starting data is to obtain the rest.
+
+Likewise, for the number of jobs $\tilde A(t)$ that departed from the queue up to time~$t$ and and the \emph{departure process} $\{D(t)\}$ we have the relations
+\begin{align*}
+\tilde A(t) &= \max\{k : \tilde A_k \leq t\}, &  \tilde A_{k} &=\min\{t: \tilde A(t) \geq k\}, \\
+ D(t) &= \max\{k : D_k \leq t\}, &  D_{k} &=\min\{t: D(t) \geq k\}.
+\end{align*}
+
+Once we have the arrival and departure processes, it is easy to compute the \recall{number of jobs in the system} at time~$t$ as, see~\cref{fig:atltdt},
+\begin{equation}\label{eq:14}
+ \L(t) = A(t) - D(t) + \L(0),
+\end{equation}
+where $\L(0)$ is the number of jobs in the system at time $t=0$; typically we assume that $\L(0)=0$.
+Recalling that in a queueing system, a job can either be in queue or in service, we distinguish between the number of jobs in the system $\L(t)$, the number of jobs in queue $\QQ(t)$, and the number in service $\Ls(t)$.
+Clearly, $\L(t) = \QQ(t) + \Ls(t)$ and  $\Ls(t) = \tilde A(t) - D(t) = \L(t) - \QQ(t)$.
+
+It is important to realize that the queue length process $\{Q(t)\}$ at general time moments~$t$ can be quite different from the queue length process $\{ \QQ(A_k-)\}$ as observed by arriving jobs.\sidenote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
+
+
+\begin{figure}[t]
+% \centering
+\begin{tikzpicture}[yscale=0.7, xscale=0.9,
+ open/.style={shape=circle, fill=white, inner sep=1pt, draw, node contents=},
+ closed/.style={shape=circle, fill=black, inner sep=1pt, draw, node contents=},
+ soldot/.style={color=blue,only marks,mark=*}
+]
+
+\def\rightend{14}
+\def\top{7}
+\path [clip] (-1,-1) rectangle (\rightend,\top);
+
+\draw[->] (-1,0) -- (\rightend,0);
+\draw[->] (-0.5,-0.5) -- (-0.5, \top);
+
+% arrivals
+\def\lastx{0}
+\foreach \x [count=\y, remember=\x as \lastx] in {1,3,4, 7, 9, 18} {
+ \node at (\lastx, 0) [below] {$A_{\y}$};
+ \node (a) at (\lastx,\y) [closed] {};
+ \draw[dotted] (\lastx,0) -- (a);
+ \draw (a)-- (\x,\y) node[open, label={}];
+}
+% draw first arrival. Since I want the circle to be open, I draw it at
+% the end.
+\node at (0, 0) [open] {};
+\node at (5.5, 4) [fill=white] {$A(t)$};
+
+
+% departures
+\foreach \x [count=\y, remember=\x as \lastx (initially 5)] in {6, 8, 10, 11, 13,15} {
+ \draw[dotted] (\lastx,\y) -- (\lastx,0);
+\draw (\lastx,\y) node[closed, label={}] -- (\x,\y) node[open, label={}];
+ \node at (\lastx, 0) [below] {$D_{\y}$};
+}
+\node at (5, 0) [open] {};
+\node at (12, 5) [fill=white] {$D(t)$};
+
+\draw[dashed, <->] (3,2.5)--node[midway, fill=white] {$\J_3$} (8,2.5);
+\draw[dashed, <->] (7.5,2)--node[midway, fill=white,rotate=90] {$\L(t)$} (7.5,5);
+
+\end{tikzpicture}
+
+\caption{Relation between the arrival process $\{A(t)\}$, the departure process $\{D(t)\}$, the number in the system $\{\L(t)\}$ and the sojourn times $\{\J_k\}$.
+Observe that the arrival and departures times are intertwined.}
+
+\label{fig:atltdt}
+\end{figure}
+
+
+Finally, the \recall{virtual waiting time process} $\{V(t)\}$ is the time a job would have to wait if it would arrive at time~$t$.
+In other words, the virtual waiting time is the waiting time observed by jobs arriving virtually (but not in reality).
+To construct\sidenote{~\cref{ex:l-150}} $\{V(t)\}$, we simply draw lines that start at points $(A_k, \J_k)$ and have slope -1, until the lines hit the~$x$-axis.
+Once at $y=0$, the virtual waiting time remains there until an arrival occurs, cf., \cref{fig:waitingtimegg1}.
+Here is the expression\sidenote{See~\cref{ex:l-150}.}
+ \begin{equation}\label{eq:34}
+ V(t)= [\J_{A(t)} - (t-A_{A(t)})]^+;
+ \end{equation}
+the ingeneous use of $A(t)$ can take some time to absorb!
+
+\newthought{Finally, we note} that queueing and production-inventory systems are very simmilar, cf., \cref{fig:inv_queue}.\sidenote{In a production-inventory system, a machine is switched on and off to replenish the inventory at a finite production rate.
+This is different from `normal' inventory systems in which replenishements arrive as batches.}
+When a job arrives in the queueing system, the virtual workload~$V(t)$ increases by the service time of the job.
+When a demand arrives in the inventory system, the inventory $I(t)$ decreases by the demand size of the customer.
+Like this, customer demands in the production-inventory system are job service times in the queueing system.
+Hence, in the figure, the demand size $D_1$ of the first customer corresponds to a production time of duration $S_1=D_1$, and so on.
+Note that as long as the on-hand inventory level suffices to cover demand, customers do not have to wait to receive their product, but their demands spawn production times at the machine (a server) that replenishes the consumed items.
+
+Assume now that the inventory process is controlled by an order-up-to policy: produce (refill the inventory) as long as the inventory level is below $S$ and stop otherwise.
+Then the figure shows that the inventory level $I(t)$ is equal to $S-V(t)$, where $V(t)$ is the virtual waiting time of the related queueing system.
+
+The figure shows in more general terms that in queueing systems or inventory systems, there is always `something' or `somebody' waiting.
+Items in the inventory of a supermarket are produced ahead and `wait' until being consumed by customers.
+In a queueing system, customers are waiting while their product is being `produced' by the server, and when there are no jobs, the server is idle and waits for jobs to arrive.
+Thus, queueing and inventory theory focus on waiting times, either by customers, servers, or items, hence both are related branches of (applied) probability theory and stochastic operations research.
+
+
+\begin{figure}[t]
+\begin{center}
+\begin{tikzpicture}[yscale=0.5]
+\draw[->] (0,0) -- coordinate (x axis mid) (8.5,0);
+\draw[->] (0,0) -- coordinate (y axis mid) (0,10.5);
+\node[below=0.2cm] at (x axis mid) {$t$};
+
+\draw plot coordinates {(1,0) (1,2) (2,1) (2,4) (4,2) (4,4.2) (7.5,0)};
+\node[left] at (7,2.5) {$V(t)$};
+\node[fill=white, rotate=90] at (1,1) {$S_1$};
+\node[fill=white, rotate=90] at (2,2.5) {$S_2$};
+\node[fill=white, rotate=90] at (4,3.) {$S_3$};
+
+\node at (7,5) {$V(t)=S-I(t)$};
+
+\draw[dotted] (0,10)--(8.5,10);
+\node[left] at (0,10) {$S$};
+\node[left] at (7,7.5) {$I(t)$};
+\draw plot coordinates {(1,10) (1,8) (2,9) (2,6) (4,8) (4,6.0) (7.5,10)};
+\node[fill=white, rotate=90] at (1,9) {$D_1$};
+\node[fill=white, rotate=90] at (2,7.5) {$D_2$};
+\node[fill=white, rotate=90] at (4,7) {$D_3$};
+\end{tikzpicture}
+\caption{
+The relation between a production-inventory system and queueing. Here $I(t)$ models the evolution of the inventory level in an inventory system, while $V(t)$ shows the virtual workload, and $S$ is the order-up-to level. When a customer requires $D_1$ items, say, it takes a server of a time $S_1=D_1$ to produce these items. Thus, demands at the inventory system convert into production times in a queueing system. When the inventory is always replenished to level $S$, then the shortage of the inventory level relative to $S$, i.e., $S-I(t)$, becomes the workload $V(t)$ for the server in terms of amount of items or production time.} \label{fig:inv_queue}
+\end{center}
+\end{figure}
+
+
+
+
+% \begin{exercise}\label{ex:20}
+% Show that we can also define $A(t)$ as $A(t) = \sum_{k=1}^\infty \1{A_k \leq t}$.
+% \begin{hint}
+%   What is $\1{A_k \leq t}$ if $A_k \leq t$?
+% \end{hint}
+% \begin{solution}
+% For every $A_k \leq t$, we have that $\1{A_k \leq t} = 1$, and else the indicator is~$0$. Hence, in the summation we count the number of times $A_k \leq t$.
+% \end{solution}
+% \end{exercise}
+
+
+\begin{truefalse}
+Claim: with our notation, the following mapping is correct:
+\begin{align*}
+ A_k : \N \to \R, \quad{\text{job id (integer) to arrival time (real number)}}.
+\end{align*}
+\begin{solution}
+True. As simple variation: Claim: with our notation, the following mapping is correct:
+\begin{align*}
+ A(t) : \R\to \N, \quad{\text{time (real number) to number of jobs (integer)}}.
+\end{align*}
+\end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}
+Claim: the number of arrivals $A(t)$ during $[0, t]]$ can be defined as $\min\{k : A_k \geq t\}$.
+\begin{solution}
+False.
+  Suppose $A_3 = 10$ and $A_4 = 20$.
+  Take $t=15$.
+  Then $\min\{k : A_k \geq 15\} = 4$ since $A_3 < t=15 < A_4$.
+However, $\max\{k : A_k \leq t\} = 3$.
+  And, indeed, at time $t=15$, 3 jobs arrived, not 4.
+Here is a simple variation: Claim: the number of arrivals $A(t)$ during $[0, t]]$ can be defined as $\min\{k: A_k > t\}$?
+\end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}[3.1]
+The waiting time of the third job is correctly represented in the figure below.
+ \begin{center}
+\begin{tikzpicture}[xscale=0.7,yscale=0.9,
+ open/.style={shape=circle, fill=white, inner sep=1pt, draw, node contents=},
+ closed/.style={shape=circle, fill=black, inner sep=1pt, draw, node contents=},
+ soldot/.style={color=blue,only marks,mark=*}
+]
+
+\def\rightend{14}
+\def\top{7}
+\path [clip] (-1,-1.5) rectangle (\rightend,\top);
+
+\draw[->] (-1,0) -- (\rightend,0);
+\draw[->] (-0.5,-0.5) -- (-0.5, \top);
+
+% arrivals
+\foreach \x [count=\y, remember=\x as \lastx] in {1,3,4, 7, 9, 18} {
+ \node at (\lastx, 0) [below] {$A_{\y}$};
+ \node (a) at (\lastx,\y) [closed] {};
+ \draw[dotted] (\lastx,0) -- (a);
+ \draw (a)-- (\x,\y) node[open, label={}];
+}
+% draw first arrival. Since I want the circle to be open, I draw it at
+% the end.
+\node at (0, 0) [open] {};
+\node at (5.5, 4) [fill=white] {$A(t)$};
+
+
+% departures
+\foreach \x [count=\y, remember=\x as \lastx (initially 2.1)] in {6, 8, 10, 11, 13,15} {
+ \draw[dotted] (\lastx,\y) -- (\lastx,0);
+ \draw (\lastx,\y) node[closed, label={}] -- (\x,\y) node[open, label={}];
+ \node at (\lastx, -0.5) [below] {$D_{\y}$};
+}
+\node at (5, 0) [open] {};
+\node at (12, 5) [fill=white] {$D(t)$};
+
+%\draw[dashed, <->] (3,2.5)--node[midway, fill=white] {$W_3$} (8,2.5);
+\draw[dashed, <->] (3,2.5)--node[midway, fill=white] {$W_3$} (9,2.5);
+\draw[dashed, <->] (7.5,2)--node[midway, fill=white,rotate=90] {$L(t)$} (7.5,5);
+
+\end{tikzpicture}
+ \end{center}
+
+\begin{solution}
+False.
+\end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}\label{ex:61}
+Claim:  $A_{A(t)} = t$ for all $t$ and $A(A_{n}) =n$ for all $n$.
+\begin{solution}
+The first part of the claim is False, the other True, hence the combination is False.
+
+ $A(t)$ is the number of arrivals during $[0,t]$. Suppose that
+ $A(t) = n$. This~$n$th job arrived at time $A_n$. Thus, $A_{A(t)}$
+ is the arrival time of the last job that arrived before or at time
+ $t$.
+
+In a similar vein, $A_n$ is the arrival time of the~$n$th job.
+Thus, the number of arrivals up to time $A_n$, i.e., $A(A_n)$, must be~$n$.
+\end{solution}
+\end{truefalse}
+
+
+
+
+
+% \begin{exercise}\label{ex:25}
+% Assume that $X_k = 10$ minutes and $S_k = 11$ minutes for all~$k$, i.e., $X_k$ and $S_k$ are deterministic and constant.
+% Compute $A_k$, $\W_k$, $D_k$ as functions of~$k$.
+% Then find expressions for $A(t)$ and $D(t)$.
+% \begin{hint}
+% Observe that jobs arrive faster than they are served.
+% \end{hint}
+% \begin{solution}
+% $A_0 = 0$, $A_1=10$, $A_2=20$, and so on. Hence,
+%  $A_k = 10k$. $\W_{0} = 0$, $\W_{1} = \max\{0 + 0-10,0\} = 0$.
+%  $\W_{2} = \max\{0+11-10,0\} =1$.
+%  $\W_{3} = \max\{1+11-10,0\} =2$. Hence, $\W_{k} = k-1$ for
+%  $k\geq1$. Thus, $\J_k = k-1+11 = k + 10$ for $k\geq1$, and
+%  $D_k = 10k + k+10 = 11k+10$. Note that $\W_k$ increases linearly
+%  as a function of~$k$. All in all, $A(t) = \lfloor t/10\rfloor$, and $D(t) = \lfloor (t-10)/11 \rfloor$.
+% \end{solution}
+% \end{exercise}
+
+
+
+
+
+
+\begin{exercise}
+Show  that $\L(A_k-)>0 \iff A_k \leq D_{k-1}$.
+\begin{hint} Use that $\L(A_k-)>0$ means that the system contains at least one job at the time of the~$k$th arrival, and that $A_k- < D_{k-1}$ means that job~$k$ arrives (almost surely) before job $k-1$ departs.
+\end{hint}
+\begin{solution} In a sense, the claim is evident, for, if the system contains a job when job~$k$ arrives, it cannot be empty.
+ But if it is not empty, then at least the last job that arrived before job~$k$, i.e., job $k-1$, must still be in the system.
+ That is, $D_{k-1} \geq   A_k$.
+ A more formal proof proceeds along the following lines.
+ Using that $A(A_k-) = k-1 = D(D_{k-1})$,
+ \begin{equation*}
+ \begin{split}
+& \L(A_k-) > 0 \iff A(A_k-) > D(A_k-) \iff A(A_{k}-) \geq D(A_k)  \\
+   &\iff k -1 \geq  D(A_k) \iff D(D_{k-1}) \geq  D(A_k) \iff  D_{k-1} \geq A_{k},
+ \end{split}
+ \end{equation*}
+ where the last relation follows from the fact that $D(t)$ is a
+ counting process, hence monotone non-decreasing.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:l-150}
+Explain~\cref{eq:34} for the virtual waiting time at time~$t$.
+\begin{hint}Make a plot of the function $t-A_{A(t)}$.
+\end{hint}
+\begin{solution}
+Suppose that $A_{n+1} = A_{n} + \epsilon$, i.e., the arrival time $A_{n+1}$ is just a tiny bit larger than $A_{n}$.
+Then job $n+1$ would have to wait $J_{n}-\epsilon$ before it can get access to the server.
+Now, recall from a previous exercise that if $A(t)=n$, then $A_n$ is the arrival time of the~$n$th job, so that the function $A_{A(t)}$ provides us with arrival times as a function of~$t$.
+Between arrival moments, the virtual waiting time decreases with slope~$1$, until it hits 0.
+\end{solution}
+\end{exercise}
+
+
+
+% \begin{exercise}\label{ex:97}
+% In~\cref{ex:25},  find an expression for $\L(A_k-)$ (The meaning of $-$ sign is defined in~\cref{eq:5}.)
+% \begin{solution}
+% Recall that $A(t) = \lfloor t/10\rfloor$, and $D(t) = \lfloor (t-10)/11 \rfloor$.
+%   Hence, since $A_k = 10 k$ so that $A_k- = 10k-$,
+%  \begin{equation*}
+%  \L(A_k-) = k-1 - D(A_k-) = k- 1 - D(10k-) = k- 1 - \left \lfloor \frac{(10k-)-10}{11} \right \rfloor.
+%  \end{equation*}
+%  The computation is a bit tricky since sometimes arrivals and departures coincide. (Consider for instance $t=120$.)
+% \end{solution}
+% \end{exercise}
+
+
+
+
+% \begin{exercise}\label{ex:l-148}
+% Compute $\P{S-X\leq u}$ for~$S$ and~$X$ independent and $S\sim \Unif{[0,7]}$ and $X\sim \Unif{[0,10]}$.
+% \begin{hint}
+% It's evident that $f_{X}(x) = \1{0\leq x \leq 10}/10$ and $f_{S}(s) = \1{0\leq s \leq 7}/7$. Let  $T=S-X$. Then $X=S-T$, and
+% \begin{align*}
+% f_{T}(t) &= \int f_{S}(s) f_{X}(s -t ) \d s = \frac{1}{70} \int \1{0\leq s \leq 7} \1{0\leq s-t \leq 10} \d s.
+% \end{align*}
+% Now work out the integral.
+% \end{hint}
+% \begin{solution}
+% Note that for the integrand in  the hint,
+% \begin{align*}
+% \1{0\leq s \leq 7} \1{0\leq s-t \leq 10} &= \1{0\leq s \leq 7} \1{t\leq s \leq t+10} =\1{\max\{0, t\} \leq s \leq \min\{7, 10+t\}} \implies \\
+% f_{T}(t)
+% &= \frac{1}{70}\int \1{\max\{0, t\} \leq s \leq \min\{7, t+10\}} \d s
+% = \frac{1}{70} [\min\{7, t+10\} - \max\{0, t\}]^{+}.
+% \end{align*}
+
+% Draw the graphs of $\min\{7, t+10\}$ and $\max\{0, t\}$ to see that this is the graph of $f_{T}$:
+% \begin{center}
+% \begin{tikzpicture}[scale=0.5]
+% \node[right] at (8,0) {$t$};
+% \draw (-11,0)--(8,0);
+% \draw (0,0)--(0,8);
+% \draw (-3,0)--(-3,7);
+% \node[below] at (-10,0) {$-10$};
+% \node[below] at (-3,0) {$-3$};
+% \node[below] at (0,0) {$0$};
+% \node[below] at (7,0) {$7$};
+% \node[right] at (0,7) {$7$};
+% \draw (-10,0)--(-3,7);
+% \draw (-3,7)--(0,7);
+% %\node[right] at (4,3) {$\max\{0, t\}$};
+% \draw (0,7)--(7,0);
+% \end{tikzpicture}
+% \end{center}
+% From this graph,
+% \begin{align*}
+% \P{S-X \leq t} &= F_{T}(t) = \int_{-\infty}^{t} f_{T}(u) \d u \\
+% &=
+%   \begin{cases}
+% 0, & t \leq -10, \\
+%     (t+10)^{2}/140, & -10 \leq t \leq -3 \\
+% 7^{2}/140 + 7(t+3)/70, & -3 \leq t \leq 0 \\
+% 7^{2}/140 + 7\cdot 3/70 + 7 t/70 - t^{2}/140 & 0 \leq t \leq 7 \\
+% 1& 7 \leq t.
+%   \end{cases}
+% \end{align*}
+
+% Solving the integral is, in principle, not hard, but it's easy to make a mistake.
+% Let's use Wolfram Alpha to check this.
+% Type this at the prompt:
+% \begin{verbatim}
+% \int_{0}^{10} \int_0^7 Boole[u<= s-x] ds dx.
+% \end{verbatim}
+% \end{solution}
+% \end{exercise}
+
+
+
+
+% \begin{exercise}\label{ex:85}
+%  Suppose that $X_k\in\{1,3\}$ such that $\P{X_k=1}=\P{X_k=3}$ and
+%  $S_k\in\{1,2\}$ with $\P{S_k=1}=\P{S_k=2}$. If $\W_{0}=3$, what are
+%  the distributions of $\W_{1}$ and $\W_{2}$?
+% \begin{hint}
+% Use~\cref{eq:59}.
+% \end{hint}
+% \begin{solution} First find the distribution of $Y_k:=S_{k-1}-X_k$ so that we can write
+%  $\W_{k}=[\W_{k-1}+Y_k]^+$. Use independence of $\{S_k\}$ and $\{X_k\}$:
+% \begin{align*}
+%  \P{Y_k=-2} &=\P{S_{k-1}-X_k=-2} = \P{S_{k-1}=1, X_k=3} = \P{S_{k-1}=1}\P{X_k=3} = \frac14.
+% \end{align*}
+% Dropping the dependence on~$k$ for ease, we get
+% \begin{align*}
+%  \P{Y=-2} &=\P{S-X=-2} = \P{S=1, X=3} = \P{S=1}\P{X=3} = \frac14,\\
+%  \P{Y=-1} &=\P{S=2}\P{X=3} = \frac14,\\
+%  \P{Y=0} &=\P{S=1}\P{X=1} = \frac14,\\
+%  \P{Y=1} &=\P{S=2}\P{X=1} = \frac14.
+% \end{align*}
+% With this
+%  \begin{align*}
+%  \P{\W_{1} = 1} &=\P{\W_{0} + Y= 1} = \P{3 + Y =1} = \P{Y=-2} =\frac14,\\
+%  \P{\W_{1} = 2} &= \P{3 + Y =2} = \P{Y=-1} =\frac14,\\
+%  \P{\W_{1} = 3} &= \P{3 + Y = 3} = \P{Y=0} =\frac14,\\
+%  \P{\W_{1} = 4} &= \P{3 + Y = 4} = \P{Y=1} =\frac14.\\
+%  \end{align*}
+% And, then
+%  \begin{equation*}
+%  \begin{split}
+%  \P{\W_{2} = 1}
+% &=\P{\W_{1} + Y = 1} = \sum_{i=1}^4 \P{\W_{1} + Y = 1\given \W_{1}=i}\P{\W_{1}=i}\\
+% &=\sum_{i=1}^4 \P{i + Y = 1\given \W_{1}=i}\frac14
+% =\sum_{i=1}^4 \P{Y = 1-i\given \W_{1}=i}\frac14\\
+% &=\frac14\sum_{i=1}^4 \P{Y = 1-i} = \frac14(\P{Y = 0} + \P{Y=-1} +\P{Y=-2}) = \frac{3}{16}.
+%  \end{split}
+%  \end{equation*}
+% \end{solution}
+% \end{exercise}
+
+
+\input{trailer}

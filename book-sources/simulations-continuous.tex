@@ -1,0 +1,277 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{Simulations in continuous time}
+\label{sec:simul-cont-time}
+
+
+With the recursions of~\cref{sec:constr-gg1-queu}  we can simulate simple queueing systems in continuous time.
+In this section we implement these recursions in python and show how to build a graph of the system length process~$L$ and the virtual waiting time process~$V$.
+This is not entirely straightward, though: to get around the problems, we need an \emph{event stack}, which is actually a queueing process operating under a specific scheduling rule.\sidenote{Thus, we use a queue, i.e., the event stack, to simulate queueing processes.}
+More generally, event stacks form the heart of every discrete event simulator you will ever use.
+In \cref{sec:discr-event-simul} we will deal with the details of discrete event simultion; here we start simple.
+
+\newthought{The dynamics of} the single server queue in continuous time is given by the recursions in~\cref{eq:qc-3}.
+The relating code is simple, but there is a small detail we should solve.
+If we were to compute the total offered amount of work, then the natural thing is to call \mintinline{python}{S.sum()}.
+However, this includes \mintinline{python}{S[0]}, while actually job~$0$ is never served.
+So, we set \mintinline{python}{S[0]=0}, which is in line with the choice to set \mintinline{python}{X[0]=0}.
+This induces a slight error though: \mintinline{python}{S.mean()} includes still $S[0]$, so we divide by one job too much; to repair we should compute \mintinline{python}{S.mean() * len(S) / (len(S) -1)}, but we choose to neglect this small error.\sidenote{Be aware, in critical software you should not use such tricks.}
+
+The next code computes first the departure times~$D$, and then the sojourn times~$J$ and waiting times~$W$. Note how easy this is. Calling statistics is trivial too.
+
+\begin{python}
+import numpy as np
+
+rng = np.random.default_rng(3)
+labda, mu = 3, 4
+num = 10
+X = rng.exponential(scale=1 / labda, size=num)
+S = rng.exponential(scale=1 / mu, size=num)
+X[0] = S[0] = 0
+A = X.cumsum()
+
+D = np.zeros_like(X)
+for i in range(1, num):
+    D[i] = max(A[i], D[i - 1]) + S[i]
+
+J = D - A  # sojourn times
+W = J - S  # waiting times
+
+# Statistics
+print(J.mean(), J.var())
+\end{python}
+
+\newthought{With the recursions}~\cref{eq:qc-3} it is apparently easy to compute the sojourn and waiting times, but it is less simple to compute the number of jobs in queue or in the system at arrival moments, for instance.
+The problem is that the arrival and departure times are all intertwined, see~\cref{fig:atltdt}.
+Before discussing how to get around this, we first show how to compute the time-average of the number of jobs in the system, as this is still relatively easy and develops some formulas that we will need for the proof of Little's law, cf., \cref{sec:littles-law}.
+
+\cref{fig:atltdt} clarifies that the number of jobs $\L(s)$ in the system at time~$s$ is equal to all jobs $A(s)$ that arrived minus the jobs $D(s)$ that departed during $[0,s]$, assuming that $L(0)= 0$.
+Therefore, if we run a simulation for $n$ jobs in total, the time average number of jobs during the simulation must be $D_{n}^{-1}\int_0^{D_{n}}t \L(s) \d s$, because the last job departs at time $D_{n}$.
+Another way to look at the integrand $\L(s)$ is to count all jobs whose arrival times lie before~$s$ and whose departure time lie after~$s$, that is, $\L(s) = \sum_{k=1}^{n} \1{A_k\leq s \leq D_{k}}$.
+Therefore, the time-average number ~$L$ must satisy,
+\begin{align*}
+\bar L&=  \frac{1}{D_{n}}\int_{0}^{D_{n}} L(s) \d s =
+  \frac{1}{D_{n}}\int_{0}^{D_{n}} \sum_{k=1}^n \1{A_k\leq s \leq D_{k}}) \d s
+=  \frac{1}{D_{n}} \sum_{k=1}^n \int_{0}^{D_{n}}\1{A_k\leq s \leq D_{k}}) \d s \\
+  &\stackrel1=  \frac{1}{D_{n}} \sum_{k=1}^n J_{k} =  \frac n{D_{n}} \frac{1}{n} \sum_{k=1}^n J_{k} = \frac n{D_{n}} \bar J,
+\end{align*}
+where 1 follows from the fact that the integral $\int_{0}^{t} \1{A_k\leq s \leq D_k} \d s = J_{k}$ if $D_k \leq t$.
+In code, to get an estimate for the average system length, just sum all sojourn times and divide by the time the last job leaves the system.
+
+\begin{python}
+print(J.sum() / D[-1])
+\end{python}
+
+
+\newthought{Let us next} turn towards designing an algorithm to compute the number $L_{k}$ of jobs in the system as seen by job~$k$ upon its arrival.
+Clearly, as time $A_{k}$ is the arrival time of job~$k$, the number of jobs that arrived during $[0, A_{k}]$ is precisely~$k$.
+Thus, if we subtract all jobs that departed before $A_{k}$, we have the number of jobs in the system, i..e, $L_{k} = k - \sum_{i=1}^{k} \1{D_i \leq A_{k}}$.
+Now this formula works, but has a terrible algorithmic performance.
+To see this, note that for job~$k$ this formula compares $A_{k}$ with the departure times of all earlier jobs.
+For~$k$ jobs in total, we therefore need $1 + 2 + \cdots k = k(k+1)/2$ comparisons, which has $O(k^{2})$ complexity.
+When~$k$ is a million, the square is a really large number indeed.
+
+The next  code is much more efficient. We keep a \emph{pivot}, i.e., a pointer, to the last departure before job~$k$. Suppose this pivot is~$i$, in other words, job~$i$ was the last job that departed before $A_{k}$, then, for $L_{k+1}$ we start searching for departures from job $i+1$ onward.
+
+\begin{python}
+L = np.zeros_like(A)
+pivot = 0
+for k in range(1, len(A)):
+    while D[pivot] < A[k]:
+        pivot += 1
+    L[k] = k - pivot
+\end{python}
+
+
+\newthought{A more flexible} way to compute $\{L_{k}\}$ is by means of an \emph{event stack}, but to understand what an event stack is, we first need to discuss \emph{heap queues}.
+
+A heap queue stores elements in a list such that they can be retrieved in accordance to some ordering rule.
+The following piece of code demonstrates the idea.
+We \emph{push} (add) a tuple containing an age and an animal name to the \emph{heap}, and we \emph{pop} from the heap to get the animals in order of age.
+Here is an example; study the output carefully.
+
+\begin{pyconsole}
+from heapq import heappop, heappush
+
+heap = []
+
+heappush(heap, (25, "Turtle"))
+heappush(heap, (21, "Horse"))
+heappush(heap, (20, "Lion"))
+heappush(heap, (18, "Cat"))
+heappush(heap, (14, "Dog"))
+
+print(heappop(heap)) # Why is it the dog?
+print(heappop(heap)) # Why is it the cat?
+heappush(heap, (23, "Elephant")) # Add Elephant
+
+while heap:
+    e = heappop(heap)
+    print(e)
+
+\end{pyconsole}
+
+Note that anytime we pop from the heap, the heap becomes one element shorter, and with pushing the heap becomes longer.
+Moreover, we can push animals, here an elephant, at our convenience, without having to wait until the heap is empty.
+As such, a heap queue is the ideal (and efficient) data structure to support simulation because we can push and pop events in any sequence we like, but we have the guarantee that events are popped in the correct sequence of time.
+
+\newthought{With heap queues we} have an appropriate data structure to plot the virtual waiting time and the system length processes in~\cref{fig:virtual_sojourn}.
+In passing we encounter some other useful and generic ideas.
+
+Suppose we set $L=0$ at time~$0$, and add~$1$ to~$L$ for each arrival and subtract~$1$ for each departure, then we have the system length if the arrival times and departures times are sorted in time.
+For this to work, we form events of type $(t, \Delta)$ where~$t$ is an arrival or departure time and $\Delta \in \{-1, 1\}$ to correspond to a departure or arrival, respectively.
+To sort the events, we form two lists of events and merge them.
+
+There is a technical, but important, detail involved.
+The function \mintinline{python}{heapq.merge} returns a generator, not a list, but \mintinline{python}{heapq.heapify} expects a list instead of a generator.
+To convert the generator obtained from \mintinline{python}{heapq.merge} we apply \mintinline{python}{list} to this generator, and then pass the resulting list to \mintinline{python}{heapq.heapify}.
+\begin{python}
+arrivals = [[t, 1] for t in A[1:]]
+departures = [[t, -1] for t in D[1:]]
+heap = list(heapq.merge((arrivals, departures)))
+heapq.heapify(heap)
+\end{python}
+
+With this heap we can already plot the system length, but for the virtual waiting time we need some additional code.
+Recall that $V(t) = [J_{A(t)} - (t-A_{A(t)})]^{+}$, and that $A(t) = \sum_{k=1}^{\infty} \1{A_k\leq t}$. The following code would work to find the last arrival before time~$t$:
+\begin{python}
+k = 1
+while A[k] <= t:
+    k += 1
+\end{python}
+However, the efficiency of this code is terrible.
+Instead, we should stick the rule that says `Thou shalt use binary search to find an element in a sorted sequence'.
+We therefore use \mintinline{python}{np.searchsorted} to efficiently find the index~$k$ in an array~$A$ such that $A_{k-1} \leq t < A_{k}$ for some given value~$t$.
+In~\cref{ex:55} we explain why the next code does the job.
+\begin{python}
+def At(t, side='right'):
+    """
+    The right or left continuous version of A(t), depending on side,
+    A(t) = max {k : A_k \geq t}
+    A(t-) = A(t) - 1.
+    """
+    return max(np.searchsorted(A, t, side=side) - 1, 0)
+\end{python}
+Note that we include the option \mintinline{python}{side} to provide us with the left-continuous version $A(t-)$; $A(t)$ is defined as right-continuous.
+
+The virtual waiting time follows now directly from its recursive definition.
+\begin{python}
+def V(t, side='right'):
+    """
+    The right or left continuous virtual waiting time at t, depending on SIDE
+    """
+    k = At(t, side)
+    return max(J[k] - (t - A[k]), 0)
+\end{python}
+
+All is in place to make~\cref{fig:virtual_sojourn}. We have two panels \mintinline{python}{ax1} and \mintinline{python}{ax2} on top of each other, and we set the labels at the axes.
+\begin{python}
+fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(6, 3), sharex=True)
+ax1.set_ylabel("Virtual time~$V$")
+ax2.set_ylabel("Length~$L$")
+ax2.set_xlabel("time")
+ax2.set_yticks([0, 1, 2, 3, 4, 5])
+\end{python}
+
+For the sojourn and waiting times we draw triangles.
+\begin{python}
+for i in range(1, num):
+    ax1.fill([A[i], A[i], D[i]], [0, J[i], 0], c='green', alpha=0.2)
+    ax1.fill([A[i], A[i], A[i] + W[i]], [0, W[i], 0], c='blue', alpha=0.2)
+\end{python}
+Setting the opacity \mintinline{python}{alpha} to $0.2$  gives nice  results for overlapping triangles.
+
+
+Next is the code to plot~$L$ and~$V$. Pay attention to the fact that we use $V(t-)$ (in code \mintinline{python}{V(now, 'left')}). Lines~$5$ and~$7$ plot vertical dotted lines for visual clarity. Formally speaking, these lines do not belong to the virtual waiting time or system length processes.
+\begin{python}
+L, past = 0, 0
+while heap:
+    now, delta = heapq.heappop(heap)
+    ax1.plot([past, now], [V(past), V(now, 'left')], c='k', lw=0.75)
+    ax1.plot([now, now], [V(now, 'left'), V(now)], ":", c='k', lw=0.75)
+    ax2.plot([past, now], [L, L], c='k', lw=0.75)
+    ax2.plot([now, now], [L, L + delta], ":", c='k', lw=0.75)
+    L += delta
+    past = now
+\end{python}
+To compile the figure with \LaTeX\/ and write to file we follow the same steps as we used to make~\cref{fig:drift}.
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics{../figures/queue-continuous-length.pdf}
+\caption{The top panel shows a graph of the sojourn times and the virtual waiting time, the lower panel the  number of jobs in the system. The darker the blue, the more jobs the system contains at that moment.}
+\label{fig:virtual_sojourn}
+% see code/plot-virtual-waiting-time.py
+\end{figure}
+
+\begin{truefalse}
+We have a single-server queue where the interarrival and service times have a general distribution. Claim, when $L(T)=0$ at time $T$, then
+\begin{equation*}
+ \begin{split}
+ \int_0^T L(s)\, \d s & = \int_0^T \sum_{k=1}^{A(T)} 1\{A_k \leq s < D_k\} \, \d s \\
+& = \sum_{k=1}^{A(T)}\int_0^T 1\{A_k \leq s < D_k\} \, \d s = \sum_{k=1}^{A(T)} J_k.
+ \end{split}
+\end{equation*}
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}
+For a queue where the interarrival and service times have a general distribution the virtual waiting time process $\{V(t), t\geq 0\}$
+satisfies
+ \begin{equation*}
+ V(t) = [J(A_{A(t)}) + (A_{A(t)}-t)]^+.
+ \end{equation*}
+\begin{solution} True.
+\end{solution}
+\end{truefalse}
+
+
+
+\begin{truefalse}
+Claim: the following code pops the element: \texttt{(1.9, 'Long')}.
+\begin{minted}{python}
+from heapq import heappop, heappush
+heap = []
+heappush(heap, (1.9, "Long"))
+heappush(heap, (1.7, "Egg"))
+heappush(heap, (1.3, "Zeno"))
+print(heappop(heap))
+\end{minted}
+\begin{solution}
+    False. It prints the entry with `Zeno', because $1.3$ is the smallest of the first elements of the tuples in the heap.
+\end{solution}
+\end{truefalse}
+
+
+
+
+\begin{exercise}
+Suppose that we want to compute the time-average of~$L$ for a time $t<D_{n}$, i.e., a time that lies before the departure time of the last job of the simulation. How would you compute this?
+\begin{solution}
+First compute the sum of the sojourn times of all jobs that departed before~$t$; in a formula $\sum_{k=1}^{n}J_k \1{D_k\leq t}$. Then add to this the times of the jobs arrived before~$t$  but that have yet departed:  $\sum_{k=1}^n (t-A_k)\1{A_k\leq t < D_{k}}$. Divide the total by~$t$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:55}
+Why is $\max\{k: A_{k-1} \leq t < A_{k}\} = 1 + A(t)$?
+\begin{hint}
+$\max\{k: A_{k-1} \leq t < A_{k}\} = \max\{k : A_{k-1} \leq t\}$ because the epochs $A_{k}$ are ordered and separated  in time (almost surely).
+\end{hint}
+\begin{solution}
+See the hint, and check out the definition of $A(t)$.
+\begin{align*}
+  \max\{k: A_{k-1} \leq t < A_{k}\} &= \max\{A_{k-1} \leq t\} = \sum_{k=1}^{\infty} \1{A_{k-1}\leq t} = \sum_{k=0}^{\infty} \1{A_{k}\leq t}  =  1 + A(t).
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}

@@ -1,0 +1,126 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{(Limits of) Empirical Performance Measures}
+\label{sec:limits-of-empirical}
+
+In~\cref{sec:constr-gg1-queu} we use the arrival process $\{A(t)\}$ and the service times $\{S_k\}$ to construct the waiting times $\{\W_k\}$, sojourn times $\{J_k\}$, and the number in the system $\{\L(t)\}$.
+If the queueing system is rate-stable, we can sensibly define several more long-run average performance measures.
+Recall that these definitions are the most used quantitative measures to express customer satisfaction.
+
+
+
+
+\newthought{Define the expected} \recall{waiting time in queue} as
+\begin{equation*}
+ \E{\W} = \lim_{n\to\infty} \frac 1 n\sum_{k=1}^n W_{k}.
+\end{equation*}
+Note that this is the limit of waiting times as \emph{observed by arriving jobs}:
+ the first job has to wait $W_1$ in queue, the second $W_2$, and so on.\sidenote{ We colloquially say that a statistic based on the sampling of arriving jobs is `as seen by arrivals'.}
+The \emph{distribution} of the waiting time as seen by arrivals can be found by counting:
+\begin{align}\label{eq:48}
+ \P{\W \leq x} &= \lim_{n\to\infty} \frac 1n\sum_{k=1}^n \1{\W_k\leq x}.
+\end{align}
+For the sojourn time  $J$  we use similar definition.
+The \recall{average number of jobs} in the system as seen by arrivals is given by
+\begin{equation}\label{eq:EQ}
+\E\L = \lim_{n\to\infty}\frac 1 n \sum_{k=1}^n L(A_k-),
+\end{equation}
+since $L(A_k-)$ is the number of jobs in the system just before the arrival epoch of the~$k$th job.
+Like~\cref{eq:48}, for the distribution of~$L$,
+\begin{align}
+ \P{\L \leq m} &= \lim_{n\to\infty} \frac 1n\sum_{k=1}^n \1{\L_k\leq m}.
+\end{align}
+
+
+
+\newthought{A related set} of performance measures follows by tracking the system's behavior over time and taking the \emph{time-average}.\sidenote{Now we sometimes say that such performance measures are as `seen by the server'.}
+
+Assuming the limit exists, we use~\cref{eq:14} to define the \recall{time-average number of jobs} as
+\sidenote{Even though the symbols are the same, this expectation is not necessarily the same as~\cref{eq:EQ}.}
+\begin{equation} \label{eq:46}
+ \E\L = \lim_{t\to\infty} \frac 1 t\int_0^t L(s) \d s.
+\end{equation}
+ The \emph{time-average fraction of time the system contains at most~$m$ jobs} is defined as
+\begin{equation*}
+ \P{\L\leq m} =\lim_{t\to\infty} \frac 1 t\int_0^t \1{\L(s)\leq m} \d s.
+\end{equation*}
+%Again, this (time-average) probability need not be the same as what customers see upon arrival.
+
+\newthought{Proving the existence} of the above limits requires a considerable amount of mathematics.\sidenote{See \citet{Asmussen2003} if you are interested.}
+Here we sidestep all such fundamental issues, and simply assume that all is well-defined.
+The limiting random variables are known as the \recall{steady-state} or \recall{stationary} limits.
+
+\newthought{In the next} chapters we will derive simple formulas for the above performance measures for a variety of queueing systems in steady-state.
+These formulas, and the relations between them, provide \emph{structural insight} into the behavior of the systems, rather than just numbers.
+Hence, for many practical purposes, which is (should be?) based on insight, a steady-state analysis suffices.
+
+\begin{truefalse}
+Claim: If the limit exists, then
+\begin{equation*}
+ \frac{1}{t} \sum_{k=1}^{A(t)} \1{W_k \leq x} \to \P{W\leq w}, \quad t\to \infty.
+\end{equation*}
+\begin{solution}
+False.
+\begin{equation*}
+ \frac{1}{t} \sum_{k=1}^{A(t)} \1{W_k \leq x} =
+ \frac{A(t)}{t} \frac 1{A(t)}\sum_{k=1}^{A(t)} \1{W_k \leq x} \to \lambda \P{W\leq x}.
+\end{equation*}
+Moreover, the last $w$ in the equation in the truefalse is also wrong, and should be an $x$.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Consider a $G/G/1$ queue that is rate-stable. Claim: The distribution of the waiting times at
+ arrival times can be sensibly defined as
+\begin{equation*}
+ \P{W \leq x} = \lim_{n\to\infty} \frac 1n\sum_{k=1}^n \1{W_k\leq x}.
+\end{equation*}
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+The departure process $\{D(t)\}$ can be computed from the set $\{D_k\}$ of departure times according to:
+\begin{equation*}
+ D(t) = \sum_{k=1}^\infty \1{D_k \leq t}.
+\end{equation*}
+
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+
+\begin{exercise}\label{ex:l-165}
+Design a queueing system to show that the average number of jobs in the system as seen by the server can be very different from what customers see upon arrival.
+\begin{hint}
+Consider a queueing system with constant service and constant inter-arrival times.
+\end{hint}
+\begin{solution}
+ Take $L(0) = 0$, $X_k = 10$ and $S_k = 10-\epsilon$ for some tiny
+ $\epsilon>0$. Then $L(t) = 1$ nearly all the time. In fact,
+ $\lim_{t\to\infty}t^{-1}\int_0^t L(t) \d t= 1-\epsilon/10$. However, $L(A_k-)=0$ for all~$k$.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:90}
+ If $L(t)/t \to 0$ as $t\to\infty$, can it still be true that $\E{\L}>0$?
+\begin{solution}
+ \begin{equation*}
+ \E{\L} = \lim_{t\to\infty} \frac 1 t \int_0^t L(s) \d s \neq \lim_{t\to\infty} \frac{\L(t)}t.
+ \end{equation*}
+If $L(t)=1$ for all~$t$, $\E{\L} =1 $, but $L(t)/t \to 0$.
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

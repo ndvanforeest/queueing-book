@@ -1,0 +1,459 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{Fighting the Exponential Distribution is Futile}
+\label{sec:fight-expon-distr}
+
+Perhaps the mathematical arguments presented in the preceding section have not fully convinced you of the universality of the exponential distribution and its counterpart, the Poisson distribution.
+To enhance your understanding, let's use simulation to see how the exponential distribution emerges as a sort of law of nature.
+
+The simulation is based on an internship of one my master's students with the task to evaluate the scheduling system for patients with inflammatory bowel disease (IBD) at a hospital.
+The IBD patients can be characterized as regular and urgent.
+Regular patients required check-ups approximately every six months, whereas urgent patients needed to be seen within one week, i.e., five working days.\sidenote{This procedure has been changed recently; however, the ideas of this case apply much more generally.}
+Each consultation takes 10 minutes.
+Immediately following a consultation, regular patients scheduled their next visit for approximately six months later.
+There are about 1000 patients in the system, and a working year consist of 200 working days.
+Given that each patient is seen biannually, a physician needed to consult with an average of 10 patients daily.\sidenote{$2\times 1000/200 = 10$.}
+The problem was to design a planning procedure that allowed enough flexibility to meet the time constraints for the urgent patients without leading to idle times for the physicians.
+Of course, new patient intakes occurred, but for ease we assume that the patient population remains constant.
+
+Planning regular patients six months in advance seems to lead to stable arrival times, but this is not true.
+First, there are many practical disturbances.
+A significant number of patients rescheduled their appointment date due to, e.g., altered holiday plans.
+Then, there were no-shows, yet other patients relocated to other cities, some died.
+However, even without such practical problems and even when each patient individually shows relatively predictable behavior, at the population level the inter-arrival times are exponential distributed.
+The simulation results discussed below strongly suggest that trying to counteract the exponential distribution is as futile as attempting to alter the laws of nature.
+
+In conclusion, whether the planner plans six months in advance, with the idea to reduce variability, or would not plan at all, there will not be much difference.
+The verdict must be clear then: when rules don't have an effect, it is best to drop them altogether.
+It is simply better to send patients a reminder for a new appointment after five months after the visit, instead of planning six months in advance.
+Much less replanning actions are needed, and the probability for no-shows decreases.
+
+
+\newthought{In the next model} we focus on just the regular patients.
+Assume that the hospital has just~$50$ regular patients.
+Each patient plans the time to the next appointment uniformly on the interval $[0.9 , 1.1]$, independent of previous times and other patients.
+Like this, we model a patient's inter-arrival time between two consecutive appointments as  half a year (100 working days) plus or minus 10 days.\sidenote{$[0.9, 1.1] \times 100 = [90, 110]$}
+The question of interest is to estimate the distribution of the inter-arrival times between any two patients \emph{as seen by the planner} of the hospital.
+Of course, when there would be just one patient, this is easy, the planner sees $\sim \Unif{[0.9, 1.1]}$. But what happens for many patients?
+
+We will use simulation to obtain insight into this question.
+The answer will be given in~\cref{fig:unitoexp}.
+Here we present the code to make this figure; it is necessary to understand the algorithms to interpret the figure.
+Hence, I expect you to really read the code.\sidenote{If you don't understand certain commands of python, just consult the web or ChatGPT.}
+
+\newthought{In python we} nearly always start with loading a set of modules.
+Modules contain specific functionality that not every Python program needs, hence these should only be loaded if required.
+For instance, the \mintinline{python}{numpy} module offers support for numerical work, while \mintinline{python}{matplotlib} is a plotting library.
+Here, and elsewhere, we place comments \emph{above} the code to which it relates.
+We will not explain commands that are trivial to understand.
+
+\inputminted[firstline=2, lastline=3]{python}{../code/IBD_simulations.py} % modules
+
+To make a pdf file with a plot that looks nice in \LaTeX\, we  use the \mintinline{python}{seaborn} library and provide it with some extra options\sidenote{Such configurations are not algorithmic, so you don't have to memorize this.}, such as good font sizes.\sidenote{While designing a figure, I comment out this code because running \LaTeX\/ slows down the script.}
+\inputminted[firstline=9, lastline=24]{python}{../code/IBD_simulations.py} % seaborn
+
+
+The simulation environment will contain \mintinline{python}{num_patients} patients and last for \mintinline{python}{num_periods} half years.
+With \mintinline{python}{default_rng} we can set up a random number generator and by setting a seed\sidenote{Here it is~$3$, but any number would do.}
+we  ensure to always get the same random deviates.\sidenote{A random deviate is a sample taken from a distribution; it is not the same as a random variable.}
+\inputminted[firstline=29, lastline=31]{python}{../code/IBD_simulations.py} % expdata
+
+We next generate a number of inter-arrival times in the following way.
+The matrix~$X$ has \mintinline{python}{num_patients} rows and \mintinline{python}{num_periods} columns.
+Row~$k$ of~$X$ corresponds to the inter-arrival times of patient~$k$.
+Each inter-arrival time is $\sim\Unif{[0.9, 1.1]}$.
+With these inter-arrival times, the arrival times for patient~$k$ are $A_{i}^{k} = A_{i-1}^{k} + X_{i}^{k}$, with $A_0^{k}=0$.
+
+The \mintinline{python}{cumsum} along a row\sidenote{Along \mintinline{python}{axis=1}} of a matrix adds up elements one by one along a row.
+\sidenote{The \mintinline{python}{cumsum} of the sequence of numbers $1, 3, 5$ is $1, 4, 9$. Hence,  if we want to implement $A_{0}=0$, we set just set $X_{0}=0$ and keep $X_{1}=3, X_{9}=5$, so that \mintinline{python}{A = [0, 3, 5].cumsum()} expands to $A=[0, 3, 8]$.}
+As such, the elements of the first column of \mintinline{python}{A} would be equal to the first column of \mintinline{python}{X}.
+To ensure that the first row of \mintinline{python}{A} is zero, so that all patients start at time~$0$, we set the first column of \mintinline{python}{X} to~$0$.
+However, by setting the first column of inter-arrivals~$X$ to zero, we effectively remove one arrival.
+Thus, we should generate \mintinline{python}{num_periods + 1} of inter-arrival times.
+
+\inputminted[firstline=35, lastline=37]{python}{../code/IBD_simulations.py} % inter-arrivals
+
+
+We need an environment to control the plots.
+The \mintinline{python}{fig} object can be thought of as a canvas on which we draw the plots, and \mintinline{python}{axes} is a list of \mintinline{python}{ax} objects, where each \mintinline{python}{ax} represents a single plot within the figure.
+As is apparent from~\cref{fig:unitoexp}, we have a matrix of four \mintinline{python}{ax} objects.
+For easy reference in the code below, we flatten\sidenote{Ask ChatGPT for further explanation.}
+the \mintinline{python}{axes} object and unpack it to the four separate objects \mintinline{python}{ax1}, $\ldots$, \mintinline{python}{ax4}.
+\inputminted[firstline=42, lastline=43]{python}{../code/IBD_simulations.py} % expfiguresetup
+
+Next we build the left upper panel of \cref{fig:unitoexp}.
+Each row contains a number of dots, each  corresponding to an arrival event of a patient.
+In other words, the coordinate of the $i$th dot of patient~$k$ is $(A_{i}^k, k)$.
+As we have~$50$ patients, we have~$50$ such rows of dots.
+The for loop adds the dots of each patient to the upper left panel referenced to by \mintinline{python}{ax1}.
+To beautify the plot, we give a few options to the plot command.
+We don't want the dots to be connected by lines, so we set the linestyle \mintinline{python}{ls='None'}.
+The marker style is a dot, the markersize \mintinline{python}{ms=0.2} and the color is blac\textbf{k}.\sidenote{I often use the abbreviations offered by matplotlib as it saves time.}
+\inputminted[firstline=47, lastline=51]{python}{../code/IBD_simulations.py} % plotuniforms
+
+
+We plot the arrivals as seen by the planner as a jitterplot, that is, we add small random noise to the data points along the $y$-axis.
+By spreading out the points slightly, the jitter plot allows for a clearer visualization of the distribution of individual points.
+We plot the dots at $y=0$ plus a jittering distributed as $\sim\Unif{[-1/2, 1/2]}$.
+Without the jitter we would just see small line segments instead of the somewhat rectangular shapes.
+\inputminted[firstline=55, lastline=58]{python}{../code/IBD_simulations.py} % plotjitter
+
+
+\newthought{Our next task} is to estimate the density of inter-arrival times as observed by the planner, and plot this in the right panel of \cref{fig:unitoexp}.
+Recall that each row of the matrix~$A$ contains the arrival times of one specific patient.
+By flatting~$A$ we obtain all arrival times in one long list.
+By sorting, we obtain the arrival times in order of time.
+Finally, inter-arrival times for the planner are the times between the elements of this list.
+\inputminted[firstline=63, lastline=64]{python}{../code/IBD_simulations.py} % allarrivals
+
+We assemble all inter-arrival times in~$X$ in bins.
+As we have $\lambda=50$ arrivals per day, the mean inter-arrival time is $1/\lambda = 1/50$.
+The pdf of exponential distribution is $\lambda e^{-\lambda x}$.
+To see the tail of the pdf in the plot, we take~$5$ times the mean, i.e, $5/50 = 0.02$, as the support for the bins.
+We then plot the histogram, i.e., the number of hits in each bin, on \mintinline{python}{ax2}, and the pdf.
+\inputminted[firstline=68, lastline=72]{python}{../code/IBD_simulations.py} % compare-with-exp
+
+Before explaining how to make the second row in \cref{fig:unitoexp}, here is the code to save the figure.
+The \mintinline{python}{tight_layout()} function ensures that the labels of the axes are nicely formatted.
+\inputminted[firstline=103, lastline=104]{python}{../code/IBD_simulations.py} % export-exp-figure
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics{../figures/IBD_exponential.pdf}
+\end{center}
+\caption{How the uniform distribution leads to the exponential distribution.}
+\label{fig:unitoexp}
+\end{figure}
+
+
+\newthought{What can we} see in \cref{fig:unitoexp}?
+In the left upper panel, the arrival times of each patients are at first tightly concentrated around~$1$, but as time progresses, the arrival times become more and spread out.
+The jitter plot around $y=0$ also demonstrates this.
+The rectangles become wider and approach each other.
+However, we see also that, in comparison to the exponential density, there are relatively many short inter-arrival times.
+This is as expected, because in particular the first couple of inter-arrival times are much too near to provide a good model for a hospital that has been serving patients for years.
+But still, even when starting with very unrealistic arrival times, we see that the exponential model is quite reasonable.
+
+
+To repair for these unnatural starting times, we set the initial arrival time of each patient uniformly on $[0,1]$.
+\inputminted[firstline=78, lastline=78]{python}{../code/IBD_simulations.py} % uniformize
+
+With this change, we run the above code again, but write the plots \mintinline{python}{ax3} and \mintinline{python}{ax4} to obtain the lower left and right panels of ~\cref{fig:unitoexp}.
+Now we see that the exponential distribution is an excellent fit, and the jitter rectangles overlap right from the start.
+
+In conclusion, if many patients arrive to the hospital and each adds some small variation to the inter-arrival times, the hospital sees exponential inter-arrival times for the population.
+Clearly, this is not specific to hospitals: it applies to any system that serves a large pool of customers, each arriving with some variation.
+Thus, the exponential distribution is an important modeling device for nearly any service and production systems; we use it often in the sequel.
+
+
+\newthought{How fast is} the convergence to the uniform distribution?
+There is theory for this, but here we use some numerical experiments to investigate this issue.
+In the next section we develop a class \texttt{RV} that can carry out all sorts of operations on random variables such as $X + Y$, but can also apply functions to random variables.
+In the present case we want to apply the function $x \to x \bmod C$ where $C$ is the length of the cycle
+
+I like to write (and read) code that resembles the mathematical operations I write on paper.
+For this purpose I build the next function that overloads the modulo operation to handle ints and floats in the regular way, but treats \texttt{RV} in a specific way, cf.,~\cref{sec:prob_artithmetic}.
+
+\inputminted[firstline=8, lastline=18]{python}{../code/exp_convergence.py} % modfunction
+
+We next iteratively compute the position $\sum_{i=1}^{n} S_{i} \bmod C$ where the step size is $S\sim\Unif{\{-1, 0, 1\}}$.
+The position starts at $0$. Observe that the \texttt{+} operator is overloaded so that it can add two objects of type \texttt{RV}. We keep track of the position with the smallest and the largest probability.
+
+\inputminted[firstline=25, lastline=36]{python}{../code/exp_convergence.py} % minsmax
+
+This code makes the left panel in~\cref{fig:conv-speed}; the right panel is made in the same way. The caption discusses our findings.
+\inputminted[firstline=49, lastline=56]{python}{../code/exp_convergence.py} % onefig
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics{../figures/exp_convergence.pdf}
+\caption{Convergence speed of the time between two visits to the hospital.
+In the left panel the cycle length $C=5$, in the right $C=10$.
+The largest and the smallest probability on the circle converge to $1/C$.
+The larger $C$, the longer it takes for the sequence of visits to converge to uniform interarrival times, from the perspective of the hospital.}
+\label{fig:conv-speed}
+\end{figure}
+
+
+\newthought{It remains to} prove the claims we made above.
+The proofs are nice because they combine order statistics, the beta distribution, first-step analysis, and some infinitesimal calculus to give the reasoning a heuristic flavor.
+Finally, we discuss an important smoothing property of taking expectations. This idea is of relevancy too in data science when using  moving averages.
+However, if you are not interested in probability theory, skip the rest of the section.
+
+We first prove the lower part of~\cref{fig:unitoexp}.
+Consider iid rvs $\{U_k\}_{k=1}^{\infty}$ such that $U_{k}\sim \Unif{[0,1]}$, and write the order statistic of $\{U_k\}_{i=1}^{n}$ as $0<A^{n}_1 < A^n_2 < \cdots < A_n^{n}<1$.\sidenote{We neglect the probability of simultaneous arrivals; these have probability zero.}
+Thus, if the $U_{k}$ represent the arrival times of~$n$ patients, the order statistic represents the ordered sequence of arrivals as seen by the hospital.
+By taking $A_0^{n} = 0, A_{n+1}^n=1$, we define the size of the gaps as seen by the hospital as $X_{k}^{n} = A_k^n - A_{k-1}^{n}$, $k=1, \ldots, n+1$.
+
+
+When the size $n$ of the population increases, the size of the first gap, i.e., the arrival time of the first patient, will be more and more like an exponentially distributed rv.
+
+\begin{lemma}
+\begin{equation*}
+\lim_{n\to\infty} \P{n X^n_1 \leq x} = \lim_{n\to\infty} \P{n A^n_1 \leq x} =1- e^{-x}.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+The probability that the smallest of $n$ rvs is less than some $x$ is the same as $1$ minus the probability that all $n$ rvs are larger than $x$.
+Therefore,
+\begin{align*}
+  \P{ A^n_1 \leq x/n}
+  &= 1 -  \P{\min\{U_{1}, \cdots, U_{n}\} > x/n} = 1 - (1-x/n)^{n},
+\end{align*}
+because $\P{U_{i} > x/n} = 1-x/n$, and the $U_{i}$ are iid.
+The RHS converges to $1-e^{-x}$ as $n\to \infty$.
+Finally, from the definition, it is obvious that $X_1^n = A_1^n - A_0^{n} = A_1^{n}$.
+\end{proof}
+
+
+We next show that all gaps have the same density.
+From the proof of the previous lemma, we have that $\P{X_1^n \leq r} = 1- (1-r)^{n}$, therefore, $f_{X_{1}^{n}}(r) \d r = \P{X_1^n \in [r, r + \d x]} = n (1-r)^{n-1} \d r$.
+By symmetry, $f_{X_{n+1}^{n}}(r) \d r = n(1-r)^{n-1} \d r$,  hence $X_1^n \sim X_{n+1}^{n}$. It remains to deal with the intermediate gaps.
+
+\begin{lemma}
+For $r\in (0, 1)$, the density of the $k$th gap, $k=2, \ldots, n-1$,  is $f_{X_{k}^n}(r) = n (1-r)^{n-1}$.
+\end{lemma}
+\begin{proof}
+The probability of the event $A_1^n < A_2^n < \cdots < A_{k-2}^n < A_{k-1}^n \in [x, x+ \d x] < A_k^n \in [y, y+\d y] < A_{k+1}^{n} < \cdots A_n^{n}$ is given
+\begin{align*}
+  f_{A_{k-1}^n, A_k^n}(x, y) \d x \d y = \frac{n!}{(k-2)!(n-k)!} x^{k-2} (1-y)^{n-k} \d x \d y.
+\end{align*}
+With this, the probability that $X_k^{n} \in [r, r+\d r]$ becomes
+\begin{align*}
+  f_{X_{k}^n}(r) \d r = \d r \int_{0}^{1-r}  f_{A_{k-1}^n, A_k^n}(x, x+r) \d x.
+\end{align*}
+Substitute the expression for the density $f_{A_{k-1}^n, A_k^n}$, but drop the factorials for the moment,
+\begin{align*}
+ \int_{0}^{1-r}  x^{k-2} (1-r-x)^{n-k} \d x
+  &= (1-r)^{n-1}\int_0^{1-r} \left(\frac{x}{1-r}\right)^{k-2} \left( \frac{1-r - x}{1-r}\right)^{n-k} \\
+  &= (1-r)^{n-1}\int_0^1 x^{k-2}(1-x)^{n-k} \d x \\
+  &= (1-r)^{n-1} \frac{(k-2)!(n-k)!}{(n-k + k-2 + 1)!},
+\end{align*}
+where we use the normalization constant of  the $\beta$ distribution to compute the integral. Canceling the factorials gives the result.
+\end{proof}
+
+
+Combining the above two lemmas leads straightaway to the next theorem.
+\begin{theorem}
+Let $n$ jobs arrive at a station such that the arrival times are iid rvs $U_{k}\sim \Unif{[0,a]}$.
+Then all interarrival times (the gaps) $\{X_{k}^{n}\}_{k=0}^{n+1}$ as seen by the server have the same distribution, i.e., $X_i^n \sim X_k^{n}$ for all $0\leq i,k \leq n$.
+Consequently, the arrival times $A_{i} = A_{i-1} + X_{i}$ are distributed as the order statistic of $\{U_{k}\}_{k=1}^{n}$. Moreover, when the population size $n$ is large, $X_k^{n}$ is approximately $\sim \Exp{a/n}$.
+\end{theorem}
+
+There is one point that remains.
+It is given that $\{U_{k}\}_{i=1}^{n}\}$ are uniform on $[0,1]$, but what is the distribution of the arrival on the next interval $[1,2]$?
+As it happens, after having discussed the next topic, this will be easy to answer.
+
+
+\newthought{To formalize the}  insights of the upper part of~\cref{fig:unitoexp},
+we consider only the day that a patient visits the hospital (the time on a day is of no importance), and assume that there are $C$ days on average between two successive visits.
+For example, suppose the interarrival time $X$ (in days) of a patient to visit the hospital is such that $\P{X=C-1} = \P{X=C} = \P{X=C+1}=1/3$.
+Then, if the process starts on day $0$ and $X = C-1$, the next visit will be on day $C-1$, but if $X=C+1$, the next visit will be on day $1$ of the next half year.
+By looking at the process like this, the patient \emph{moves on a circle} with $C$ states, and with every move the patient moves with probability $1/3$ one state to the left or to the right on the circle, or stays put. We call $C$ the cycle length.\sidenote{There is a subtle, small problem when  the cycle length is $10$ and $\P{X=C-1} = \P{X=C+1} = 1/2$.
+As $10$ is a multiple of $2$, the visit happens either on even or odd days.
+By making $\P{X = 0} > 0$ we prevent this behavior.}
+
+\begin{theorem}\label{thr:2}
+Let $\alpha_k(i) = \P{A_k=i}$ be the probability that the $k$th arrival is on the $i$th day, where $A_{i} = (A_{i-1} + X_{i}) \bmod C$, i.e, $A_{i}$ lives on the circle space $\{0, 1, \ldots, C-1\}$.
+If $\{X_{k}\}_{k=1}^{\infty}$ is a set of iid rvs such that $\E{X_{k}} < \infty$ and $\sup_{j}\P{X_{k} =j} < 1$, then, for all $i$, $\alpha_k(i) \to 1/C$ as $k\to\infty$.
+\end{theorem}
+
+\begin{proof}
+We impose the condition $\E{X_{k}}<\infty$ to prevent to having to deal with $A_{k} = \infty$ for some finite $k$.
+For the moment, take $\P{X_{k} = 1}=p \in (0, 1)$ and $\P{X_{k}=-1} = q=1-p$, and let $C$ be odd.
+By first-step analysis,
+\begin{equation*}
+\alpha_{k+1}(i) = p \alpha_k(i-1) + q \alpha_k(i+1).
+\end{equation*}
+Clearly, if $\alpha_{k}(i)=1/C$ for all $i$, then $\alpha_{k+1}(i) = 1/C$ as well.
+
+However, if not all $\alpha_{k}(\cdot)$ are equal, then as there are a finite number of states, there must be at least one state $i$ such that $\alpha_k(i)$ is larger than its neighbors, that is, $\alpha_{k}(i) \geq \max\{\alpha_k(i-1), \alpha_k(i+1)\} > \min\{\alpha_k(i-1),\alpha_k(i+1)\}$.
+But then, on the next step
+\begin{equation*}
+\alpha_{k+1}(i) = p \alpha_k(i-1) + q \alpha_k(i+1) < \alpha_k(i).
+\end{equation*}
+In particular, the largest $\alpha_{k}$ becomes smaller and, by symmetry, the smallest $\alpha_{k}$ becomes larger.
+
+The argument is easy to generalize.
+Let $\P{X=j} = p_{j}$.
+By assumption $p_{j} \in (0, 1)$.
+Then, $\E{\alpha_k(i+X)} = \sum_{j} p_{j} \alpha_k(i+j) < \alpha_k(i)$ if $\alpha_k(i) \geq \alpha_{k}(\cdot)$ and there is at least one $j$ such that $\alpha_k(i+j) < \alpha_k(i)$ and $p_{j} > 0$.
+Thus, in general, any maximum become strictly smaller, and by the same reasoning, any minimum becomes strictly larger.
+Finally, the minimum and the maximum cannot cross after any step.
+
+All in all, this implies that $\alpha_k(i) \to 1/C$ for all $i$ as $k\to \infty$.
+\end{proof}
+
+Clearly, the proof\sidenote{We might need  some conditions to prevent trivial periodic behavior.} applies to any $C=1, 2, \ldots$
+With some additional (technical) effort it can be generalized to the circle $[0, 1)$ on the reals.
+To see how, consider a continuous function $f$ on the unit circle $C$.
+As the circle is compact and $f$ continuous, $f$ achieves its maximum $f(\bar x)$ at $\bar x$, say.
+Suppose for some $\epsilon>0$ there is set $A_{\epsilon}(\bar x) = \{x \in C: f(x) \leq f(\bar x) -\epsilon\}$ such that $\P{A_{\epsilon}(\bar )} > 0$.
+(If there is no such set for any $\epsilon$, then $f$ is a constant.)
+But then, $\E{f(x+X)} \leq (f(\bar x) -\epsilon) \P{A_{\epsilon}(\bar )} + f(\bar x) (1-\P{A_{\epsilon}(\bar x)}) < f(\bar x)$.
+Clearly, taking an average over $f$ makes the maximum smaller, and likewise the minimum larger.
+
+
+Finally, how about the distribution of the fractional part of $Z=U+V$ when $U, V$ are independent and uniform on $[0,1]]$?
+
+\begin{theorem}
+Let $Z=\sum_{i}^{n} U_{i}$ for $n$ idd rvs $U_{i}\sim \Unif{[0,1)}$, and $\lfloor x \rfloor$  the integer part of $x\in \R$.
+The fractional part $Z-\lfloor Z \rfloor$ of $Z$ is uniformly distributed on $[0,1)$.
+\end{theorem}
+\begin{proof}
+Realizing that the density of the sum of two uniform rvs on $[0,1]$ is a triangle with base $[0,2]$ and height $1$,
+\begin{align*}
+\P{U_{1} +U_{2}- \lfloor U_{1}+U_{2} \rfloor \leq x} &= \P{U_{1} +U_{2}\leq x} + \P{1\leq U_{1} + U_{2}\leq 1 + x} \\
+  &= x^{2}/2 +  (1/2 - (1-x)^{2} /2) = x.
+\end{align*}
+Therefore, the fractional part of the sum of two uniform rvs is uniform on $[0,1]$.
+We can apply this idea term by term, from left to right, and arrive at the conclusion.
+\end{proof}
+
+\begin{truefalse}
+    Consider the following chunk of code, where the $i$th row of $X$ corresponds to the interarrival times of the $i$th patient to a hospital.
+    \begin{minted}{python}
+import numpy as np
+
+rng = np.random.default_rng(3)
+N, T = 5, 8
+a, b = 0, 3
+X = rng.uniform(low=a, high=b, size=(N, T))
+X[:, 0] = 0
+A = X.cumsum(axis=1)
+    \end{minted}
+Claim: the $i$-th row of $A$ contains the $T$ arrival times of the $i$-th patient.
+    \begin{solution}
+    B (False).
+The $i$th row of $A$ contains the first $T-1$ number of arrival times of patient $i$ because $A[0] = 0$.
+Hence when $T=8$, $A[:,T]$ corresponds $7$th arrival time of the patients.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse} \textbf{This question is removed; I find it too hard. I just keep it here for the moment to not mess up the numbering.}
+Claim: if the individual interarrival times are iid rvs from a distribution $F$, then in the limit, the interarrival distribution as seen by the server approaches an exponential distribution.
+    \begin{solution}
+        False. Consider the case where the individual interarrival distribution is degenerate.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: this program prints 24.
+\begin{minted}{python}
+x = [3 * i + 1 for i in range(10)]
+print(x[8])
+\end{minted}
+    \begin{solution}
+        False.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: the keys and the values of the dict $a$ are 8, 13 and 18.
+\begin{minted}{python}
+a = {}
+start, thres = 3, 19
+while True:
+    start += 5
+    if start >= thres:
+        break
+    a[start] = start
+
+print(a.keys())
+\end{minted}
+    \begin{solution}
+        True.
+    \end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}
+Claim: this program prints 64.
+\begin{minted}{python}
+def doit(a):
+    match a:
+        case int():
+            return 8 * a
+        case float():
+            return 9 * a
+        case _:
+            raise ValueError("Unknown type passed")
+
+print(doit("8"))
+\end{minted}
+    \begin{solution}
+        False.
+    \end{solution}
+\end{truefalse}
+
+
+
+\begin{truefalse}
+    Given that the function \texttt{uniform()} returns a uniform random number on the interval $(0, 1)$ then the following function generates a random variate with a Poisson distribution with parameter $\lambda=$\texttt{labda}.
+\begin{minted}{python}
+def Pois(labda):
+    R = 0
+    T = - np.log(uniform())
+    while T < labda:
+        R += 1
+        T += -np.log(uniform())
+    return R
+\end{minted}
+\begin{solution}
+True.
+The solution follows directly from material from Blitzstein,i.e., standard  probability, and results of the previous section.
+Here we go.
+Take  $U \sim \Unif{(0,1)}$. Take $f(x) = -\frac{1}{\lambda}\log x$.
+Then,
+\begin{equation*}
+\P{f(U) \leq a} \stackrel1= \P{U \geq f^{-1}(a)} \stackrel2= 1- f^{-1}(a) \stackrel3= 1- e^{-\lambda a},
+\end{equation*}
+where $1$ follows from the fact that $f$ is strictly decreasing, 2 from the general property of the uniform distribution $\P{U\geq b} = 1 - b$, and $3$ because $f^{-1}(y) = e^{-\lambda y}$.
+Thus,  if we define $X:=f(U)$, then $X = -\frac{1}{\lambda}\log U \sim \Exp{\lambda}$. In other words, the rv $X=-\frac{1}{\lambda} \log U$ is exponentially distributed.
+
+Next, define
+\begin{equation*}
+N(t) = \inf\{j : A_{j} \leq t < A_{j+1}\},
+\end{equation*}
+in words, $N(t)$ is the index of the last arrival before or equal $t$.
+Moreover, when $\{U_{i}\}$ is a sequence of iid uniform rvs on $(0,1)$ then the $X_{i} = -\frac{1}{\lambda} \log U_{i}$ are iid $\sim \Exp{\lambda}$.
+Since $A_{k} = A_{k-1} + X_{k}$, we have that the event
+\begin{align*}
+  \{N(t) = k \}
+  &= \{A_k \leq t < A_{k+1}\} \\
+  &= \left\{\sum_{i}^{k} X_{i}\leq t < \sum_{i}^{k+1} X_{i}\right\} \\
+  &= \left\{-\frac{1}{\lambda}\sum_{i}^{k} \log U_{i}\leq t < -\frac{1}{\lambda}\sum_{i}^{k+1} \log U_{i}\right\}.
+%  &= \left\{-\sum_{i}^{k} \log U_{i}\leq \lambda t < -\sum_{i}^{k+1} \log U_{i}\right\}.
+\end{align*}
+Now taking $t=1$, we arrive at the equality:
+\begin{align*}
+  \{N(1) = k \} = \left\{-\frac{1}{\lambda}\sum_{i}^{k} \log U_{i}\leq 1 < -\frac{1}{\lambda}\sum_{i}^{k+1} \log U_{i}\right\}.
+\end{align*}
+Since $-\frac{1}{\lambda}\log U\sim \Exp{\lambda}$, the sum of $k$ such rvs is $\Gamma{k, \lambda}$, and, by \cref{eq:e-35} and \cref{eq:e-9},
+\begin{align*}
+  \P{N(1) = k} = \P{-\frac{1}{\lambda}\sum_{i}^{k} \log U_{i}\leq 1 < -\frac{1}{\lambda}\sum_{i}^{k+1} \log U_{i}} = \frac{\lambda^{k}}{k!} e^{-\lambda}.
+\end{align*}
+
+
+In fact, this is exactly what the next algorithm implements: it searches for the smallest index of a sum of exp rvs suc that the threshold of $\lambda$ exceded.
+\begin{minted}{python}
+def Pois(labda):
+    R = 0
+    T = - np.log(uniform()) / labda
+    while T < 1:
+        R += 1
+        T += -np.log(uniform()) / labda
+    return R
+\end{minted}
+However, note that we have to divide every rv \texttt{uniform()} by $\lambda$. But this is numerically wasteful. We can just as well multiply the threshold by $\lambda$, just once, and save the division by $\lambda$. And this is the algorithm of the question.
+
+Realize that each uniform rv in the while loop must be a new drawing (i.e., realization of a rv). If not, we keep on adding the same number, which is wrong.
+\end{solution}
+\end{truefalse}
+
+\input{trailer}

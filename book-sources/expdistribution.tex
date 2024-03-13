@@ -1,0 +1,252 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Exponential Distribution}
+\label{sec:expon-distr}
+
+In \cref{sec:poisson-distribution} we introduce the Poisson process to model the arrival process of jobs, and we use the Poisson distribution in simulations to generate the random number of jobs arriving in a period.
+Likewise, to model and simulate the continuous-time single-server queueing process of~\cref{sec:constr-gg1-queu}, we need to specify distributions for the inter-arrival times $\{X_k\}$ and service times $\{S_k\}$.
+In particular for the inter-arrival times the exponential distribution is useful as it is closely related to the Poisson distribution.
+In this section we concentrate on the properties of the  exponential distribution.
+
+
+
+
+We say that a random variable~$X$ is \recall{exponentially distributed} with mean~$1/\lambda$ if
+\begin{equation*}
+ \P{X \leq t} = 1- e^{-\lambda t},
+\end{equation*}
+and then we write $X\sim \Exp{\lambda}$. The following properties hold:\sidenote{~\cref{ex:lambda}--~\cref{ex:11}}
+\begin{subequations}
+  \begin{align}
+  \E X &= \lambda^{-1},  &  %\label{eq:24}\\
+\V X &= \lambda^{-2}. %, \label{eq:26}\\
+ %    C^2&= 1, \\
+ % M_X(t) &= \frac{\lambda}{\lambda-t}, \quad t<\lambda.
+\end{align}
+\end{subequations}
+
+
+\newthought{Perhaps the most} important property of an exponential rv~$X$ is that it is \recall{memoryless}, which means that it satisfies
+\begin{equation*}
+ \P{X > s+t \given X>s} = \P{X>t}.
+\end{equation*}
+In words, the probability that~$X$ is larger than some time $s+t$, conditional on it being larger than a time~$s$, is equal to the probability that~$X$ is larger than~$t$.
+Stated differently, even given that~$X$ did not occur before~$s$, the probability that it takes~$t$ time units more to occur, is the same as if we did not have to wait for~$s$ time units to pass.
+The remarkable fact is he reverse--when -a continuous memoryless random variable is memoryless it is exponential---can also be proven, but that is harder\sidenote{\citet[Appendix 3]{yushkevich69:_markov_proces}}.
+
+The characteristic timescales we consider in queueing theory range from minutes to a week.\sidenote{And of course there are exceptions.}
+On these timescales it often turns out that it is reasonable to model inter-arrival times of jobs as memoryless, hence exponentially distributed.
+For instance, if~$X$ is the arrival time of the next patient with a broken arm at the emergency room of a hospital, what can we say about~$X$ when we know that an hour earlier a patient came in with broken arm?
+Not much, as most of us will agree.
+
+However, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s=t = 100$ years. Then $\P{X>100}$ was small, but not zero, but $\P{X>200 \given X>100} = 0$.%\sidenote{Even if you believe that Elvis Presley is still alive.}
+
+
+\newthought{There is a} close link between the Poisson process~$N$ and the exponential distribution.
+In fact, a counting process $\{N(t)\}$ is a \emph{Poisson process} with rate~$\lambda$ if and only if the inter-arrival times $\{X_k\}$ are iid and $X_{k} \sim \Exp{\lambda}$.
+To see this, note that the event $\{N(t)= 0\}$ is equal to the event that the first arrival occurs after~$t$, i.e., $\{X_1 > t\}$.
+Therefore, $\P{X_1> t} = \P{N(t) = 0} = e^{-\lambda t}$.
+
+
+Thus, if you find it reasonable to model inter-arrival times as memoryless, then the number of arrivals in an interval is necessarily Poisson distributed.
+And, if you find it reasonable that the occurrence of an event in a small time interval is constant over time and independent from one interval to another, then the arrival process is Poisson, and the inter-arrival times are exponential.
+
+
+\newthought{The geometric distribution} is the discrete-time analog of exponential distribution.
+As such, geometric rvs are also memoryless, but in discrete time.
+To demonstrate this, consider a machine that produces items.
+An item fails with probability~$p$, and is correct with probability $q=1-p$, independent of the correctness of any other item.
+Let~$X$ be the number of items produced until a failure occurs.  Then $\P{X=m} =  p q^{m-1}$, from which easily follows that
+\begin{equation*}
+\P{X>n+m\given X>m} = \frac{\P{X>n+m}}{\P{X>m}} = \frac{q^{n+m}}{q^m}=q^{n} = \P{X>n}.
+\end{equation*}
+
+
+
+% \begin{exercise}\label{ex:lambda}
+% Show~\cref{eq:24}.
+% \begin{hint}
+%  \begin{equation*}
+%  \E X = \int_0^\infty t f(t)\, \d t =
+%  \int_0^\infty t \lambda e^{-\lambda t}\, \d t,
+%  \end{equation*}
+%  where~$f(t)=\lambda e^{-\lambda t}$ is the density function of~$X$.
+% \end{hint}
+% \begin{solution}
+% Let $I_j = \int_0^\infty e^{- x} x^j \d x$. Then, $I_j = {j!}$, since by recursion,
+% \begin{align*}
+% I_j &=  \int_0^\infty e^{- x} x^j \d x = \left. -e^{-x} x^j\right|_0^\infty + j  \int_0^\infty e^{- x} x^{j-1} \d x = j I_{j-1}, \\
+% I_0 &= \int_0^\infty e^{-x} \d x = 1.
+% \end{align*}
+% By the change of variable $\lambda x \to y$, $\int_0^\infty e^{- \lambda x} x^j \d x = I_j/\lambda^{j+1} = j!/\lambda^{j+1}$.
+% Hence, $\E X = \lambda\, 1!/\lambda^2$.
+% \end{solution}
+% \end{exercise}
+
+% \begin{exercise}\label{ex:15}
+%  If \marginpar{A useful intermediate step to compute the variance.}
+%  $X\sim\Exp{\lambda}$, show that $\E{X^2} = \frac{2}{\lambda^2}$.
+% \begin{hint}
+% Use~\cref{ex:lambda}.
+% \end{hint}
+% \begin{solution}
+% $\E{X^2} =  \int_0^\infty t^2  \lambda e^{-\lambda t}\, \d t = \lambda\, 2!/\lambda^3$.
+% \end{solution}
+% \end{exercise}
+
+
+% \begin{exercise}\label{ex:86}
+% Show~\cref{eq:26}.
+% \begin{hint} Use~\cref{ex:lambda,ex:15}.
+% \end{hint}
+% \begin{solution}
+% $\V X = \E{X^2} - (\E X)^2 = \frac{2}{\lambda^2} - (\frac{1}{\lambda})^2 = \lambda^{-2}$.
+% \end{solution}
+% \end{exercise}
+
+
+\begin{exercise}\label{ex:11}
+Show that when $X\sim \Exp{\lambda}$ its MGF is $ M_X(t) = \E{\exp(t X)} = \lambda/(\lambda -t)$. Use this to compute $\E X$ and $\V X$.
+\begin{solution}
+ \begin{align*}
+ M_X(t) &= \E{\exp(t X)}
+=\int_0^\infty e^{tx} f(x) \,\d x
+=\int_0^\infty e^{tx} \lambda e^{-\lambda x} \,\d x =\frac{\lambda}{\lambda -t}.
+ \end{align*}
+This last integral only converges when $\lambda -t > 0$. Next, $M_X'(t)=\lambda/(\lambda-t)^2 \implies M_X'(0)=1/\lambda$, $M_X''(t)=2\lambda/(\lambda-t)^3 \implies \E{X^2}=2\lambda^{-2}$.
+Thus, $\V X = \E{X^2} - (\E X)^2 = \frac{2}{\lambda^2} - (\frac{1}{\lambda})^2 = \lambda^{-2}$.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:l-214}
+If $X\sim \Exp{\lambda}$, show that~$X$ is memoryless.
+\begin{hint}
+Simplify $\P{X>t+h\given X>t}$ with $\P{A\given B} = \P{AB}/\P{B}$.
+\end{hint}
+\begin{solution}
+By the definition of conditional probability
+\begin{equation*}
+  \begin{split}
+ \P{X>t+h\given X>t} &= \frac{\P{X>t+h, X>t}}{\P{X>t}} = \frac{\P{X>t+h}}{\P{X>t}} \\
+&= \frac{e^{-\lambda(t+h)}}{e^{-\lambda t}} = e^{-\lambda h} = \P{X>h}.
+  \end{split}
+\end{equation*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:30}
+ Assume \marginpar{In this and the next exercises we show that exponential $\implies$ Poisson.} that inter-arrival times $\{X_i\}$ are iid and $\sim\Exp{\lambda}$. Let
+the arrival time of the~$i$th job be $A_i=\sum_{k=1}^i X_k$. Show that
+$\E{A_i} = i/\lambda$.
+\begin{hint}
+$\E{A_i} = \E{\sum_{k=1}^i X_k}$
+\end{hint}
+\begin{solution}
+$\E{A_i} = \E{\sum_{k=1}^i X_k} = i \E{X} =  i/ \lambda$, as $X_i$ iid.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:54}
+ Prove that $A_i$ has density %\marginpar{Continuation of~\cref{ex:30}.}
+%\begin{equation*}
+$f_{A_i}(t) = \lambda e^{-\lambda t} \frac{(\lambda t)^{i-1}}{(i-1)!}$.
+%\end{equation*}
+\begin{hint}
+Why is $M_{A_i}(t) = \E{e^{t A_i}} = \prod_{k=1}^{i} \E{e^{tX_k}}$?
+\end{hint}
+\begin{solution}
+ Using the iid\ property of the $\{X_i\}$,
+\begin{align*}
+ M_{A_i}(t) &= \E{e^{t A_i}} = \E{\exp\left(t\sum_{k=1}^{i} X_k\right)}  = \prod_{k=1}^{i} \E{e^{tX_k}} =
+%\prod_{k=1}^{i} M_{X_k}(t) =
+%\prod_{k=1}^{i} \frac{\lambda}{\lambda -t }
+  \left(\frac{\lambda}{\lambda -t }\right)^i.
+\end{align*}
+From a table of moment-generating functions it follows immediately that
+$A_i \sim \Gamma(i,\lambda)$, i.e., $A_i$ is Gamma distributed.
+\end{solution}
+\end{exercise}
+
+% \begin{exercise}
+%  Use \marginpar{Continuation of~\cref{ex:54}.}  $f_{A_i}$ of~\cref{ex:54} to show that $\E{A_i}=i/\lambda$.
+% \begin{hint}
+% Use~\cref{ex:lambda}, or $\E X = \frac{\d}{\d t} M_X(t) |_{t=0}$.
+% \end{hint}
+% \begin{solution}
+%  \begin{equation*}
+% \E{A_i} = \int_0^\infty t f_{A_i} (t) \, \d t =
+% \int_0^\infty t \lambda e^{-\lambda t} \frac{(\lambda t)^{i-1}}{(i-1)!}\, \d t = \frac{1}{(i-1)!} \int_0^\infty e^{-\lambda t} (\lambda t)^i\,\d t = \frac{i!}{(i-1)!\lambda}.
+% \end{equation*}
+% In the last step we use the recursion of~\cref{ex:lambda}.
+% As a check,
+% \begin{align*}
+%  \E{A_i}
+% &= \left.\frac{\d}{\d t} M_{A_i}(t)\right|_{t=0}
+% = \left.\frac{\d}{\d t} \left(\frac{\lambda}{\lambda-t}\right)^i\right|_{t=0}
+% = i \left.\left(\frac{\lambda}{\lambda-t}\right)^{i-1}\frac{\lambda}{(\lambda-t)^2}\right|_{t=0}
+% \end{align*}
+% \end{solution}
+% \end{exercise}
+
+\begin{exercise}\label{ex:l-213}
+% If \marginpar{Continuation of~\cref{ex:54}.}
+If the inter-arrival times $\{X_i\}$ are iid
+ $\sim \Exp{(\lambda}$, prove that the number $N(t)$ of arrivals during the interval $[0,t]$ is Poisson distributed.
+\begin{hint}
+ $\P{N(t)=k} = \P{A_k \leq t} - \P{A_{k+1} \leq t}$.
+\end{hint}
+\begin{solution}
+With  the density of $A_{k+1}$ and applying partial integration,
+\begin{align*}
+\P{A_{k+1} \leq t}
+&= \lambda \int_0^t \frac{(\lambda s)^{k}}{k!}e^{-\lambda s}\, \d s
+= \lambda \frac{(\lambda s)^{k}}{k!}\frac{e^{-\lambda s}}{-\lambda} \Big|_{0}^t + \lambda \int_0^t \frac{(\lambda s)^{k-1}}{(k-1)!}e^{-\lambda s}\, \d s \\
+&= - \frac{(\lambda t)^{k}}{k!} e^{-\lambda t} + \P{A_k \leq t}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:10}
+ If \marginpar{This result can be anticipated when you think about merging Poisson processes.} $X\sim\Exp{\lambda}, S\sim\Exp{\mu}$ and
+ independent, show that $Z=\min\{X,S\}\sim\Exp{\lambda+\mu}$,
+hence $\E Z = (\lambda+\mu)^{-1}$.
+\begin{hint}
+$\{\min\{X, S\}>x\} =\{X>x\} \cap\{S> x\}$.
+\end{hint}
+\begin{solution}
+$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as  $X$ and~$S$ independent.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:3}
+ If  \marginpar{Now think about splitting Poisson processes.}
+$X\sim \Exp{\lambda}$, $S\sim\Exp{\mu}$  and independent, show that
+ \begin{equation*}
+ \P{X\leq S} = \frac{\lambda}{\lambda+\mu}.
+ \end{equation*}
+\begin{hint}
+Use that $\P{S > X} = \E{\E{\1{S>X}|X}}$.
+\end{hint}
+\begin{solution}
+With conditioning, $\P{S>X|X=t} = \P{S>t} =e^{-\mu t}$.
+With the fundamental brigde and conditional expectation, $\E{\1{S>X}|X} = e^{-\mu X}$, hence $\E{\1{S>X}} = \E{e^{-\mu X}}$. But this last formula is equal to
+$M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of~$X$ we obtain $\lambda/(\lambda+\mu)$.
+% \begin{align*}
+%  \P{X\leq S}
+% &= \E{\1{X\leq S}} = \int_0^\infty \int_0^\infty \1{x\leq y} f_{X,S}(x,y)\, \d y\,\d x\\
+% &= \lambda \mu \int_0^\infty \int_0^\infty \1{x\leq y} e^{-\lambda x} e^{-\mu y} \, \d y\,\d x
+% = \lambda \mu \int_0^\infty e^{-\mu y} \int_0^y e^{-\lambda x}\, \d x \, \d y \\
+% &= \mu \int_0^\infty e^{-\mu y} (1-e^{-\lambda y})\,\d y= \mu \int_0^\infty (e^{-\mu y} - e^{-(\lambda +\mu)y} ) \,\d y\\
+% &= 1 - \frac{\mu}{\lambda + \mu} = \frac{\lambda}{\lambda + \mu}.
+% \end{align*}
+% With \cref{ex:30a} it's immediate.
+\end{solution}
+\end{exercise}
+
+\input{trailer}

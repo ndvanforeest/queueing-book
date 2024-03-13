@@ -1,0 +1,308 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Indispensable knowledge}
+\label{sec:indep-knowl}
+
+
+
+\opt{solutionfiles,check}{
+\loadgeometry{tufte}
+\Opensolutionfile{hint}
+\Opensolutionfile{ans}
+}
+
+There are some fundamental concepts you are supposed to have seen earlier in your career.
+We recall them here, and use them over and over in the rest of the book, mostly without reference.
+
+% The (set) function $\1{}$ is known as the \recall{indicator function}:
+%  \begin{align}
+%  \1{A} &=
+%  \begin{cases}
+%  1, & \text{if~$A$ is true}, \\
+%  0, & \text{if~$A$ is false},
+%  \end{cases}
+%  \end{align}
+% With this, define
+% \begin{equation*}
+% [x]^+ = x \1{x\geq 0}.
+% \end{equation*}
+
+The left and right limit of a function $f: \R\to \R$ are defined as
+ \begin{align}
+ f(x-) &= \lim_{y\uparrow x} f(y), &
+ f(x+) &= \lim_{y\downarrow x} f(y).\label{eq:5}
+\end{align}
+
+% We write $f(h)=o(h)$ for a function~$f$ to say that~$f$ is such that $f(h)/h \to 0$ as $h\to 0$.
+% If we write $f(h) = o(h)$ it is implicit that $|h| \ll 1$.
+% We call this \recall{small~$o$ notation}.
+
+
+You should know that:
+\begin{subequations}
+ \begin{align}
+ (a+b)^n &= \sum_{i=0}^n {n \choose i} a^{n-i} b^i, \label{eq:71}\\
+e^x &= \lim_{n\to\infty} (1+x/n)^n = \sum_{k=0}^{\infty} \frac{x^k}{k!}, \label{eq:76}\\
+ \sum_{n=0}^N \alpha^n &= \frac{1-\alpha^{N+1}}{1-\alpha}. \label{eq:61}
+\end{align}
+\end{subequations}
+
+For a non-negative integer-valued random variable~$X$ with \recall{probability mass function} $f(k)= \P{X = k}$,
+\recall{(cumulative) distribution function} $F(k)=\P{X\leq k}$ and \recall{survivor function} $G(k) = \P{X>k}$ we have
+\begin{subequations}\label{eq:105}
+\begin{align}
+X&=\sum_{n=0}^\infty X\1{X=n} = \sum_{n=0}^\infty n \1{X=n}, \label{eq:77} \\
+\E{\1{X\leq x}} &= \P{X\leq x}, \label{eq:74}\\
+\E X &= \E{\sum_{n=0}^\infty n \1{X=n}} = \sum_{n=0}^\infty n \E{\1{X=n}} = \sum_{n=0}^\infty n f(n), \label{eq:p-78} \\
+  \E{g(X)} &= \sum_{n=0}^\infty g(n) f(n), \label{eq:66} \\
+  \V X &= \E{X^2} - (\E X)^2.\label{eq:68}\\
+\end{align}
+\end{subequations}
+Eq.~\cref{eq:66} is known as the \recall{LOTUS (law of the unconscious statistician)}.
+
+
+Let~$X$ be a continuous non-negative random variable with pdf~$f$.
+We write $ \E{X} = \int_0^\infty x f(x) \d x$ for the expectation of~$X$. By LOTUS, $\E{g(X)} = \int_0^\infty g(x) f(x) \d x$.
+
+Sometimes we write $\int \d F(x)$ rather than $\int f(x) \d x$.
+The reason behind this notation has to do with jumps in the cdf~$F$.
+As an example, suppose the rv~$X$ is such that $\P{X\leq x} = 0$ for $x<0$, $\P{X=0} = 1/2$, and $\P{X\leq x} = (2-e^{-\lambda x})/2$ for $x>0$.
+Then~$X$ does not have a pdf~$f$ everywhere, in particular, $F$ makes a jump of size $1/2$ at~$0$.
+For such mixed rvs, we write $\d F(x)$ to include the jumps and the continuous part in an integral.
+To see how this works, consider some general continuous function~$g$.
+Then, for the~$X$ above,
+\begin{align*}
+\E{g(X)} &= \int_{-\infty}^{0-} g(x) f(x) \d x + g(0)/2 + \int_{0+}^{\infty} g(x) f(x) \d x \\
+ &= g(0)/2 + 1/2 \int_{0+}^{\infty} g(x) \lambda e^{-\lambda x} \d x,
+\end{align*}
+since $f(x) = 0$ for $x<0$ and $f(x) = \lambda e^{-\lambda x}/2$ for $x>0$, but  $f(0)$ is not defined.
+
+
+You should be able to use indicator functions and integration by parts to show that $\E{X^2} = 2\int_0^\infty y G(y) \d y$, where $G(x) = 1- F(x)$, provided the second moment exists.
+
+For general random variables~$X$ and~$Y$:
+\begin{align*}
+  \E{X+Y} &= \E X + \E Y, \\
+\intertext{and, if~$X$ and~$Y$ are independent so that $\E{XY} = \E X \E Y$,}
+  \V{X+Y} &= \V X + \V Y.
+\end{align*}
+
+Sometimes we use conditioning to compute  expectations and variances. In such cases we use Adam's and Eve's laws:
+\begin{align*}
+\E Y &= \E{\E{Y|X}}, & \V{Y} &= \E{\V{Y|X}} + \V{\E{Y|X}}.
+\end{align*}
+
+
+The \recall{moment-generating function} $M_X(s)$ of a random variable~$X$ is defined for~$s\in \mathbb{R}$ sufficiently small as:
+\begin{subequations}
+\begin{align}
+ M_X(s) &= \E{e^{s X}}. \label{eq:75}\\
+\intertext{$M_X(s)$  uniquely characterizes the distribution of~$X$. From this definition it follows that:}
+ \E{X} &= M_{X}'(0) = \left.\frac{\d M_{X}(s)}{d s}\right|_{s=0},\label{eq:69}\\
+\E{X^2} &= M_{X}''(0), \label{eq:64}\\
+\intertext{and, if~$X$ and~$Y$ are independent,}
+M_{X+Y}(s) &= M_X(s)\cdot M_Y(s). \label{eq:73}
+\end{align}
+\end{subequations}
+
+
+\newthought{About \recall{conditional probability}} you should know that
+\begin{subequations}\label{eq:70}
+\begin{align}
+\P{A\given B} & = \frac{\P{AB}}{\P{B}}, \quad\text{if}\, \P{B}>0, \\
+\intertext{and, if $A=\bigcup_{i=1}^n B_i$ with $\P{B_i>0}$ for all~$i$,}
+ \P{A} &= \sum_{i=1}^n \P{A B_i} = \sum_{i=1}^n \P{A\given B_i} \P{B_i}.
+\end{align}
+\end{subequations}
+
+\newthought{We say that} a set $\{X_k\}$ of iid rvs are \recall{distributed as the common rv} $X$ when all $X_k$ have the same cdf as~$X$.
+
+\begin{exercise}\label{ex:12}
+Show that $|h|^{\alpha} = o(h)$ for all $\alpha > 1$. Conclude in particular that $a h^{2} = o(h)$ for any constant~$a$.
+\begin{solution}
+Take $f(x) = h^{\alpha}$. Then,
+\begin{align*}
+\lim_{h\to 0} \frac{f(h)}{h} =
+\lim_{h\to 0} \frac{h^{\alpha}}{h} =
+\lim_{h\to 0} h^{\alpha-1}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+
+\begin{exercise}\label{ex:l-104}
+ Let~$c$ be a constant (in $\R$) and the functions~$f$ and~$g$ both of $o(h)$. Then show that (1) $f(h) \to 0$ when $h\to 0$, (2) $c\cdot f = o(h)$, (3) $f+g=o(h)$, and (4) $f\cdot g=o(h)$.
+\begin{solution}
+ In fact (1) is trivial: $|f(h)| \leq |f(h)/h|$ when $|h| < 1$.
+ But it is given that the RHS goes to zero.
+ For (2) and (3):
+\begin{align*}
+\lim_{h\to 0} \frac{c f(h)}{h} &= c \lim_{h\to 0} \frac{f(h)}{h} = 0, \; \text{as } f = o(h), \\
+\lim_{h\to 0} \frac{f(h) + g(h)} h &= \lim_{h\to 0} \frac{f(h)} h + \lim_{h\to 0} \frac{g(h)} h = 0.
+\end{align*}
+For (4), use the Algebraic Limit Theorem and multiply with $h/h$,
+\begin{align*}
+\lim_{h\to 0} \frac{f(h)g(h)}{h} &= \lim_{h\to 0} h \frac{f(h)}{h} \frac{g(h)}{h}
+= \lim_{h\to 0} h \lim_{h\to 0} \frac{f(h)}{h} \lim_{h\to 0} \frac{g(h)}{h} = 0
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:87}
+ Why is $e^{x} = 1 +x + o(x)$?
+\begin{solution}
+ When $|x|\ll 1$, the terms with $n\geq 2$ in~\cref{eq:76} are $x^n = o(x)$. Then applying $x^n + x^m = o(x)$ to the Taylor series gives the result.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}
+ Why is~\cref{eq:77} true?
+\begin{solution}
+To see~\cref{eq:77}, note first that $X\1{X=n} = n\1{X=n}$ because $X=n$ when $\1{X=n} =1$, and second that $\sum_{n=0}^\infty \1{X=n} =1$, since~$X$ takes one of the values in $\N$, and events $\{X=n\}$ and $\{X=m\}$ are non-overlapping when $n\neq m$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:l-105}
+Show that $G(k) = \sum_{m=0}^\infty \1{m>k} f(m)$ for discrete~$X$.
+\begin{solution}
+ This is just rewriting the definition:
+\begin{equation*}
+G(k) = \P{X>k} = \sum_{m=k+1}^\infty \P{X=m} = \sum_{m=k+1}^\infty f(m)=\sum_{m=0}^\infty \1{m>k}f(m).
+\end{equation*}
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:6}
+ For a nonnegative discrete random variable~$X$, use indicator functions to prove that $\E X = \sum_{k=0}^\infty G(k)$.
+\begin{hint}
+Write
+$\sum_{k=0}^\infty G(k) = \sum_{k=0}^\infty \sum_{m=k+1}^\infty \P{X=m}$, reverse the summations. Then realize that $\sum_{k=0}^\infty \1{k<m} = m$.
+\end{hint}
+\begin{solution}
+Observe first that $\sum_{k=0}^\infty \1{m>k} = m$, since $\1{m>k}=1$ if $k<m$ and $\1{m>k} = 0$ if $k\geq m$. With this,
+\begin{align*}
+\sum_{k=0}^\infty G(k)
+&= \sum_{k=0}^\infty \P{X>k}
+= \sum_{k=0}^\infty \sum_{m=k+1}^\infty \P{X=m} \\
+& = \sum_{k=0}^\infty \sum_{m=0}^\infty \1{m>k} \P{X=m}
+= \sum_{m=0}^\infty \sum_{k=0}^\infty \1{m>k} \P{X=m} \\
+&= \sum_{m=0}^\infty m\P{X=m} = \E X.
+\end{align*}
+There are some technical details with respect to the interchange of the summations.
+Since the summands are positive, this is allowed.
+For further detail, see \citet{capinski03:_probab_probl}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:66}
+For discrete~$X$,  use indicator functions to prove that
+$\sum_{i=0}^\infty i G(i) = \E{X^2}/2 - \E{X}/2$.
+\begin{hint}
+$\sum_{i=0}^\infty i G(i) = \sum_{n=0}^\infty \P{X=n} \sum_{i=0}^\infty i \1{n\geq i+1}$,
+and reverse the summations.
+\end{hint}
+\begin{solution}
+\begin{align*}
+\sum_{i=0}^\infty i G(i)
+&= \sum_{i=0}^\infty i \sum_{n=i+1}^\infty \P{X=n} = \sum_{n=0}^\infty \P{X=n} \sum_{i=0}^\infty i \1{n\geq i+1} \\
+&= \sum_{n=0}^\infty \P{X=n} \sum_{i=0}^{n-1}i = \sum_{n=0}^\infty \P{X=n} \frac{(n-1)n}{2} \\
+&= \sum_{n=0}^\infty \frac{n^2}{2} \P{X=n} - \frac{\E X}{2}
+= \frac{\E{X^2}}{2} - \frac{\E X}{2}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:l-107}
+For  general non-negative~$X$,  use indicator functions to prove that
+$ \E X = \int_0^\infty x \d F(x) = \int_0^\infty G(y) \d y,$
+where $G(x) = 1 - F(x)$.
+\begin{hint}
+$\E X = \int_0^\infty x \d F( x) = \int_0^\infty \int_0^\infty \1{y\leq x} \d y \d F(x)$.
+\end{hint}
+\begin{solution}
+ \begin{align*}
+ \E{X} &= \int_0^\infty x \d F(x) = \int_0^\infty \int_0^x \d y \d F(x) \\
+ & = \int_0^\infty \int_0^\infty \1{y\leq x} \d y \d F(x) = \int_0^\infty \int_0^\infty \1{y\leq x} \d F(x) \d y\\
+ & = \int_0^\infty \int_y^\infty\d  F(x) \d y = \int_0^\infty G(y) \d y.
+ \end{align*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:14}
+  Use indicator functions to prove that for a general non-negative random variable~$X$, $ \E{X^2} = 2 \int_0^\infty y G(y) \d y$.
+\begin{hint}
+$\int_0^\infty y G(y) \d y = \int_0^\infty y \int_0^\infty \1{y\leq x}f(x)\, \d x \d y$.
+\end{hint}
+\begin{solution}
+ \begin{align*}
+\int_0^\infty y G(y) \d y
+&= \int_0^\infty y \int_y^\infty f(x)\, \d x \d y = \int_0^\infty y \int_0^\infty \1{y\leq x}f(x)\, \d x \d y\\
+&= \int_0^\infty f(x) \int_0^\infty y \1{y \leq x}\, \d y \d x
+= \int_0^\infty f(x) \int_0^x y\, \d y \d x\\
+&= \int_0^\infty f(x) \frac{x^2}2 \d x =\frac{\E{X^2}}2.
+ \end{align*}
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:l-108}
+ Show that $\E{X^2}/2 = \int_0^\infty y G(y) \d y$ for a continuous non-negative random variable~$X$ with survivor function~$G$.
+ \begin{solution}
+ \begin{hint}
+ Use integration by parts.
+ \end{hint}
+ \begin{equation*}
+ \int_0^\infty y G(y) \d y
+= \frac{y^2}2 G(y) \bigg|_0^\infty - \int_0^\infty \frac{y^2}2 g(y)\d y = \int_0^\infty \frac{y^2}2 f(y)\d y = \frac{\E{X^2}}2,
+ \end{equation*}
+ since $g(y) = G'(y) = - F'(y) = - f(y)$. Note that we used $\frac{y^2}2 G(y) \bigg|_0^\infty = 0 - 0 = 0$, which follows from our assumption that $\E{X^2}$ exists, implying that $\lim_{y \to \infty} y^2G(y) = 0$.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+ What is the value of $M_X(0)$?
+\begin{solution}
+ $M_X(0) = \E{e^{0 X}} = \E{e^0} = \E{1} = 1$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:l-109}
+ We have one gift to give to one out of three children. As we cannot
+ divide the gift into parts, we decide to let `fate decide'. That
+ is, we choose a random number in the set $\{1, 2, 3\}$. The first
+ child that guesses this number wins the gift. Show that the
+ probability of winning the gift is the same for each child.
+\begin{hint}
+ For the second child, condition on the event that the first does not choose the right number.
+ Use the definition of conditional probability:
+ $\P{A\given B} = \P{AB}/\P{B}$ provided $\P{B}>0$.
+\end{hint}
+\begin{solution}
+ The probability that the first child to guess  wins is
+ $1/3$. What is the probability for child number two? Well, for
+ him/her to win, it is necessary that child one does not win and
+ that child two guesses the right number of the remaining
+ numbers. Assume, without loss of generality that child 1 chooses
+ $3$ and that this is not the right number. Then
+ \begin{equation*}
+ \begin{split}
+&\P{\text{Child 2 wins}} \\
+&= \P{\text{Child 2 guesses the right number and child 1 does not win}} \\
+&= \P{\text{Child 2 guesses the right number} \given\, \text{child 1 does not win}}
+\cdot \P{\text{Child 1 does not win}} \\
+&= \P{\text{Child 2 makes the right guess in the set $\{1,2\}$}}\cdot \frac 23 \\
+&= \frac 1 2\cdot \frac 23 = \frac 1 3.
+ \end{split}
+ \end{equation*}
+ Similar conditional reasoning gives that child 3 wins with probability $1/3$.
+\end{solution}
+\end{exercise}
+
+\input{trailer}

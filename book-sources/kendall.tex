@@ -1,0 +1,73 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Kendall's Notation}
+\label{sec:kendalls-notation}
+
+As is apparent from~\cref{sec:constr-discr-time,sec:constr-gg1-queu}, the construction of a queueing process for a single station involves three main elements: the distribution of job inter-arrival times, the distribution of the service times, the number of servers present to process jobs, and the number (batch) of jobs that arrive and can be served at once.
+
+
+To characterize the type of queueing process it is common to use \recall{Kendall's abbreviation} $A^{B}/Y^{C}/c/K$, where~$A$ is the distribution of the iid inter-arrival times,
+$Y$ the distribution of the iid service times, $c$ the number of servers, and~$K$ the system size, i.e., the total number of customers that can be simultaneously present, whether in queue or in service.\sidenote{The meaning of~$K$ differs among authors.
+Sometimes it stands for the capacity of the queue, not the entire system.
+In this book~$K$ corresponds to the system's size.} It is implicit that $K\geq c$ for any queueing system. When $K$ is not specified, the system capacity is unbounded, but when it appears in the acronym,  queue length is bounded.
+When at an arrival epoch multiple jobs can arrive simultaneously (like a group of people entering a restaurant), we say that a \emph{batch of jobs} arrives.
+Likewise, the server can work in batches, for instance, an oven can  process multiple jobs at the same time.
+The letter~$B$ denotes  the (distribution of the) batch size and~$C$ the (distribution of the) size of the service batch.
+When $B\equiv 1$ or $C \equiv 1$, i.e., single batch arrivals or single batch services, we suppress the~$B$ or~$C$ in Kendall's formula.
+Finally, in this notation, it is assumed that the service discipline is FIFO.
+
+
+The most important inter-arrival and service distributions are the exponential distribution, denoted with the shorthand\sidenote{which stands for Markov or Memoryless}  $M$, and the general distribution\sidenote{with the implicit assumption that the first moment is finite},  denoted with  $G$. We write~$D$ for a deterministic (constant) random variable.
+
+\newthought{A few important} examples are the following queueing processes: the $M/M/1$ queue in which inter-arrival times and service times are exponentially distributed;  the $M/G/1$ queue with exponential inter-arrival times and general service times; and the $G/G/c$ queue in which the inter-arrival and service times are not specified.
+
+A model that is often used to determine the number of beds needed in (a ward of) a hospital is the $M/M/c/c$ queue.
+The motivation is as follows.
+Practice tells us that patient inter-arrival times are memoryless, hence exponentially distributed.
+Data of patients treatment times shows that these times are often quite well described by an exponential distribution.
+Next, there are~$c$ beds available.
+Clearly, as each bed can serve just one patient, when all~$c$ beds are occupied, the hospital is `full'.
+Thus, the maximal number of jobs in the system is the same as the number of servers available.
+
+We can represent the discrete-time model  that corresponds to the recursion \cref{eq:31} as a $D^{B}/D^{C}/1$ queue in which $a_{k}\sim B$ and $c_{k}\sim C$.
+
+
+\begin{truefalse}
+Consider an $M^2/G/c/K$ queue, with $K\geq c$.
+Claim: exactly one of the following statements is false.
+    \begin{itemize}
+        \item Jobs arrive in pairs of two.
+        \item Service times can be deterministic.
+        \item The  queue shared among $c$ parallel servers cannot contain more than $K$ jobs.
+    \end{itemize}
+    \begin{solution}
+    False.
+All statements are true.
+The first and second statement are evident.
+For the third, $K$ is the capacity of the system, not the queue capacity.
+Hence, the queue cannot contain more than $K-c$ jobs, and since $K-c < K$, the third statement is true.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+In the $D/M/1$ jobs have deterministic service times.
+\begin{solution}
+False. Service times are iid and exponential.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Consider a check-in desk at an airport.
+There is one desk that is dedicated to business customers.
+However, when it is idle (i.e., no business customer in service or in queue), this desk also serves economy class customers.
+The other $c$ desks are reserved for economy class customers.
+The queueing process as perceived by the economy class customers can be modeled as an $M/M/(c+1)$ queue.
+\begin{solution}
+False. The service  for the business customers works as a priority queue. Therefore, one of the $c+1$ servers, as perceived by the economy customers, works differently.
+\end{solution}
+\end{truefalse}
+
+
+\input{trailer}

@@ -1,0 +1,172 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+
+\begin{document}
+\section{Distribution of Waiting Times}
+\label{sec:comp-with-rand}
+
+
+We can determine the waiting time of the~$n$th job in a single-server queue by means of the recursion $W_{k} = [W_{k-1} + S_{k-1}-X_{k}]^{+}$.
+That is, for given random deviates $\{X_{k}\}$ and $\{S_{k}\}$ we can compute the \emph{number} $W_{k}$.
+If want to get information about the \emph{distribution} of $W_{k}$, we need to do some more work.
+One way is to use simulation and repeat the recursions many different times with different seeds to make a histogram of the observed values of $W_{k}$.
+There is however, another way that is directly based on the tools for probabilistic arithmetic we developed in~\cref{sec:prob_artithmetic}.
+Let us show some code how to we can do this;~\cref{fig:waitingdistribution} will be the result of our effort.\sidenote{We discuss the main ideas of the code blocks just above each block.}
+
+\newthought{To start, we}  load \mintinline{python}{pytictoc}, besides the regular libraries, to measure the running times of certain parts of the code.
+The module \mintinline{python}{random_variables.py} contains our code to handle the probabilistic arithmetic..
+(We hide the lines that deal with \mintinline{python}{seaborn} on how to make the \LaTeX\/ plots.)
+\inputminted[firstline=2, lastline=6]{python}{../code/waiting_time_distribution.py} % modules
+
+In the recursions for~$W$ we will use the function $[x]^{+} = \max\{x, 0\}$. We also instantiate a \mintinline{python}{tictoc} object.
+\inputminted[firstline=18, lastline=23]{python}{../code/waiting_time_distribution.py} % tictoc
+
+
+As explained in~\cref{sec:prob_artithmetic} an \mintinline{python}{RV} object uses a dictionary to make the support and pmf of a rv; the keys of the dict represent possible outcomes, the values the associated  probabilities.
+Observe from the numbers below that the mean service time is larger than the mean inter-arrival time.
+This is on purpose to see later in the graphs how this affects the distribution of the waiting time and the departure time.
+\inputminted[firstline=27, lastline=28]{python}{../code/waiting_time_distribution.py} % rvs
+
+The next few lines do the work to compute the distribution of $W_{30}$.
+We set the initial arrival that $\P{A_{0} = 0}$, and  then, by writing \pythoninline{A += X}, we compute the pmf of the rv $A+X$. Thus, the first call \mintinline{python}{A += X} computes the pmf of $A_{1}$. Since the system starts empty, the first job does not have to wait, which we implement by setting $\P{W_{1} = 0} = 1$.
+In the for loop, we update $A_{k}$ according to the rule $A_{k} = A_{k-1} +X_{k}$ and the waiting time with $W_{k} = [W_{k-1} + S_{k-1} - X_{k}]^{+}$.
+We start the for loop at $2$, because the lines before the loop compute the pmf of $A_{1}$ and $W_{1}$.
+The call to \mintinline{python}{tic.toc()} prints the time that elapsed between \mintinline{python}{tic.tic()} and the `toc'.
+\inputminted[firstline=32, lastline=43]{python}{../code/waiting_time_distribution.py} % computedist
+
+For later purposes, you should note the line that computes the departure times. We explain later why this way of computing the departure times is \emph{wrong}.
+
+Let us now estimate the distribution of~$W$ by means of simulation.
+We compute from $W_{30}=0$ a number of \mintinline{python}{num_runs} times and store the outcomes in the array \mintinline{python}{nth_waiting_time}.
+In the computations we let the departure times tag along.
+We use small letters for the variables to avoid a name clash with the capitals like \mintinline{python}{X} we used earlier.
+\inputminted[firstline=47, lastline=67]{python}{../code/waiting_time_distribution.py} % simulation
+
+
+Making the plots follows the same pattern as we did earlier.
+First we plot the cdfs of the departure times.
+The keyword \mintinline{python}{cumulative=True} converts a histogram\sidenote{Recall, a histogram is an (approximation of a) pmf} to a cdf.
+\inputminted[firstline=71, lastline=88]{python}{../code/waiting_time_distribution.py} % figdeparturetimes
+\noindent
+And next the waiting times.
+\inputminted[firstline=92, lastline=107]{python}{../code/waiting_time_distribution.py} % figwaitingtimes
+The last step is to save the plot to file.
+\inputminted[firstline=111, lastline=112]{python}{../code/waiting_time_distribution.py} % figsave
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics{../figures/waiting_time_distribution.pdf}
+\caption{The cumulative distribution of the departure and waiting time of job $30$ with the inter-arrival and service times as mentioned in the text.
+Observe that the distribution shifts to the right because the queue is not stable.
+The results of theory and simulation are similar, but there seems to a be a bit of a difference between the plot of the theoretical values for the cdf of departure times and the simulations. The main text explains why, and what the error is.}
+\label{fig:waitingdistribution}
+\end{figure}
+
+Finally, to plot the pmf instead of the cdf, we change the \mintinline{python}{cdf} in \mintinline{python}{pmf} and remove the lines with \mintinline{python}{cumulative=True}. Running the code again gives~\cref{fig:waitingdistributionpmfgood}.
+
+\begin{figure}[tb]
+\centering
+\includegraphics{../figures/waiting_time_distribution_pmf.pdf}
+\caption{The pmfs of the departure and waiting time of job $30$ with~$X$  concentrated on $3, 4, 5$. Compare this to~\cref{fig:waitingdistributionpmf}.}
+\label{fig:waitingdistributionpmfgood}
+\end{figure}
+
+
+\newthought{You might wonder} why we should have a preference for ploting the cdf instead of the pmf of the waiting and departure times; it seems that the pmf is easier to interpret.
+However, this is not true: the pmf is an ill-behaved object.\sidenote{You'll appreciate the wisdom of this only after making some related errors yourself.}
+For instance, let us take the support of~$X$ as $3, 4.1, 5$ instead of $3, 4, 5$ as above, and leave the rest of the parameters untouched.
+Plotting the pmf in the same way as for~\cref{fig:waitingdistributionpmfgood}, we now obtain~\cref{fig:waitingdistributionpmf}.This looks quite a bit different from the densities in~\cref{fig:waitingdistributionpmfgood}, to say the least.\sidenote{If you doubt the correctness of the compuations, just run the same code but plot the cdfs instead; the pathology disappear.}
+In general, you should remember that plotting the density of a rv is not simple, and I leave the  interesting exercise to find out why to you.
+
+\begin{figure}[tb]
+\centering
+\includegraphics{../figures/waiting_time_distribution_pmf_4.1.pdf}
+\caption{The pmfs of the departure and waiting time of job $30$ with~$X$ concentrated on $3, 4.1, 5$ instead of $3, 4, 5$; the rest of the parameters are the same as in~\cref{fig:waitingdistribution}.
+Note how pathological the pmf of the theoretical distribution behaves.
+This is not a mistake in the code; when using $3, 4, 5$ as support for~$X$ we get~\cref{fig:waitingdistributionpmfgood}.
+}
+\label{fig:waitingdistributionpmf}
+\end{figure}
+
+Another interesting question is what would happen if we would compute the departure times with the following code, which is the implementation of the recursion $D_{k} = \max\{D_{k-1}, A_{k}\} + S_{k}$.
+\begin{python}
+A = rv.RV({0: 1})
+D = rv.RV({0: 1})
+for i in range(1, horizon):
+    A += X
+    D = rv.compose_function(max, D, A) + S
+\end{python}
+\noindent In fact, this is wrong for a subtle reason.
+The code in \mintinline{python}{random_variable.py} assumes that the rvs are \emph{independent}, but $D_{k}$ and $A_{k-1}$ are dependent!\sidenote{Dependent is the same as not independent.}
+To see this, observe from the left panel of~\cref{fig:waitingdistribution} that $\P{D_{30} \leq 150} > 0$, but $\P{D_{30} \leq 150| A_{30} > 151} = 0$ while still $\P{A_{30} > 151} > 0$.
+This also explains the conceptual\sidenote{The mistake lies not in the code of \texttt{RV} itself, but in how we \emph{use} the code.}
+mistake in our earlier code \mintinline{python}{D = A + W + S}, and why the graphs of the `theoretical' cdf and the ecdf\sidenote{empirical cdf} in the left panel of~\cref{fig:waitingdistribution} do not agree.
+By inspecting this carefully, we see that the ecdf obtained by simulation starts to increase later than the cdf of~$D$ but increases faster.
+The variance of the simulated departure times are apparently smaller.
+In conclusion, as $A_{30}$ and $W_{30}$ are dependent, $D_{30}$ cannot be computed as simply as the code suggests.
+In fact, its computation requires a careful build up of the dependency structure of the rvs involved.\sidenote{A nice python package that implements dependence in a correct way is \mintinline{python}{lea}.}
+
+But why then does our compuation works in the code that implements the recursion $W_k = [W_{k-1} + S_{k-1} - X_k]^{+}$?
+This is because $W_{k-1}$ \emph{is} independent of $S_{k-1}$ and $X_{k}$ so that we can compute $W_{k-1}+ S_{k-1} - X_{k}$ without problems.
+
+Keep in mind that stochastic dependence is  tricky and can be easily overlooked.
+To prevent making such mistakes (when it is important) it helps to check the results against simulation.
+If the results do not agree, there is an error (which may be simple or hard to find).
+
+
+\begin{truefalse}
+Claim: This code prints the mean departure time.
+\begin{minted}{python}
+import numpy as np
+
+rng = np.random.default_rng(3)
+labda, mu = 3, 4
+num = 10
+X = rng.exponential(scale=1 / labda, size=num)
+Z = rng.exponential(scale=1 / mu, size=num)
+X[0] = Z[0] = 0
+A = X.cumsum()
+
+D = np.zeros_like(X)
+for i in range(1, num):
+    D[i] = max(A[i], D[i - 1]) + Z[i]
+
+print(D.mean())
+\end{minted}
+    \begin{solution}
+        False. Very sneaky, but the correct quantity is \texttt{D[1:].mean()}.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Consider a  queue in continuous time with inter-arrival times $\{X_k\}$, service times $\{S_k\}$, waiting times $\{W_k\}$ and sojourn times $\{J_k\}$. Claim: we can compute the waiting times and sojourn times with the following recursion:
+\begin{align*}
+ W_{k} &= [J_{k-1} - X_k]^+, &
+ J_{k} &= W_{k} + S_k.
+\end{align*}
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+
+
+\begin{truefalse}
+Claim: This code  uses the recursion $D_{k} = \max\{D_{k-1}, A_{k}\} + S_{k}$ in the correct way to compute the probability distribution of $\{D_{k}\}$.
+\begin{python}
+A = rv.RV({0: 1})
+D = rv.RV({0: 1})
+for i in range(1, horizon):
+    A += X
+    D = rv.compose_function(max, D, A) + S
+\end{python}
+\begin{solution}
+False. See the main text. It neglects the dependence between $A_{k}$ and $D_{k-1}$.
+\end{solution}
+\end{truefalse}
+
+
+\input{trailer}

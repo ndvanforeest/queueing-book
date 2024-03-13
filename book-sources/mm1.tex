@@ -1,0 +1,525 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{\texorpdfstring{$M/M/1$}{MM1} queue and its variations}
+\label{sec:mm1}
+
+
+In this section we develop many different queueing models by making judicious choices for $\lambda(n)$, $\tilde \lambda(n)$ and $\mu(n)$ for the level-crossing equations~\cref{eq:25}.
+We first discuss several models, then we sketch an algorithm which allows to compute the performance measures for the general case.
+We assume that a system that does not block arrivals in some way is stable; a systems that blocks demand is stable anyway.
+Note that it is much more important to understand how to specify the correct level-crossing equations than to derive closed form expressions for the performance measures.
+
+In the models below we allow $\lambda(n)$ and $\mu(n)$ to depend on the number~$n$ in the system, but such that, given~$n$, the inter-arrival and service times should be exponentially distributed, that is,\sidenote{This very general queueing systems is sometimes written as the $M(n)/M(n)/1$ queue.}
+\begin{align*}
+  X|L=n &\sim \Exp{\lambda(n)}, & S|L=n &\sim \Exp{\mu(n)}.
+\end{align*}
+As  in the general case arrivals need not enter, we consider $\tilde \lambda$ rather than $\lambda$ in the next equations:
+\begin{align*}
+  \P{\L(t+\Delta t) = n+1 \given \L(t) = n } &= \tilde \lambda(n) \Delta t + o(\Delta t), \quad n\geq 0,\\
+  \P{\L(t+\Delta t) = n-1 \given \L(t) = n } &= \mu(n) \Delta t + o(\Delta t), \quad n \geq 1.
+\end{align*}
+Below, when all arrivals are accepted, we write $\tilde \lambda = \lambda$, but otherwise, we use~$\tilde \lambda$.
+
+
+\newthought{The $M/M/1$ queue} has  a constant arrival and service rate so that we take
+\begin{align*}
+\lambda(n)&=\lambda, & \mu(n)&=\mu.
+\end{align*}
+With this, the level-crossing equations become
+\begin{equation*}
+ p(n+1) = \frac{\lambda(n)}{\mu(n+1)} p(n) = \frac{\lambda}{\mu} p(n) = \rho p(n),\quad \rho = \frac{\lambda}{\mu}.
+\end{equation*}
+As this holds for any $n\geq 0$, $p(n+1) = \rho^{n+1} p(0)$. Since $p(0) \sum_{n=0}^{\infty} \rho^{n} = p(0)/(1-\rho)$, the normalization condition $\sum_{n=0}^{\infty} p(n) = 1$ implies that $p(0) = 1-\rho$, hence
+\begin{align}\label{eq:23}
+p(n) &= (1-\rho)\rho^{n}, \quad n \geq 0.
+\end{align}
+
+It is now easy to compute the most important performance measures.
+The load and the utilization are equal since all jobs are accepted, hence served.  With a bit of algebra,\sidenote{\cref{ex:34}}
+\begin{align}\label{eq:el}
+\rho &= \frac{\lambda}{\mu}, & \E{\Ls} &= \rho, \\
+  \E \L &= \frac \rho{1-\rho}, & \P{\L> n} &= \rho^{n+1},
+\end{align}
+recall that $\E\Ls$ is the time-average number of jobs in service. Since $\E\L$ is the number in the system, we see that for the number of jobs in queue,
+\begin{equation*}
+\E \QQ = \E \L - \E{\Ls} = \frac{\rho^2}{1-\rho}.
+\end{equation*}
+
+
+
+\newthought{The $M/M/c$ queue} has~$c$ identical servers to process jobs.
+To model this, set
+\begin{align*}
+\lambda(n) &= \lambda, & \mu(n) &= \mu \min\{n, c\}.
+\end{align*}
+It is possible\sidenote{\cref{ex:7}} to derive closed form expressions for $\E \QQ$ and $p(n)$, but I don't find them really useful.
+It is much easier to use the code for the $M/M/c/K$ below, and compute the performance measures for various large values for $K$.
+When $K$ is so large that the measures hardly change, then for all practical purposes, $\P{L=K}$ is negligible.
+
+Still, two measures are particularly simple:
+\begin{align*}
+  \rho & = \frac{\lambda}{ c\mu}, & \E{\Ls} &= \sum_{n=0}^{\infty}\min\{n,c\} p(n)= \frac{\lambda}\mu,
+\end{align*}
+where the second follows directly from Little's law.\sidenote{Note that $\E{\Ls} \neq \rho$.}
+
+
+
+\newthought{The $M/M/1/K$ queue} blocks jobs when $L\geq K$.
+We can implement this by taking\sidenote{Note how $\lambda$ and $\tilde \lambda$ relate.}
+\begin{align*}
+\tilde \lambda(n) &= \lambda \1{n < K}, & \mu(n) &= \mu.
+\end{align*}
+This gives $\lambda p(n) = \mu p(n+1)$ for $n<K$, and $p(n) = 0$ for $n>K$ because $\tilde \lambda(n) = 0$ for $n\geq K$.
+Thus, in general, $\tilde \lambda(n) p(n) = \mu(n+1)p(n+1)$, from which it follows right away that
+ \begin{align*}
+\rho &= \frac{\lambda}{\mu} & p(n) &= \frac{1-\rho}{1-\rho^{K+1}} \rho^n.
+\end{align*}
+
+
+There is a subtle point here to make.
+When the system contains $K$ jobs, the rate at which jobs arrive at the system is $\lambda (K) = \lambda$ because jobs still \emph{arrive} as a Poisson process, but the rate at which the jobs \emph{enter} is $\tilde \lambda(K)= 0$ Consequently,
+\begin{equation*}
+\lambda \pi(K) = \lambda(K) p(K) \neq \tilde \lambda(K) p(K) = 0.
+\end{equation*}
+Thus, since $\lambda(K) = \lambda$,  we still have that $\pi(K) = p(K)$. By PASTA, the \emph{fraction} of jobs rejected is therefore equal to $p(K)$.
+Moreover, since jobs are blocked, the utilization is no longer equal to the load:
+\begin{align}\label{eq:mm1-2}
+\tilde \rho &= \lambda (1-p(K))/\mu = \E\Ls.
+\end{align}
+
+
+\newthought{The $M/M/c/K$ queue} is a multiserver queue with blocking and is a immediate combination of the $M/M/c$ and $M/M/1/K$ queue:
+\begin{align*}
+\tilde \lambda(n) &= \lambda\1{n<K}, &\mu(n) &= \mu \min\{n, c\}.
+\end{align*}
+
+\newthought{The $M/M/c/c$ queue} blocks jobs when all of its~$c$ servers are occupied.\sidenote{This queueing model is also known as the Erlang~$B$ model.}
+Thus, we take\sidenote{Why is it not necessary to write $\mu(n) = \mu \min\{c, n\}$?}
+\begin{align*}
+\tilde \lambda(n) &= \lambda\1{n<c}, & \mu(n) &= n \mu.
+ \end{align*}
+This queueing system is often used to determine the number of beds needed by a hospital: the beds act as servers and the patients as jobs.
+Given the arrival rate of patients, and the average time they occupy a bed\sidenote{i.e., the expected service time}, the problem is to find the number of beds~$c$ such that the probability $p(c)$ to block a patient is less than some threshold, $1\%$ say.
+For hospitals it is reasonable to assume Poisson arrivals since patients arrive independently from a large population.
+Then, by PASTA, we conclude that indeed $\pi(c) = p(c)$, in other words, the blocked fraction is equal to the time average $p(c)$ during which all beds are occupied.
+As for the service times, there are often many patients in a hospital, and they have many different reasons why they occupy a bed.
+Hence it is not entirely unreasonable to model the recovery times as exponentially distributed.
+
+Take $\rho = \lambda/(c \mu)$. When $n<c$, $\lambda p(n) = (n+1)\mu p(n+1)$, hence
+ \begin{align*}
+   p(n+1) = \frac{\lambda}{(n+1)\mu }p(n) = \cdots = \frac{\lambda^{n+1}}{(n+1)!\mu^{n+1}} p(0) = \frac{(c\rho)^{n}}{(n+1)!} p(0).
+\end{align*}
+The normalization constant follows  as $G = \sum_{n=0}^{c}p(n)$. As there are as many servers as jobs, jobs get rejected at rate $1-p(c)$, so that, using PASTA,
+ \begin{align*}
+   \E \QQ &= 0, & \E \Ls &= \frac{\lambda}{\mu} \left(1- p(c)\right).
+\end{align*}
+% Observing that $\lambda(1-p(c))$ is the rate of accepted jobs, the utilization \emph{of the system} is $\lambda(1-p(c))/\mu$, and this must be equal to the average number $\E{L_{s}}$ of busy servers.
+
+
+\newthought{The $M/M/\infty$ queue} is simple to analyze, as it has \emph{ample} servers.
+Any arrival finds a free server, hence, its service  starts directly upon arrival.
+Therefore,
+\begin{align*}
+\lambda(n)&=\lambda, & \mu(n) &= n \mu.
+\end{align*}
+By taking the limit $c\to \infty$ in the expressions of the $M/M/c$ queue\sidenote{or the $M/M/c/c$ queue.} we get
+\begin{align*}
+  p(n) &= e^{-\lambda/\mu} \frac{(\lambda/\mu)^n}{n!}, & \E Q&=0, & \E \L = \E \Ls = \frac \lambda \mu.
+\end{align*}
+We see that the number of busy servers in the $M/M/\infty$ queue is Poisson distributed with parameter $\lambda \E S$.
+We mention in passing---but do not prove it---that the same results also hold for the $M/G/\infty$ queue.
+
+\newthought{With a finite calling population} the number of jobs is fixed, $N$ say.
+This model is useful to analyze repair systems and inventory systems of spare parts.
+To see this, consider a factory with~$N$ machines and~$c$ mechanics.\sidenote{When  $c=N$ we obtain the Ehrenfest model of diffusion, which is used to provide some insight into the second law of thermodynamics.}
+A machine can be in one of two states: working or failed.
+When a machine breaks down, it moves to the repair department and waits until it is repaired.
+When~$n$ machines are in repair, there are $N-n$ machines still working.
+
+Thus, if $\lambda$ is the rate at which a individual machine can fail, $\lambda(N-n)$ is the rate at which any of the working machines can fail,
+we obtain
+\begin{align*}
+  \lambda(n) &= \lambda (N-n), & \mu(n) = \mu \min\{n, c\}.
+\end{align*}
+Since jobs are not lost: $\tilde \lambda(n) = \lambda(n)$.
+It's easy to modify the code below, therefore it's easy to obtain numerical answers.
+
+% In case $c=1$, the probabilities become \sidenote{~\cref{ex:l-247}}
+% \begin{align*}
+%  p(n)  &= \frac{N!}{(N-n)!}\frac{\rho^n}{G}, & G &= \sum_{n=0}^N \rho^n \frac{N!}{(N-n)!}.
+% \end{align*}
+% As the expression for~$G$ cannot be simplified, there is not much point trying to derive simple expressions for $\E \L$.
+% There exist algorithms to compute $\E L$, we don't discuss these here.
+
+\newthought{A customer balks} when the customer finds the queue too long, hence decides not to join.
+A simple example with customer balking is to take,
+ \begin{align*}
+\tilde \lambda(n) &= \lambda [K-n]^{+}, &  \mu(n)&=\mu.
+\end{align*}
+
+Balking is not necessarily the same as blocking.
+In the latter case, $\tilde \lambda(n)= \lambda \1{n < K}$; in the former case, a fraction of the customers may already choose not the join the system at a lower level than~$K$.
+
+As the steady-state probabilities depend heavily on the form of $\tilde \lambda(n)$ and $\mu(n)$, we use the recursion~\cref{eq:25} and the code below to compute the performance measures.
+
+
+\newthought{The most general} case can only be approached with numerical methods.
+We present example code to deal with a queue with blocking; the other models of this section are easy modifications of this.
+Note that we need to assume that~$K$ is finite, although it can be large. For all practical purposes, allowing~$K$ in the order of 1000 seems more than large enough.
+
+\begin{python}
+import numpy as np
+
+arrival_rate = 23
+service_rate = 6
+c, K = 4, 20
+
+
+def labda_tilde(n):
+    return arrival_rate * (K > n)
+
+
+def mu(n):
+    return service_rate * min(n, c)
+
+
+p = np.ones(K + 1, dtype=float)
+for n in range(K):
+    p[n + 1] = p[n] * labda_tilde(n) / mu(n + 1)
+p /= p.sum()  # normalize
+
+Labda = sum(labda_tilde(n) * p[n] for n in range(len(p)))
+print(Labda, service_rate * c) # check
+EQ = sum(p[n] * max(n - c, 0) for n in range(len(p)))
+ELs = sum(p[n] * min(n, c) for n in range(len(p)))
+EL = sum(p[n] * n for n in range(len(p)))
+print(EL, EQ + ELs) # check
+\end{python}
+
+
+% \newthought{Quite a number} of exercises in this, and the next few, section are targeted on \emph{checking} that the results for some general queueing system reduce to those for special cases.
+% The reader should understand the importance of such checks.
+% These exercises are simple in a sense---it is perfectly clear what to do, there is no model to make for instance---, but the algebra can be a bit tough at times.
+
+\begin{truefalse}
+In the level-crossing analysis of the $M(n)/M(n)/1$ queue we claim it is necessary that the interarrival times of jobs are iid.
+\begin{solution}
+False. In this queueing model, the arrival rate $\lambda(n)$ can depend on the number of jobs in queue. If this is the case, the interarrival times can still be independent, but not identically distributed.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+For the $M/M/1$ queue, the following reasoning leads to the expected number of jobs in the system.
+\begin{equation*}
+ \begin{split}
+ M_L(s)
+&= \E{e^{s L}} = \sum_{n=0}^\infty e^{s n}p(n) = (1-\rho) \sum_n e^{s n} \rho^n \\
+&=\frac{1-\rho}{1-e^{s}\rho},
+ \end{split}
+\end{equation*}
+where we assume that $s$ is such that $e^s \rho < 1$. Then,
+\begin{equation*}
+ M_L'(s) = (1-\rho) \frac{1}{(1-e^s\rho)^2} e^s \rho.
+\end{equation*}
+Claim: the above implies  $\E L = M_L'(0) = \rho/(1-\rho)$.
+\begin{solution}
+True. See~\cref{ex:34}.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: To model the $M/M/c/c+K$ queue as an $M(n)/M(n)/1$ queue we need to take $\lambda(n) = \lambda$ for all $n$.
+\begin{solution} False,~\cref{ex:41}
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: For the $M/M/c$ queue, $\E{L_Q} = \sum_{n=0}^\infty \max\{n-c, 0\} p(n)$.
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+
+\begin{exercise}
+ Explain that for the $M/M/1$ queue $\E{\QQ} = \sum_{n=1}^\infty (n-1)\pi(n)$ and use this to find that $\E{\QQ}=\rho^2/(1-\rho)$.
+\begin{solution}
+ The fraction of time the system contains~$n$ jobs is $\pi(n)$ (by
+ PASTA). When the system contains $n>0$ jobs, the number in queue
+ is one less, i.e., $n-1$.
+\begin{align*}
+\E{\QQ}
+&= \sum_{n=1}^\infty (n-1)\pi(n)
+=\sum_{n=1}^\infty n\pi(n) -\sum_{n=1}^\infty \pi(n)
+= \E\L - (1-\pi(0)) = \E\L - \rho.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:33}
+ Derive the steady state probabilities $p(n)$ for a queue with a finite calling population with~$N$ jobs and~$N$ servers.
+  What happens if $N\to\infty$?
+\begin{solution}
+ Take $\lambda(n) = (N-n)\lambda$ and $\mu(n) = n \mu$. Then
+ \begin{align*}
+ p(n+1)
+&= \frac{\lambda(n)}{\mu(n+1)} p(n)
+= \frac{(N-n)\lambda}{(n+1)\mu} p(n)
+= \frac{(N-n)(N-(n-1))}{(n+1)n}\frac{\lambda^2}{\mu^2} p(n-1) \\
+&= \frac{N!}{(N-(n+1))!}\frac1{(n+1)!}\rho^{n+1} p(0)
+ = {N \choose n+1}\rho^{n+1} p(0).
+ \end{align*}
+Therefore, $G=\sum_{k=0}^N \rho^k { N \choose k}$.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:34}
+Use moment-generating functions to derive $\E\L$ and $\V\L$ for the $M/M/1$ queue, and show that $\P{L>n} = \rho^{n+1}$.
+\begin{hint}
+First show that $M_L(s) = (1-\rho) \sum_n e^{s n} \rho^n$, then use the familiar expression of the sum over a geometric series.
+Similarly, $\P{\L\geq n} = \sum_{k\geq n} p(k)$.
+\end{hint}
+\begin{solution}
+\begin{equation*}
+ M_L(s) = \E{e^{s L}} = \sum_{n=0}^\infty e^{s n}p(n) = (1-\rho) \sum_n e^{s n} \rho^n=\frac{1-\rho}{1-e^{s}\rho},
+\end{equation*}
+where we assume that~$s$ is such that $e^s \rho < 1$. Then,
+\begin{align*}
+ M_L'(s) &= (1-\rho) \frac{1}{(1-e^s\rho)^2} e^s \rho \implies \E\L = M_L'(0)= \frac{\rho}{1-\rho}, \\
+ \E{\L^2}&= M''(0)= \frac{2\rho^2}{(1-\rho)^2} + \frac{\rho}{1-\rho},\\
+\V\L &= \E{L^2} - (\E\L)^2 = \frac{\rho(1+\rho)}{(1-\rho)^2}-\frac{\rho^2}{(1-\rho)^2} = \frac{\rho}{(1-\rho)^2},\\
+ \P{\L\geq n}
+ &= \sum_{k=n}^\infty p(k) = \sum_{k=n}^\infty p(0)\rho^k = (1-\rho)\sum_{k=n}^\infty \rho^k
+= (1-\rho)\rho^n \sum_{k=0}^\infty\rho^k = (1-\rho) \rho^n \frac1{1-\rho} = \rho^n.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+The remaining exercises ask you to derive the  expressions for the various models. You can skip them if you don't like algebra.
+
+
+\begin{extra}\label{ex:7}
+Derive the following expressions for the  $M/M/c$ queue:
+\begin{subequations}
+\begin{align}
+  \rho & = \frac{\lambda}{ c\mu},\\
+p(n) &= \frac 1 {G} \frac{1}{\prod_{k=1}^{n}\min\{c, k\}}(c\rho)^{n} , \quad n\geq 1,\\
+G &= \frac 1{p(0)} = \sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^c}{(1-\rho)c!}, \label{eq:501}\\
+\E{\QQ} &= \sum_{n=c}^\infty (n-c) p(n) = \frac{(c\rho)^c}{c! G}\frac{\rho}{(1-\rho)^2}\\
+\end{align}
+\end{subequations}
+\begin{solution}
+  For $n\geq 1$,
+ \begin{align*}
+ p(n)
+ &= \frac{\lambda(n-1)}{\mu(n)}p(n-1)
+ = \frac{\lambda}{\min\{c, n\} \mu }p(n-1)
+ = \frac{1}{\min\{c, n\}}(c\rho) p(n-1) \\
+ & = \frac{1}{\min\{c, n\}\min\{c, n-1\}}(c\rho)^2 p(n-2) \\
+ &= \frac{1}{\prod_{k=1}^{n}\min\{c, k\}}(c\rho)^{n} p(0).
+ \end{align*}
+To obtain the normalization constant $G = 1/p(0)$,
+\begin{align*}
+1 &= \sum_{n=0}^\infty p(n)
+= p(0) + \sum_{n=1}^{c-1} p(n) + \sum_{n=c}^\infty p(n) \\
+&=p(0) + p(0) \sum_{n=1}^{c-1}\frac{(c\rho)^n}{n!} +
+ p(0)\sum_{n=c}^{\infty} \frac{c^c}{c!} \rho^{n} \\
+&=p(0)\sum_{n=0}^{c-1}\frac{(c\rho)^n}{n!} +
+ p(0) \sum_{n=c}^{\infty} \frac{(c\rho)^c}{c!} \rho^{n-c} \\
+&=
+p(0)\sum_{n=0}^{c-1}\frac{(c\rho)^n}{n!} +
+p(0)\frac{(c\rho)^c}{c!} \sum_{n=0}^{\infty} \rho^n \\
+&=
+p(0) \sum_{n=0}^{c-1}\frac{(c\rho)^n}{n!} +
+p(0)\frac{(c\rho)^c}{c!(1-\rho)}.
+\end{align*}
+Next, for $n\geq c$, note that $p(n) = (c \rho)^{n}/(c^{n-c}c!) = c^{c} \rho^{n}/c!$, so that
+\begin{align*}
+ \E{\QQ}
+&=\sum_{n=c}^\infty (n-c) p(n)
+=\sum_{n=c}^\infty (n-c) \frac{c^c}{c!}\rho^{n} p(0) \\
+&=\frac{c^c\rho^c}{G c!} \sum_{n=c}^\infty (n-c) \rho^{n-c}
+=\frac{c^c\rho^c}{G c!} \sum_{n=0}^\infty n \rho^n \\
+&=\frac{c^c\rho^c}{G c!} \frac{\rho}{(1-\rho)^2}.
+\end{align*}
+
+The derivation of the expected number of jobs in service becomes easier if we pre-multiply the normalization constant~$G$:
+ \begin{align*}
+ G \E{\Ls}
+&= G \left( \sum_{n=0}^{c} n p(n) + \sum_{n=c+1}^{\infty} c p(n) \right) \\
+&= \sum_{n=1}^{c} n \frac{(c\rho)^n}{n!} + \sum_{n=c+1}^{\infty} c \frac{c^c\rho^n}{c!}
+= \sum_{n=1}^{c} \frac{(c\rho)^n}{(n-1)!} + \frac{c^{c+1}}{c!}\sum_{n=c+1}^{\infty} \rho^n\\
+&= \sum_{n=0}^{c-1} \frac{(c\rho)^{n+1}}{n!} + \frac{(c\rho)^{c+1}}{c!}\sum_{n=0}^{\infty} \rho^n
+= c\rho \left(\sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^{c}}{c!(1-\rho)}\right).
+ \end{align*}
+Observe that the RHS is precisely equal to $\rho c G$, so that $\E\Ls = c \rho$.
+\end{solution}
+\end{extra}
+
+
+
+
+
+
+\begin{extra}
+ Check that the performance measures of the $M/M/c$ queue reduce to those of the $M/M/1$ queue if $c=1$.
+\begin{hint}
+Fill in $c=1$. Realize that this is a check on the formulas.
+\end{hint}
+\begin{solution}
+Take $c=1$
+%\begin{subequations}
+ \begin{align*}
+p(0) &= \frac{1}G \frac{(c\rho)^0}{0!}=\frac1 G, \\
+p(n) &= \frac{1}G \frac{c^c\rho^n}{c!} = \frac{1}G \frac{1^1\rho^n}{1!} =\frac{\rho^n}G , \quad n=1,2, \ldots \\
+G &=\sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^c}{(1-\rho)c!}
+=\sum_{n=0}^{0} \frac{\rho^0}{0!} + \frac{\rho}{(1-\rho)} = 1 + \frac{\rho}{1-\rho} = \frac1{1-\rho},
+\\
+\E{\L} &= \frac{(c\rho)^c}{c! G}\frac{\rho}{(1-\rho)^2} = \frac{\rho}{1/(1-\rho)}\frac{\rho}{(1-\rho)^2} = \frac{\rho^2}{1-\rho}, \\
+\E{\L} &= \sum_{n=0}^{c}n p(n) + \sum_{n=c+1}^\infty c p(n) = p(1) + 1 \sum_{n=2}^\infty p(n) = 1- p(0) = \rho.
+\end{align*}
+%\end{subequations}
+Everything is in accordance to the formulas we derived earlier for the $M/M/1$ queue.
+\end{solution}
+\end{extra}
+
+
+\begin{extra}\label{ex:l-33}
+Show that~\cref{eq:mm1-2} is true.
+\begin{solution}
+With the other results for the $M/M/1/K$ queue,
+\begin{align*}
+  1-p(0) &= 1-\frac{1-\rho}{1-\rho^{K+1}} = \frac{1-\rho^{K+1} - 1 + \rho}{1-\rho^{K+1}} = \rho \frac{1-\rho^{K}}{1-\rho^{K+1}}, \\
+  \rho (1-p(K)) &= \rho \frac{1-\rho^{K+1} - \rho^K + \rho^{K+1}}{1-\rho^{K+1}} = \rho \frac{1-\rho^{K}}{1-\rho^{K+1}}.
+\end{align*}
+\end{solution}
+\end{extra}
+
+\begin{extra}\label{ex:40}
+ Show that as $K\to\infty$, the performance measures of the $M/M/1/K$ converge to those of the $M/M/1$ queue.
+\begin{hint}
+Use that $\sum_{i=0}^n x^i = (1-x^{n+1})/(1-x)$. BTW, is it
+ necessary for this expression to be true that $|x|<1$? What should
+ you require for $|x|$ when you want to take the limit
+ $n\to\infty$?
+\end{hint}
+\begin{solution}
+To take the limit $K\to\infty$---mind, not the limit $n\to\infty$---, write
+\begin{equation*}
+G= \frac{1-\rho^{K+1}}{1-\rho} = \frac{1}{1-\rho} -\frac{\rho^{K+1}}{1-\rho}.
+\end{equation*}
+Since $\rho^{K+1}\to 0$ as $K\to \infty$ (recall, $\rho<1$), we get
+\begin{equation*}
+G \to \frac{1}{1-\rho},
+\end{equation*}
+as $K\to\infty$. Therefore, $p(n)=\rho^n/G \to \rho^n(1-\rho)$, and
+the latter are the steady-state probabilities of the $M/M/1$
+queue. Finally, if the steady-state probabilities are the same, the
+performance measures (which are derived from $p(n)$) must be the same.
+\end{solution}
+\end{extra}
+
+% \begin{exercise}\label{ex:l-246}
+% Derive the expressions for the $M/M/\infty$ queue.
+% \begin{hint}
+% Use that for any~$x$, $x^n/n!\to 0$ as $n\to\infty$.
+% \end{hint}
+% \begin{solution}
+%  By taking the limit $c\to\infty$, note first that in~\cref{eq:501},
+% \begin{equation*}
+% \frac{(c\rho)^c}{(1-\rho)c!} = \frac{(\lambda/\mu)^c}{(1-\rho)c!}\to 0, \quad\text{as } c\to \infty.
+% \end{equation*}
+% Hence
+% \begin{equation*}
+% G =\sum_{n=0}^{c-1} \frac{(c\rho)^n}{n!} + \frac{(c\rho)^c}{(1-\rho)c!} \to \sum_{n=0}^{\infty} \frac{(c\rho)^n}{n!} = e^{\lambda/\mu}.
+% \end{equation*}
+% Next, for any fixed~$n$, eventually $c>n$, and then, as $\rho=\lambda/(\mu c)$,
+% \begin{equation*}
+%  p(n) = \frac{1}G \frac{(c\rho)^n}{n!} = \frac{1}G \frac{(\lambda/\mu)^n}{n!}
+% \to e^{-\lambda/\mu} \frac{(\lambda/\mu)^n}{n!}, \quad\text{as } c\to\infty.
+% \end{equation*}
+% \end{solution}
+% \end{exercise}
+
+
+
+
+
+% \begin{exercise}\label{ex:l-247}
+% Find  the steady state probabilities  for a single-server queue with a finite calling population with~$N$ jobs.
+% \begin{solution}
+%  \begin{align*}
+%  p(n+1)
+% & = \frac{(N-n)\lambda}\mu p(n)
+%  = \rho (N-n) p(n) \\
+% & = \rho^2 (N-n)(N-(n-1))p(n-1) \\
+% & = \rho^3 (N-n)(N-(n-1))(N-(n-2)) p(n-2) \\
+% & = \rho^{n+1} (N-n)(N-(n-1))\cdots(N-(0)) p(0) \\
+% &= \rho^{n+1} \frac{N!}{(N-(n+1))!}p(0).
+%  \end{align*}
+% \end{solution}
+% \end{exercise}
+
+
+
+
+
+% \begin{exercise}
+% Derive the expression for $\E\L$ in~\cref{eq:el} by means of indicator variables.
+% \begin{solution}
+% \begin{align*}
+% \E\L &= \sum_{n=0}^\infty n p(n) = \sum_{n=0}^\infty \sum_{i=1}^n \1{i\leq n} p(n) && n=\sum_{i=1}^n \1{i\leq n}\\
+% &= \sum_{n=0}^\infty \sum_{i=1}^\infty \1{i\leq n} p(n) && i>n\implies \1{i\leq n} = 0\\
+% &= \sum_{i=1}^\infty \sum_{n=0}^\infty \1{i\leq n} p(n) = \sum_{i=1}^\infty \sum_{n=i}^\infty p(n) && n < i \implies \1{i\leq n}=0 \\
+% &= \sum_{i=1}^\infty \sum_{n=i}^\infty (1-\rho)\rho^n && p(n) = (1-\rho)\rho^n \\
+% &= \sum_{i=1}^\infty \sum_{n=0}^\infty (1-\rho)\rho^{n+i} && n\to n+i \\
+% &= \sum_{i=1}^\infty (1-\rho)\rho^i \sum_{n=0}^\infty \rho^n && \rho^{n+i}=\rho^i \rho^n\\
+% &= \sum_{i=1}^\infty (1-\rho)\rho^i \frac1{1-\rho} = \sum_{i=1}^\infty \rho^i = \sum_{i=0}^\infty \rho^{i+1} && i\to i+1\\
+% &= \rho \sum_{i=0}^\infty \rho^i = \frac{\rho}{1-\rho}.
+% \end{align*}
+% Note that, since the summands are positive, we can use Fubini's theorem
+% to justify the interchange of the summations.
+% \end{solution}
+% \end{exercise}
+
+
+% \begin{exercise}
+% Derive $\E\L$ and $\E{\L^2}$  by differentiating the  LHS and RHS of $\sum_{n=0}^{\infty}\rho^n = (1-\rho)^{-1}$.
+% \begin{solution}
+%   Differentiate the left- and RHS of $(1-\rho)^{-1} = \sum_{n=0}^\infty \rho^n$ with respect to $\rho$ and then multiply with $\rho$ to get
+% \begin{equation*}
+% \dfrac{\rho}{(1-\rho)^2}=\sum_{n=0}^{\infty}n\rho^n.
+% \end{equation*}
+% Then multiply both sides by $1-\rho$ and use that $p(n) = (1-\rho)\rho^n$ to get $\E\L$.
+
+% Differentiating and multiplying with $\rho$ a second time yields
+% \begin{align*}
+% \rho \frac{(1-\rho)^2 + \rho2(1-\rho)}{(1-\rho)^4} &= \rho \frac{1-2\rho+\rho^2 + 2\rho-2\rho^2}{(1-\rho)^4}
+%                                                      = \rho \frac{1-\rho^2}{(1-\rho)^4} \\
+%   &=\rho \dfrac{1+\rho}{(1-\rho)^3}=\sum_{n=0}^{\infty}n^2\rho^n,
+% \end{align*}
+% and hence for $\E{\L^2}$,
+% \begin{align*}
+%   (1-\rho)\sum_{n=0}^{\infty}n^2\rho^n
+%   &= \rho\dfrac{1+\rho}{(1-\rho)^2}  = \dfrac{\rho}{(1-\rho)^2} + \dfrac{\rho^2}{(1-\rho)^2}
+%     = \dfrac{2\rho^2}{(1-\rho)^2} + \dfrac{\rho}{(1-\rho)^2} - \dfrac{\rho^2}{(1-\rho)^2} \\
+%   &= \dfrac{2\rho^2}{(1-\rho)^2} + \rho\dfrac{(1-\rho)}{(1-\rho)^2} = \dfrac{2\rho^2}{(1-\rho)^2} + \dfrac{\rho}{1-\rho}.
+% \end{align*}
+% Recall that $p(n) = (1-\rho)\rho^n$.
+% \end{solution}
+% \end{exercise}
+
+\input{trailer}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

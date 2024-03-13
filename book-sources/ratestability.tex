@@ -1,0 +1,222 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{Rate, Stability and Load}
+\label{sec:rate-stability}
+
+
+
+In this section, we develop a number of measures to characterize the performance of queueing systems in steady-state.
+In particular, we define the load, which is, arguably, the most important performance measure of a queueing system to check.
+
+We first develop the concepts for a queueing process with batch and service sizes of~$1$, i.e. $B=C=1$ in Kendall's formula. At the end we present the general formula.
+
+
+\newthought{We first formalize} the arrival rate and departure rate in terms of the arrival and departure processes $\{A(t)\}$ and $\{D(t)\}$, cf., \cref{sec:constr-gg1-queu}.
+The \recall{arrival rate} is the long-run average number of jobs that arrive per unit time along a sample path, i.e.,\sidenote{This limit does not necessarily exist if $A(t)$ is some pathological function.
+}
+\begin{equation*}
+ \lambda = \lim_{t\to\infty} \frac{A(t)}t.
+\end{equation*}
+Likewise, the \recall{departure rate} is
+\begin{equation}\label{eq:28}
+ \delta = \lim_{t\to\infty} \frac{D(t)}t.
+\end{equation}
+Henceforth, we assume that both limits exist, are finite, and $0<\delta \leq \lambda<\infty$, where the middle inequality is true when the system starts empty, i.e., $L(0) = 0$, because in that case $D(t) \leq A(t)$.
+
+
+\newthought{For the arrival rate,} suppose we are given a sequence of iid inter-arrival times $\{X_k\}$, each of which is distributed as the common rv~$X$.
+Then, by the definition of $A_{n}$, $\sum_{k=1}^n X_k = A_n$.
+If $\E X < \infty$, then by the strong law, $A_n/n \to \E X$ as $n\to \infty$.
+The next theorem relates this to the limit of $A(t)/t$ as $t\to \infty$; this relation is not entirely evident because the first limit runs of over the natural numbers, while the second runs over the real numbers.
+
+\begin{theorem}
+Assume that $\lambda \in (0, \infty)$. Then, the existence of one of the next two limits implies  the existence of the other, in which case,
+\begin{equation*}
+\frac{A_{n}}{n} \to \lambda^{-1}>0  \iff \frac{A(t)}{t} \to \lambda >0.
+\end{equation*}
+% When either of the limits
+% If $\lim_{t\to\infty}\frac{A(t)}{t}>0$ or $\lim_{n\to\infty} \frac{A_{n}}{n}>0$ exist and lies in $(0, \infty)$, then the other limit exists and lies in $(0, \infty)$, and
+% \begin{equation*}
+% \lim_{n\to\infty} \frac{A_{n}}{n} = \lim_{t\to\infty} \frac t{A(t)}.
+% \end{equation*}
+\end{theorem}
+\begin{proof}
+Observe first that when $A(t)= n$ then\sidenote{\cref{ex:61}} $A_{A(t)} = A_{n}$, and therefore, $A_{A(t)}/A(t) = A_n/n$.
+By assumption at least one of the limits is positive,  so $A(t)$ and $A_{n}$ must increase without bound.
+
+Second, $A_{A(t)}$ is the arrival time of the last job \emph{before} time~$t$, hence $A_{A(t)} \leq t$.
+This, in turn, implies that $A_{A(t)+1}$ is the arrival time of the first job \emph{after} time~$t$.
+Therefore, $A_{A(t)} \leq t < A_{A(t)+1}$, hence for $A(t)>0$,
+\begin{equation*}
+ \frac{A_{A(t)}} {A(t)} \leq \frac{t}{A(t)} <\frac{A_{A(t)+1}}{A(t)} = \frac{A_{A(t)+1}}{A(t)+1}\frac{A(t)+1}{A(t)}.
+ \end{equation*}
+If $A_n/n \to \lambda^{-1}$, then $t/A(t) \to \lambda^{-1}$, because $A(t) \to \infty \implies A(t)+1)/A(t) \to 1$.
+
+If $A(t)/t \to \lambda$, then on the epochs $A_{k}$ we must also have that $A(A_k)/A_k \to \lambda$.\sidenote{Recall: $A(t)/t \to \lambda$ as $t\to\infty$ $\iff$ $\forall \epsilon > 0: \exists s: \forall t > s : |A(t)/t - \lambda| < \epsilon$.}
+Noting that $A(A_{k}) = k$, it follows that $k/A_{k} \to \lambda$.
+\end{proof}
+
+From this theorem it follows for the average inter-arrival time $\E X$ between two consecutive jobs that
+\begin{equation*}
+ \E X = \lim_{n\to\infty} \frac{1}n\sum_{k=1}^n X_k = \lim_{n\to\infty} \frac{A_{n}}{n} = \lim_{t\to\infty} \frac t{A(t)} = \frac 1 \lambda,
+\end{equation*}
+i.e., the inverse of the arrival rate.
+
+For the service rate of a \emph{single} server, take $S_k$ as the required service time of the~$k$th job served by the server, so that $U_n = \sum_{k=1}^n S_k$ is the total service time of the first~$n$ jobs.
+Similar to the definition of $A(t)$, we let $ U(t) = \max\{n: U_n \leq t\}$ and define the \recall{service}, or \recall{processing}, rate of a single server as
+\begin{equation*}
+ \mu := \lim_{t\to\infty} \frac{U(t)}t, \quad 0 < \mu < \infty,
+\end{equation*}
+assuming that this limit exists. This provides us with the relation
+\begin{equation*}
+ \E S = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n S_k = \lim_{n\to\infty} \frac{U_n}{n} = \lim_{t\to\infty} \frac t{U(t)} = \frac 1 \mu.
+\end{equation*}
+Thus, the service rate $\mu$ of a single server is the \emph{inverse} of $\E S$.
+
+\newthought{The next concept} of importance is \emph{stability}.
+To discuss this properly, we distinguish between three counting functions: the number of arrivals $A(t)$, the number of jobs entering the system $\tilde A(t)$, and the number of departures $D(t)$.
+The difference between $A(t)$ and $\tilde A(t)$ is relevant when we deal with a queueing system in which the server rejects jobs or arriving customers do not wish to join the queue, for whatever reason.
+
+We require the fundamental property that service is \emph{work-conserving}, that is, the server is not idle when there is one (or more) job in the system.\sidenote{Thus, when service is work-conserving, capacity is not wasted when there are jobs in the system}.
+
+Assuming that $\tilde A(t)/t \to \tilde \lambda$, we consider four (intuitively) obvious situations.
+\begin{enumerate}
+\item $\lambda \geq \tilde \lambda > \mu = \delta$. The system overflows because the service capacity cannot keep up with the rate at which jobs enter. Hence, the number of jobs in the system $L(t) \to \infty$. Work-conservation implies that the server is always busy, hence jobs depart at the rate at which they are served.
+\item $\lambda \geq \mu > \tilde \lambda = \delta$. Jobs must be  blocked to prevent the system to explode, but the jobs that enter are (eventually) served.
+\item $\mu$ > $\lambda \geq \tilde \lambda = \delta$.
+There is sufficient capacity to serve all jobs that arrive, but still not all arrivals need not enter the system.
+All accepted jobs are (eventually) served.
+\item $\mu > \lambda = \tilde \lambda = \delta$. All arrivals enter the system and are (eventually) served.
+\end{enumerate}
+To prevent all sorts of pathological situations, we do not consider cases in which $\lambda = \mu = \tilde \lambda$.
+
+In view of the above inequalities, we say that a system is \recall{rate-stable} if
+\begin{equation*}
+\tilde \lambda = \delta.
+\end{equation*}
+In words: the system is rate-stable whenever in the long run jobs leave the system just as fast as they enter the system.
+
+Henceforth, we \emph{only} consider queueing systems that fall into cases 2--4, i.e., the system is rate stable and $\mu > \tilde \lambda$.
+Moreover, unless explicitly stated, we assume that the fourth case applies.
+Note that $\lambda = \tilde \lambda$ when $A(t) = \tilde A(t)$, and then we mean by rate-stability that $\lambda = \delta$.
+This holds in particular where there exists an infinite sequence of times $\{T_i\}$,  $T_i\to\infty$, at which the system is empty, i.e., $A(T_i) = D(T_i)$.
+
+
+
+\newthought{With the arrival} and service rate, we define for the single server queue the server \recall{load} as
+\begin{equation*}
+\textrm{Server load } = \rho :=  \lambda \E S=\frac{\lambda}{\mu} = \frac{\E S}{E X}.
+\end{equation*}
+Next, we define the \recall{utilization} as
+\begin{equation*}
+\textrm{Server utilization } = \tilde \lambda \E S = \frac{\tilde \lambda}{\mu},
+\end{equation*}
+as this involves the rate at which work enters the system, and by rate-stability, this is the work that is served.
+When $\lambda = \tilde \lambda$,  the load $\rho$ and the utilization are all equal, and we will use these terms interchangeably.
+However, when $\tilde \lambda < \lambda$  we need to be careful about the difference between load and utilization.
+Note that the load can exceed 1, while the utilization is~$< 1$.
+
+
+It is  easy to generalize the definition for $\rho$.
+When each job contains $\E B$ items each of which requires $\E S$ time to serve, the work per job is $\E S \E B$.
+Similarly, when a server serves, on average, a batch of $\E C$ of items per service time, its service rate is $\E C/\E S$.
+Finally, when the station contains identical~$c$ servers, the station's capacity is~$c$ times are large as that of a single server.
+Thus, in the most general case,
+\begin{equation*}
+\rho := \frac{\lambda \E S}c \frac{\E B}{\E C}.
+\end{equation*}
+The utilization has to change accordingly.
+
+
+\newthought{We can use} the memoryless property of the inter-arrival times of the $M/G/1$ queue to  show that the expected busy time of the $M/G/1$ satisfies $\E \U = \E S/(1-\rho)$.
+During the service time of the first customer that starts a busy time, an expected number $\lambda \E S$ new jobs arrive.
+As each of these jobs restarts the busy-period, the expected busy time started by the first jobs must be equal to the expected service time of this job plus all busy periods that are generated by the jobs that arrive during this service time, hence, $\E U = \E S + \lambda \E S \E U$. But from this, $\E U = \E S / (1-\rho)$, because $\rho = \lambda \E S$.
+Realize further that because inter-arrivals times are memoryless for the $M/G/1$ queue, the expected idle time $\E I = 1/\lambda$.
+
+\begin{truefalse}
+    Claim: If for a queueing system $\lim_{t\to\infty}A(t) = \infty$, then the system is not rate stable.
+    \begin{solution}
+        False. In any reasonable queueueing system this limit is $\infty$.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+    Claim:  $\lim_{t\to\infty}\frac{A(t)}{t}=\lim_{n\to\infty}\frac{A_n}{n}$.
+    \begin{solution}
+        False.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+    Claim: $\lambda = \delta \implies \rho = 1$, hence the queue is not stable.
+    \begin{solution}
+        False: $\delta$ is not $\mu$
+    \end{solution}
+\end{truefalse}
+
+\begin{extra}
+  Can you make an arrival process such that $A(t)/t$ does not have a limit?
+\begin{hint}
+  As a start, the function $\sin(t)$ does not have a limit as $t\to\infty$.
+  However, the time-average $\sin(t)/t \to 0$.
+  Now you need to make some function whose time-average does not converge, hence it should grow fast, or fluctuate wilder and wilder.
+
+ For the mathematically interested, we seek a function whose Ces\`aro limit does not exist.
+\end{hint}
+\begin{solution}
+ If $A(t) = 3 t^2$, then clearly $A(t)/t = 3t$. This does not
+ converge to a limit.
+
+ Another example, let the arrival rate $\lambda(t)$ be given as follows:
+ \begin{equation*}
+ \lambda(t) =
+ \begin{cases}
+ 1 & \text{if } 2^{2k} \leq t < 2^{2k+1} \\
+ 0 & \text{if } 2^{2k+1} \leq t < 2^{2(k+1)},
+ \end{cases}
+ \end{equation*}
+ for $k=0,1,2,\ldots$.
+ Let $A(t) = \lambda(t) t$.
+ Then $A(t)/t$ does not have a limit.
+ Of course, these examples are quite pathological, and are not representable for `real life cases'.
+ (Although this is also quite vague:  what is actually a real-life case?)
+\end{solution}
+\end{extra}
+
+
+% \begin{exercise}\label{ex:98}
+% If the system starts empty, then we know that the number $L(t)$ in the system at time~$t$ is equal to $A(t) - D(t)$.
+% Show that the system is rate-stable  if $L(t)$ remains finite, or, more generally, $\lim_{t\to\infty}L(t)/t = 0$.
+% \begin{solution}
+% Since $L(t) = L(0) + A(t) - D(t)$, and $\lim_{t\to\infty}L(0)/t = 0$ because $L(0)$ is a constant, and $\lim_{t\to\infty} L(t)/t \leq \lim_{t\to\infty} L/t = 0$ when $L(t)$ is bounded by the number~$L$,
+% \begin{equation*}
+%  \lambda = \lim_{t \to \infty} \frac{A(t)}t = \lim_{t \to \infty} \frac{D(t)+L(t)}t = \lim_{t \to \infty} \frac{D(t)}t + \lim_{t \to \infty} \frac{\L(t)}t
+%  = \delta.
+% \end{equation*}
+% Hence, $\lambda=\delta$ when $L(t)/t\to0$.
+% \end{solution}
+% \end{exercise}
+
+
+
+
+% \begin{exercise}\label{ex:l-253}
+%  Show for the $G/G/1$ queue that $\E{ X_k-S_k} > 0$ implies that $\rho < 1$.
+% \begin{hint}
+% Remember that $\{X_k\}$ and $\{S_k\}$ are sequences of iid random variables. What are the implications for the expectations?
+% \end{hint}
+% \begin{solution}
+%  $0>  \E {S_{k}-X_k} = \E{ S_{k}}- \E {X_k} = \E S - \E X$, where we use the fact that the $\{S_k\}$ and $\{X_k\}$ are iid sequences. Hence,
+%  \begin{equation*}
+%  \E X > \E S \iff \frac 1{\E S} > \frac1{\E X} \iff \mu > \lambda.
+%  \end{equation*}
+% \end{solution}
+% \end{exercise}
+
+
+
+
+\input{trailer}

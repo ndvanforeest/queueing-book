@@ -1,0 +1,152 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+
+\section{Motivation and overview}
+\label{sec:motivation-overview}
+
+Queueing and inventory systems abound, and the analysis, performance evaluation, control and optimization of these stochastic systems are  major topics in Operations Research.
+
+
+For instance, fast food restaurants deal with many difficult queueing and inventory situations.
+They prepackage hamburgers and put these on shelf\sidenote{This is called make-to-stock production.}
+so that when a customer arrives, the customer does not have to wait for the product.
+The life time of such products is quite small, in the order of a few minutes, and when a customer does not show up in time, the product has to be scrapped.
+The question is here to balance the number of hamburgers to put on stock so that both the probability of scrapping and the probability that a customer has to wait\sidenote{Customers that go elsewhere are known as lost sales.}
+are small.
+Fast food restaurants keep also an inventory of baked patties, which are not yet turned into hamburgers (with a bun).
+The patties have a longer life time than prepared hamburgers, but as it requires some work to turn it into a hamburger, it might give a potential waiting time for a customer.
+Again, the inventory level of these patties need to be controlled.
+This is still not the end of the matter because the rate of customer demand changes over time, so that the inventory levels of (the different types of) hamburgers and patties need to be time dependent.
+\sidenote{Inventory and queueing systems are tightly related by changing perspective.
+Hamburgers in stock can be interpreted as \emph{customers in queue} waiting for service, where the service time is the time between the arrival of two customers that buy hamburgers.}
+
+As a second example, service systems, such as hospitals, call centers, courts, have a certain capacity available to serve customers.
+The performance of such systems is, in part, measured by the total number of jobs processed per year and the fraction of jobs processed within a certain time frame between receiving and closing the job.
+Here the problem is to organize the capacity such that the sojourn time, i.e., the typical time a job spends in the system, does not exceed some threshold.
+
+Clearly, in all these examples, the performance of the stochastic system has to be monitored and controlled.
+Typically the following performance measures\sidenote{Also known as Key Performance Indicators (KPIs).} are relevant for queueing systems.\sidenote{Inventory systems have very similar performance measures such that average time items spend on shelf,  the fraction  of customers served from stock, the fraction of lost sales.}
+\begin{enumerate}
+\item The fraction of time $p(n)$ that the system contains~$n$ customers.
+ In particular, $1-p(0)$, i.e., the fraction of time the system contains jobs, is important, as this is a measure of the time-average occupancy of the servers, hence related to personnel cost.
+\item The fraction of customers $\pi(n)$ that `see upon arrival' the system with~$n$ customers.
+  This measure relates to customer perception and lost sales, i.e., fractions of arriving customers that do not enter the system.
+\item The average, variance, and/or distribution of the waiting time.
+\item The average, variance, and/or distribution of the number of customers in the system.\
+\end{enumerate}
+
+
+With these examples in mind, let us give an overview of the chapters of this book.
+
+\newthought{\cref{cha:single-stat-queu} starts with} constructing queueing and inventory systems in discrete time.
+This serves three goals.
+First, construction is concrete, so that by specifying the rules to characterize the behavior of the system, you (the reader) develop essential modeling skills.
+Second, these rules can often be easily implemented in computer code and used to simulate and control actual stochastic systems.
+Simulation is in general the best way to analyze practical stochastic systems, as realistic systems seldom yield to mathematics.
+Third, simulation provides us with sample paths of the behavior of the system, but we will also use sample-path arguments to develop the theoretical results of  the book.
+
+In~\cref{cha:continuous-time} we move on to systems in continuous time and show again how to set up simulation environments to construct sample paths, in particular  \emph{discrete event simulation}.\sidenote{(Nearly?) all professional simulation tools are built on the same principles.}
+
+Once it is clear what queueing and inventory theory is about, the stage is set for a more mathematical treatment of such systems.
+In \cref{cha:fundamental-tools} we develop some necessary key results.
+For this, we use sample paths of stochastic processes, and by assuming that such sample paths capture the `normal' stochastic behavior, we can use the sample paths to estimate the  most important performance measures.
+
+In~\cref{cha:analytical-models} we use these tools to develop exact models for single-station queueing systems.
+In our discussions we mostly focus on obtaining an intuitive understanding of the analytical tools.\sidenote{For most of the  proofs and/or more extensive results we refer to the bibliography at the end of the book.}
+
+Notwithstanding the power of simulation, it is often hard to obtain structural understanding of the behavior of stochastic systems.
+Instead, mathematical models, whether exact or approximate, are useful to help reason about and improve such systems.
+In~\cref{cha:approximate-models} we use approximations and general results of probability theory to understand how production and service situations are affected by the system parameters such as service speed, batching rules, and outages.
+
+
+\newthought{While the main} text contains many examples and derivations, a considerable number of examples are delegated to exercises.
+Also, some of these exercises are consistency checks between results derived for different models,  thereby providing important relations between various parts of the text.\sidenote{Note  that, while such checks are trivial in principle, the algebra can be quite difficult at times.}
+The exercises are not meant to be really easy; they should require (some) work.
+Hints and solutions to all problems are available at the end of the book.
+
+
+\newthought{It remains to} discuss the contents of this chapter.
+Clearly, this \cref{sec:motivation-overview} provides some high level motivation why to study stochastic systems, of which queueing and inventory processes are prime examples.
+\cref{sec:expon-poiss-distr} introduces and relates the Exponential distribution and the Poisson distribution, which are, perhaps, the most important distributions to model dynamic stochastic systems.
+In~\cref{sec:fight-expon-distr} we use simulation and some maths to explain why these distribution's are particularly useful to arrival processes of customers or jobs in queueing systems and demands for inventory systems.
+These amount of computational work is quite involved, but the computer is our diligent assistant here.
+In \cref{sec:prob_artithmetic} we discuss the Python code that handles these numerical aspects.
+Not only will we use this code multiple times in the book, we show how to convert the ideas and notation we are used to think about into an elegant program so that programming becomes an agreeable and intellectually stimulating activity.
+
+
+\begin{truefalse} \textbf{This question is added for later years; in the year 2324 it is not used.}
+Consider the next code.
+\begin{minted}{python}
+a = 8
+a += 9
+a = 10
+a -= 3
+\end{minted}
+Claim:  \pythoninline{a = 10}
+\begin{solution}
+False. The variable $a$ changes from 8 to 17 to 10 to 7.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse} \textbf{This question is added for later years; in the year 2324 it is not used.}
+Consider the next code.
+\begin{minted}{python}
+a = [0, 2, 4, 6]
+a[1] += 1
+\end{minted}
+Claim:  \pythoninline{a = [0, 3, 4, 6]}
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse} \textbf{This question is added for later years; in the year 2324 it is not used.}
+Consider the next code.
+\begin{minted}{python}
+a = {-10: 1, 2: 8}
+a[1] += 1
+\end{minted}
+Claim:  \pythoninline{a = {-10: 1, 1: 1, 2: 8}}.
+\begin{solution}
+False. Since the key $1$ is not yet in the dictionary $a$, the code will fail.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse} \textbf{This question is added for later years; in the year 2324 it is not used.}
+Consider the next code.
+\begin{minted}{python}
+from collections import defaultdict
+
+a = defaultdict(int)
+a[-8] = 1
+a[2] = 8
+a[1] += 3
+a[2] -= 3
+\end{minted}
+Claim:  \pythoninline{a = {-8: 1, 1: 3, 2: 5}}.
+\begin{solution}
+True. Since we now work with a defaultdict, we can right away add numbers with $+=$ even when the key $1$ is not yet present in the dictionary $a$. As the key $1$  is not present, the defaultdict will set the value to 0, and then add 3.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse} \textbf{This question is added for later years; in the year 2324 it is not used.}
+Consider the next code.
+\begin{minted}{python}
+from collections import defaultdict
+
+a = defaultdict(int)
+a[-8] = 1
+a[2] = 8
+a[1] += 3
+a[2] -= 3
+\end{minted}
+Claim:  the keys of $a$ are $-8, 1, 2$ and the values $1, 3, 5$.
+\begin{solution}
+True. A dictionary maps a \emph{key} to a \emph{value}, for example  a studend id (the key) to a student name (value).
+\end{solution}
+\end{truefalse}
+
+
+\input{trailer}

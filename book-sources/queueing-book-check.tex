@@ -1,0 +1,18 @@
+% arara: clean: { files: [blg, idx, ilg, ind, log, out, pytxcode, rel, toc ]}
+% arara: clean: {files: [ ans.tex, hint.tex] }
+% arara: pdflatex: { shell: yes }
+% arara: bibtex
+% arara: makeindex
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex: { shell: yes }
+
+% I only use this to make the latexing of the separate files easier.
+\documentclass[oneside,11pt,a4paper]{book}
+\usepackage[check]{optional}
+
+\input{book_contents}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

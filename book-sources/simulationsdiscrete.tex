@@ -1,0 +1,403 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+\section{General Behavior of Queueing Systems}
+\label{sec:simul-discr-time}
+
+
+In this section we develop a simulation environment to obtain insight into general behavior of queueing systems and make graphs of the evolution of queue length processes.
+
+
+\newthought{The first point} of a queueing system we should address is its stability.
+Intuitively, when work arrives faster than it can be served, on average, the queue must increase as a function of time, while when work arrives slower, the queue must stay limited (most of the time).
+To check this we show how to make~\cref{fig:drift} which contains the graph of the queue length process for a number of different arrival rates and capacities.
+
+
+%\inputminted[firstline=2, lastline=3]{python}{../code/discrete_simulations.py} % modules
+%\inputminted[firstline=8, lastline=21]{python}{../code/discrete_simulations.py} % seaborn
+
+
+We import the standard modules, cf.,~\cref{sec:simul-psych-case}.
+The next python function below simulates the queue length process for a given sequence of arrivals $a=(a_{0}, a_{1}, \ldots, a_{n})$ and service capacities $c = (c_{0}, c_{1}, \ldots, c_{n})$.
+We set $L_{0}$ to \mintinline{python}{L0} and start simulating from time~$1$ onward.
+Thus, the values $a_{0}$ and $c_{0}$ remain unused.
+Note that for \mintinline{python}{d} we assume that the jobs arriving in period~$i$ can be served in that same period.
+\inputminted[firstline=26, lastline=34]{python}{../code/discrete_simulations.py} % queuelength
+
+Next, we set the parameters for the simulation.
+\inputminted[firstline=40, lastline=43]{python}{../code/discrete_simulations.py} % setup
+
+To get a feel for the variability inherent to stochastic systems, we plot a few different sample paths of the queue length process.
+Thus, we give $10$ different seeds to the random number generator, simulate the queue length for each different seed, and add each sample path to \mintinline{python}{ax1}.
+For the simulation, we take $a_{i}$ uniformly distributed on the integers $\lambda-1, \lambda, \lambda +1$ with $\lambda=6$, so that~$6$ jobs arrive on average in a period.
+As the function \mintinline{python}{rng.integers(l, h)} generates iid uniformly distributed random deviates on $l, l+1, \ldots, h-1$, we should set $h=\lambda + 2$ instead of $h=\lambda +1$.
+The service capacity is constant and equal to $\mu=\lambda + 1 =7$, so the system must be stable.
+\inputminted[firstline=47, lastline=57]{python}{../code/discrete_simulations.py} % stability
+
+We repeat the simulation for a system in which $\mu=5$, hence we expect this to be unstable.
+The last step is to write the figure to a file.
+\cref{fig:drift} shows the result of our work.
+\inputminted[firstline=61, lastline=73]{python}{../code/discrete_simulations.py} % unstable
+
+
+\begin{figure}[t]
+\centering
+\includegraphics{../figures/queue-discrete-time-stability.pdf}
+\caption{Drift of queue length process.
+In the left panel, the queue length starts at 40, and the service capacity is $\mu=7$ while the arrival rate is $\lambda=6$, so the initial queue drains at about 1 per period.
+In the right panel, $\mu=5$, $Q_{0}=40$, and the queue increases at a rate~$1$ job per period.
+Clearly, in one case the queue length process decreases, in the other it increases.}
+\label{fig:drift}
+\end{figure}
+
+\newthought{How about reducing} the difference between $\lambda$ and $\mu$?
+When there is little extra capacity, i.e.
+$\mu$ is just a little larger than $\lambda$, it must take longer to drain large fluctuations of the queue length than when $\mu$ is quite a bit larger than $\lambda$.
+To see this in quantitative terms, we run a simulation, one with $\mu=6.5$ and another with $\mu=6.2$ while keeping $\lambda=6$, and we compute the mean and variance of the number of jobs in the system.
+
+To do so, we need a sequence of random integers for~$c$ such that the mean is $\mu=6.2$, say. One way to make such a sequence is to set $c_{i} = 6 + b_{i}$ where $b_{i}$ is a Bernoulli rv with success probability  $p=\mu - 6 = 0.2$.
+
+The code for this is simple because we don't need to make a graph this time. We just add the next code to the code above.
+\inputminted[firstline=78, lastline=87]{python}{../code/discrete_simulations.py} % meanvar
+The results are $\E L = 0.7$, $\V L = 1.1$ for $\mu=6.3$, and $\E L = 2.2$, $\V L = 5$ for $\mu=6.1$.
+(Here $\E L$ stands for the sample average $n^{-1}\sum_{i=1}^{n} L_{i}$, and likewise for $\V L$.\sidenote{We are in a state of sin here: the mean of a rv is not the same as its sample average.
+The strong law of large numbers makes a statement only about the limit; for small sample sizes, the difference can be quite large.})
+Indeed, the mean queue length increases when service capacity becomes tighter.
+
+Suppose we cannot serve jobs in the period in which they arrive.
+Then we use the code \mintinline{python}{d = min(c[i], L[i - 1])} to update \mintinline{python}{d}.
+In this case, $\E L = 8.1$, $\V L = 6$ when $\mu=6.1$.
+Not serving jobs in the period they arrive has a non-negligible effect on the queue length.
+Clearly, being a bit flexible when dealing with customers can reduce the average queue length quite considerably.
+
+
+\newthought{Would variability affect} the average queue length?
+We can suspect so, because when $a_{i}=1$ and $c_{i}=1$ for all~$i$, and $L_{0} = 0$,  then $L_{i} = 0$ for all~$i$.
+However, if $c_{1}=5$ whenever~$i$ is a multiple of~$5$ and $c_{i}=0$ elsewhere, then we do see queues appearing and disappearing.
+Let's use simulation to see how variability can influence the queue length process. The goal is now  to make~\cref{fig:scv}.
+
+Before doing this, we need a way to quantify \emph{relative }variability.
+To see the point, suppose the standard deviation of the time to serve a job is~$1$ minute.
+When the mean service time is 1 hour, we are inclined to call the service times very regular, while if the mean is just 1 minute, we would call it irregular.
+To capture this difference, we define the fundamentally important concept of \recall{square coefficient of variation (SCV)} of a random variable~$X$  as
+\begin{equation*}
+ C^2_{X}:= \frac{\V X}{(\E X)^2}.
+\end{equation*}
+
+
+Continuing with the simulation, we like to find a probability distribution for the services $\{c_{i}\}$ such that it has a specific mean $\mu$ and a SCV $c^{2}$.
+A simple  way to achieve this is to use a rv~$X$ such that $\P{X=b} = p$ and $\P{X=0} = 1-p$, and require that $\E X = p b= \mu$ and $C^2_X = c^{2}$.
+Using that $\V X = \E{X^{2}} - (\E X)^{2}$, we see that $C^{2}_{X} = \E{X^{2}}/(\E X)^{2} - 1$.
+Rewriting this, we get $\E{X^{2}} = \mu^{2}(c^2+1)$, but we also know that $\E{X^{2}} = p b^{2}$.
+Solving for~$b$ and~$p$ in terms of $\mu$ and $c^{2}$ gives that $p = 1 / (1 + c^{2})$ and $b=\mu/p = \mu (1+c^{2})$.
+
+
+With this construction, we can fix $\E{c_{i}}=\mu$, but vary the SCV from one simulation to another.
+This next function implements the construction of a vector of rvs with the required properties.
+\inputminted[firstline=92, lastline=98]{python}{../code/discrete_simulations.py} % makecsv
+
+Now we can run the simulations and make graphs for $c^2=0.5, 1, 2$ for the periodic service capacities. The arrivals are constant.
+\inputminted[firstline=105, lastline=117]{python}{../code/discrete_simulations.py} % constant
+
+To see the effect of variability in both the arrivals and services, we make a second plot with the next code, and save the result to file.
+\cref{fig:scv} shows clearly that variability has quite an influence on the queueing behavior: the larger the SCV, the larger the excursions of the queue length.
+\inputminted[firstline=121, lastline=130]{python}{../code/discrete_simulations.py} % variable
+
+\begin{figure}[tb]
+\centering
+  \includegraphics{../figures/queue-discrete-time-scv.pdf}
+
+  \caption{The influence of variability on queue length.
+In the left panel the arrivals are constant, but the number of services per period is variable with SCVs~$c^{2}$ as indicated in the legend.
+In the right panel, we have variability in both arrivals and services.
+Thus, when there is variability in both arrivals and services, the queue length seems to become yet more variable.
+(Note that the scales on the~$y$-axes are the same in the left and right panel.)}
+\label{fig:scv}
+\end{figure}
+
+In conclusion, when capacity is tight, or when relative variability in arrivals or services is large, queues are large.
+Hence, if we want to improve the performance of a queueing system, we basically have four options, increase the capacity, reduce the load (or demand), reduce the SCV of the arrivals, or reduce the SCV of the services, or of both.
+Of course, these options are not exclusive, for instance, we can try to reduce the variability of the service process and add some capacity at the same time.
+
+
+
+\newthought{In our last} example we consider some queues in sequence.
+For instance, to get your grade for this queueing course, several queueing stations are involved.
+First, I grade the exams (and handle all changes that might occur during the perusal).
+Then I mail a csv file with the grades to the secretary to have it uploaded to some database.
+The secretary also makes a print of this file which I have to sign because I am the examiner of the course.
+This paper is sent to a general office that logs it to show that all internal processes have been in line with the legal obligations of the university.
+In abstract terms, there are three stations (me, the secretary, and back office), and at least I am involved twice, once for the grading and a second time for the signing.
+More generally, many, if not most, service systems consist of a sequence of servers that have to be passed (multiple times) to complete a service from the perspective of a customer.
+
+To get some insight into such systems, we can simulate a chain of~$4$ stations in tandem, which means that jobs arrive at station 1, are sent to station 2, and so on, until they leave the network after station~$4$.
+Jobs don't visit the same server, nor are lost or dropped somewhere half way the network.
+
+Since in a tandem network the departures of station~$i$ are fed as arrivals into station $i+1$, we have to update the function to compute the queue lengths a bit.
+\inputminted[firstline=135, lastline=144]{python}{../code/discrete_simulations.py} % tandem
+
+We next generate the arrivals at station 1, and the service capacities at each of the stations.
+Pay attention to the capacities: observe that station 2 has the slowest server.
+Note that if we use Poisson distributed service capacities, an integer amount of jobs is served each period, but the expected number served can be fractional.
+\inputminted[firstline=151, lastline=160]{python}{../code/discrete_simulations.py} % simtandem
+
+It remains to make the plots.
+\inputminted[firstline=164, lastline=182]{python}{../code/discrete_simulations.py} % figtandem
+
+From~\cref{fig:tandem} we learn that the station with the slowest server typically has the most jobs in queue in front of it.
+This brings us to an interesting idea.
+If we want to improve a queueing network, we should try of course to spend our (hard-earned) money on the bottleneck.
+Now, in many practical situations it is not directly evident what station is the bottleneck, because it can be difficult to obtain real good estimates of the number of services that a server can do per day.
+(There are many reasons why this is difficult.
+The capacity may depends on the person at the station on a certain day.
+There are disturbances due to raw materials missing or whether some machine at the station broke down or not.
+In short, in practical situations, there are many messy details that disturb the assembly of high quality data.)
+However, one clue to find the bottleneck station is by looking at the queue lengths in front of each station: the station with the largest queue is a good candidate for being a bottleneck.
+
+\begin{figure}[tb]
+\centering
+\includegraphics{../figures/queue-discrete-network.pdf}
+\caption{A queueing network of 4 stations in tandem.}
+\label{fig:tandem}
+\end{figure}
+
+
+\begin{truefalse}
+    A queueing system is stable when the arrival rate is not larger than the service rate.
+    \begin{solution}
+        False. The condition does not exclude that the arrival rate is the service rate, for which the queue is not stable.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+The SCV of a random variable $X$ is the same SCV of $\alpha X$ if $\alpha$ a positive scalar.
+    \begin{solution}
+        True. However a bit misleading, it is true for all values of $t$.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+The parking meters at the universities are redesigned.
+A study has shown that the average amount of time that individuals need to spend to pay at the parking  meter has gone down.
+Claim: as long as the interarrival distribution stays the same, the average queue length at the parking meter will be smaller.
+    \begin{solution}
+        False.  The variance of the time required to pay has an impact on the queue length too.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: When $X\sim\Exp{\lambda}$ its SCV is larger than 1.
+\begin{solution} False.
+\end{solution}
+\end{truefalse}
+
+
+\begin{truefalse}
+    Consider a queue with an exponential interarrival distribution and a service time distribution uniform on $[0,A]$. Claim:
+    \begin{equation*}
+        C_s^2 = \frac 13.
+    \end{equation*}
+
+    \begin{solution}
+        True.
+    \end{solution}
+\end{truefalse}
+
+
+
+\begin{exercise}\label{ex:l-115}
+A queueing system \marginpar{Queue with blocking}  is  under periodic review, i.e., at the end of each period the queue length is measured.
+Jobs arriving at period~$k$ cannot be served  in period~$k$ and the system cannot contain more than~$K$ jobs.
+Develop code to simulate $\{L_k\}$ and compute the amount of jobs lost per period, and  the fraction of jobs lost after simulating for~$T$ periods.
+
+\begin{solution}
+ % All jobs that arrive such that the queue becomes larger than~$K$ must be dropped.
+
+ % First $d_k = \min\{\L_{k-1}, c_k\}$. Then, $\L_k' = \L_{k-1}+a_k-d_k$ is the queue without blocking. Then $\L_k=\min\{\L_k', K\}$ is the queue with blocking. Finally, the loss $l_k=\L_k'-\L_k$, i.e., the excess arrivals. The fraction lost is $l_k/a_k$.
+Here is the python code.
+
+\begin{python}
+import numpy as np
+
+rng = np.random.default_rng(3)
+a = rng.integers(3, 8, size=100)
+c = 2 * np.ones_like(a)
+L = np.zeros_like(a)
+l = np.zeros_like(a)  # store the lost jobs
+
+K = 8  # loss level
+
+for k in range(1, len(a)):
+    d = min(L[k - 1], c[k])
+    Lp = L[k - 1] + a[k] - d  #  without loss
+    L[k] = min(Lp, K)  #  chop off at K
+    l[k] = Lp - L[k]  #  lost
+
+print(sum(l) / sum(a))  # fraction lost.
+\end{python}
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+\label{ex:88}
+All items\marginpar{Systems with yield loss}
+ that are produced by a machine are tested. With probability~$p$ an item turns out to be faulty, and is returned to the queue for repair. The production time of new and faulty items is equal.  Supposing  items cannot be served in the period they arrive,   develop a set of recursions to simulate $\{L_k\}$.
+ \begin{hint}
+ When the machine makes~$n$ items, and each of these is faulty with probability~$p$, then the number of faulty items is $\Bin{n, p}$.
+ \end{hint}
+\begin{solution}
+Here is the code.
+\begin{python}
+import numpy as np
+
+rng = np.random.default_rng(3)
+a = rng.integers(3, 8, size=100)
+c = 7 * np.ones_like(a)
+L = np.zeros_like(a)
+d = np.zeros_like(a)
+p = 0.1
+
+for k in range(1, len(a)):
+    produced = min(L[k - 1], c[k])
+    faulty = rng.binomial(produced, p)
+    d[k] = produced - faulty
+    L[k] = L[k - 1] + a[k] - d[k]
+
+print(L.mean())
+  \end{python}
+Observe that faulty items do not leave the system.
+
+An interesting challenge:  can you use these recursions to \emph{prove} that the long-run average service capacity $n^{-1}\sum_{i=1}^n c_i$ must be larger than $\gamma/(1-p)$, where $\gamma = \lim_{n\to \infty} n^{-1}\sum_{k=1}^n a_k$ is the arrival rate of new jobs?
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:52}
+Sometimes items need rework.
+Suppose a fraction~$p$ of items does not meet the quality requirements after the first pass at a machine, but requires a second pass to repair the problems.
+Assume that repair jobs need half the service time of new jobs and are served with priority over new jobs.
+Develop the recursions.
+\begin{hint}
+  Make a queue for the new and repaired items and use~\cref{ex:l-117}.
+\end{hint}
+\begin{solution}
+In code:
+\begin{python}
+a = [0, 4, 8, 2, 1]
+c = [3] * len(a)
+L_R = [0] * len(a)  # repair jobs
+d_R = [0] * len(a)  # departing repair jobs
+L_N = [0] * len(a)  # new jobs
+d_N = [0] * len(a)  # departing new jobs
+p = 0.2
+
+L_R[0] = 2
+L_N[0] = 8
+
+for k in range(1, len(a)):
+    l = L_R[k - 1]
+    if l % 2 == 1:
+        l -= 1
+    d_R[k] = min(l, 2 * c[k])
+    c_N = c[k] - d_R[k] / 2  # capacity left for new jobs
+    d_N[k] = min(L_N[k - 1], c_N)
+    a_R = int(p * d_N[k] + 0.5)  # rounding
+    a_N = a[k]
+    L_R[k] = L_R[k - 1] + a_R - d_R[k]
+    L_N[k] = L_N[k - 1] + a_N - d_N[k]
+
+print(L_R)
+print(L_N)
+\end{python}
+We need a trick to get around the division by 2 in line 17 (because of $L_R[k]$ is odd we might end up with 0.5).
+For this, we should check whether $L_{R}[k]$ is odd or not.
+If so, it must be at least be 1, and then we can subtract 1 to make~$l$ even.
+This~$l$ can be used to compute the number of departures.
+
+Here is a general observation: the number of ways to organize the repairs is countless. Do we serve them with priority or not, do we bin them and make new items instead, do we do the repairs on another, separate, station?  Such differences need to be reflected in the simulation model.
+\end{solution}
+\end{exercise}
+
+
+
+
+\begin{exercise}
+A tandem queue with blocking is  a production network with two production stations in tandem and blocking: the server at station 1 is not allowed to produce more than the amount~$M$ station~$2$ can maximally contain.
+We assume also that work jobs moves first from station 1 to station 2 before jobs from station 2 leave.
+Thus, besides the regular conditions, we need to impose $c^1_{k+1} \leq M-L^2_k$.
+Find recursions.
+
+\begin{solution} Using~\cref{ex:l-118} with $d^1_k = \min\{\L^1_{k-1}, c_k^1, M-\L^2_{k-1}\}$ is nearly correct.
+But, what if  $\L^2_{k-1}>M$ for the first few periods? Therefore,  take instead
+$d^1_k = \min\{\L_{k-1}^1, c_k^1, [M-\L^2_{k-1}]^+\}\}$.
+
+
+\begin{python}
+a1 = [0, 2, 3, 8, 0, 9]
+c1 = [3] * len(a1)
+c2 = [2] * len(a1)
+L1 = [0] * len(a1)
+L2 = [0] * len(a1)
+
+M2 = 10
+
+if L2[0] > M2:
+    print("The starting value of L2 is too large")
+    exit(0)
+
+for k in range(1, len(a1)):
+    d1 = min(L1[k], c1[k], M2 - L2[k - 1])
+    L1[k] = L1[k - 1] + a1[k] - d1
+    d2 = min(L2[k], c2[k])
+    L2[k] = L2[k - 1] + d1 - d2
+pp\end{python}
+
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:l-166}
+Consider \marginpar{Performance measures obtained by sampling in  discrete-time queueing models require some extra attention.}
+ the discrete-time model specified by~\cref{eq:31}. We assume that $a_{k}$ is a \emph{batch} of jobs arriving in period~$k$ \emph{after} the departures $d_k$ have left.
+Provide a simulation to estimate  $\P{\L\leq m}$ for a situation in which  the first job of the batch sees $L_{k-1} - d_k$ jobs in the system,
+the second sees $L_{k-1}-d_k + 1$ jobs, and so on.
+\begin{solution}
+The idea is like this. The dictionary \mintinline{python}{L_count} counts the number of jobs that see~$0$, $1$, and so on, in the system.
+
+Here is the code. As an aside, it was hard to make it this simple. (See  the web what a defaultdict does.)
+\begin{python}
+from collections import defaultdict
+
+L_count = defaultdict(int)
+
+a = [0, 2, 5, 1, 2]
+c = [0, 1, 1, 1, 1]
+
+d = [0] * len(a)
+L = [0] * len(a)
+
+for k in range(1, len(a)):
+    d[k] = min(L[k - 1], c[k])
+    L[k] = L[k - 1] + a[k] - d[k]
+    for i in range(a[k]):
+        L_count[L[k - 1] - d[k] + i] += 1
+
+
+# normalize
+tot = sum(L_count.values())
+L_dist = {k: v / tot for k, v in L_count.items()}
+
+print(L_count)
+print(L_dist)
+\end{python}
+
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}

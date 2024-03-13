@@ -1,0 +1,296 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+\begin{document}
+
+\section{Control of Single-item Inventory Systems}
+\label{sec:single-item-invent}
+
+In this section we analyze, so called, single-item inventory systems under \emph{periodic review}.
+As a simple example, think of boxes of macaroni on a supermarket shelf.
+At the end of the period, here a day, the supermarket uses the amount of boxes left to decide whether a replenishment of macaroni is necessary or not.
+If so, it orders in the evening a batch containing ten, say, macaroni boxes to refill the stock.
+The batch will be delivered by truck at the start of the next day after which a shelf stocker unpacks the batch and puts all ten macaroni boxes on the shelf.
+
+In general there are many different types of items in inventory, ranging from cheap to expensive, so we need different rules to control inventories.\sidenote{As such, inventory systems are examples of stochastic processes subject to control.}
+We assume that demand is discrete, stochastic, and items are not perishable so that items unsold in one period carry over to the next period.
+With these assumptions we can develop a few simple, elegant, formulas by which we can construct, hence simulate, the discrete-time dynamics of the most important inventory control systems.
+Then we define a number of performance measures that allow us to assess the performance of these rules by means of simulation.
+In a later chapter, after developing some appropriate further mathematical concepts, we can derive closed form expressions for a number of performance measures.
+
+
+We use the following notation, the meaning of which we explain below,\sidenote{Inventory theory uses  the word `level'  for many different concepts, which should not be confused.
+Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level~$s$, and service levels.}
+\begin{align*}
+  Q_k &= \text{order size that arrives at  the \emph{start} of period~$k$}, \\
+  D_k &= \text{demand arriving \emph{during} period~$k$}, \\
+  \IL_k &= \text{inventory level at the \emph{start} of period~$k$}, \\
+\IL_k^+ &= \text{inventory on hand at the \emph{start} of period~$k$}, \\
+\IL_k^- &= \text{backlogged demand at the \emph{start} of period~$k$}. \\
+  \IP_k &= \text{inventory position at the \emph{start} of period~$k$}, \\
+  L &= \text{fixed lead time}.
+\end{align*}
+Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_k'$.\sidenote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in the system.}
+
+\newthought{The dynamics of} the inventory can be simply constructed if we are given a set of period demands $\{D_k, t=1, 2, \ldots\}$ and order sizes $\{Q_k, t=0, 1, \ldots\}$, but first we need to address a subtle point.
+In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take~$L$ to be constant over time and independent of the number of outstanding orders.
+Then, when placing an order of size $Q_{k-L}$ at the start of period $t-L$ so that it arrives at the start of period~$t$,  the  \recall{inventory level} follows  the rules
+\begin{align}\label{eq:i5}
+  \IL_k &= \IL_{k-1}'+Q_{k-L}. & \IL_k' &= \IL_{k} - D_k.
+\end{align}
+The sequence is important. The replenishment order arrives at the start of the period so that it is available to serve demand.
+
+In general, the inventory level $\IL_k$ can be positive and negative.
+In the former case, $I_k^{+} = \max\{I_k,0\}$ is the \recall{inventory on hand} as the items can be used to meet demand directly from stock.
+In the latter case, $I^{-}_k = \max\{-I_k, 0\}$ is the \recall{backlogged} demand, because it is demand (or a customer) that has to wait for the arrival of future replenishment order(s).
+
+Clearly, if we would use the inventory level to determine when and how much the order, we might be too late in placing orders, due to the leadtime. To compensate for this, we use the  \recall{inventory position} which updates according to the rule
+\begin{align}\label{eq:b9}
+  \IP_k &= \IP_{k-1}' + Q_k, & \IP_k' = \IP_{k}- D_k.
+\end{align}
+Thus, the inventory position includes the outstanding orders, hence accounts for items under way to cover future demand.
+In other words, the difference between the inventory position and the inventory level is that in the former we immediately include all orders `in the books', but these orders physically arrive~$L$ periods later, and only then they can be used to meet demand.
+
+
+Let us next study a number of rules that use the inventory position to compute order sizes; these policies differ only in the decision when to trigger an order and how much to order. Since these rules check the inventory position at the end of a period, we say that the inventory is under periodic review.
+
+
+\newthought{The basestock policy} seems to be the simplest rule as it asks for a replenishment for each item demanded. Specifically, under a basestock policy, the  size of the order is given by\sidenote{Why is the second equality true?}
+\begin{equation*}
+  Q_k = (s+1-\IP_{k-1}')\1{\IP_{k-1}' \leq s} = s+1-\IP_{k-1}',
+\end{equation*}
+where~$s$ is known as the \recall{reorder level}, and $s+1$ as the \recall{order-up-to} level.
+Note that the amount ordered depends on the \emph{end-of-period} inventory position, and that the inventory control policy uses the inventory position, not the inventory level. By combining this ordering rule with \cref{eq:b9}, we see that the $P_k=s+1$ for all~$t$.
+
+
+A basestock policy is often used to control inventories of expensive items in which the order cost~$K$ is small relative to the price of the item or can be easily included in the selling price of the item. For instance, when somebody buys a washing machine, the customer is often prepared to pay to have the washing machine delivered and installed in place. Also, customers do not buy multiple washing machines at the same time, hence, any setup or ordering costs must be covered by  each single demand.
+
+
+
+\newthought{An $(s,S)$ policy} is appropriate in situations in which the size of the deliveries can vary and the order cost is significant. The update rule is as follows.
+When the inventory position is at or below~$s$, we order up to level~$S$, specifically,
+\begin{equation*}
+  Q_k = (S-\IP_{k-1}')\1{\IP_{k-1}' \leq s}.
+\end{equation*}
+As in the basestock case, the parameter~$s$ is called the \recall{reorder level}, while~$S$ is the \recall{order-up-to} level.
+The basestock policy is a special case when we set $S=s+1$.
+Sometimes supermarkets use $(s,S)$ policies to control the inventory of packaged meat, like bacon.
+The inventory levels are tracked real time, and there are daily deliveries.
+As long as the inventory level is sufficiently high, there is no need to replenish (hence a basestock policy is not useful), and, as the items are perishable, it seems best to only replenish when there are very little items left.
+Then the shelvers should put the newest items under the older items, so that customers (hopefully) pick the oldest items first.
+
+
+\newthought{The $(Q,r)$ policy} is useful when the ordering cost is large, or can be easily spread over multiple items.
+The order quantity is taken as a multiple of a minimal order quantity~$Q$ such that $\IP(t)$ always lies above the reorder level~$r$ and below $r+Q+1$.
+In a formula,
+\begin{equation*}
+  Q_k = Q \left\lceil \frac{r+1-\IP_{k-1}'}{Q} \right\rceil \1{\IP_{k-1}'\leq r}.
+\end{equation*}
+So, a basestock policy is a $(Q,r)$ policy with $Q=1$ and $r=s$.
+The $(Q,r)$ policy is mostly used by  supermarket supply chains to replenish groceries.
+The factory packets the items in batches, and transports these batches on pallets to distribution centers.
+At a distribution center, batches are picked from the pallets and send to supermarkets.
+Finally, at the supermarket a shelver removes the cellophane or box and places the single items on the shelf.
+Thus, to reduce ordering costs, the entire supply chain orders and transports batches of items, rather than single units.
+Moreover, as for supermarkets leadtimes are  in the order of a day, the  order size~$Q$ is typically larger than the average daily demand.
+
+Admittedly, it is a bit strange that the $(Q,r)$ policy is not called the $(Q,s)$ policy, but this is the names that is commonly used.
+
+
+\newthought{Finally, the $(T,S)$ policy}  specifies to order up to~$S$ every~$T$ periods. In a formula:
+\begin{equation*}
+  Q_k = (S-\IP_{k-1}')\1{\text{mod}\{k, T\}=0},
+\end{equation*}
+where $\text{mod}\{k, T\}$ is the remainder of $t/T$, In settings in which it is convenient to supply stores in a fixed order, this policy makes sense.
+The route length determines the number of periods~$T$ between the deliveries.
+Then, at a visit, the inventory is refilled to level~$S$. An example can be highway service areas whose fuel tanks are refilled during the night.
+
+
+Clearly, when we have a (simulated) sequence of period demands $D_{1}, D_{2}, \ldots$ and we have an inventory control rule, we can run the above recursions to compute how the inventory level and position behave over time.
+It remains to develop a number of measures to assess how the inventory control rule performs, in particular to see how costs depend on the policy parameters.
+
+\newthought{For cost computations} we need to make a choice when to account for the period cost of inventory and backlog.
+Here we choose to charge~$b$ Euro for each demand in backlog  and~$h$ per item on hand at the start of the period.
+If there is a cost~$K$ per time we place an order, the average cost up to time~$n$ becomes
+\begin{align*}
+K q + h I^+ + b I^-,
+\end{align*}
+where
+\begin{align*}
+  q&= \frac 1n \sum_{k=1}^n \1{Q_{k}>0}  &
+  I^+ &= \frac 1n \sum_{k=1}^n \IL_k^+  &
+  I^- &= \frac 1n \sum_{k=1}^n \IL_k^-,
+\end{align*}
+which, implicitly, depend on the inventory policy.
+Clearly, we can search for a good policy by running (many) simulations for various policies and comparing the average costs.
+
+\newthought{Service levels} form a set of  measures to quantify the extent to which demand is met. Here we discuss three different such measures.
+The \recall{ready rate} is the fraction of periods in which the end-of-period inventory is not negative, i.e.,
+\begin{equation*}
+\alpha :=   \frac 1n \sum_{k=1}^n \1{\IL_k \geq 0}.
+\end{equation*}
+
+The \recall{fill rate} $\beta$ relates to the fraction of demand satisfied from on-hand stock.
+Observe first that at period~$t$ as much as possible of the demand $D_{k}$ is satisfied.
+It seems that this should be equal to $\min\{D_{k}, I_{k}\}$, but $I_{k}$ might be negative.
+Thus, we should take $\min\{D_{k}, \IL_{k}^{+}\}$ instead, and with this we define the fill rate as
+\begin{equation}\label{eq:c24}
+    \beta :=  \frac{\sum_{k=1}^n \min\{D_k, \IL_k^{+}\}}{\sum_{k=1}^n D_k}.
+\end{equation}
+We can rewrite this into  a nice formula with a few interesting tricks.
+
+\begin{lemma}\label{lem:4}
+The fill rate equals
+\begin{equation*}
+    \beta = 1 - \frac{\sum_{k=1}^n \min\{D_k, \IL_k'^-\}}{\sum_{k=1}^n D_k}.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+Using in step 1 that $\min\{x, y\} = x - [x-y]^{+}$, in step 2 that  $x - z^{+} = \min\{x, x-z\}$, in step 3~\cref{eq:i5}, in step 4 that $[\min\{x, y\}]^{+} = \min\{x^+, y^{+}\}$ and $[-I_k]^{+} = I_k^{-}$, we get
+\begin{align*}
+   \min\{D_{k}, \IL_{k}^{+}\}
+  &\stackrel1= D_k - [D_k-\IL_{k}^{+}]^{+}\\
+  &\stackrel2= D_k - [\min\{D_k, D_{k}-\IL_{k}\}]^{+}\\
+  &\stackrel3= D_k - [\min\{D_k, -\IL_{k}']^{+}\\
+  &\stackrel4= D_k - [\min\{D_k, \IL_{k}'^{-}].
+\end{align*}
+Summing and dividing gives the result.
+\end{proof}
+
+
+The third measure is the \recall{cycle service level} which is defined as the fraction of cycles in which the inventory was not negative; a cycle is the time between the arrival of two consecutive replenishments.
+To capture this in a formula, note first that a cycle ends in period~$t$ when $Q_{k-L}> 0$ (because then a replenishment arrives).
+Second, there is still on-hand inventory at the start of period~$t$ when $I_{k-1}'\geq 0$.
+Thus, the number of cycles in which the inventory was non-negative must be $\sum_{k=L+1}^n \1{Q_{k-L}>0}\1{I_{k-1}'\geq 0}$.
+The cycle service level then follows from averaging over the total number of cycles $\sum_{k=L+1}^n \1{Q_{k-L}>0}$:
+\begin{equation*}
+\alpha_c =  \frac{\sum_{k=L+1}^n \1{Q_{k-L}>0}\1{I_{k-1}'\geq 0}}{\sum_{k=L+1}^n \1{Q_{k-L}>0}}.
+\end{equation*}
+The cycle service measure is much used in practice because it is simple to execute: when a replenishment arrives, just register whether there is still on-hand stock.
+However, it is often not accurate, hence not  helpful to understand how many customers have been served from on-hand stock (which is actually what we want to know).
+
+\newthought{Some inventory control} problems can be formulated as a combination of a linear program and some recursions.
+Consider a production system that can produce maximally $M_k$ items per week during normal working hours, and maximally $N_k$ items during extra (weekend and evening) hours.
+Management needs a production plan that specifies for the next $T$ weeks the number of items to be produced per week, assuming that demand must be met from on-hand inventory.
+For this problem, let, for period $k$,
+ \begin{align*}
+ D_k &= \text{Demand in week $k$}, \\
+ S_k &= \text{Sales, i.e., number of items sold, in week $k$}, \\
+ r_k &= \text{Revenue per item sold in week $k$}, \\
+ X_k &= \text{Number of items produced in week $k$ during normal hours}, \\
+ Y_k &= \text{Number of items produced in week $k$ during extra hours}, \\
+ c_k &= \text{Production cost per item during normal hours}, \\
+ d_k &= \text{Production cost per item during extra hours}, \\
+ h_k &= \text{Holding cost per item, due at the end of week $k$}, \\
+ I_k &= \text{On hand inventory level at the end of week $k$}. \\
+ \end{align*}
+The  decision variables are $X_k$, $Y_k$ and $S_k$; the objective is to maximize the rewards over the production horizon $T$:
+ \begin{equation*}
+ \max \sum_{k=1}^T (r_kS_k -c_k X_k - d_k Y_k - h_k I_k),
+ \end{equation*}
+and the constraints are (for all $k$),
+\begin{align*}
+ 0&\leq S_k \leq D_k, \\
+ 0&\leq X_k \leq M_k, \\
+ 0&\leq Y_k \leq N_k, \\
+ I_k&=I_{k-1}+X_k+Y_k - S_k. \\
+I_k &\geq 0.
+\end{align*}
+It remains to fill in the data and feed this to an optimizer.
+
+
+\newthought{Inventory and queueing} systems are related throught three types of `buffer': \emph{inventory}, \emph{capacity}, and \emph{time}.
+These three related concepts are exceedingly useful\sidenote{If you consider to become consultant, then memorize this as you can use it time and again.}
+in the analysis and improvement of nearly any logistic system as they can traded against each other to satisfy demand.
+Suppose demand can be backlogged, that is, a company does not have to meet (all) demand from stock, but customers agree that they (sometimes) have to wait for their demand to be satisfied.
+In this case, the company needs \emph{more} time, but \emph{less} inventory to meet demand, which can reduce overall cost.
+In the limiting case in which it is impossible to stock the product, e.g., operations in a hospital, or very expensive, e.g., customer-specific machines, all demand is backlogged, thereby reducing the inventory system to a queueing system with finite capacity.
+The company can still increase capacity, as this typically shortens queueing times.
+However, increasing capacity comes at a cost.
+All in all, many businesses struggle with how to organize \emph{capacity} and \emph{inventory} levels such that the \emph{time} limitations as imposed by customers are met.\sidenote{\citet{hopp08:_factor_physic} offers very nice additional insights on this material.}
+
+
+
+
+
+\begin{truefalse}
+    Simulating inventory control problems is significantly harder than simulating queueing problems, due to the presence of control policies.
+    \begin{solution}
+        False,  they are very similar.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: in a single-item inventory system, the inventory level triggers the orders.
+    \begin{solution}
+        False, it's the inventory position.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: in a single-item inventory system the inventory level only depends on the lead time $L$ when $L>0$.
+    \begin{solution}
+        True.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: in a single-item inventory system the inventory position and inventory level coincide when the leadtime $L=0$.
+    \begin{solution}
+        True.
+    \end{solution}
+\end{truefalse}
+
+\begin{exercise}
+In production environments it is important to decide which products have to be make-to-order (MTO) and which make-to-stock (MTS). Why is a queueing system a model for MTO production? What inventory control model would best model a queueing system, and what are the parameters?
+\begin{solution}
+In a queueing system, an item is not produced before the demand for it arrives. This is a cost effective way to produce when items are very expensive, hence holding cost is high, or customer specific. Besides, services (which are not products) cannot be put on stock. For instance, keeping an invetory of haircuts seems impossible.
+
+Note that in a queueing system the server has a finite capacity. In the inventory models above, the production capacity is assumed infinite.
+
+A basestock model with $s=-1$ is appropriate. When a customer arrives, the server switches on, and keeps on producing until there are no further jobs in queue. Note also that a job in queue is the same as a customer in backlog.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}
+  Suppose $h\gg b$, i.e.,  inventory on hand is much more expensive than demand in backlog, what service level would you like?
+  \begin{solution}
+    We want all service levels to be zero. If $h\gg b$ for some inventory system, the cost structure expresses that we dislike stock on hand. In other words, it expresses that we want produce according to MTO.
+  \end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+  Which variables (period, order quantity) are fixed, which can  vary, in each of the inventory policies  we discussed above? Which policy should be able to achieve the lowest cost?
+  \begin{solution}
+  Note the differences between these schemes.
+In the $(s,S)$ the order level is fixed, but in case of stochastic demand, the specific period in which an order is triggered is not fixed.
+The order quantity (which is not the same as the order-up-to level) may also differ from period to period.
+In the $(Q,r)$ policy, the order quantity is fixed, but not the period.
+The $(T,S)$ policy fixes the period, but leaves the order quantity free.
+The $(s,S)$ policy must be ablle to achieve the lowest average cost, because it is the least constrained of the policies.
+  \end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}
+Above we assumed that demand in excess of the  stock level is backlogged.
+Modify the recursions of the basestock model such that it can cope with lost demand.
+For instance, if right after the start of period~$i$, the inventory level $\IL_{k}= 5$, and $D_k=9$, then 4 items are lost, and~$5$ are accepted.
+\begin{solution}
+Since at the start of period~$t$, the inventory present to serve is $I_{k}$, the rules for a loss system become
+\begin{align*}
+L_k &= (\IL_k-D_k)^- = \IL_k'^- & \text{lost demand}\\
+A_k &= \IL_{k} - L_k & \text{accepted demand}\\
+\IP_k' &= \IP_{k} - A_k, &\text{subtract the accepted demand}\\
+\IL_k' &= \IL_{k} - A_k, &\text{subtract the accepted demand}.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+
+
+\input{trailer}

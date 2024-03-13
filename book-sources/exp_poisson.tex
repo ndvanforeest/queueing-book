@@ -1,0 +1,426 @@
+\documentclass[stochastic-or.tex]{subfiles}
+\input{header}
+
+\begin{document}
+
+
+\section{Exponential and Poisson Distribution}
+\label{sec:expon-poiss-distr}
+
+In this section we make a model for the arrival process that is the most useful for queueing and inventory systems.\sidenote{Arrivals in queueing systems are often called \emph{customers ar jobs}, and \emph{demand} in inventory systems.}
+In particular, we show how the exponential and gamma distribution relate to the Poisson distribution, and we use the memoryless property of job inter-arrival times as the motivating point of departure.
+
+
+
+\newthought{The timescales that} are relevant for our purposes range roughly from minutes to a week\sidenote{With exceptions, naturally.}.
+On such timescales it seems is reasonable to model inter-arrival times as memoryless.
+For instance, if~$X$ is the inter-arrival time between two patients with a broken arm at the emergency room of a hospital, what can we say about the time the next patient with a broken arm arrives if somebody tells us that an hour earlier a similar patient arrived?
+Not much, as most of us will agree.
+Similarly, suppose that the average time between the sales of some shirt in a clothes shop is 5 minutes, and the shop owner informs us that no shirt has been sold the past 7 minutes.
+Does that knowledge imply that the next shirt must be sold within the next minute?
+Surely not.
+
+In more formal terms we claim that the probability that the next arrival will not occur within~$t$ time units from now does not depend on somebody telling us that there wasn't an arrival in the past~$s$ time units.
+In other words, if the person does not tell us anything, we write the probability that no arrival occurs before time $t$ as $\P{X>t}$.
+However, if the person tells us at time~$s$ there was no arrival during $[0,s]$, we write that the probability that there will not be an arrival for an additional amount time~$t$ as $\P{X>s+t|X>s}$.
+If we believe that the information $\{X>s\}$ is immaterial to our probabilistic model, then necessarily $\P{X > s+t \given X>s} = \P{X>t}$.
+
+\begin{definition}
+A rv~$X$ whose cdf\sidenote{cdf = cumulative distribution function} satisfies
+\begin{equation}\label{eq:29}
+ \P{X > s+t \given X>s} = \P{X>t}
+\end{equation}
+is said to be \recall{memoryless}.
+\sidenote{As a counter example, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s= 100$ and $t = 99$ years.
+Then $\P{X>99}$ was small, but not zero, but $\P{X>199 \given X>100} = 0$.}
+\end{definition}
+
+
+\newthought{The next theorem} is fundamental.
+\begin{theorem}
+The rv $X\sim \Exp{\lambda}$ iff $X$ is memoryless.
+\end{theorem}
+\begin{proof}
+$\implies$ Observing that $\P{X \leq t} = 1- e^{-\lambda t} \implies \P{X>t} = e^{-\lambda t}$,
+\begin{align*}
+ \P{X > s+t \given X>s} &\stackrel1= \frac{\P{X>s+t}}{\P{X>s}} = \frac{e^{-\lambda(t+s)}}{e^{-\lambda s}} \\
+  &= e^{-\lambda t} =\P{X>t},
+\end{align*}
+where Step 1 follows from the standard formula for conditional probability and that $\{X>t+s\} \subset \{X>s\}$.
+Next, $\impliedby$,  this is slightly more difficult, so we skip it. \sidenote{For a proof, see \citet[Appendix 3]{yushkevich69:_markov_proces}}
+\end{proof}
+
+
+Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cref{ex:11}}
+  \begin{align*}
+  \E X &= \lambda^{-1},  &
+\V X &= \lambda^{-2}.
+\end{align*}
+
+If we have a sequence of inter-arrival times $\{X_{i}\}_{i=1}^{\infty}$, then we construct arrival times according to the rule
+\begin{equation*}
+A_{k} = A_{k-1} + X_{k}, \quad  A_{0} = 0.
+\end{equation*}
+When inter-arrival times are iid\sidenote{iid := independent and identically distributed} rvs\sidenote{ rv(s) := random variable(s)} and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
+\begin{equation*}
+ f_{A_{1}}(t) = f_{X} (t) = \lambda e^{-\lambda t} = \lambda \frac{(\lambda t)^{0}}{0!} e^{-\lambda t},
+\end{equation*}
+where we add the last term to see how a pattern emerges.
+Using convolution, for the second arrival time,
+\begin{align*}
+  f_{A_{2}}(t) &=\int_{0}^{t} f_{A_1}(s) f_{X}(t-s)\d s = \int_{0}^{t} \lambda e^{-\lambda s} \lambda e^{-\lambda(t-s)}\d s = \lambda \frac{(\lambda t)^1}{1!} e^{-\lambda t}.
+\end{align*}
+With induction it  is straightforward to extend the pattern and prove that $A_{k} \sim \Gamma{\lambda, k}$, i.e.,
+\begin{equation}\label{eq:e-37}
+f_{A_k}(t) = \int_{0}^{t}f_{A_{k-1}}(s) f_X(t-s)\d s = \lambda \frac{(\lambda t)^{k-1}}{(k-1)!} e^{-\lambda t}.
+\end{equation}
+
+
+
+\newthought{When the arrival} times are gamma distributed,  the cdf of the number $N(t)$ of jobs arriving during $[0, t]$ follows readily by observing that
+\begin{equation}\label{eq:e-35}
+\P{N(t) = k} = \P{A_{k} \leq t < A_{k+1}} = \P{A_k \leq t} - \P{A_{k+1} \leq t},
+\end{equation}
+that is, to have precisely~$k$ arrivals during $[0, t]$, the arrival time $A_{k}$ of job~$k$ must lie in $[0, t]$, but job $k+1$ must arrive after $t$.
+Using the cdf of $A_{k}$ and partial integration,
+\begin{align*}
+\P{A_{k+1} \leq t}
+&= \lambda \int_0^t \frac{(\lambda s)^{k}}{k!}e^{-\lambda s}\, \d s
+= \lambda \frac{(\lambda s)^{k}}{k!}\frac{e^{-\lambda s}}{-\lambda} \Big|_{0}^t + \lambda \int_0^t \frac{(\lambda s)^{k-1}}{(k-1)!}e^{-\lambda s}\, \d s \\
+&= - \frac{(\lambda t)^{k}}{k!} e^{-\lambda t} + \P{A_k \leq t}.
+\end{align*}
+Combining this with~\cref{eq:e-35},
+\begin{equation}\label{eq:e-9}
+\P{N(t) = k} = \frac{(\lambda t)^{k}}{k!} e^{-\lambda t},
+\end{equation}
+that is, $N(t) \sim \Pois{\lambda t}$, i.e., \recall{Poisson distributed} with parameter $\lambda t$.
+
+
+
+It is simple to see from~\cref{eq:e-9} that\sidenote{\cref{ex:pois-mgf}}
+\begin{align*}
+\E{N(t)} &= \lambda t
+& \V{N(t)} &= \lambda t.
+\end{align*}
+
+
+
+Interestingly, we can use~\cref{eq:e-35} to derive the pdf of $A_{k}$ from the Poisson distribution.
+For $k=0$, $\P{N(t) = 0} = e^{-\lambda t}$, and as $A_0=0$ by definition, the RHS\sidenote{RHS := right hand side, LHS := left hand side.} of~\cref{eq:e-35} becomes $1-\P{A_1\leq t}$.
+Consequently, $\P{A_{1}\leq t} = 1 - e^{-\lambda t}$, hence, by differentiation,  $f_{A_1}(t) = \lambda e^{-\lambda t}$.
+For $k\geq 1$, taking the derivative with respect to~$t$ of the RHS of~\cref{eq:e-9} and at both sides of~\cref{eq:e-35},
+\begin{equation*}
+\lambda \frac{(\lambda t)^{k-1}}{(k-1)!} e^{-\lambda t} - \lambda \frac{(\lambda t)^{k-1}}{(k-1)!} e^{-\lambda t} = f_{A_{k}}(t) - f_{A_{k+1}}(t).
+\end{equation*}
+With recursion, we retrieve~\cref{eq:e-37}.
+
+
+\newthought{The family} of random variables $N_\lambda=\{N(t), t\geq 0\}$ is a \recall{Poisson process} with \emph{arrival rate} $\lambda$.\sidenote{A \emph{random process} is a much more complicated mathematical object than a random variable: a process is a (possibly uncountable) set of random variables indexed by time, not just \emph{one} random variable.}
+Once we have $N(t)$, we can define $N(s, t] := N(t)-N(s)$ as the number of customers that arrive in a general time period $(s, t]$.\sidenote{Note that $[0,t]$ is closed at both ends, but $(s,t]$ is open at the left.}
+
+It is important to know that $N_\lambda$ has \recall{stationary and independent increments}.
+Stationarity means that the distributions of the number of arrivals are the same for all intervals of equal length, that is, $N(s,t]$ has the same probability distribution as $N(u, v]$ if $t-s = v-u$.
+Independence means, roughly speaking, that knowing that $N(s,t]= n$, does not help to make any predictions about the value of $N(u, v]$ if the intervals $(s,t]$ and $(u, v]$ do not overlap.
+\cref{eq:e-9} implies a number of useful properties of the Poisson process.
+Next, with small~$o$ notation\sidenote{A function $f(h) = o(h)$ when $f(h)/h \to 0$ as $h\to 0$, e.g., $x^{2} = o(x)$.}, if $t\ll 1$,
+\begin{subequations}\label{eq:32}
+\begin{align}
+\P{N( t) = 0} &= e^{-\lambda t} = 1-\lambda  t + o( t), \\
+\P{N( t) = 1} &= \lambda t e^{-\lambda t} = \lambda t (1-\lambda t + o(t)) = \lambda  t + o( t), \label{eq:8} \\
+\P{N( t)  \geq 2} &= 1 - \P{N(t) = 0} - \P{N(t)= 1} \\
+  &= 1 - (1-\lambda t) - \lambda t + o(t) = o(t). \label{eq:10}
+\end{align}
+\end{subequations}
+It is also important to know that the reverse of the above holds, that is, a stochastic process with stationary and independent increments and satisfying~\cref{eq:32} is necessarily a Poisson process.\sidenote{We refer to the literature on (mathematical) probability theory for further background.}
+
+
+\newthought{When we merge} two independent Poisson processes $N_{\lambda}$ and $N_{\mu}$, e.g., adults and children entering a shop\sidenote{Or some other feature by which you want to distinguish between customers.}, we obtain a new Poisson process $N_{\lambda +\mu}$ with rate $\lambda + \mu$. To see this, we use the above. For $t\ll 1$,
+\begin{align*}
+\P{N_{\lambda+\mu}( t) = 0} &= \P{N_{\lambda}( t) = 0} \P{N_{\mu}( t) = 0} \\
+  &= (1-\lambda t)(1-\mu t) + o(t) = 1 - (\lambda + \mu)t + o(t), \\
+\P{N_{\lambda+\mu}( t) = 1} &= \P{N_{\lambda}( t) = 1} \P{N_{\mu}( t) = 0}  + \P{N_{\lambda}( t) = 0} \P{N_{\mu}( t) = 1}\\
+  &= \lambda t (1-\mu t) + (1-\lambda t)\mu t + o(t) = (\lambda + \mu) t + o(t),
+\end{align*}
+and the third  relations in~\cref{eq:32} follow similarly.
+Moreover, as $N_{\lambda}$ and $N_{\mu}$ have stationary and independent increments, $N_{\lambda +\mu}$ has these properties too.
+
+We can also \emph{split}, or \emph{thin}, a stream into several sub-streams.
+For instance, consider a stream of people passing by a shop as a Poisson process $N_\lambda$, and suppose that a customer decides to enter the shop as a Bernoulli distributed rv~$B$, independent of $N_{\lambda}$, with success probability~$p$ and failure probability $q=1-p$.
+Then the process of customers entering the shop is a Poisson process $N_{\lambda p}$ with rate $\lambda p$, because, for $t\ll 1$, from~\cref{eq:32},\sidenote{Why are there $o(t)$ symbols already after the first equality signs?}
+\begin{align*}
+  \P{N_{\lambda p}(t) = 0 } &= \P{N_{\lambda}(t) = 0} +\P{N_{\lambda}(t) = 1}\P{B=0} + o(t)\\
+  &= 1- \lambda t + \lambda t q  + o(t) = 1 - \lambda p t + o(t),\\
+  \P{N_{\lambda p}(t) = 1 } &= \P{N_{\lambda}(t) = 1}\P{B=1} + o(t)= \lambda t p + o(t),\\
+  \P{N_{\lambda p}(t) \geq 2 } &\leq  \P{N_{\lambda}(t) \geq 2} = o(t),
+\end{align*}
+and $N_{\lambda p}$ has stationary and independent increments because $N_{\lambda}$ is a Poisson process.
+
+\newthought{A final interesting}, and useful, property of the Poisson process is the distribution of the arrivals over an interal $[0,t]$ given that $N(t) = n$, say.
+In fact, if this event is true, the arrivals are $\Unif{[0,t]}$.\sidenote{We write $\Unif{A}$ for the uniform distribution on the set $A$. This set $A$ can be a set of numbers like $\{0, 2, 3\}$ but also an interval like $[0,t]$, as is the case here.}
+\begin{theorem}\label{thr:1}
+Conditional on the event $N(t)=n$, $t>0$, the distribution of the arrival times $\{A_{i}\}_{i=1}^{n}$ is the same as the distribution of the order statistic of~$n$ iid rvs $\sim \Unif{[0,t]}$.
+\end{theorem}
+\begin{proof}
+We write for convience $\d t_i = [t_{i}, t_i + \d t]$, and similarly $\d(t_i-t_{i-1}) = [t_i-t_{i-1}, t_i-t_{i-1}+\d t]$. This notation allows us to write $\P{X_i \in \d t_i} = \lambda e^{-\lambda t_i} \d t$ when $X_i\sim \Exp{\lambda}$, and $\P{U_i\in \d t_i } = \d t /t$ when $U_i\sim \Unif{[0,t]}$.
+We provide the proof for $N(t)=2$; the proof for the general case is nearly identical, but needs more notation.
+
+Consider first the Poisson process with $0\leq t_1<t_2 \leq  t$. Then,
+\begin{align*}
+  \P{A_1\in \d t_1, A_2\in \d t_2 | N(t)=2}
+= \frac{\P{A_1\in \d t_1, A_2\in \d t_2, A_3 > t}}{\P{N(t)=2}},
+\end{align*}
+because $N(t) = 2 \iff A_{2} \leq t < A_{3}$.
+For the numerator,
+\begin{align*}
+\P{A_1\in \d t_1, A_2\in \d t_2, A_3 > t}
+  &\stackrel1= \P{X_1\in \d t_1, X_2\in \d (t_2-t_1), X_3 > t-t_{2}} \\
+  &\stackrel2= \lambda e^{-\lambda t_1} \lambda e^{-\lambda (t_2-t_1)} e^{-\lambda (t-t_2)} \d t^{2}  \\
+  &\stackrel3= \lambda^{2} e^{-\lambda t} \d  t^{2},
+\end{align*}
+where  1 follows from the recursive relation  $A_{i} = A_{i-1} + X_{i}$; 2 because the $X_i$ are iid  $\sim \Exp{\lambda}$; 3 is algebra.
+Because $\P{N(t)=2} = (\lambda t)^2 e^{-\lambda t}/2!$, we find that
+$ \P{A_1\in \d t_1, A_2\in \d t_2 | N(t)=2} =  2!/t^{2}$.
+
+As for the iid uniform rvs, $\P{U_1\in \d t_1, U_2\in \d t_2} = \d t^2/ t^{2}$.
+However, there are $2!$ ways that the uniform rvs hit the set $\d t_1 \d t_{2}$, hence the probability that the \emph{order statistic} of $U_{1}, U_2$ lies in this set is $2!/t^{2}$.
+This equals the earlier conditional probablity.
+\end{proof}
+
+
+
+\newthought{Summarizing, the Poisson} process $N_{\lambda}$ and the exponential distribution are very closely related: a counting process $\{N_{\lambda}(t)\}$ is a \emph{Poisson process} with rate~$\lambda$ if and only if the inter-arrival times $\{X_k\}$ are iid and $X_{k} \sim \Exp{\lambda}$.
+Thus, if you find it reasonable to model inter-arrival times as memoryless, then the number of arrivals in an interval is necessarily Poisson distributed.
+And, if you find it reasonable that the occurrence of an event in a small time interval is constant over time and independent from one interval to another, then the arrival process is Poisson, and the inter-arrival times are exponential.
+
+
+\newthought{True-False questions} are simple statements that can be true or false; you have to find out the correct alternative.
+
+
+
+\begin{truefalse}
+Let $N$ be a Poisson process with rate $\lambda$, and $0<s<t$. Claim:
+ \begin{equation*}
+\{N(0,s]+N(s,t]=1\}\cap\{N(0,t]=1\} = \{N(0,s]=1\}.
+ \end{equation*}
+\begin{solution}
+False. Since $N(0,s] + N(s, t] = N(0,t]$, the LHS just says that there was one arrival during $(0,t]$. The RHS says something different, in particular because $s<t$.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Assume that
+ $N_a(t)\sim \Pois{\lambda t}$ , $N_s(t) \sim \Pois{\mu t}$ and
+ independent. Claim:
+\begin{equation*}
+\P{N_a(t) + N_s(t) = n}
+= e^{-(\mu+\lambda)t} \sum_{i=0}^n \frac{(\mu t)^{n-i}}{(n-i)!} \frac{(\lambda t)^i}{i!}. \\
+\end{equation*}
+\begin{solution}
+ True.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: this program prints 6.
+\begin{minted}{python}
+X = [0, 1, 2, 3, 4, 7]
+A = [1] * len(X)
+
+for i in range(2, 5):
+    A[i] += A[i - 1] + X[i]
+
+print(A[3])
+\end{minted}
+\begin{solution}
+False, it prints 8. To see why, observe that for $i=2$, $A[i-1] = SA[1] = 1$ and $X[2] = 2$. Thus, for $i=2$ the RHS in the loop becomes $3$. Now there is the $+=$  symbol, implying that the $3$ gets added to $A[2]$. As the latter is 1, $A[2]$ becomes $1+ 3 = 4$ after the first iteration of the while loop. In the second iteration, we therefore have that $4+3$ gets added to $A[3]=1]$, so $A[3]$ becomes 8.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+The interarrival times $\{X_k\}$ are iid and exponentially distributed with mean $1/\lambda$, and $A_k = \sum_{i=1}^k X_i$, $A_{0} = 0$.
+Claim,
+\begin{equation*}
+ \begin{split}
+\P{A_{k+1} \leq t}
+&= - \frac{(\lambda t)^{k}}{k!} e^{-\lambda t} + \P{A_k \leq t}.
+ \end{split}
+\end{equation*}
+\begin{solution}
+ True.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: this program prints 31.
+\begin{minted}{python}
+tot, thres = 8, 30
+while tot < thres:
+    tot += 5
+
+print(tot)
+\end{minted}
+\begin{solution}
+False, it prints 32, because the algorithms keeps adding $5$ to 8 until the threshold 30 is passed.
+\end{solution}
+\end{truefalse}
+
+
+\newthought{The exercises require} pen and paper.
+
+\begin{exercise}\label{ex:11}
+Show that when $X\sim \Exp{\lambda}$ its moment-generating function (MGF) is $ M_X(t) := \E{e^{tX}} = \lambda/(\lambda -t)$, and use this to compute $\E X$ and $\V X$.
+\begin{hint}
+Recall that $\E X = M_{X}'(0)$, $\E{X^{2}} = M_{X}''(0)$, and $\V X = \E{X^{2}} - (\E X)^{2}$.
+\end{hint}
+\begin{solution}
+ \begin{align*}
+ M_X(t) &= \E{\exp(t X)}
+=\int_0^\infty e^{tx} f(x) \,\d x
+=\int_0^\infty e^{tx} \lambda e^{-\lambda x} \,\d x =\frac{\lambda}{\lambda -t}.
+ \end{align*}
+This last integral only converges when $\lambda -t > 0$. Next, $M_X'(t)=\lambda/(\lambda-t)^2 \implies M_X'(0)=1/\lambda$, $M_X''(t)=2\lambda/(\lambda-t)^3 \implies \E{X^2}=2\lambda^{-2}$.
+Thus, $\V X = \E{X^2} - (\E X)^2 = \frac{2}{\lambda^2} - (\frac{1}{\lambda})^2 = \lambda^{-2}$.
+\end{solution}
+\end{exercise}
+
+
+
+\begin{exercise}\label{ex:54}
+Use MGFs to  prove that $A_i$ has density
+$f_{A_i}(t) = \lambda e^{-\lambda t} \frac{(\lambda t)^{i-1}}{(i-1)!}$.
+\begin{hint}
+Use that for independent rvs $X, Y$, $M_{X+Y}(t)=M_{X}(t) M_{Y}(t)$.
+Why is $M_{A_i}(t) = \E{e^{t A_i}} = \prod_{k=1}^{i} \E{e^{tX_k}}$?
+\end{hint}
+\begin{solution}
+ Using the iid\ property of the $\{X_i\}$,
+\begin{align*}
+ M_{A_i}(t) &= \E{e^{t A_i}} = \E{\exp\left(t\sum_{k=1}^{i} X_k\right)}  = \prod_{k=1}^{i} \E{e^{tX_k}} =
+  \left(\frac{\lambda}{\lambda -t }\right)^i.
+\end{align*}
+From a table of moment-generating functions it follows immediately that
+$A_i \sim \Gamma(i,\lambda)$, i.e., $A_i$ is Gamma distributed.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:pois-mgf}
+When $N \sim \Pois{\lambda}$ and $\alpha > 0$, show that $\E{\alpha^{N}} = e^{\lambda(\alpha-1)}$.
+Use this to see that $M_{N(t)}(s) = \exp{(\lambda t(e^s-1))}$. Then  find $\E{N(t)}$ and $\V{N(t)}$.
+\begin{hint}
+LOTUS: $\E{\alpha^{N}} = \sum_{k=0}^\infty \alpha^{k} \P{N=k}$.
+\end{hint}
+\begin{solution}
+Check the hint.
+\begin{align*}
+\sum_{k=0}^\infty \alpha^{k} \P{N=k} = \sum_{k=0}^\infty \alpha^{k} \frac{(\lambda)^k}{k!} e^{-\lambda}
+= e^{-\lambda} \sum_{k=0}^\infty \frac{(\alpha \lambda)^k}{k!} =\exp(\lambda (\alpha - 1)).
+\end{align*}
+Taking $\alpha=e^{s}$ in~\cref{ex:pois-mgf}:
+ \begin{equation*}
+ M_{N(t)}'(s) = \lambda t e^s \exp(\lambda t(e^s - 1)).
+ \end{equation*}
+ Hence $\E{N(t)} = M_{N(t)}'(0) = \lambda t $.
+Next, $M_{N(t)}''(s) = (\lambda t e^s + (\lambda t e^s)^2) \exp(\lambda t(e^s - 1))$, hence $\E{(N(t))^2} = M''(0) = \lambda t + (\lambda t)^2$, and thus, $\V{N(t)} =\E{(N(t))^2}-(\E{N(t)})^2 = \lambda t + (\lambda t)^2 - (\lambda t)^2 = \lambda t$.
+
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:10}
+ If  $X\sim\Exp{\lambda}, S\sim\Exp{\mu}$ and
+ independent, show that $Z=\min\{X,S\}\sim\Exp{\lambda+\mu}$,
+hence $\E Z = (\lambda+\mu)^{-1}$.
+\begin{hint}
+This result can be anticipated when you think about merging Poisson processes. Then, use
+$\{\min\{X, S\}>x\} =\{X>x\} \cap\{S> x\}$.
+\end{hint}
+\begin{solution}
+$\P{Z>x} = \P{\min\{X,S\}>x} = \P{X>x, S> x} = \P{X>x}\P{S>x}  = e^{-\lambda x} e^{-\mu x}$, as~$X$ and~$S$ independent.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:30a}
+ If the Poisson arrival processes $N_\lambda$ and $N_\mu$ are independent, show that
+ \begin{equation*}
+ \P{N_\lambda(t) = 1 \given N_\lambda(t) + N_\mu(t) = 1} =
+\frac{\lambda}{\lambda+\mu}.
+ \end{equation*}
+In words,  given that a customer arrived in $[0,t]$, the probability that it is of the first type is $\lambda/(\lambda+\mu)$.
+\begin{solution}
+ With the above:
+ \begin{align*}
+& \P{N_\lambda(t) = 1 \given N_\lambda(t) + N_\mu(t) = 1}
+= \frac{\P{N_\lambda(t) = 1}\P{N_\mu(t) = 0}}{\P{N_{\lambda+\mu}(t) = 1}} \\
+&= \frac{\lambda t \exp(-\lambda t) \exp(-\mu t)}{((\lambda+\mu)t)\exp{(-(\lambda+\mu)t)}}
+= \frac{\lambda t \exp{(-(\lambda + \mu)t)}}{((\lambda+\mu)t)\exp{(-(\lambda+\mu)t)}}
+= \frac{\lambda}{\lambda+\mu}.
+ \end{align*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:3}
+ If
+$X\sim \Exp{\lambda}$, $S\sim\Exp{\mu}$  and independent, show that
+ \begin{equation*}
+ \P{X\leq S} = \frac{\lambda}{\lambda+\mu}.
+ \end{equation*}
+\begin{hint}
+Think about splitting Poisson processes, and use that $\P{S > X} = \E{\E{\1{S>X}|X}}$.
+\end{hint}
+\begin{solution}
+With conditioning, $\P{S>X|X=t} = \P{S>t} =e^{-\mu t}$.
+With the fundamental bridge and conditional expectation, $\E{\1{S>X}|X} = e^{-\mu X}$, hence $\E{\1{S>X}} = \E{e^{-\mu X}}$. But this last formula is equal to
+$M_{X}(-\mu)$, so taking $t=-\mu$ in the MGF of~$X$ we obtain $\lambda/(\lambda+\mu)$.
+\end{solution}
+\end{exercise}
+
+
+\newthought{If the somewhat} heuristic derivations above do not satisfy your sense for rigor, then you should solve the next set of exercises; otherwise you can skip them.
+
+
+
+\begin{extra}\label{ex:41}
+ If the Poisson arrival processes $N_\lambda$ and $N_\mu$ are independent, use moment-generating functions to show that $N_\lambda + N_\mu$ is a Poisson process with rate $\lambda + \mu$.
+\begin{solution}
+\begin{align*}
+M_{N_\lambda(t)+N_\mu(t)}(s)
+&= M_{N_\lambda(t)}(s)\cdot M_{N_{\mu}(t)}(s)
+=\exp(\lambda t (e^s -1))\cdot \exp(\mu t(e^s-1)) \\
+&= \exp((\lambda + \mu)t (e^s-1)).
+\end{align*}
+\end{solution}
+\end{extra}
+
+
+
+\begin{extra}\label{ex:1}
+ Show with moment-generating functions that thinning the Poisson process $N_\lambda$ by means of Bernoulli random variables with success probability~$p$ results in a Poisson process $N_{\lambda p}$.
+\begin{hint}
+Dropping the dependence of~$N$ on~$t$ for the moment for notational convenience, consider the random variable
+ \begin{equation*}
+ Y = \sum_{i=1}^N Z_i,
+ \end{equation*}
+ with $N\sim P(\lambda)$ and $Z_i\sim B(p)$ and $\{Z_{i}\}$ iid.
+Show that the moment-generating function of~$Y$ is equal to the moment-generating function of a Poisson random variable with parameter $\lambda p$.
+\end{hint}
+\begin{solution}
+Use the hint. Then,
+\begin{equation*}
+ \E{e^{s Z}} = e^0 \P{Z=0} + e^{s} \P{Z=1} = (1-p) + e^s p,
+\end{equation*}
+from which
+\begin{equation*}
+\E{e^{s\sum_{i=1}^n Z_i}} = \left(\E{e^{s Z}}\right)^n = \left(1 + p (e^s - 1)\right)^n,
+\end{equation*}
+where we use that the $Z_i$  are iid.
+Thus, $\E{e^{sY}\big|N=n} = \E{e^{s\sum_{i=1}^n Z_i}} = \alpha^{n}$, where we write $\alpha =1 + p (e^s - 1)$ for ease.
+Now with Adam's law and~\cref{ex:pois-mgf}, we get
+\begin{equation*}
+\E{e^{sY}} = \E{\alpha^{N}} = e^{\lambda (\alpha - 1)} = \exp(\lambda p (e^s - 1)).
+\end{equation*}
+This is the MGF of a Poisson rv with rate $\lambda p$.
+\end{solution}
+\end{extra}
+\input{trailer}

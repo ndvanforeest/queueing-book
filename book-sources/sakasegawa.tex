@@ -1,0 +1,333 @@
+\documentclass[stochastic-or.tex]{subfiles}
+%\externaldocument{queueing-book}
+\input{header}
+
+\begin{document}
+
+\section{\texorpdfstring{$G/G/c$}{GGC} Queue: Sakasegawa's Formula}\label{sec:gg1}
+
+
+While there is no expression available to compute the exact expected waiting time for the $G/G/c$ queue, Sakasegawa's formula provides a reasonable approximation.
+This takes the form
+\begin{equation}\label{eq:7}
+ \E{\W} = \frac{C_a^2+C_s^2}2 \frac{\rho^{\sqrt{2(c+1)}-1}}{1-\rho} \frac{\E S}{c},
+\end{equation}
+where $C_a^2 = \V X/(\E X )^2$ and $C_s^2=\V S/(\E S)^2$ are the square coefficient of variation (SCV) of the inter-arrival time and service time, respectively, and the utilization of the station\sidenote{Here is a subtle point.
+When there are multiple machines, the utilization of each machine need not be equal to $\rho$.
+For instance, if there is a preference to choose the `left-most' machine whenever it is free, then the utilization of this machine is larger than $\rho$.
+Only when the machines have the same speed, and the \emph{routing} is such that each machine receives a fraction $\lambda/c$ of jobs, the machines have the same utilization.}
+is $\rho = \lambda \E S/c$, where $\lambda$ is the rate at which jobs arrive at the system, $\E S$ is the expected service time, and~$c$ the number of servers. It is evident from this formula that $\rho \in[0, 1)$, hence the load and utilization are the same.
+
+
+Note that Sakasegawa's formula for the $G/G/c$ queue reduces to the PK formula for $\E{\W}$ for the $M/G/1$ queue; just fill in $c=1$ and set $C_a^2=1$.
+Part of the intuition behind Sakasegawa's formula is based on the following idea.
+To generalize the formula for $\E W$ from the $M/M/1$ queue to that of the $M/G/1$ queue, we replace $(1+1)/2$ by $(1+C_{s}^{2})/2$; the result remains exact.
+Now, to go from the $M/G/1$ queue to the $G/G/1$ queue, replace $(1+C_{s}^{2})/2$ by $(C_a^2+C_s^2)/2$; this is no longer exact, but the approximation remains good for most practical purposes. For the details behind the power with~$c$, we refer to Sakasegawa's paper.
+
+
+\newthought{It is crucial} to memorize the insights into the performance of queueing systems that this formula offers.
+Even though~\cref{eq:7} is an approximation, it proves to be exceedingly useful when designing queueing systems and analyzing the effect of certain changes.
+
+First, we see that $\E{\W} \sim (1-\rho)^{-1}$.
+Consequently, when $\rho$ is large, the waiting time is (very) large. And,
+not only is $\E\W$ large, it is also extremely \emph{sensitive} to the actual value of $\rho$.
+Clearly, such situations must be avoided, and therefore, when trying to improve a queueing system, the first focus should be on reducing~$\rho$.
+
+Second, $\rho = \lambda \E S/c$.
+Thus, when $\rho$ must be made smaller, we have just three options.\sidenote{And not more!}
+We can reduce the arrival rate $\lambda$ of jobs, for instance by blocking demand, or sending it elsewhere such as to another machine.\sidenote{And if customers have a choice, they will take their own measures, simply by going elsewhere.}
+We can make $\E S$ smaller by replacing a server with a faster one or by shifting some of the processing steps of a job to other servers, thereby making job sizes smaller.
+Finally, we can add servers, which reduces $\rho$ quite significantly when~$c$ is small.\sidenote{This is precisely what you see in supermarkets.}
+If technically possible, adapting~$c$ is a very effective mechanism to control waiting times.
+
+Third, $\E{\W} \sim C_a^2$ and $\E{\W} \sim C_s^2$, which implies that when job inter-arrival or service times are very variable, $\E\W$ is large.
+Thus, after ensuring that~$\rho$ is sufficiently small, it becomes important to concentrate on reducing on $C_a^2$ and $C_s^2$.\sidenote{It works the other way too: systems with low variability can deal with higher load.
+}
+
+Finally, $\E{\W} \sim \E S/c$.
+This says that, from the perspective of a job in queue, average job service times are~$c$ times as short as `its own service time'.
+
+
+% \newthought{Clearly, Sakasegawa's equation} requires an estimate of $C_a^2$ and $C_s^2$.
+% Now it is not always easy in practice to determine the actual service time distribution, one reason being that service times are often only estimated by a planner, but not actually measured.
+% Similarly, the actual arrival moments of jobs are often not registered, only just the date, or perhaps the hour, that a customer arrived.
+% Hence, it is often not possible to directly estimate $C_a^2$ and $C_s^2$ from the information that is available.
+
+% However, when the number of arrivals per period $\{a_n\}$ has been logged for some time, we can use $\{a_n\}$ to estimate~$C_a^2$
+% as\sidenote{This can of course also be used to estimate $C_s^2$.}
+% \begin{equation*}
+% C_a^2 \approx \frac{\tilde \sigma^2}{\tilde \lambda},
+% \end{equation*}
+% where
+% \begin{equation*}
+% \tilde \lambda = \lim_{n\to\infty} \frac 1n \sum_{i=1}^n a_i,\quad
+% \tilde \sigma^2 = \lim_{n\to\infty} \frac 1 n \sum_{i=1}^n a_i^2 - \tilde \lambda^2.
+% \end{equation*}
+% We derive this results in steps.\sidenote{It is based an argument in~\cite{cox62:_renew_theor}.} If you don't like to extend your knowledge of statistics, you can skip this derivation.
+
+% First recall some results of earlier sections.
+% Let the inter-arrival time~$X$ have mean $1/\lambda$ and variance $\sigma^2$, so that
+% \begin{equation*}
+% C_a^2 = \frac{\V{X_i}}{(\E{X_i})^2} = \frac{\sigma^2}{1/\lambda^2} = \lambda^2 \sigma^2.
+% \end{equation*}
+% Let $A_k$ be the arrival time of the~$k$th arrival and $A(t)$ the number of arrivals up to time~$t$.
+% Consider the following useful relation between $A(t)$ and $A_k$, see~\cref{ex:54},
+% \begin{equation*}
+% \P{A(t) < k} = \P{A_k > t}.
+% \end{equation*}
+
+
+
+% Since the inter-arrival times have finite mean and second moment by assumption, we use~\cref{ex:l-147} to see that
+% \begin{equation*}
+% \lim_{k\to\infty}\frac{A_k -k/\lambda}{\sigma \sqrt k} = N(0,1),
+% \end{equation*}
+% where $N(0,1)$ is a standard normal random variable with
+% distribution $\Phi(\cdot)$. Similarly,
+% for an $\alpha$  yet to be determined,\sidenote{This is a common trick: suppose that there exists a constant to take of the scaling, and then try an extra relation to `ferret out' the scaling constant.}
+% \begin{equation*}
+% \frac{A(t) -\lambda t}{\alpha \sqrt t} \to N(0,1).
+% \end{equation*}
+% Thus,
+% $\E{A(t)} = \lambda t$ and $\V{A(t)}=\alpha^2 t$.
+
+% Using that $\P{N(0,1) \leq y} = \P{N(0,1) > -y}$, we have that
+% \begin{align*}
+% \Phi(y) &\approx \P{\frac{A_k - k/\lambda}{\sigma \sqrt k }\leq y} \\
+%  &= \P{\frac{A_k - k/\lambda}{\sigma \sqrt k} > -y} \\
+%  &= \P{A_k > \frac k\lambda - y \sigma \sqrt k}.
+% \end{align*}
+
+
+% We can use this relation between the distributions of~$A(t)$
+% and~$A_k$ to see that~$\P{A_k >t_k } = \P{A(t_k) <k}$ where
+% we define for ease
+% \begin{equation*}
+% t_k = \frac{k}\lambda - y \sigma \sqrt k.
+% \end{equation*}
+% With this we get,
+% \begin{align*}
+% \Phi(y)
+%  &\approx \P{A_k > t_k } \\
+%  &= \P{A(t_k) < k } \\
+%  &= \P{\frac{A(t_k) - \lambda t_k}{\alpha \sqrt{t_k}} <
+% \frac{k-\lambda t_k}{\alpha \sqrt{t_k}}}.
+% \end{align*}
+% Since $(A(t_k) - \lambda t_k)/ \alpha \sqrt{t_k} \to N(0,1)$
+% as $t_k \to \infty$, the above implies that
+% \begin{equation*}
+% \frac{k-\lambda t_k}{\alpha \sqrt{t_k}} \to y,
+% \end{equation*}
+% as $t_k \to \infty$. Using the above definition of $t_k$, the LHS
+% of this equation can be written as
+% \begin{equation*}
+% \frac{k-\lambda t_k}{\alpha \sqrt{t_k}} =
+% \frac{\lambda \sigma \sqrt k }{\alpha \sqrt{k/\lambda + \sigma\sqrt k}} y.
+% \end{equation*}
+% Since $t_k \to \infty$ is implied by (and implies)
+% $k\to\infty$, we therefore want that $\alpha$ is such that
+% \begin{equation*}
+% \frac{\lambda \sigma \sqrt k }{\alpha \sqrt{k/\lambda + \sigma\sqrt k}} y \to y,
+% \end{equation*}
+% as $k\to\infty$. This is precisely the case when
+% \begin{equation*}
+% \alpha = \lambda^{3/2}\sigma.
+% \end{equation*}
+% Finally, for~$t$ large, or, by the same token, $k$ large,
+% \begin{equation*}
+% \frac{\sigma_k^2}{\lambda_k} = \frac{\V{A(t)}}{\E{A(t)}} \approx \frac{\alpha^2 t}{\lambda t}
+% = \frac{\alpha^2}{\lambda} = \frac{\lambda^3\sigma^2}{\lambda} = \lambda^2 \sigma^2 = C_a^2,
+% \end{equation*}
+% where the last equation follows from the above definition of $C_a^2$.
+
+\begin{truefalse}
+Sakasegawa's approximation for the waiting time in a $G/G/c$ queue is
+\begin{equation*}
+ \E{W} = \frac{C_a^2+C_s^2}2 \frac{\rho^{\sqrt{2(c+1)}-1}}{c(1-\rho)} \E S.
+\end{equation*}
+We claim that it is exact for the $M/G/1$ queue.
+\begin{solution}
+True.
+\end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Claim: For a $G/G/1$ queue, if $\rho=0.95$ then a 5\% increase in the service rate reduces the average waiting time by about a half.
+    \begin{solution}
+        True. Remarkable but true.
+    \end{solution}
+\end{truefalse}
+
+\begin{truefalse}
+Sakasegawa's approximation for the waiting time in a $G/G/c$ queue is
+\begin{equation*}
+ \E{W} = \frac{C_a^2+C_s^2}2 \frac{\rho^{\sqrt{2(c+1)}-1}}{c(1-\rho)} \E S.
+\end{equation*}
+Claim: For a stable $D/D/1$ queue $C_a^2=0$ and $C_s^2=0$, therefore $\E{W}=0$.
+\begin{solution}
+True. If the queue is not stable, $\E W = \infty$.
+\end{solution}
+\end{truefalse}
+
+\begin{exercise}
+In a manufacturing setting, the Poisson process is not always a suitable model for the arrival process of jobs at a production station. Can you provide an example to see why this is the case?
+\begin{hint}
+Think about the inter-departure time of a machine that produces items every 10 minutes. What inter-arrival times will a down-stream machine see?
+
+\end{hint}
+\begin{solution}
+  When processing times at a station are nearly constant, and the jobs of this station are sent to a second station for further processing, the inter-arrival times at the second station must be roughly equal.
+  But then the inter-arrival times are not well approximated by the exponential distribution, consequently, the arrival process is not well described by a Poisson process.
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:77}
+ Consider \marginpar{This is an important example to memorize.} a single-server queue at which every minute a customer arrives, precisely at the first second and $S\equiv 50$ s.
+ What are $\rho$, $\E\L$, $C_a^2$, and $C_s^2$?
+\begin{solution}
+ $\rho = \lambda \E S = 1/60 \cdot 50 = 5/6$.
+ Since job arrivals do not overlap any job service, the number of jobs in the system is 1 for $50$ seconds, then the server is idle for 10 seconds, and so on.
+ Thus $\E\L = 1\cdot5/6 = 5/6$.
+ There is no variance in the inter-arrival times, and also not in the service times, thus $C_a^2 = C_s^2 = 0$.
+ Also $\E{\W}=0$ since $\E{\QQ}=0$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}\label{ex:76}
+ Consider the same single-server system as in~\cref{ex:77}, but now the customer service time is stochastic: with probability $1/2$ a customer requires~$1$ minute and $20$ seconds of service, and with probability $1/2$ the customer requires only $20$ seconds of service.
+ What are $\rho$, $C_a^2$, and $C_s^2$?
+\begin{solution}
+ Again $\E S$ is 50 seconds, so that $\rho = 5/6$. Also
+ $C_a^2=0$. For the $C_s^2$ we have to do some work.
+ \begin{equation*}
+ \begin{split}
+ \E S &= \frac{20}2 + \frac{80}2 = 50 \\
+ \E{S^2} &= \frac{400}2 + \frac{6400} 2 = 3400 \\
+ \V S &= \E{S^2} - (\E S)^2 = 3400 - 2500 = 900 \\
+ C_s^2 &= \frac{\V S}{(\E S)^2} = \frac{900}{2500}=\frac{9}{25}.
+ \end{split}
+ \end{equation*}
+\end{solution}
+\end{exercise}
+
+
+\begin{exercise}\label{ex:91}
+In a workplace, when a mechanic has used a specific high precision tool, the tool has to be inspected by a microscope for potential failures.
+The inter-arrival times of the tools at the microscope is $X\sim \Unif{3, 9}]$, and the inspection time~$S$ is such that $\E S = 5$ minutes and $\V S = 4$ minutes squared.
+Use Sakasegawa's formula to estimate $\E{\W}$.
+Next, when tools would arrive as a Poisson process, what would be $\E\W$.
+Discuss your findings.
+\begin{hint}
+  What is $\lambda$? What is $C_a^2$ in the $G/G/1$ setting; what is it in the $M/G/1$ setting?
+\end{hint}
+
+\begin{solution}
+First the $G/G/1$ case. Observe that in this case, the inter-arrival time $X\sim U[3,9]$, that is, never smaller than 3 minutes, and never longer than 9 minutes.
+
+\begin{pyconsole}
+a = 3.0
+b = 9.0
+EX = (b + a) / 2.0  # expected inter-arrival time
+EX
+labda = 1.0 / EX  # per minute
+labda
+VA = (b - a) * (b - a) / 12.0
+CA2 = VA / (EX * EX)
+CA2
+
+ES = 5.0
+VS = 4
+CS2 = VS / (ES * ES)
+CS2
+
+rho = labda * ES
+rho
+
+W = (CA2 + CS2) / 2.0 * rho / (1.0 - rho) * ES
+W
+\end{pyconsole}
+
+Now the $M/G/1$ case. In that case $C_a^2=1$.
+\begin{pyconsole}
+W = (1.0 + CS2) / 2.0 * rho / (1.0 - rho) * ES
+W
+\end{pyconsole}
+
+The arrival process with uniform inter-arrival times is much more regular than a Poisson process.
+In the first case, tool arrivals are spaced in time at least with 3 minutes.
+\end{solution}
+\end{exercise}
+
+
+% \begin{exercise}\label{ex:l-185}
+%   Show for the $G/G/c/K$ queue that $\beta = 1 - \E{\Ls}\mu/ \lambda$ is the long-run fraction of customers lost and $\E{\Ls}$ the average number of busy/occupied servers.
+% \begin{hint}
+%   Why is $\lambda \beta$ the rate at which jobs are lost?
+%   What, then, is the rate at which jobs are accepted to the system?
+%   Observe that  $\mu \E{\Ls}$ is the rate at which jobs leave the system.
+% \end{hint}
+% \begin{solution}
+%   Observe that $\lambda(1-\beta)$ is the net arrival rate, as jobs are lost at a rate $\lambda\beta$.
+%   The rate at which the station carries out work is $\mu \E{\Ls}$.
+%   Since all jobs that enter the system, must also leave the system (recall, the queue is finite), it follows that $\mu \E{\Ls} = \lambda(1-\beta)$, from which the expression for $\beta$ readily follows.
+% \end{solution}
+% \end{exercise}
+
+
+
+\begin{exercise}\label{ex:49}
+  A machine serves two types of jobs.
+  The processing time of jobs of type~$i$, $i=1,2$, is exponentially distributed with parameter $\mu_i$.
+  The type~$T$ of a job is random and independent of anything else, and such that $\P{T=1} = p = 1-q = 1-\P{T=2}$.
+  (An example is a desk serving adults and children, both requiring different average service times, and~$p$ is the probability that the customer in service is a adult.)
+  Show that the expected processing time and variance are given by
+\begin{align*}
+ \E S &= p \E{S_1} + q \E{S_2} \\
+\V S &= p \V{S_1} + q \V{S_2} + pq(\E{S_1} - \E{S_2})^2.
+ \end{align*}
+Thus, even if $\V{S_1} = \V{S_2} = 0$, still $\V S > 0$ if $\E{S_1} \neq \E{S_2}$.
+    Mixing different jobs types increases variability, hence queueing times.
+\begin{hint}
+ Let~$S$ be the processing (or service) time at the server, and
+ $S_i$ the service time of a type~$i$ job. Then,
+ \begin{equation*}
+ S = \1{T=1} S_1 + \1{T=2} S_2.
+ \end{equation*}
+\end{hint}
+\begin{solution}
+With the hint,
+\begin{align*}
+ \E S
+&= \E{\1{T=1} S_1} + \E{\1{T=2} S_2} \\
+&= \E{\1{T=1}} \E{S_1} + \E{\1{T=2}} \E{S_2}, \quad \text{by the independence of~$T$}, \\
+&= \P{T=1}\E{S_1} + \P{T=2} \E{S_2} \\
+&= p \E{S_1} + q \E{S_2}.
+\end{align*}
+For the variance, we need some algebra. Since,
+\begin{equation*}
+\1{T=1}\1{T=2} = 0 \text{ and } \1{T=1}^2 = \1{T=1},
+\end{equation*}
+we get
+\begin{align*}
+ \V S
+&= \E{S^2} - (\E S)^2 \\
+&= \E{\left(\1{T=1} S_1 + \1{T=2} S_2\right)^2} - \left(\E{S}\right)^2 \\
+&= \E{\1{T=1} S_1^2 + \1{T=2} S_2^2} - \left(\E S \right)^2 \\
+&= p \E{S_1^2} + q \E{S_2^2} - \left(\E S \right)^2 \\
+&= p \V{S_1} + p (\E{S_1})^2 + q \V{S_2} + q(\E{S_2})^2 - \left(\E S\right)^2 \\
+&= p \V{S_1} + p (\E{S_1})^2 + q \V{S_2} + q(\E{S_2})^2 - p^2 (\E{S_1})^2 - q^2 (\E{S_2})^2 - 2pq \E{S_1}\E{S_2} \\
+&= p \V{S_1} + q \V{S_2} + pq (\E{S_1})^2 +pq (\E{S_2})^2 - 2pq \E{S_1}\E{S_2}, \quad\text{ as } p = 1-q\\
+&= p \V{S_1} + q \V{S_2} + pq(\E{S_1} - \E{S_2})^2.
+\end{align*}
+\end{solution}
+\end{exercise}
+
+
+\input{trailer}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

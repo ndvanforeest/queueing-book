@@ -1,0 +1,30 @@
+% arara: clean: { files: [blg, idx, ilg, ind, log, out, pytxcode, rel, toc ]}
+% arara: clean: {files: [ ans.tex, hint.tex] }
+% arara: pdflatex: { shell: yes }
+% arara: bibtex
+% arara: makeindex
+% arara: pythontex: {verbose: yes, rerun: modified }
+% arara: pdflatex: { shell: yes }
+%%%%% arara: pdflatex: { shell: yes }
+% arara: move: {  files: [ 'queueing-book.pdf' ], target: ['../'] }
+
+
+%\documentclass[oneside,11pt]{book}
+\documentclass[oneside,11pt,a4paper]{book}
+%\documentclass[landscape,oneside,a5paper]{book}
+
+
+\usepackage[all-solutions-at-end]{optional}
+%\usepackage[check]{optional}
+\usepackage{preamble}
+
+
+
+\usepackage{etoc}
+
+\input{book_contents}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
