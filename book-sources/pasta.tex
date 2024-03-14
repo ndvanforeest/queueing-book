@@ -270,26 +270,17 @@ Define
 \alpha = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n L(A_k).
 \end{equation*}
 For the $M/G/1$ queue we can use PASTA to see that $1-\rho = \alpha$.
-
 \begin{solution} False.
 We should define
 \begin{equation*}
 \alpha = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n L(A_k-).
 \end{equation*}
+Mind that $L(A_{k}) \neq L(A_{k}-)$.
 \end{solution}
 \end{truefalse}
 
 \begin{exercise}\label{ex:36}
-Derive~\cref{eq:lc-1}.
-\begin{hint}
- Show that $A(t) =\sum_{n=0}^\infty A(n,t)$.
-\end{hint}
-\begin{solution}
- \begin{equation*}
-A(t) = \sum_{k=1}^\infty \1{A_k \leq t} = \sum_{k=1}^\infty \sum_{n=0}^\infty \1{\L(A_k-) = n} \1{A_k \leq t}  = \sum_{n=0}^\infty A(n,t).
- \end{equation*}
-Divide by~$t$, then use the proof of~\cref{thr:4}.
-\end{solution}
+Removed.
 \end{exercise}
 
 \begin{exercise} \label{ex:38}
