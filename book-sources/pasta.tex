@@ -264,18 +264,18 @@ True.
 \end{truefalse}
 
 \begin{truefalse}
-Let $L(s)$ be the number of items in the system at time $s$.
+Let $L_{S}(s)$ be the number of items in the system at time $s$.
 Define
 \begin{equation*}
-\alpha = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n L(A_k).
+\alpha = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n L_{S}(A_k).
 \end{equation*}
 For the $M/G/1$ queue we can use PASTA to see that $1-\rho = \alpha$.
-\begin{solution} False.
-We should define
+\begin{solution} False, for various reasons. First we should use  $L(A_{k}-)$ instead of $L(A_{k})$ to count the number of arrivals seen \emph{upon arrival}.  Seccond, $\alpha$ counts the fraction of arrivals that see the number of jobs at the server (not in the system). By PASTA this must be the load, which is $\rho$; $1-\rho$ is the fraction of time the server is idle.
+
+BTW, here is another way to write $\alpha$:
 \begin{equation*}
-\alpha = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n L(A_k-).
+\alpha = \lim_{n\to\infty} \frac 1 n \sum_{k=1}^n \1{L(A_k-) > 0} = \lim_{t\to\infty} \frac{1}{t}\int_0^{t} \1{L(s) > 0}\d s.
 \end{equation*}
-Mind that $L(A_{k}) \neq L(A_{k}-)$.
 \end{solution}
 \end{truefalse}
 

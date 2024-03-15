@@ -77,7 +77,7 @@ We note that the solution of~\cref{eq:33} is unique once $T(0)$ is fixed.
 \newthought{To find the} cost to clear the queue, we first concentrate on the expected queueing cost $U(q)$ that accrue during a service that starts with~$q$ jobs in the system.
 The expected cost for the~$q$ jobs already present is $h q \E{S}$, i.e., $h$ times the area of the rectangle with base~$\E{S}$ and height~$q$.
 The expected cost for new arrivals during the service is $h \E{\int_0^{S} N(s) \d s}$, where $N(s)\sim \Pois{\lambda s}$.
-Conditional on $S=t$, $\E{\int_0^{t} N(s) \d s } = \int_{0}^{t} \E{N(s)} \d s = \lambda t^2/2$, hence, $\E{\int_0^{S} N(s) \d s} = \E{\lambda S^{2}/2}$.
+Conditional on $S=t$, $\E{\int_0^{t} N(s) \d s } = \int_{0}^{t} \E{N(s)} \d s = \int_{0}^{t} \lambda s \d s = \lambda t^2/2$, hence, $\E{\int_0^{S} N(s) \d s} = \E{\lambda S^{2}/2}$.
 The total cost is therefore
 \begin{equation*}
 U(q)  =  h q \E S +  \frac 12 \lambda h \E{S^2}.
