@@ -292,7 +292,7 @@ Similarly, $\P{\L\geq n} = \sum_{k\geq n} p(k)$.
 where we assume that~$s$ is such that $e^s \rho < 1$. Then,
 \begin{align*}
  M_L'(s) &= (1-\rho) \frac{1}{(1-e^s\rho)^2} e^s \rho \implies \E\L = M_L'(0)= \frac{\rho}{1-\rho}, \\
- \E{\L^2}&= M''(0)= \frac{2\rho^2}{(1-\rho)^2} + \frac{\rho}{1-\rho},\\
+ \E{\L^2}&= M''(0)= \frac{2\rho^2}{(1-\rho)^2} + \frac{\rho}{1-\rho} = \rho \frac{1+\rho}{(1-\rho)^{2}},\\
 \V\L &= \E{L^2} - (\E\L)^2 = \frac{\rho(1+\rho)}{(1-\rho)^2}-\frac{\rho^2}{(1-\rho)^2} = \frac{\rho}{(1-\rho)^2},\\
  \P{\L\geq n}
  &= \sum_{k=n}^\infty p(k) = \sum_{k=n}^\infty p(0)\rho^k = (1-\rho)\sum_{k=n}^\infty \rho^k

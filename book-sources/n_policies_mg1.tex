@@ -68,7 +68,8 @@ because first the job in service must leave, and then, when $Y=k$, it takes $T(q
 To solve this equation, we substitute the guess $T(q) = aq+b$ and solve for~$a$ and~$b$.
 It is clear that $T(0)=0$, hence $b=0$.\sidenote{If the system is empty, it takes no time to clear it.}
 Substituting $a q$ into~\cref{eq:33} gives $q a =\E S + aq + a\E Y - a$.
-Noting that $\E Y = \lambda \E S,$\sidenote{\cref{eq:38}} and solving for~$a$ we find~(\cref{eq:n-pol-2}).
+Noting that $\E Y = \lambda \E S$, \sidenote{Poisson arrivals $\implies$ $\E{Y|S=s} = \lambda s$ $\implies$ $\E{Y|S} = \lambda S$ $\implies$ $\E Y = \E{\E{Y|S}} = \lambda \E S$.}
+and solving for~$a$ we find~\cref{eq:n-pol-2}.
 We note that the solution of~\cref{eq:33} is unique once $T(0)$ is fixed.
 
 
