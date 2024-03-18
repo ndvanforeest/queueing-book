@@ -249,11 +249,13 @@ Claim:   Little's Law informs us that in the $M^{B}/M/1$ queue, the expected num
 \begin{truefalse}
     For an $M^B/M/1$ queue we know that:
     $$
-    \E{W}=\frac{1+C_s^2}{2}\frac{\rho}{1-\rho}\E{B}\E{S}+\frac{\rho}{1-\rho}\E{S}.
+    \E{W}=\frac{1+C_s^2}{2}\frac{\rho}{1-\rho}\E{B}\E{S}+\frac{1}{2}\frac{\rho}{1-\rho}\E{S}.
     $$
-    Claim: this formula implies that if  batch size increases, but the distribution of the service time of an item remains the same, the expected waiting time increases linearly with rate $\rho \E S/2(1-\rho)$.
+    Suppose that $\V B = 0$.
+    Claim: this formula implies that if the batch size increases, but $\E S$ decreases such that $\rho$ remains the same, the expected waiting time becomes smaller.
+
     \begin{solution}
-        True. Suppose  the batch size is $n$, then, $C_{s}^{2} \sim 1/n$, hence $C^2_s n$ is a constant.
+        True. $\V B = 0 \implies C_{s}^{2} = 0 \implies$ the first term on the RHS does not change when $\rho$ remains constant. The second term does become smaller.
     \end{solution}
 \end{truefalse}
 
