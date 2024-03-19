@@ -18,8 +18,8 @@ Then we define a number of performance measures that allow us to assess the perf
 In a later chapter, after developing some appropriate further mathematical concepts, we can derive closed form expressions for a number of performance measures.
 
 
-We use the following notation, the meaning of which we explain below,\sidenote{Inventory theory uses  the word `level'  for many different concepts, which should not be confused.
-Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level~$s$, and service levels.}
+We use the following notation, the meaning of which we explain below:\sidenote{Inventory theory uses  the word `level'  for many different concepts, which should not be confused.
+Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level~$s$, and service levels.}\sidenote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in a queueing system; do not confuse these concepts even though they have the same symbol.}
 \begin{align*}
   Q_k &= \text{order size that arrives at  the \emph{start} of period~$k$}, \\
   D_k &= \text{demand arriving \emph{during} period~$k$}, \\
@@ -27,15 +27,15 @@ Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level
 \IL_k^+ &= \text{inventory on hand at the \emph{start} of period~$k$}, \\
 \IL_k^- &= \text{backlogged demand at the \emph{start} of period~$k$}. \\
   \IP_k &= \text{inventory position at the \emph{start} of period~$k$}, \\
-  L &= \text{fixed lead time}.
+  L &= \text{fixed lead time.}
 \end{align*}
-Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_k'$.\sidenote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in the system.}
+Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_k'$.
 
 \newthought{The dynamics of} the inventory can be simply constructed if we are given a set of period demands $\{D_k, t=1, 2, \ldots\}$ and order sizes $\{Q_k, t=0, 1, \ldots\}$, but first we need to address a subtle point.
 In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take~$L$ to be constant over time and independent of the number of outstanding orders.
 Then, when placing an order of size $Q_{k-L}$ at the start of period $t-L$ so that it arrives at the start of period~$t$,  the  \recall{inventory level} follows  the rules
 \begin{align}\label{eq:i5}
-  \IL_k &= \IL_{k-1}'+Q_{k-L}. & \IL_k' &= \IL_{k} - D_k.
+ \IL_{k-1}' &= \IL_{k-1} - D_{k-1},  & \IL_{k} &= \IL_{k-1}' + +Q_{k-L}.
 \end{align}
 The sequence is important. The replenishment order arrives at the start of the period so that it is available to serve demand.
 
@@ -45,7 +45,7 @@ In the latter case, $I^{-}_k = \max\{-I_k, 0\}$ is the \recall{backlogged} deman
 
 Clearly, if we would use the inventory level to determine when and how much the order, we might be too late in placing orders, due to the leadtime. To compensate for this, we use the  \recall{inventory position} which updates according to the rule
 \begin{align}\label{eq:b9}
-  \IP_k &= \IP_{k-1}' + Q_k, & \IP_k' = \IP_{k}- D_k.
+\IP_{k-1}' &= \IP_{k-1}- D_{k-1},  &  \IP_k &= \IP_{k-1}' + Q_k.
 \end{align}
 Thus, the inventory position includes the outstanding orders, hence accounts for items under way to cover future demand.
 In other words, the difference between the inventory position and the inventory level is that in the former we immediately include all orders `in the books', but these orders physically arrive~$L$ periods later, and only then they can be used to meet demand.
@@ -109,8 +109,8 @@ Clearly, when we have a (simulated) sequence of period demands $D_{1}, D_{2}, \l
 It remains to develop a number of measures to assess how the inventory control rule performs, in particular to see how costs depend on the policy parameters.
 
 \newthought{For cost computations} we need to make a choice when to account for the period cost of inventory and backlog.
-Here we choose to charge~$b$ Euro for each demand in backlog  and~$h$ per item on hand at the start of the period.
-If there is a cost~$K$ per time we place an order, the average cost up to time~$n$ becomes
+Here we choose to charge~$b$ Euro for each demand in backlog and~$h$ per item on hand at the start of the period.
+If there is a cost~$K$ per time we place an order, the average cost up to period~$n$ becomes
 \begin{align*}
 K q + h I^+ + b I^-,
 \end{align*}
@@ -126,7 +126,7 @@ Clearly, we can search for a good policy by running (many) simulations for vario
 \newthought{Service levels} form a set of  measures to quantify the extent to which demand is met. Here we discuss three different such measures.
 The \recall{ready rate} is the fraction of periods in which the end-of-period inventory is not negative, i.e.,
 \begin{equation*}
-\alpha :=   \frac 1n \sum_{k=1}^n \1{\IL_k \geq 0}.
+\alpha :=   \frac 1n \sum_{k=1}^n \1{\IL_k'\geq 0}.
 \end{equation*}
 
 The \recall{fill rate} $\beta$ relates to the fraction of demand satisfied from on-hand stock.

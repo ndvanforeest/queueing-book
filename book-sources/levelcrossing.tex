@@ -209,12 +209,12 @@ Since $p(0)=1-\rho$, it follows that
 f(x) = \lambda(1-\rho) e^{- \mu(1-\rho)x}, \quad x > 0.
 \end{equation}
 
-Another fun way to obtain this result is to use conditioning on the number $L_Q$ of jobs found in queue at arrival, and then using that the total service of these $L_Q$ customers have a gamma density. Here is the first step of the derivation:
+Another fun way to obtain this result is to use conditioning on the number $\QQ$ of jobs found in queue at arrival, and then using that the total service of these $\QQ$ customers have a gamma density. Here is the first step of the derivation:
 
 \begin{align*}
 f(x)
-&= \sum_{k=1}^\infty \P{W = x | L_Q = k}\P{L_Q = k } \\
-&= \sum_{k=1}^\infty \P{S_1 + S_2 + \cdots + S_k = x}\P{L_Q = k }.
+&= \sum_{k=1}^\infty \P{W = x | \QQ = k}\P{\QQ = k } \\
+&= \sum_{k=1}^\infty \P{S_1 + S_2 + \cdots + S_k = x}\P{\QQ = k }.
 % &= (1-\rho) \sum_{k=1}^\infty \rho^k \P{S_1 + S_2 + \cdots + S_k = x } \\
 % &= (1-\rho) \sum_{k=1}^\infty \rho^k \mu \frac{(\mu x)^{k-1}}{(k-1)!}e^{-\mu x}\\
 % &= (1-\rho) \mu \rho \sum_{k=1}^\infty \rho^{k-1} \frac{(\mu x)^{k-1}}{(k-1)!}e^{-\mu x}\\
