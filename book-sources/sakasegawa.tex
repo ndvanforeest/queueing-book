@@ -154,7 +154,7 @@ True.
 \begin{truefalse}
 Claim: For a $G/G/1$ queue, if $\rho=0.95$ then a 5\% increase in the service rate reduces the average waiting time by about a half.
     \begin{solution}
-        True. Remarkable but true.
+        True. Suppose for ease that the SCVs don't change when we reduce the load $\rho$ by $5\%$, and that we achieve this load by reducing $\lambda$ with $5\%$ so that $\E S$ remains the same too. Then the only factor that changes in Sakasegawa's formula is $\rho/(1-\rho)$. Now, when $\rho=0.95$, this factor is $0.95/(1-0.95) \approx 20$. When $\rho$ becomes $0.9$, then $\rho/(1-\rho) = 0.9/(1-0.9) \approx 10$. Since $10$ is half of $20$, the reduction in waiting time is roughly a factor 2.
     \end{solution}
 \end{truefalse}
 
