@@ -61,9 +61,9 @@ When $K$ is so large that the measures hardly change, then for all practical pur
 
 Still, two measures are particularly simple:
 \begin{align*}
-  \rho & = \frac{\lambda}{ c\mu}, & \E{\Ls} &= \sum_{n=0}^{\infty}\min\{n,c\} p(n)= \frac{\lambda}\mu,
+  \rho & = \frac{\lambda}{ c\mu}, & \E{\Ls} &\stackrel1= \sum_{n=0}^{\infty}\min\{n,c\} p(n) \stackrel2= \frac{\lambda}\mu,
 \end{align*}
-where the second follows directly from Little's law.\sidenote{Note that $\E{\Ls} \neq \rho$.}
+where 1 shows how to compute $\E L_{S}$ as an expectation, and 2 follows from Little's law.\sidenote{Recall, jobs spend an average time $\E S$ in service, and jobs arrive at rate $\lambda$ at the servers, hence $\lambda \E S$ must be number of jobs at some server.}\sidenote{Note that $\E{\Ls} \neq \rho$.}
 
 
 
@@ -104,7 +104,7 @@ Thus, we take\sidenote{Why is it not necessary to write $\mu(n) = \mu \min\{c, n
 This queueing system is often used to determine the number of beds needed by a hospital: the beds act as servers and the patients as jobs.
 Given the arrival rate of patients, and the average time they occupy a bed\sidenote{i.e., the expected service time}, the problem is to find the number of beds~$c$ such that the probability $p(c)$ to block a patient is less than some threshold, $1\%$ say.
 For hospitals it is reasonable to assume Poisson arrivals since patients arrive independently from a large population.
-Then, by PASTA, we conclude that indeed $\pi(c) = p(c)$, in other words, the blocked fraction is equal to the time average $p(c)$ during which all beds are occupied.
+Then, by PASTA, we conclude that indeed $\pi(c) = p(c)$, in other words, the blocked fraction is equal to the fraction of time $p(c)$ during which all beds are occupied.
 As for the service times, there are often many patients in a hospital, and they have many different reasons why they occupy a bed.
 Hence it is not entirely unreasonable to model the recovery times as exponentially distributed.
 
@@ -112,7 +112,7 @@ Take $\rho = \lambda/(c \mu)$. When $n<c$, $\lambda p(n) = (n+1)\mu p(n+1)$, hen
  \begin{align*}
    p(n+1) = \frac{\lambda}{(n+1)\mu }p(n) = \cdots = \frac{\lambda^{n+1}}{(n+1)!\mu^{n+1}} p(0) = \frac{(c\rho)^{n}}{(n+1)!} p(0).
 \end{align*}
-The normalization constant follows  as $G = \sum_{n=0}^{c}p(n)$. As there are as many servers as jobs, jobs get rejected at rate $1-p(c)$, so that, using PASTA,
+The normalization constant follows  as $G = \sum_{n=0}^{c}p(n)$. As there are as many servers as jobs, jobs get accepted at rate $1-p(c)$, so that, using PASTA,
  \begin{align*}
    \E \QQ &= 0, & \E \Ls &= \frac{\lambda}{\mu} \left(1- p(c)\right).
 \end{align*}
@@ -125,7 +125,7 @@ Therefore,
 \begin{align*}
 \lambda(n)&=\lambda, & \mu(n) &= n \mu.
 \end{align*}
-By taking the limit $c\to \infty$ in the expressions of the $M/M/c$ queue\sidenote{or the $M/M/c/c$ queue.} we get
+By taking the limit $c\to \infty$ in the expressions of the $M/M/c$ queue\sidenote{Or the $M/M/c/c$ queue.} we get
 \begin{align*}
   p(n) &= e^{-\lambda/\mu} \frac{(\lambda/\mu)^n}{n!}, & \E Q&=0, & \E \L = \E \Ls = \frac \lambda \mu.
 \end{align*}
