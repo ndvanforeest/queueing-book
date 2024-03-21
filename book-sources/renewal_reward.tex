@@ -123,21 +123,23 @@ From~\cref{fig:renewal} it is simple to see that
     t_1 &= \frac{S-s}{d}, & t_2 &= \frac{S-s}{r-d}, & T = t_1+t_{2} = \frac{S-s}{d}\frac{r}{r-d},
   \end{align*}
 are the time to empty the inventory from level~$S$ to~$s$ (after which production switches on) and the time needed to replenish the inventory from level~$s$ to~$S$ (after which production switches off).
-Writing $T_+$ ($T_-$) for the amount of time that the inventory is positive (negative) during a cycle, it follows that
+
+Let us next assume that $s\leq 0 < S$. Then, writing $T_+$ ($T_-$) for the amount of time that the inventory is positive (negative) during a cycle, it follows that
 \begin{align*}
 \frac{T_+}T &= \frac{S}{S-s},
-& \frac{T_-}T &= \frac{s}{S-s}.
+& \frac{T_-}T &= \frac{-s}{S-s}.
 \end{align*}
-Using that the holding and backlogging cost are proportional to the areas of the related triangles,  the average cost of one cycle becomes
+Using that the holding and backlogging cost are proportional to the areas of the related triangles,  the average cost of one cycle becomes\sidenote{When $0\leq s < S$, $g=K/T + h(s+S)/2$, and when $s<S \leq 0$, $g=K/T + b|s+S|/2$.}
 \begin{align*}
-g
-&=\frac{K}{T} +  b\frac{s}{2} \frac{T_-} T  + h\frac{S}{2} \frac{T_+}{T}.
+g &=\frac{K}{T} +  b\frac{-s}{2} \frac{T_-} T  + h\frac{S}{2} \frac{T_+}{T}.
 \end{align*}
 Substituting the expressions for $T_{-}, T_{+}$, and $T$ in terms of~$s$ and~$S$, taking the partial derivatives with respect to~$s$ and~$S$ and solving for the optimal values by setting $\partial g/\partial s = \partial g/\partial S = 0$ gives
 \begin{align}\label{eq:renewal1}
-g^{*} &= \sqrt{2Kd} \sqrt{\frac{hb}{h+b}}\sqrt{1-\frac d r}, & s^{*} &= \frac{g^{*}}b, & S^{*} = \frac{g^{*}}{h}.
+g^{*} &= \sqrt{2Kd} \sqrt{\frac{hb}{h+b}}\sqrt{1-\frac d r}, & s^{*} &= -\frac{g^{*}}b, & S^{*} = \frac{g^{*}}{h}.
 \end{align}
 Of course we need  $r\geq d$ for stability. Interestingly, when $r=d$, the cost $g^{*} = 0$.\sidenote{Why is that so?}
+
+
 
 The (perhaps) most important formula for practical inventory management is the Economic Order Quantity (EOQ) which follows from~\cref{eq:renewal1} by taking $r\to \infty$ and $b\to\infty$, which amount to saying that replenishments arrive immediately and backlogging is not allowed.
 This results in
