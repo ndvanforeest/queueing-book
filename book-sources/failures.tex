@@ -153,13 +153,12 @@ Condition on $S_0$ and~$N$.
 When doing the computations by hand, I worked from bottom to top. However, for the solutions, the current sequence is perhaps easier understand.
 \begin{align*}
   \E{S|S_0, N} &=\E{S_0 + \sum_{i=1}^N R \Big|S_0, N} = S_0 + N \E R, \text{ since $\{R_i\}$ are iid},\\
-  \E{S|S_0} &= \E{\E{S|S_{0}, N}|S_0} = \E{S_0 + N \E R |S_{0}} = S_0 + \lambda_f S_0 \E R\\
-  \E{S} &= \E{\E{S|S_{0}}} = \E{S_0(1+\lambda_f  \E R)} = \E{S_0}(1 + \lambda_f \E R) = \E{S_0}/A.\\
+  \E{S|S_0} &= \E{\E{S|S_{0}, N}|S_0} = \E{S_0 + N \E R |S_{0}} = S_0 + \lambda_f S_0 \E R = S_{0}/A\\
+  \E{S} &= \E{\E{S|S_{0}}} = \E{S_0/A} = \E{S_0}/A.\\
   \V{S|S_0, N} &=  \V{S_0 + \sum_i^N R_i| S_{0}, N} = N \V R, \text{ as } \V{S_0|S_0} = 0,\\
 \V{S|S_0} &= \E{\V{S|S_0, N} |S_0} + \V{\E{S|S_{0}N}|S_{0}} = \lambda_f S_0 \V R + \V{S_{0} + N \E R|S_0}\\
-  &= \lambda_f S_0\V R + (\E R)^{2} \V{N|S_0} = \lambda_f S_0\V R + (\E R)^{2} \lambda_{f} S_{0}, \\
-  \V S &= \E{\V{S|S_0}} + \V{\E{S|S_0}} = \lambda_f (\V R + (\E R)^2) \E{S_0} + \V{(1+\lambda_f \E R)S_{0}} \\
-  &= \lambda_f \E{R^2} \E{S_0} + (1+\lambda_f \E R)^2 \V{S_{0}} = \lambda_f \E{R^2} \E{S_0} + \V{S_{0}}/A^{2}.
+  &= \lambda_f S_0\V R + (\E R)^{2} \V{N|S_0} = \lambda_f S_0\V R + (\E R)^{2} \lambda_{f} S_{0} = \lambda_{f} \E{R^{2}} S_{0}\\
+  \V S &= \E{\V{S|S_0}} + \V{\E{S|S_0}} =  \lambda_f \E{R^2} \E{S_0}  + \V{S_{0}}/A^{2}.
 \end{align*}
 
 \end{solution}

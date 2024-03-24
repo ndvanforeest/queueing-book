@@ -159,7 +159,7 @@ Summing and dividing gives the result.
 
 The third measure is the \recall{cycle service level} which is defined as the fraction of cycles in which the inventory was not negative; a cycle is the time between the arrival of two consecutive replenishments.
 To capture this in a formula, note first that a cycle ends in period~$t$ when $Q_{k-L}> 0$ (because then a replenishment arrives).
-Second, there is still on-hand inventory at the start of period~$t$ when $I_{k-1}'\geq 0$.
+Second, there is still on-hand inventory at the start of period~$k$ when $I_{k-1}'\geq 0$.
 Thus, the number of cycles in which the inventory was non-negative must be $\sum_{k=L+1}^n \1{Q_{k-L}>0}\1{I_{k-1}'\geq 0}$.
 The cycle service level then follows from averaging over the total number of cycles $\sum_{k=L+1}^n \1{Q_{k-L}>0}$:
 \begin{equation*}
@@ -278,15 +278,16 @@ The $(s,S)$ policy must be ablle to achieve the lowest average cost, because it 
 \begin{exercise}
 Above we assumed that demand in excess of the  stock level is backlogged.
 Modify the recursions of the basestock model such that it can cope with lost demand.
-For instance, if right after the start of period~$i$, the inventory level $\IL_{k}= 5$, and $D_k=9$, then 4 items are lost, and~$5$ are accepted.
+For instance, if right after the start of period~$k$, the inventory level $\IL_{k}= 5$, and $D_k=9$, then 4 items are lost, and~$5$ are accepted.
 \begin{solution}
-Since at the start of period~$t$, the inventory present to serve is $I_{k}$, the rules for a loss system become
+Since at the start of period~$k$, only the on-hand inventory $I_{k}$ can be used to serve the demand $D_{k}$, the rules for a loss system become
 \begin{align*}
-L_k &= (\IL_k-D_k)^- = \IL_k'^- & \text{lost demand}\\
-A_k &= \IL_{k} - L_k & \text{accepted demand}\\
-\IP_k' &= \IP_{k} - A_k, &\text{subtract the accepted demand}\\
-\IL_k' &= \IL_{k} - A_k, &\text{subtract the accepted demand}.
+\tilde D_k &= \min\{\IL_k, D_k\} & \text{accepted demand}\\
+L_k &= D_{k} - \tilde D_{k} & \text{lost demand}\\
+\IP_k' &= \IP_{k} - \tilde D_k, &\text{subtract the accepted demand}\\
+\IL_k' &= \IL_{k} - \tilde D_k, &\text{subtract the accepted demand}.
 \end{align*}
+And now use the standard rules to compute $Q_{k+1}$, and update $P_{k+1}$ and $I_{k+1}$ accordingly.
 \end{solution}
 \end{exercise}
 
