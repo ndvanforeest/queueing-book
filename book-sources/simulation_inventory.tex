@@ -42,7 +42,7 @@ We next compute the inventory positions and inventory levels.
 We generate \mintinline{python}{N} random deviates for the demand and pass a random generator to ensure to get the same numbers for every simulation run.
 For ease we combine ~\cref{eq:i5} into a single recursion for $P_t$, and likewise for $I_t$.
 Expressions like \mintinline{python}{(3 <= 4)} evalutate to \mintinline{python}{True} which in turn become~$1$ in computations.
-Thus, \mintinline{python}{(Pprime <= s)} implements the indicator function.\sidenote{The indicator $\1{A} = 0$ if the event~$A$ occurs, and~$0$ otherwise.}.
+Thus, \mintinline{python}{(Pprime <= s)} implements the indicator function.\sidenote{The indicator $\1{A} = 0$ if the event~$A$ occurs, and~$0$ otherwise.}
 The first \mintinline{python}{for} loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
 In the second loop we should protect against a simple error: it might happen that the number of periods over which we simule is smaller than~$L$.
 \inputminted[firstline=23, lastline=40]{python}{../code/ss_inventory_simulation.py} % simulation
@@ -76,7 +76,7 @@ labda = 3
 D = gen.poisson(labda, size=n)
 
 Pp = np.zeros_like(D)
-Qp = np.zeros_like(D)
+Q = np.zeros_like(D)
 for t in range(1, len(D)):
     Qp[t] = Q_size * (Pp[t - 1] <= s)
     Pp[t] = Pp[t - 1] + Q[t] - D[t]

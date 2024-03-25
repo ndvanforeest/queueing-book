@@ -35,7 +35,7 @@ Note  that we are specific about the \emph{timing} of each of the  variables; we
 In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take~$L$ to be constant over time and independent of the number of outstanding orders.
 Then, when placing an order of size $Q_{k-L}$ at the start of period $t-L$ so that it arrives at the start of period~$t$,  the  \recall{inventory level} follows  the rules
 \begin{align}\label{eq:i5}
- \IL_{k-1}' &= \IL_{k-1} - D_{k-1},  & \IL_{k} &= \IL_{k-1}' + +Q_{k-L}.
+ \IL_{k-1}' &= \IL_{k-1} - D_{k-1},  & \IL_{k} &= \IL_{k-1}' + Q_{k-L}.
 \end{align}
 The sequence is important. The replenishment order arrives at the start of the period so that it is available to serve demand.
 
