@@ -240,13 +240,14 @@ False, it prints 8. To see why, observe that for $i=2$, $A[i-1] = SA[1] = 1$ and
 The interarrival times $\{X_k\}$ are iid and exponentially distributed with mean $1/\lambda$, and $A_k = \sum_{i=1}^k X_i$, $A_{0} = 0$.
 Claim,
 \begin{equation*}
- \begin{split}
 \P{A_{k+1} \leq t}
-&= - \frac{(\lambda t)^{k}}{k!} e^{-\lambda t} + \P{A_k \leq t}.
- \end{split}
+= - \frac{(\lambda t)^{k}}{k!} e^{-\lambda t} + \P{A_k \leq t}.
 \end{equation*}
 \begin{solution}
- True.
+ True. Realize that
+\begin{equation*}
+\P{A_k \leq t} - \P{A_{k+1} \leq t} = \frac{(\lambda t)^{k}}{k!} e^{-\lambda t}.
+\end{equation*}
 \end{solution}
 \end{truefalse}
 
@@ -260,7 +261,7 @@ while tot < thres:
 print(tot)
 \end{minted}
 \begin{solution}
-False, it prints 32, because the algorithms keeps adding $5$ to 8 until the threshold 30 is passed.
+False, it prints 32, because the algorithms keeps adding $5$ to 8 until the threshold 30 is passed. It does not print the intermediate values of \pythoninline{tot} because the \pythoninline{print(tot)} is not part of the body of the loop.
 \end{solution}
 \end{truefalse}
 

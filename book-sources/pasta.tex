@@ -286,11 +286,12 @@ Removed.
 \begin{exercise} \label{ex:38}
 If $\lambda>\delta$, can it happen that $ \lim_{t\to\infty} A(n,t)/t > 0$ for some (finite)~$n$?
 \begin{solution}
- If $\lambda > \delta$, then $L(t)\to\infty$.
- But then there must be a last time, $s$ say, that $L(s) = n+1$, and $L(t) > n+1$ for all $t>s$.
- Hence, after time~$s$ no job will see the system with~$n$ jobs.
- Thus $A(n,t) = A(n,s)$ for all $t>s$.
-As this is  finite, $\lim_{t\to\infty}A(n,t)/t=0$.
+If $\lambda > \delta$, then $L(t)\to\infty$.
+But then there must be a last time, $s$ say, that $L(s) = n+1$, and $L(t) > n+1$ for all $t>s$.
+Hence, after time~$s$ there will never be a job that will see the system with~$n$ jobs.
+Thus $A(n,t) = A(n,s)$ for all $t>s$ (recall, $A(n,t)$ can only change at time $t$, say, when a job arriving at $t$ sees $n$ in the system.
+But since $L(t) > n+1$ for $t>2$, this will never happen after $ts$.)
+As $A(n,t)$ remains finite, $\lim_{t\to\infty}A(n,t)/t=0$.
 \end{solution}
 \end{exercise}
 
@@ -298,7 +299,10 @@ As this is  finite, $\lim_{t\to\infty}A(n,t)/t=0$.
 \begin{exercise}\label{ex:26}
  When $\lambda\neq \delta$, is $\pi(n)\geq \delta(n)$?
 \begin{hint}
- Use that $\lambda \geq \delta$ always holds. Thus, when $\lambda \neq \delta$, it must be that $\lambda > \delta$. What are the consequences of this inequality; how does the queue length behave as a function of time?
+Solve \cref{ex:38} first.
+Use that $\lambda \geq \delta$ always holds.
+Thus, when $\lambda \neq \delta$, it must be that $\lambda > \delta$.
+What are the consequences of this inequality; how does the queue length behave as a function of time?
 \end{hint}
 \begin{solution}
  The assumptions lead us to conclude that $\lambda > \delta$. As a consequence, the queue length must increase in the long run (jobs come in faster than they leave). Therefore, $A(n,t)/t \to 0$ for all~$n$, and also $D(n,t)/t\to 0$. Consequently, $\pi(n) = \delta(n) = 0$, which is the only sensible reconciliation with~\cref{eq:36}.

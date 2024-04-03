@@ -144,9 +144,9 @@ In the EPQ formula,  take $\E S \to 0$ so that $\rho \to 0$.
 
 \begin{theorem}[Pollaczek-Khinchine (PK) formula]
 The expected waiting time of the $M/G/1$ queue is given by
-\begin{equation*}
+\begin{equation}\label{eq:4}
  \E{\W} = \frac 1 2 \frac{\lambda \E{S^2}}{1-\rho} =\frac{1 + C_s^2}2 \frac{\rho}{1-\rho} \E S.
-\end{equation*}
+\end{equation}
 \end{theorem}
 \begin{proof}
 In the $M/G/1$ queue, waiting customers pay $h=1$ per unit time per customer, and the setup cost $K=0$. Hence, it is optimal to take $N=1$ in~\cref{eq:100}.
@@ -217,6 +217,29 @@ Replacing this expression in the above expression for $\E\W$, we obtain the PK f
 \frac{\E{S^2}}{(\E S)^2} =  \frac{\E{S^2} - (\E S)^{2} + (\E{S})^{2}}{(\E S)^2} = \frac{\V S + (\E S)^{2}}{(\E S)^{2}} = C_s^2 +1.
 \end{equation*}
 
+
+\newthought{The Pollaczek-Khinchine equation} can also be found as a limiting case of the expression~\cref{eq:43} of the waiting time of the $M^{B}/M/1$ queue.\sidenote{If you are not interested in maths, than you should this derivation.}
+Recall that, in the $M^{B}/M/1$ queue, batches of items arrives, and the service times of the items are iid with mean $1/\nu$, say. If $F$ is the cdf of the service times of the $M/G/1$ queue, then we take
+\begin{equation*}
+\P{B=k} = F(k/\nu) - F((k-1)/\nu)
+\end{equation*}
+as the probability that a batch has size $k$.
+Note that when a batch has size $k$, the  expected service time is the sum of $k$ rvs that are $\Exp{\nu}$; thus, the service time of a batch of size $k$ is $\sim \Gamma{k, \nu}$.
+With this, the expected service time of a batch becomes
+\begin{align*}
+  \E{S_{B}}
+  &= \E{\E{S_{B}|B}} = \E{B/\nu} = \sum_{1=0}^{\infty} k/\nu \P{B=k} \\
+&= \sum_{1=0}^{\infty} k/\nu  [F(k/\nu) - F((k-1)/\nu)] \approx \int_{0}^{\infty} x \d F(x) = \E S.
+\end{align*}
+In words, when $\nu$ becomes large, the expected service time of a batch in the $M^{B}/M/1$ queue is nearly the the same as the expected waiting time of a job of the $M/G/1$ queue.
+
+In fact, the proof that the expected waiting time of the $M^{B}/M/1$ converges to the Pollaczek-Khinchine equation when $\nu\to \infty$ is based on the fact that every cdf $F$, concentrated on $[0, \infty)$, can be approximated (weakly) by the sequence of cdfs\sidenote{See Asmussen, Section III.4, Applied Probability and Queues, 2003.}
+\begin{equation*}
+F_{\nu}(x) = F(0) + \sum_{k=1}^{\infty} [F(k/\nu] - F((k-1)/\nu)] \frac{e^{-\nu t}}{x} \frac{(\nu x)^k}{(k-1)!},\quad\text{as } \nu\to\infty.
+\end{equation*}
+That is to say, the distribution of the service times of the batches whose item times are $\Exp{\nu}$ approaches the cdf of the service times of the $M/G/1$ queue.
+This implies that the expectation and scv off the batch service times converges to $\E S$ and $C_{S}^{2}$ of $F$.
+Finally, the last term in~\cref{eq:4} becomes small because the service time of a single item becomes negligible as $\nu\to\infty$.
 
 
 \begin{truefalse}

@@ -196,10 +196,12 @@ The problem with the code of the question is that the reserved capacity for the 
 
 
 \begin{exercise}\label{ex:n-policies}
-A machine \marginpar{Cost of an~$N$ policy.} can switch on and off. Suppose that the jobs that arrive in period~$k$ can be served in that period.
- If the system length hits~$N$ (becomes empty) in period~$k$, the machine switches on (off) in period $k+1$.
+A machine \marginpar{Cost of an~$N$ policy.}
+can switch on and off.
+Suppose that the jobs that arrive in period~$k$ can be served in that period.
+If the system length hits~$N$ (becomes empty) in period~$k$, the machine switches on (off) in period $k+1$.
 Make the recursions.
-Assume the machine is  off at $k=0$.
+Assume the machine is off at $k=0$.
 \begin{hint}
   Introduce a variable $I_k\in\{0, 1\}$ to keep track of the state of the server.
   Then, $I_{k+1} = \1{\L_k\geq N} + I_k \1{0<\L_k<N}$ implements the N-policy.
@@ -224,7 +226,7 @@ I = np.zeros(num_weeks)  # on or not
 for k in range(1, num_weeks):
     I[k] = (L[k - 1] >= N) + I[k - 1] * (0 < L[k - 1] < N)
     c[k] *= I[k]
-    d = min(L[k - 1], c[k])
+    d = min(L[k - 1] + a[k]], c[k])
     L[k] = L[k - 1] + a[k] - d
 
 

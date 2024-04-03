@@ -73,9 +73,9 @@ We can implement this by taking\sidenote{Note how $\lambda$ and $\tilde \lambda$
 \tilde \lambda(n) &= \lambda \1{n < K}, & \mu(n) &= \mu.
 \end{align*}
 This gives $\lambda p(n) = \mu p(n+1)$ for $n<K$, and $p(n) = 0$ for $n>K$ because $\tilde \lambda(n) = 0$ for $n\geq K$.
-Thus, in general, $\tilde \lambda(n) p(n) = \mu(n+1)p(n+1)$, from which it follows right away that
+Thus, in general, $\tilde \lambda(n) p(n) = \mu(n+1)p(n+1)$, from which follows right away that
  \begin{align*}
-\rho &= \frac{\lambda}{\mu} & p(n) &= \frac{1-\rho}{1-\rho^{K+1}} \rho^n.
+\rho &= \frac{\lambda}{\mu}, & p(n) &= \frac{1-\rho}{1-\rho^{K+1}} \rho^n.
 \end{align*}
 
 
@@ -282,10 +282,11 @@ Therefore, $G=\sum_{k=0}^N \rho^k { N \choose k}$.
 \begin{exercise}\label{ex:34}
 Use moment-generating functions to derive $\E\L$ and $\V\L$ for the $M/M/1$ queue, and show that $\P{L>n} = \rho^{n+1}$.
 \begin{hint}
-First show that $M_L(s) = (1-\rho) \sum_n e^{s n} \rho^n$, then use the familiar expression of the sum over a geometric series.
+Use \cref{eq:23}, show that $M_L(s) = (1-\rho) \sum_n e^{s n} \rho^n$, then use the familiar expression of the sum over a geometric series.
 Similarly, $\P{\L\geq n} = \sum_{k\geq n} p(k)$.
 \end{hint}
 \begin{solution}
+Using the hint,
 \begin{equation*}
  M_L(s) = \E{e^{s L}} = \sum_{n=0}^\infty e^{s n}p(n) = (1-\rho) \sum_n e^{s n} \rho^n=\frac{1-\rho}{1-e^{s}\rho},
 \end{equation*}

@@ -87,14 +87,14 @@ To capture this difference, we define the fundamentally important concept of \re
 \end{equation*}
 
 
-Continuing with the simulation, we like to find a probability distribution for the services $\{c_{i}\}$ such that it has a specific mean $\mu$ and a SCV $c^{2}$.
+Continuing with the simulation, we like to find a probability distribution for the services $\{c_{i}\}$ such that it has a specific mean $\mu$ and a scv $c^{2}$.
 A simple  way to achieve this is to use a rv~$X$ such that $\P{X=b} = p$ and $\P{X=0} = 1-p$, and require that $\E X = p b= \mu$ and $C^2_X = c^{2}$.
 Using that $\V X = \E{X^{2}} - (\E X)^{2}$, we see that $C^{2}_{X} = \E{X^{2}}/(\E X)^{2} - 1$.
 Rewriting this, we get $\E{X^{2}} = \mu^{2}(c^2+1)$, but we also know that $\E{X^{2}} = p b^{2}$.
 Solving for~$b$ and~$p$ in terms of $\mu$ and $c^{2}$ gives that $p = 1 / (1 + c^{2})$ and $b=\mu/p = \mu (1+c^{2})$.
 
 
-With this construction, we can fix $\E{c_{i}}=\mu$, but vary the SCV from one simulation to another.
+With this construction, we can fix $\E{c_{i}}=\mu$, but vary the scv from one simulation to another.
 This next function implements the construction of a vector of rvs with the required properties.
 \inputminted[firstline=92, lastline=98]{python}{../code/discrete_simulations.py} % makecsv
 
@@ -118,7 +118,7 @@ Thus, when there is variability in both arrivals and services, the queue length 
 \end{figure}
 
 In conclusion, when capacity is tight, or when relative variability in arrivals or services is large, queues are large.
-Hence, if we want to improve the performance of a queueing system, we basically have four options, increase the capacity, reduce the load (or demand), reduce the SCV of the arrivals, or reduce the SCV of the services, or of both.
+Hence, if we want to improve the performance of a queueing system, we basically have four options, increase the capacity, reduce the load (or demand), reduce the scv of the arrivals, or reduce the scv of the services, or of both.
 Of course, these options are not exclusive, for instance, we can try to reduce the variability of the service process and add some capacity at the same time.
 
 
@@ -172,7 +172,7 @@ However, one clue to find the bottleneck station is by looking at the queue leng
 \end{truefalse}
 
 \begin{truefalse}
-The SCV of a random variable $X$ is the same SCV of $\alpha X$ if $\alpha$ a positive scalar.
+The scv of a random variable $X$ is the same scv of $\alpha X$ if $\alpha$ a positive scalar.
     \begin{solution}
         True. However a bit misleading, it is true for all values of $t$.
     \end{solution}
@@ -188,7 +188,7 @@ Claim: as long as the interarrival distribution stays the same, the average queu
 \end{truefalse}
 
 \begin{truefalse}
-Claim: When $X\sim\Exp{\lambda}$ its SCV is larger than 1.
+Claim: When $X\sim\Exp{\lambda}$ its scv is larger than 1.
 \begin{solution} False.
 \end{solution}
 \end{truefalse}
@@ -314,12 +314,21 @@ for k in range(1, len(a)):
 print(L_R)
 print(L_N)
 \end{python}
-We need a trick to get around the division by 2 in line 17 (because of $L_R[k]$ is odd we might end up with 0.5).
+We need a trick to get around the division by 2 in line 17 (because if $L_R[k]$ is odd we might end up with 0.5).
 For this, we should check whether $L_{R}[k]$ is odd or not.
 If so, it must be at least be 1, and then we can subtract 1 to make~$l$ even.
 This~$l$ can be used to compute the number of departures.
 
-Here is a general observation: the number of ways to organize the repairs is countless. Do we serve them with priority or not, do we bin them and make new items instead, do we do the repairs on another, separate, station?  Such differences need to be reflected in the simulation model.
+The above code is easily converted to maths. Only lines 13 to 15 might be a bit problematic, but that is easy too. Whe writing line 16 like this,
+\begin{equation}
+\label{eq:20}
+d_{R,k} = 2 \min\{\lfloor L_{R,k-1}/2\rfloor, c_{k}\},
+\end{equation}
+we obtain the effect of lines 13 to 16 in one step.
+
+Here is a general observation: the number of ways to organize the repairs is countless.
+Do we serve them with priority or not, do we bin them and make new items instead, do we do the repairs on another, separate, station?
+Such differences need to be reflected in the simulation model.
 \end{solution}
 \end{exercise}
 

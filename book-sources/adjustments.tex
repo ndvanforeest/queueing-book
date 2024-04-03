@@ -31,7 +31,7 @@ As a consequence, the number of jobs served between two consequtive adjustments 
 We further assume that the adjustment times $\{R_{i}\}$ are iid rvs, distributed as the common rv~$R$ with mean $\E R$ and variance $\V R$.
 Finally, we assume that the net processing times $\{S_{0,i}\}$, $\{R_{i}\}$ and $\{F_{i}\}$ are independent.
 
-\newthought{To compute $\E\W$} with Sakasegawa's formula, we only have to find out how the adjustments affect the  mean $\E S$ and SCV $C_s^2$ of the effective processing time.
+\newthought{To compute $\E\W$} with Sakasegawa's formula, we only have to find out how the adjustments affect the  mean $\E S$ and scv $C_s^2$ of the effective processing time.
 As the adjustments have no influence on the job arrival process, $\lambda$ and $C_a^{2}$ remain the same.
 
 In the exercises we show that the average effective processing time is
@@ -46,7 +46,7 @@ and its  variance is
 &= \V{S_0} + \frac{\V R}{\E B} + (\E R)^2\frac{C_B^2}{\E B},
  \end{split}
 \end{equation}
-where $C_B^2$ is the SCV of the runlength~$B$.
+where $C_B^2$ is the scv of the runlength~$B$.
 By dividing $\V S$ by $(\E S)^{2}$ we obtainx $C_{S}^{2}$.
 
 Assuming there is one server,  we can now  fill in Sakasegewa's formula!

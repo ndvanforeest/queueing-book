@@ -441,9 +441,9 @@ $L(s) = \sum_{n=0}^\infty n\, \1{\L(s) = n}$, we see that
 %With this we can write for the time-average number of jobs in the system
 \begin{equation*}
 \frac 1 t \int_0^t L(s) \d s = \frac 1 t \int_0^t \left(\sum_{n=0}^{\infty} n\, \1{\L(s) = n}\right) \d s
-= \sum_{n=0}^{\infty} \frac n t \int_0^t \1{\L(s) = n} \d s.
+= \sum_{n=0}^{\infty} \frac n t \int_0^t \1{\L(s) = n} \d s = \sum_{n=0}^{\infty} n \frac{Y(n,t}{t}
 \end{equation*}
-Now apply~\cref{eq:18}.
+Taking the limit $t\to\infty$ and applying~\cref{eq:18} (and reversing the limit and the summation, which we assume is ok here) we obtain that $\E L = \sum_{n} n p(n)$.
 \end{solution}
 \end{exercise}
 
@@ -459,6 +459,7 @@ Show for the $M/G/1$  that  with probability~$\rho$ a job leaves behind a busy s
  Apply PASTA and \cref{eq:39}.
 \end{hint}
 \begin{solution}
+Use the references in  the hint to see that
 $\rho = \sum_{i=1}^\infty p(i) = \sum_{i=1}^\infty \pi(i) = \sum_{i=1}^\infty \delta(i)$.
 \end{solution}
 \end{exercise}

@@ -21,7 +21,7 @@ In the main text we provide a list of elements required to compute $\E J$, in~\c
 
 \newthought{Assume a single} machine produces runs of red jobs and blue jobs, and needs a setup for each color change.
 Jobs arrive at rate $\lambda_r$ and $\lambda_b$.
-The SCV of both job types inter-arrival times is given by $C_a^2$.
+The scv of both job types inter-arrival times is given by $C_a^2$.
 Once the server is setup for the correct color, we assume for simplicity that jobs of both type have the same average \recall{net processing time} $\E{S_0}$ and variance $\V{S_0}$.
 It is a simple exercise to generalize the notation to allow service times to depend on color.
 Finally, setup times are iid and have mean $\E R$ and variance $\V R$, and are assumed to be independent of job service times.
@@ -60,7 +60,7 @@ With~\cref{eq:90} this leads to the condition that~$B$ must be larger than some 
 B> B_m = \frac{\lambda \E R}{1-\lambda \E{S_0}}.
 \end{equation*}
 
-Now that we have identified the arrival rate and service times of batches, it remains to find expressions for the SCV of the batch inter-arrival times $C_{a,B}^2$ and the batch service times $C_{s,B}^2$. It's easy to derive that\sidenote{~\cref{ex:490} \cref{ex:491}}
+Now that we have identified the arrival rate and service times of batches, it remains to find expressions for the scv of the batch inter-arrival times $C_{a,B}^2$ and the batch service times $C_{s,B}^2$. It's easy to derive that\sidenote{~\cref{ex:490} \cref{ex:491}}
  \begin{align}\label{eq:82}
 C_{a,B}^2 &= \frac{C_{a}^2}B, &
 C_{s, B}^2 &= \frac{\V{S_B}}{(\E{S_B})^2},
@@ -142,7 +142,7 @@ for B in x:
     # Now the time a batch spends in queue
     Cae = 1.0
     CaB = Cae / B
-    Ce = 1.0  # SCV of service times
+    Ce = 1.0  # scv of service times
     VS0 = Ce * ES0 * ES0
     VR = 1.0 * 1.0  # Var setups is sigma squared
     VSe = B * VS0 + VR
@@ -227,7 +227,7 @@ The time a batch spends in queue.
 Cae = 1.0
 CaB = Cae / B
 CaB
-Ce = 1.0  # SCV of service times
+Ce = 1.0  # scv of service times
 VS0 = Ce * ES0 * ES0
 VS0
 VR = 1.0 * 1.0  # Var setups is sigma squared
@@ -272,7 +272,7 @@ An arbitrary job has to wait half the time it takes  to form a batch.
 
 
 \begin{exercise}\label{ex:490}
-Explain that the SCV of the batch inter-arrival times is given by~\cref{eq:82}.
+Explain that the scv of the batch inter-arrival times is given by~\cref{eq:82}.
 \begin{solution}
 The variance of the inter-arrival time of batches is~$B$ times the variance of job inter-arrival times. The inter-arrival times of batches is also~$B$ times the inter-arrival times of jobs. Thus,
 \begin{equation*}

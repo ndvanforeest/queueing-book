@@ -10,8 +10,8 @@ Consider two $G/G/1$ stations in tandem.\sidenote{`In tandem' means `in line', i
 Suppose we have the financial means to reduce the variability of the processing times at  one of the stations, but not at both.
 Then we like to improve the one that has the most impact on the total sojourn time in the line.
 
-For the waiting time of the first machine, we can use Sakasegawa's formula, but to apply this to the second machine, we need $C^2_{a,2}$, i.e., the SCV of the inter-arrival times at the second station.
-Now, noting that the output of the first machine forms the input of the second machine, it is clear that $C^2_{a,2}=C^2_{d,1}$, where $C^2_{d,1}$ is the SCV of the \emph{inter-departure} times of \emph{first} station.
+For the waiting time of the first machine, we can use Sakasegawa's formula, but to apply this to the second machine, we need $C^2_{a,2}$, i.e., the scv of the inter-arrival times at the second station.
+Now, noting that the output of the first machine forms the input of the second machine, it is clear that $C^2_{a,2}=C^2_{d,1}$, where $C^2_{d,1}$ is the scv of the \emph{inter-departure} times of \emph{first} station.
 
 
 Let us consider the inter-departure times of a $G/G/1$ queue.
@@ -19,7 +19,7 @@ Suppose that the  utilization $\rho$ is very high.
 Then the server will seldom be idle, so that most of the inter-departure times are equal to the service times.
 However, if the utilization is low, the server will be idle most of the time, and the inter-departure times must be approximately equal to the inter-arrival times.
 
-We obtain an  approximation for the SCV $C_{d}^2$ of the inter-departure times by  interpolating between these two extremes
+We obtain an  approximation for the scv $C_{d}^2$ of the inter-departure times by  interpolating between these two extremes
 \begin{equation} \label{eq:40}
  C_{d}^2 \approx  (1-\rho^2) C_{a}^2 + \rho^2 C_{s}^2.
 \end{equation}
@@ -30,7 +30,7 @@ For the $G/G/c$, i.e., a multiserver queue, there is the generalization
 It is simple to see that this reduces to~\cref{eq:40} for the $G/G/1$ queue.
 
 Combining Sakasegawa's formula with this expression provides us with a very useful insight for a line of queues.
-If we reduce $C^2_{s,1}$, i.e., the SCV of service times at the first station, $\E{\W_1}$ and $C^2_{d,1}$ become smaller.
+If we reduce $C^2_{s,1}$, i.e., the scv of service times at the first station, $\E{\W_1}$ and $C^2_{d,1}$ become smaller.
 Since $C^2_{a,2}=C^2_{d,1}$, $\E{\W_2}$ becomes lower too, but also $C^2_{d,2}$, and so on.
 In other words, the entire chain benefits from an improvement in service variability at the first station.\sidenote{In other words, try to improve from the start of the chain.}
 

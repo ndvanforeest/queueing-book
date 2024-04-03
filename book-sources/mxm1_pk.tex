@@ -72,17 +72,17 @@ We can brush this up by realizing that
 \begin{align*}
 \frac{\E{B^2}}{(\E{B})^2}
   =\frac{\E{B^2}-(\E B)^2 + (\E B)^2}{(\E{B})^2}
-= \frac{\V B + (\E B)^2}{(\E B)^2}= C_s^2+1.
+= \frac{\V B + (\E B)^2}{(\E B)^2}= C_B^2+1,
 \end{align*}
-% todo: change $C_{s}$ into $C_{B}$.Check also the related sections in ch 6.
-where $C_s^2 = \V B/ (\E B)^{2}$ is the SCV of the batch size distribution.  Substituting this into the above gives the final result
+where where $C_B^2 = \V B/ (\E B)^{2}$ is the scv of the batch size distribution.
+Substituting this into the above gives the final result
 \begin{equation}\label{eq:43}
 \E{\W} =
-\frac{1+C_s^2}2 \frac{\rho}{1-\rho} \E B \E S + \frac12\frac\rho{1-\rho} \E S.
+\frac{1+C_B^2}2 \frac{\rho}{1-\rho} \E B \E S + \frac12\frac\rho{1-\rho} \E S.
 \end{equation}
 
 This formula is an important result.
-It tells us that the load increases when the load increases or the variability $C_{s}^{2}$ of the batch size increases, but also when $\E B \E S$ increases (even when the utilization $\rho$ remains the same). As such, it gives us the most important clues about  what we should try to change if we want to improve a queueing system.
+It tells us that the load increases when the load increases or the variability $C_{B}^{2}$ of the batch size increases, but also when $\E B \E S$ increases (even when the utilization $\rho$ remains the same). As such, it gives us the most important clues about  what we should try to change if we want to improve a queueing system.
 
 \newthought{Rather than using} the time an entire batch spends at the server, as in the above use of the renewal-reward equation, we can
 concentrate on the expected time spent by single items at the server.
@@ -256,7 +256,7 @@ Claim:   Little's Law informs us that in the $M^{B}/M/1$ queue, the expected num
     Claim: this formula implies that if the batch size increases, but $\E S$ decreases such that $\rho$ remains the same, the expected waiting time becomes smaller.
 
     \begin{solution}
-        True. $\V B = 0 \implies C_{s}^{2} = 0 \implies$ the first term on the RHS does not change when $\rho$ remains constant. The second term does become smaller.
+        True. $\V B = 0 \implies C_{B}^{2} = 0 \implies$ the first term on the RHS does not change when $\rho$ remains constant. The second term does become smaller.
     \end{solution}
 \end{truefalse}
 
@@ -351,7 +351,7 @@ And thus,
 % For the $M/M/1$ queue, we have that $B\equiv 1$, i.e., constant. % Why does this imply that $C_s^{2} = 0$?
 % \end{hint}
 % \begin{solution}
-% $B\equiv 1 \implies \V B = 0 \implies C_{s}^{2} =0$ and $\E B = 1$. Filling the formula for $\E S$ is now trivial.
+% $B\equiv 1 \implies \V B = 0 \implies C_{B}^{2} =0$ and $\E B = 1$. Filling the formula for $\E S$ is now trivial.
 % \end{solution}
 % \end{exercise}
 
@@ -400,11 +400,12 @@ Check that if $\E B =1$ the $M/M/1$ queue results.
 $\P{B=k}=q^{k-1}p$ with $q=1-p$. Look up the expectation and variance of a geometric rv.
 \end{hint}
 \begin{solution}
-Filling the formula for $\E W$,
+Use the hint. For a geometric rv,
  \begin{align*}
- \E B &= \frac 1 p, &  \V B &= \frac1{p^2}-\frac1p, &  C_s^2&= \frac{\V B}{(\E B)^2} = p^2 \left(\frac1{p^2}-\frac1p\right)=1-p, &
- (1+C_s^2)/2 &= 1-p/2,
+ \E B &= \frac 1 p, &  \V B &= \frac1{p^2}-\frac1p, &  C_B^2&= \frac{\V B}{(\E B)^2} = p^2 \left(\frac1{p^2}-\frac1p\right)=1-p, \\
+ (1+C_B^2)/2 &= 1-p/2,
 \end{align*}
+With this, fill in the formula for $\E W$ to get
 \begin{equation*}
 \E \L =
 \left(1-\frac p2\right) \frac\rho{1-\rho} \frac 1 p + \frac12\frac\rho{1-\rho}
@@ -412,16 +413,16 @@ Filling the formula for $\E W$,
 \end{equation*}
 For the $M/M/1$ queue, $\E B = 1 \implies p = 1 \implies \E\L=\rho/(1-\rho)$.
 
-% If you can't find the expectation and variance of a geometric rv, then here is the derivation.
-%  \begin{align*}
-%  M_B(s)
-% &= \E{e^{sB}} = \sum_{k=0}^\infty e^{sk} \P{B=k} \\
-% &= \sum_{k=0}^\infty e^{sk} p q^{k-1}
-% = \frac p q \sum_{k=0}^\infty (q e^s)^k = \frac p q \frac1{1-qe^s},\\
-%  \E B &= M_B'(0) = \left.\frac p q \frac q{(1-q e^s)^2}\right|_{s=0}= \frac p{(1-q)^2} = \frac 1 p,\\
-%  \E{B^2} &= M_B''(0) = \frac2{p^2} - \frac1p, \\
-%  \V B &= \E{B^2} - (\E B)^2 = \frac2{p^2} - \frac1p - \frac1{p^2} = \frac1{p^2}-\frac1p,\\
-% \end{align*}
+If you can't find the expectation and variance of a geometric rv, then here is the derivation.
+ \begin{align*}
+ M_B(s)
+&= \E{e^{sB}} = \sum_{k=0}^\infty e^{sk} \P{B=k} \\
+&= \sum_{k=0}^\infty e^{sk} p q^{k-1}
+= \frac p q \sum_{k=0}^\infty (q e^s)^k = \frac p q \frac1{1-qe^s},\\
+ \E B &= M_B'(0) = \left.\frac p q \frac q{(1-q e^s)^2}\right|_{s=0}= \frac p{(1-q)^2} = \frac 1 p,\\
+ \E{B^2} &= M_B''(0) = \frac2{p^2} - \frac1p, \\
+ \V B &= \E{B^2} - (\E B)^2 = \frac2{p^2} - \frac1p - \frac1{p^2} = \frac1{p^2}-\frac1p,\\
+\end{align*}
 \end{solution}
 \end{exercise}
 
