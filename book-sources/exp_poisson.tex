@@ -7,12 +7,12 @@
 \section{Exponential and Poisson Distribution}
 \label{sec:expon-poiss-distr}
 
-In this section we make a model for the arrival process that is the most useful for queueing and inventory systems.\sidenote{Arrivals in queueing systems are often called \emph{customers ar jobs}, and \emph{demand} in inventory systems.}
+In this section we make a model for the arrival process that is the most useful for queueing and inventory systems.\marginnote{Arrivals in queueing systems are often called \emph{customers ar jobs}, and \emph{demand} in inventory systems.}
 In particular, we show how the exponential and gamma distribution relate to the Poisson distribution, and we use the memoryless property of job inter-arrival times as the motivating point of departure.
 
 
 
-\newthought{The timescales that} are relevant for our purposes range roughly from minutes to a week\sidenote{With exceptions, naturally.}.
+\newthought{The timescales that} are relevant for our purposes range roughly from minutes to a week\marginnote{With exceptions, naturally.}.
 On such timescales it seems is reasonable to model inter-arrival times as memoryless.
 For instance, if~$X$ is the inter-arrival time between two patients with a broken arm at the emergency room of a hospital, what can we say about the time the next patient with a broken arm arrives if somebody tells us that an hour earlier a similar patient arrived?
 Not much, as most of us will agree.
@@ -26,12 +26,12 @@ However, if the person tells us at time~$s$ there was no arrival during $[0,s]$,
 If we believe that the information $\{X>s\}$ is immaterial to our probabilistic model, then necessarily $\P{X > s+t \given X>s} = \P{X>t}$.
 
 \begin{definition}
-A rv~$X$ whose cdf\sidenote{cdf = cumulative distribution function} satisfies
+A rv~$X$ whose cdf\marginnote{cdf := cumulative distribution function} satisfies
 \begin{equation}\label{eq:29}
  \P{X > s+t \given X>s} = \P{X>t}
 \end{equation}
 is said to be \recall{memoryless}.
-\sidenote{As a counter example, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s= 100$ and $t = 99$ years.
+\marginnote{As a counter example, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s= 100$ and $t = 99$ years.
 Then $\P{X>99}$ was small, but not zero, but $\P{X>199 \given X>100} = 0$.}
 \end{definition}
 
@@ -47,11 +47,11 @@ $\implies$ Observing that $\P{X \leq t} = 1- e^{-\lambda t} \implies \P{X>t} = e
   &= e^{-\lambda t} =\P{X>t},
 \end{align*}
 where Step 1 follows from the standard formula for conditional probability and that $\{X>t+s\} \subset \{X>s\}$.
-Next, $\impliedby$,  this is slightly more difficult, so we skip it. \sidenote{For a proof, see \citet[Appendix 3]{yushkevich69:_markov_proces}}
+Next, $\impliedby$,  this is slightly more difficult, so we skip it. \marginnote{For a proof, see \citet[Appendix 3]{yushkevich69:_markov_proces}}
 \end{proof}
 
 
-Note that for $X\sim \Exp{\lambda}$, the following properties hold:\sidenote{\cref{ex:11}}
+Note that for $X\sim \Exp{\lambda}$, the following properties hold:\marginnote{\cref{ex:11}}
   \begin{align*}
   \E X &= \lambda^{-1},  &
 \V X &= \lambda^{-2}.
@@ -61,7 +61,7 @@ If we have a sequence of inter-arrival times $\{X_{i}\}_{i=1}^{\infty}$, then we
 \begin{equation*}
 A_{k} = A_{k-1} + X_{k}, \quad  A_{0} = 0.
 \end{equation*}
-When inter-arrival times are iid\sidenote{iid := independent and identically distributed} rvs\sidenote{ rv(s) := random variable(s)} and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
+When inter-arrival times are iid\marginnote{iid := independent and identically distributed} rvs\marginnote{rv(s) := random variable(s)}[1cm] and distributed as the common rv $X\sim \Exp{\lambda}$, it is clear that the density of the first arrival time is
 \begin{equation*}
  f_{A_{1}}(t) = f_{X} (t) = \lambda e^{-\lambda t} = \lambda \frac{(\lambda t)^{0}}{0!} e^{-\lambda t},
 \end{equation*}
@@ -97,7 +97,7 @@ that is, $N(t) \sim \Pois{\lambda t}$, i.e., \recall{Poisson distributed} with p
 
 
 
-It is simple to see from~\cref{eq:e-9} that\sidenote{\cref{ex:pois-mgf}}
+It is simple to see from~\cref{eq:e-9} that\marginnote{\cref{ex:pois-mgf}}
 \begin{align*}
 \E{N(t)} &= \lambda t
 & \V{N(t)} &= \lambda t.
@@ -106,7 +106,7 @@ It is simple to see from~\cref{eq:e-9} that\sidenote{\cref{ex:pois-mgf}}
 
 
 Interestingly, we can use~\cref{eq:e-35} to derive the pdf of $A_{k}$ from the Poisson distribution.
-For $k=0$, $\P{N(t) = 0} = e^{-\lambda t}$, and as $A_0=0$ by definition, the RHS\sidenote{RHS := right hand side, LHS := left hand side.} of~\cref{eq:e-35} becomes $1-\P{A_1\leq t}$.
+For $k=0$, $\P{N(t) = 0} = e^{-\lambda t}$, and as $A_0=0$ by definition, the RHS\marginnote{RHS := right hand side, LHS := left hand side.} of~\cref{eq:e-35} becomes $1-\P{A_1\leq t}$.
 Consequently, $\P{A_{1}\leq t} = 1 - e^{-\lambda t}$, hence, by differentiation,  $f_{A_1}(t) = \lambda e^{-\lambda t}$.
 For $k\geq 1$, taking the derivative with respect to~$t$ of the RHS of~\cref{eq:e-9} and at both sides of~\cref{eq:e-35},
 \begin{equation*}
@@ -115,14 +115,14 @@ For $k\geq 1$, taking the derivative with respect to~$t$ of the RHS of~\cref{eq:
 With recursion, we retrieve~\cref{eq:e-37}.
 
 
-\newthought{The family} of random variables $N_\lambda=\{N(t), t\geq 0\}$ is a \recall{Poisson process} with \emph{arrival rate} $\lambda$.\sidenote{A \emph{random process} is a much more complicated mathematical object than a random variable: a process is a (possibly uncountable) set of random variables indexed by time, not just \emph{one} random variable.}
-Once we have $N(t)$, we can define $N(s, t] := N(t)-N(s)$ as the number of customers that arrive in a general time period $(s, t]$.\sidenote{Note that $[0,t]$ is closed at both ends, but $(s,t]$ is open at the left.}
+\newthought{The family} of random variables $N_\lambda=\{N(t), t\geq 0\}$ is a \recall{Poisson process} with \emph{arrival rate} $\lambda$.\marginnote{A \emph{random process} is a much more complicated mathematical object than a random variable: a process is a (possibly uncountable) set of random variables indexed by time, not just \emph{one} random variable.}
+Once we have $N(t)$, we can define $N(s, t] := N(t)-N(s)$ as the number of customers that arrive in a general time period $(s, t]$.\marginnote{Note that $[0,t]$ is closed at both ends, but $(s,t]$ is open at the left.}[2.1cm]
 
 It is important to know that $N_\lambda$ has \recall{stationary and independent increments}.
 Stationarity means that the distributions of the number of arrivals are the same for all intervals of equal length, that is, $N(s,t]$ has the same probability distribution as $N(u, v]$ if $t-s = v-u$.
 Independence means, roughly speaking, that knowing that $N(s,t]= n$, does not help to make any predictions about the value of $N(u, v]$ if the intervals $(s,t]$ and $(u, v]$ do not overlap.
 \cref{eq:e-9} implies a number of useful properties of the Poisson process.
-Next, with small~$o$ notation\sidenote{A function $f(h) = o(h)$ when $f(h)/h \to 0$ as $h\to 0$, e.g., $x^{2} = o(x)$.}, if $t\ll 1$,
+Next, with small~$o$ notation\marginnote{A function $f(h) = o(h)$ when $f(h)/h \to 0$ as $h\to 0$, e.g., $x^{2} = o(x)$.}, if $t\ll 1$,
 \begin{subequations}\label{eq:32}
 \begin{align}
 \P{N( t) = 0} &= e^{-\lambda t} = 1-\lambda  t + o( t), \\
@@ -131,10 +131,10 @@ Next, with small~$o$ notation\sidenote{A function $f(h) = o(h)$ when $f(h)/h \to
   &= 1 - (1-\lambda t) - \lambda t + o(t) = o(t). \label{eq:10}
 \end{align}
 \end{subequations}
-It is also important to know that the reverse of the above holds, that is, a stochastic process with stationary and independent increments and satisfying~\cref{eq:32} is necessarily a Poisson process.\sidenote{We refer to the literature on (mathematical) probability theory for further background.}
+It is also important to know that the reverse of the above holds, that is, a stochastic process with stationary and independent increments and satisfying~\cref{eq:32} is necessarily a Poisson process.\marginnote{We refer to the literature on (mathematical) probability theory for further background.}
 
 
-\newthought{When we merge} two independent Poisson processes $N_{\lambda}$ and $N_{\mu}$, e.g., adults and children entering a shop\sidenote{Or some other feature by which you want to distinguish between customers.}, we obtain a new Poisson process $N_{\lambda +\mu}$ with rate $\lambda + \mu$. To see this, we use the above. For $t\ll 1$,
+\newthought{When we merge} two independent Poisson processes $N_{\lambda}$ and $N_{\mu}$, e.g., adults and children entering a shop\marginnote{Or some other feature by which you want to distinguish between customers.}, we obtain a new Poisson process $N_{\lambda +\mu}$ with rate $\lambda + \mu$. To see this, we use the above. For $t\ll 1$,
 \begin{align*}
 \P{N_{\lambda+\mu}( t) = 0} &= \P{N_{\lambda}( t) = 0} \P{N_{\mu}( t) = 0} \\
   &= (1-\lambda t)(1-\mu t) + o(t) = 1 - (\lambda + \mu)t + o(t), \\
@@ -146,7 +146,7 @@ Moreover, as $N_{\lambda}$ and $N_{\mu}$ have stationary and independent increme
 
 We can also \emph{split}, or \emph{thin}, a stream into several sub-streams.
 For instance, consider a stream of people passing by a shop as a Poisson process $N_\lambda$, and suppose that a customer decides to enter the shop as a Bernoulli distributed rv~$B$, independent of $N_{\lambda}$, with success probability~$p$ and failure probability $q=1-p$.
-Then the process of customers entering the shop is a Poisson process $N_{\lambda p}$ with rate $\lambda p$, because, for $t\ll 1$, from~\cref{eq:32},\sidenote{Why are there $o(t)$ symbols already after the first equality signs?}
+Then the process of customers entering the shop is a Poisson process $N_{\lambda p}$ with rate $\lambda p$, because, for $t\ll 1$, from~\cref{eq:32},\marginnote{Why are there $o(t)$ symbols already after the first equality signs?}
 \begin{align*}
   \P{N_{\lambda p}(t) = 0 } &= \P{N_{\lambda}(t) = 0} +\P{N_{\lambda}(t) = 1}\P{B=0} + o(t)\\
   &= 1- \lambda t + \lambda t q  + o(t) = 1 - \lambda p t + o(t),\\
@@ -156,7 +156,7 @@ Then the process of customers entering the shop is a Poisson process $N_{\lambda
 and $N_{\lambda p}$ has stationary and independent increments because $N_{\lambda}$ is a Poisson process.
 
 \newthought{A final interesting}, and useful, property of the Poisson process is the distribution of the arrivals over an interal $[0,t]$ given that $N(t) = n$, say.
-In fact, if this event is true, the arrivals are $\Unif{[0,t]}$.\sidenote{We write $\Unif{A}$ for the uniform distribution on the set $A$. This set $A$ can be a set of numbers like $\{0, 2, 3\}$ but also an interval like $[0,t]$, as is the case here.}
+In fact, if this event is true, the arrivals are $\Unif{[0,t]}$.\marginnote{\sl We write $\Unif{A}$ for the uniform distribution on the set $A$. This set $A$ can be a set of numbers like $\{0, 2, 3\}$ but also an interval like $[0,t]$, as is the case here.}[-1.5cm]
 \begin{theorem}\label{thr:1}
 Conditional on the event $N(t)=n$, $t>0$, the distribution of the arrival times $\{A_{i}\}_{i=1}^{n}$ is the same as the distribution of the order statistic of~$n$ iid rvs $\sim \Unif{[0,t]}$.
 \end{theorem}

@@ -23,10 +23,10 @@ The five psychiatrists  put forward various suggestions to reduce the waiting ti
   Motivation: Currently one psychiatrist does 9 intakes per week, one does 3, and the three other psychiatrists do only 1.
   This is not a problem during weeks when all psychiatrists are present; however, psychiatrists take holidays, visit conferences, and so on.
   So, if the psychiatrist with the most intakes per week goes on leave, this affects the intake capacity considerably.
-\item Synchronize holidays.\sidenote{Later, with the models of \cref{cha:approximate-models}, we can immediately see that this will not work at best, but otherwise detrimental.}
+\item Synchronize holidays.\marginnote{Later, with the models of \cref{cha:approximate-models}, we can immediately see that this will not work at best, but otherwise detrimental.}
   Motivation: to reduce the variation in the service capacity, the psychiatrists plan their holidays consecutively.
   However, perhaps it is better to work at full capacity or not at all.
-\item Control\sidenote{People often object to such policies because they believe that they have to do more work.
+\item Control\marginnote{People often object to such policies because they believe that they have to do more work.
     However, this is wrong.
     Suppose that 1000 patients per year need treatment.
     This number does not depend on whether they spend time in queue or not.}  the intake capacity as a function of the waiting time.
@@ -36,10 +36,10 @@ The five psychiatrists  put forward various suggestions to reduce the waiting ti
 
 
 We next develop a method to simulate the behavior of the system over time so that we can evaluate the effect of the above suggestions.
-We use simulation, because the mathematical analysis is too hard.\sidenote{In case you  doubt this, try to analyze transient multiserver queueing systems with vacations, of which this is an example.}
+We use simulation, because the mathematical analysis is too hard.\marginnote{In case you  doubt this, try to analyze transient multiserver queueing systems with vacations, of which this is an example.}[1cm]
 
 \newthought{Let us start} with discussing the essentials of simulating of a queueing system.
-The easiest way to construct queueing processes is to `chop up' time in periods\sidenote{The length of these periods depends on context.
+The easiest way to construct queueing processes is to `chop up' time in periods\marginnote{The length of these periods depends on context.
   For the present case, it is appropriate to take weeks.
   For supermarkets perhaps a length of 5 minutes is more appropriate.}
 and develop recursions for the behavior of the queue from period to period.
@@ -69,7 +69,7 @@ Now that we know the number of departures, the number at the end of period~$k$ i
  \L_k = \L_{k-1} -d_k + a_k.
 \end{equation*}
 \end{subequations}
-Like this, if we are given $\L_0$ and numbers $\{a_{k}\}_{k=1}^{n}$ and $\{c_{k}\}_{k=1}^{n}$, we can obtain the numbers $\{L_{k}\}_{k=0}^{n}$ from this recursion.\sidenote{In a sense,~\cref{eq:31} is the $F = m a$ of a queueing system: Given initial conditions, we apply the rule at time $k-1$ to get the state at time~$k$, and so on.}
+Like this, if we are given $\L_0$ and numbers $\{a_{k}\}_{k=1}^{n}$ and $\{c_{k}\}_{k=1}^{n}$, we can obtain the numbers $\{L_{k}\}_{k=0}^{n}$ from this recursion.\marginnote{In a sense,~\cref{eq:31} is the $F = m a$ of a queueing system: Given initial conditions, we apply the rule at time $k-1$ to get the state at time~$k$, and so on.}
 
 
 Of course we are not going to carry out the computations for $\{L_k\}$ by hand.
@@ -183,7 +183,7 @@ However, controlling the service rate as a function of the queue length can impr
 \newthought{The above example} hopefully claries how we can use simulation to obtain insight into a stochastic system behaves and how to control it. We next discuss some general points that need further attention.
 
 In~\cref{eq:31} we assume that jobs that arrive in period~$k$ cannot be served in period~$k$.
-If the situation is such that jobs \emph{can} be served in the same period as they arrive, then~\cref{eq:31} should be changed to\sidenote{~\cref{ex:24}}
+If the situation is such that jobs \emph{can} be served in the same period as they arrive, then~\cref{eq:31} should be changed to\marginnote{~\cref{ex:24}}
 \begin{equation}\label{eq:aap3}
 d_k = \min\{\L_{k-1}+a_{k}, c_k\}.
 \end{equation}
@@ -197,8 +197,8 @@ In the models we consider, we will \emph{not} allow to let jobs wait when there 
 
 The above recursions obviously only construct $\{L_k\}$, i.e., the dynamics of the number of jobs in the system.
 If we also need information about the \recall{sojourn times}, i.e., the time jobs spend in the system, it is necessary to specify the \recall{service discipline}, i.e., a scheduling rule that decides on the order in which jobs in queue are taken into service.
-In this book we assume henceforth that jobs move to the server  in the order in which they arrive.
-This is known as \recall{First-In-First-Out (FIFO)}.\sidenote{\recall{First-Come-First Serve (FCFS)} is also often used.}
+In this book we assume henceforth that jobs move to the server in the order in which they arrive.
+This is known as \recall{First-In-First-Out (FIFO)}.\marginnote{\recall{First-Come-First Serve (FCFS)} is also often used.}
 There are many other scheduling rules, such as Last-In-First-Out; we do not discuss these here.
 
 It is quite remarkable that the computation of the system length process $\{L_{k}\}$ is very simple with~\cref{eq:31}, but it is much harder to compute the sojourn time $J_{k}$ for the jobs arriving in period~$k$.
@@ -228,11 +228,11 @@ Similary, we can take averages over $d_{k}$, $J_k^{-}$ and $J_k^{+}$. The varian
 \newthought{In general, with} recursions like~\cref{eq:31} we can carry out numerous what-if-analyses.
 As another example, a hospital considers to buy a second MRI scanner, because the current one is saturated, as it is used from 8 am to 6 pm, and can certainly not serve the forecasted demand.
 However, if the hospital can identify some extra capacity, it might postpone the purchasing of an additional MRI scanner for a few years.
-Suppose that a percentage of staff is willing to work from 8 pm to 11 pm, say, and that 30\% of the patients\sidenote{Perhaps some staff and patients even prefer to work/have scans in the evening.}
+Suppose that a percentage of staff is willing to work from 8 pm to 11 pm, say, and that 30\% of the patients\marginnote{Perhaps some staff and patients even prefer to work/have scans in the evening.}
 is prepared to come to the hospital for a scan between 8 pm and 11 pm, then the capacity would increase with about $30\% = (3/(18-8))$.
 To see whether this idea is interesting, we can use~\cref{eq:31} to let the computer make a graph of the influence on~$L$.
 Thus, the recursions such as \cref{eq:31} and control rules such as~\cref{eq:103} are the essential elements of any queueing model.
-Once we have the recursions,\sidenote{An intellectually challenging task sometimes.} the computer can compute the performance measures, and then we (humans) have to interpret the results.
+Once we have the recursions,\marginnote{An intellectually challenging task sometimes.} the computer can compute the performance measures, and then we (humans) have to interpret the results.
 
 Such recursion are not limited just to queueing systems. For instance, a common model in population dynamics has this form
 \begin{align*}
@@ -244,7 +244,7 @@ Yet another setting is the reflection of infra-red light by carbon-dioxide.
 The atmosphere is modeled as a sequence of layers, such that per layer the temperature, air density and chemical composition are considered constant.
 These properties determine how much infrared light, which is initially reflected by the surface of the earth, makes it to outer space.
 In each of the layers we need to specify how many infrared photons are transmitted to a higher layer, absorbed, or reflected again to a lower level.
-Thus, people model a physical process as a queueing system in which photons (customers) go from one layer (station) to another layer (station), or are absorbed (leave the network).\sidenote{\url{https://github.com/scienceetonnante/RadiativeForcing/blob/main/RadiativeForcing.py}}
+Thus, people model a physical process as a queueing system in which photons (customers) go from one layer (station) to another layer (station), or are absorbed (leave the network).\marginnote{\url{https://github.com/scienceetonnante/RadiativeForcing/blob/main/RadiativeForcing.py}}
 
 \newthought{Given that formulating} recursions is the key step in making useful models for data science, you should practice with this a lot.
 Here are a large number of exercises to help you make a start with this extremely useful skill.

@@ -15,7 +15,7 @@ Thus, in the rest of the book we will only study queueing systems in steady-stat
 
 
 
-\newthought{In the construction} of discrete-time queueing processes as set out in~\cref{sec:constr-discr-time}, we are given two sequences of iid rvs: the number of arrivals $\{a_k\}$ and the service capacities $\{c_k\}$ per period, and we use these sequences to construct the number of jobs in the system with the recursion\sidenote{\cref{ex:24}} $L_k = [L_{k-1} +a_k- c_{k}]^+$.
+\newthought{In the construction} of discrete-time queueing processes as set out in~\cref{sec:constr-discr-time}, we are given two sequences of iid rvs: the number of arrivals $\{a_k\}$ and the service capacities $\{c_k\}$ per period, and we use these sequences to construct the number of jobs in the system with the recursion\marginnote{\cref{ex:24}} $L_k = [L_{k-1} +a_k- c_{k}]^+$.
 It is clear that the use of the $[\cdot]^{+}$ operator complicates the computation.
 If we drop this, we obtain a related stochastic process $\{Z_k, k=0,1,\ldots\}$ with $Z_k$ given by
 \begin{equation}\label{eq:44}
@@ -29,7 +29,7 @@ It is interesting to express $\{\L_k\}$ in terms of $\{Z_k\}$. From~\cref{eq:44}
  L_k = [L_{k-1} +a_k- c_{k}]^+ = [L_{k-1} +Z_k- Z_{k-1}]^+.
 \end{equation*}
 It follows that  $L_k - Z_{k} = \max\{\L_{k-1} - Z_{k-1}, -Z_k\}$,
-and, by completing the recursion,\sidenote{\cref{ex:l-133}} we obtain
+and, by completing the recursion,\marginnote{\cref{ex:l-133}} we obtain
 \begin{equation}\label{eq:reich1}
  L_k = Z_k - \left(\min_{1\leq i \leq k} Z_i\right)\wedge 0,
 \end{equation}
@@ -123,7 +123,7 @@ To obtain insight into this question, let us suppose that $a_k\sim \Pois{\lambda
 \begin{equation*}
  Z_k = Z_0+N_{\lambda, k} - N_{\mu, k}.
 \end{equation*}
-Writing $Z_0=m$ and with a bit of work, we can show\sidenote{\cref{ex:l-134}} that\sidenote{Note that the difference of two Poisson random variables is not Poisson, in contrast to the sum.}
+Writing $Z_0=m$ and with a bit of work, we can show\marginnote{\cref{ex:l-134}} that\marginnote{Note that the difference of two Poisson random variables is not Poisson, in contrast to the sum.}
 \begin{equation}\label{eq:rw2}
  \PP{m}{Z_k=n}
 = e^{-(\lambda+\mu)k} (\lambda k)^{n-m} \sum_{j=0}^\infty

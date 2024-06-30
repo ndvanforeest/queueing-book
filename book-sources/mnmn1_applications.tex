@@ -83,13 +83,13 @@ With this we can find a formula to convert the demand profile into a \emph{load 
 This is typically not easy since shifts have to satisfy all kinds of restrictions with respect to breaks and durations.  Moreover, shifts can also have different costs: evening shifts are typically  more expensive per hour.
 
 The usual way to solve such covering problems is by means of an integer
-problem. For instance, suppose only 4 \emph{shift plans} are available as shown at the right.\sidenote{\begin{enumerate}
+problem. For instance, suppose only 4 \emph{shift plans} are available as shown at the right.\marginnote{\begin{enumerate}
 \item $++-++$
 \item $+++-+$
 \item $++-+++$
 \item $+++-++$,
 \end{enumerate}
-Shift plans. A $+$ indicates a working hour and $-$ a break of an hour.}
+Shift plans. A $+$ indicates a working hour and $-$ a break of an hour.}[-1cm]
 
 For the optimization, let $x_i$ be the number of shifts of type~$i$ and~$c_i$ the cost of this type.
 Then the problem is to solve $\min \sum_i c_i x_i$,
@@ -155,19 +155,19 @@ plt.savefig("../figures/mm3_vs_mm1.pdf")
 
 \begin{truefalse}
     Suppose $\frac{\lambda}{\mu} = 2$ then we claim that 3 is the minimum number of servers required to make the system stable.
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 Claim: It is always better to have a single fast server than multiple slow servers which together have the same rate.
-    \begin{solution}
+\begin{solution}
     False.
 This depends on the objective.
 The service time at a slow server is longer.
 However, when multiple servers are present, if one server breaks down, service can still continue with the other servers, while when a single fast server fails, everything stops.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}

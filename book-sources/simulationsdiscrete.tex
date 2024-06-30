@@ -62,7 +62,7 @@ To do so, we need a sequence of random integers for~$c$ such that the mean is $\
 The code for this is simple because we don't need to make a graph this time. We just add the next code to the code above.
 \inputminted[firstline=78, lastline=87]{python}{../code/discrete_simulations.py} % meanvar
 The results are $\E L = 0.7$, $\V L = 1.1$ for $\mu=6.3$, and $\E L = 2.2$, $\V L = 5$ for $\mu=6.1$.
-(Here $\E L$ stands for the sample average $n^{-1}\sum_{i=1}^{n} L_{i}$, and likewise for $\V L$.\sidenote{We are in a state of sin here: the mean of a rv is not the same as its sample average.
+(Here $\E L$ stands for the sample average $n^{-1}\sum_{i=1}^{n} L_{i}$, and likewise for $\V L$.\marginnote{We are in a state of sin here: the mean of a rv is not the same as its sample average.
 The strong law of large numbers makes a statement only about the limit; for small sample sizes, the difference can be quite large.})
 Indeed, the mean queue length increases when service capacity becomes tighter.
 
@@ -166,25 +166,25 @@ However, one clue to find the bottleneck station is by looking at the queue leng
 
 \begin{truefalse}
     A queueing system is stable when the arrival rate is not larger than the service rate.
-    \begin{solution}
+\begin{solution}
         False. The condition does not exclude that the arrival rate is the service rate, for which the queue is not stable.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 The scv of a random variable $X$ is the same scv of $\alpha X$ if $\alpha$ a positive scalar.
-    \begin{solution}
+\begin{solution}
         True. However a bit misleading, it is true for all values of $t$.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 The parking meters at the universities are redesigned.
 A study has shown that the average amount of time that individuals need to spend to pay at the parking  meter has gone down.
 Claim: as long as the interarrival distribution stays the same, the average queue length at the parking meter will be smaller.
-    \begin{solution}
+\begin{solution}
         False.  The variance of the time required to pay has an impact on the queue length too.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
@@ -196,13 +196,13 @@ Claim: When $X\sim\Exp{\lambda}$ its scv is larger than 1.
 
 \begin{truefalse}
     Consider a queue with an exponential interarrival distribution and a service time distribution uniform on $[0,A]$. Claim:
-    \begin{equation*}
+\begin{equation*}
         C_s^2 = \frac 13.
-    \end{equation*}
+\end{equation*}
 
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 

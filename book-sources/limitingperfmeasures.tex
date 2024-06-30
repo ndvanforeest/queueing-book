@@ -17,7 +17,7 @@ Recall that these definitions are the most used quantitative measures to express
  \E{\W} = \lim_{n\to\infty} \frac 1 n\sum_{k=1}^n W_{k}.
 \end{equation*}
 Note that this is the limit of waiting times as \emph{observed by arriving jobs}:
- the first job has to wait $W_1$ in queue, the second $W_2$, and so on.\sidenote{ We colloquially say that a statistic based on the sampling of arriving jobs is `as seen by arrivals'.}
+ the first job has to wait $W_1$ in queue, the second $W_2$, and so on.\marginnote{ We colloquially say that a statistic based on the sampling of arriving jobs is `as seen by arrivals'.}
 The \emph{distribution} of the waiting time as seen by arrivals can be found by counting:
 \begin{align}\label{eq:48}
  \P{\W \leq x} &= \lim_{n\to\infty} \frac 1n\sum_{k=1}^n \1{\W_k\leq x}.
@@ -35,10 +35,10 @@ Like~\cref{eq:48}, for the distribution of~$L$,
 
 
 
-\newthought{A related set} of performance measures follows by tracking the system's behavior over time and taking the \emph{time-average}.\sidenote{Now we sometimes say that such performance measures are as `seen by the server'.}
+\newthought{A related set} of performance measures follows by tracking the system's behavior over time and taking the \emph{time-average}.\marginnote{Now we sometimes say that such performance measures are as `seen by the server'.}
 
 Assuming the limit exists, we use~\cref{eq:14} to define the \recall{time-average number of jobs} as
-\sidenote{Even though the symbols are the same, this expectation is not necessarily the same as~\cref{eq:EQ}.}
+\marginnote{Even though the symbols are the same, this expectation is not necessarily the same as~\cref{eq:EQ}.}[0.2cm]
 \begin{equation} \label{eq:46}
  \E\L = \lim_{t\to\infty} \frac 1 t\int_0^t L(s) \d s.
 \end{equation}
@@ -48,7 +48,7 @@ Assuming the limit exists, we use~\cref{eq:14} to define the \recall{time-averag
 \end{equation*}
 %Again, this (time-average) probability need not be the same as what customers see upon arrival.
 
-\newthought{Proving the existence} of the above limits requires a considerable amount of mathematics.\sidenote{See \citet{Asmussen2003} if you are interested.}
+\newthought{Proving the existence} of the above limits requires a considerable amount of mathematics.\marginnote{See \citet{Asmussen2003} if you are interested.}
 Here we sidestep all such fundamental issues, and simply assume that all is well-defined.
 The limiting random variables are known as the \recall{steady-state} or \recall{stationary} limits.
 

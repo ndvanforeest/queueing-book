@@ -11,7 +11,7 @@ There are, however, other reasons to interrupt the server from serving jobs that
 For instance,  when a knife in a cutting machine becomes blunt, an operator has to stop the machine to replace the knife.
 Another example is a medical doctor who  has to make a number of unexpected phone calls between seeing two patients.
 All such small (maintenance) tasks can be carried out in between jobs, but it is often hard to predict when they are required.
-Therefore, the number of jobs\sidenote{Compare this to a batch of jobs.} served between any two tasks\sidenote{And compare a task to a setup.}
+Therefore, the number of jobs\marginnote{Compare this to a batch of jobs.}[-0.2cm] served between any two tasks\marginnote{And compare a task to a setup.}[0.5cm]
 is no longer constant.
 But we know from Sakasegawa's formula that randomness in service times affects queueing times, and we also know from~\cref{eq:60} that the batch size affects the service time.
 Hence, such unplanned tasks must have a negative effect on sojourn times.
@@ -21,13 +21,13 @@ It is important to realize that setups and adjustments are \recall{non-preemptiv
 
 
 In this section we develop a simple model to understand the impact of adjustments on job sojourn times; we use the same notation as in~\cref{sec:setups-batch-proc} and follow the same line of reasoning.
-With this model, we can analyze a number of trade-offs, such doing fewer, but longer adjustments, or planning adjustments instead just waiting until it becomes necessary at an unexpected moment.\sidenote{~\cref{ex:104}} With the model we can make graphs of the sojourn time as a function of adjustment rate, so that we can optimize for the adjustment rate.
+With this model, we can analyze a number of trade-offs, such doing fewer, but longer adjustments, or planning adjustments instead just waiting until it becomes necessary at an unexpected moment.\marginnote{~\cref{ex:104}} With the model we can make graphs of the sojourn time as a function of adjustment rate, so that we can optimize for the adjustment rate.
 
 
 \newthought{Let us write} $F_{i}$ for the Bernouilli rv that, when equal to~$1$, indicates that job~$i$ requires an adjustment, and, when~$0$, the adjustment is not necessary.
 We assume that $\{F_{i}\}$ is a set of iid rvs, distributed as the common rv~$F$ such that $\P{F=1} = p = 1-\P{F=0}$.
 Thus, with constant probability~$p$ an adjustment occurs between any two jobs.
-As a consequence, the number of jobs served between two consequtive adjustments is a geometric rv~$B$ such that $\E{B} = 1/p$, and~$B$ is memoryless.\sidenote{In practice, we measure the average number of jobs $\E B$ served between a number of adjustments, and take $p=1/\E B$.}
+As a consequence, the number of jobs served between two consequtive adjustments is a geometric rv~$B$ such that $\E{B} = 1/p$, and~$B$ is memoryless.\marginnote{In practice, we measure the average number of jobs $\E B$ served between a number of adjustments, and take $p=1/\E B$.}
 We further assume that the adjustment times $\{R_{i}\}$ are iid rvs, distributed as the common rv~$R$ with mean $\E R$ and variance $\V R$.
 Finally, we assume that the net processing times $\{S_{0,i}\}$, $\{R_{i}\}$ and $\{F_{i}\}$ are independent.
 
@@ -62,9 +62,9 @@ The first few exercises demonstrate how to do apply the above, the rest are conc
 
 \begin{truefalse}
     The number of jobs served between two consecutive adjustments follows a Poisson distribution.
-    \begin{solution}
+\begin{solution}
         False.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
@@ -75,9 +75,9 @@ It can however easily be fixed by running through the control checklist, which t
 The Yamazaki breaks down about once a month, but it is much more complicated to fix and takes 3.5 hours.
 The time till a break down is memoryless and the machines have the same service rate.
 Claim: The Yamazaki is better from a queueing perspective.
-    \begin{solution}
+\begin{solution}
         False. Having fewer but larger breakdowns increases the variance more. This is bad from a queueing perspective.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{exercise}\label{ex:l-255}
@@ -156,7 +156,7 @@ Comparing this to the results of~\cref{ex:l-255}, we see that the load becomes s
 \end{exercise}
 
 \begin{exercise}
-The easiest way to derive the expressions for $\E S$ and $\V S$ is to use Adam's and Eve's rule\sidenote{$\V{Y} = \E{\V{Y|X}} + \V{\E{Y|X}}$.}. Try it.
+The easiest way to derive the expressions for $\E S$ and $\V S$ is to use Adam's and Eve's rule\marginnote{$\V{Y} = \E{\V{Y|X}} + \V{\E{Y|X}}$.}. Try it.
 \begin{solution}
 Applying adam's and Eve's is  straightforward, but the details require attention. Using independence where necessary (and allowed by our assumptions),
 \begin{align*}

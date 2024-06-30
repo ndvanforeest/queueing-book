@@ -24,7 +24,7 @@ For generality, we can provide an optional queue level \mintinline{python}{L0} i
 Now we make the capacity schemes.
 The first step is to form an array with~$5$ rows such that each row corresponds to the weekly capacities of each psychiatrist.
 Since python starts numbering at 0, instead of 1, the row with index 0 corresponds to the first psychiatrist.
-We can set all values of the entire row with index 0 with notation like \mintinline{python}{p[0, :]]} where the semicolon refers all indices of the columns.\sidenote{It evokes the dots in mathematical notation like $i = 1, 2, \ldots$} Next, \mintinline{python}{np.ones(n)} makes a row array of just ones. For each psychiatrist, we fill the related row in \mintinline{python}{p} with the appropriate capacity of that specific psychiatrist. The result is a matrix that looks like the one in~\cref{eq:6}.
+We can set all values of the entire row with index 0 with notation like \mintinline{python}{p[0, :]]} where the semicolon refers all indices of the columns.\marginnote{It evokes the dots in mathematical notation like $i = 1, 2, \ldots$} Next, \mintinline{python}{np.ones(n)} makes a row array of just ones. For each psychiatrist, we fill the related row in \mintinline{python}{p} with the appropriate capacity of that specific psychiatrist. The result is a matrix that looks like the one in~\cref{eq:6}.
 \inputminted[firstline=60, lastline=67]{python}{../code/psychiatrists.py} % unbalanced
 
 The next function builds the matrix~\cref{eq:9}
@@ -35,7 +35,7 @@ This function spreads the holidays over week so that we obtain~\cref{eq:11}.
 The operator $\%$ computes the remainder after division, for example $ 17 \% 5 = 2$.
 In the for loop, the variable~$j$ moves one column per iteration, and it cycles over the rows from~$0$ to~$4$.
 The \mintinline{python}{shape[0]} returns the number of columns of a matrix.
-And, finally, the function does not need to return \mintinline{python}{p} because the change is \emph{in-place}.\sidenote{Look on the web what is meant by a change `in place'.} Here we return it so that all functions work in the same way.
+And, finally, the function does not need to return \mintinline{python}{p} because the change is \emph{in-place}.\marginnote{Look on the web what is meant by a change `in place'.} Here we return it so that all functions work in the same way.
 \inputminted[firstline=88, lastline=92]{python}{../code/psychiatrists.py} % spread
 
 In the case of synchronized holidays, we set all capacities in one column to zero, cf.~\cref{eq:19}.
@@ -69,7 +69,7 @@ Note, \mintinline{python}{L.min(axis=0)} computes the minimum queue length per w
 
 
 \newthought{For real life} situations the recursions can become quite intricate.
-A nurse\sidenote{This example is a somewhat simplified case from a bachelor thesis.}
+A nurse\marginnote{This example is a somewhat simplified case from a bachelor thesis.}
 takes blood samples at two departments in a hospital.
 It takes time to walk from one location to another.
 The nurse serves all patients in one location, then moves to the other location, serves all patients there, and walks the first location, and so on.
@@ -116,9 +116,9 @@ plt.savefig("nurses.pdf")
 
 \begin{truefalse}
 If we find the average queue length too large, then we must increase the average service rate to decrease average queue length.
-    \begin{solution}
+\begin{solution}
         False. We can also block jobs.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 

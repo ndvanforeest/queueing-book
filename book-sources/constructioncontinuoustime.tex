@@ -17,18 +17,18 @@ When the next job arrives before $10$ am, this second job has to wait in queue u
 If, however, this second job arrives after 10 am, it finds the server free, so that its service can start right at the moment of arrival.
 
 More generally, suppose we are given an (ordered) sequence of \emph{arrival times} $\{A_{k}\}$ and a set of iid \emph{service times} $\{S_{k}\}$, such that job~$k$ arrives at time $A_{k}$ and needs an amount $S_{k}$ of service.
-Then we can compute the sequence of departure times $\{D_{k}\}$ from the recursions\sidenote{Note that we assume that job~$k$ `reveals' its service time at the moment it arrives.}
+Then we can compute the sequence of departure times $\{D_{k}\}$ from the recursions\marginnote{Note that we assume that job~$k$ `reveals' its service time at the moment it arrives.}
 \begin{align}\label{eq:qc-3}
-\tilde A_{k}&= \max\{A_k, D_{k-1}\}, & D_{k} &= \tilde A_{k} +S_k = \max\{A_{k}, D_{k-1}\} + S_{k},
+\As_{k}&= \max\{A_k, D_{k-1}\}, & D_{k} &= \As_{k} +S_k = \max\{A_{k}, D_{k-1}\} + S_{k},
 \end{align}
-where $\tilde A_{k}$ is the time a job moves from the queue to the server.
+where $\As_{k}$ is the time a job moves from the queue to the server.
 Why is this true?
-The service of job~$k$ cannot start before it arrives, hence,  $\tilde A_k \geq A_k$.
+The service of job~$k$ cannot start before it arrives, hence,  $\As_k \geq A_k$.
 Moreover,  job~$k$ cannot leave the queue before job $k-1$ left the server. Thus, the service of job~$k$ can also not start before $D_{k-1}$.
 
 Once $A_{k}$ and $D_{k}$ are known, we can compute the \recall{sojourn time} and the  \recall{waiting time} as
 \begin{align*}
-\J_k &= D_{k} - A_k, & \W_k &= \tilde A_k - A_k = J_{k} - S_{k};
+\J_k &= D_{k} - A_k, & \W_k &= \As_k - A_k = J_{k} - S_{k};
  \end{align*}
  thus, $\W_{k}$ is the time the job spends in queue (but not at the server), and $\J_{k}$ is the total amount of time job~$k$ spends in the system.
 \cref{fig:waitingtimegg1} shows how the above concepts relate to each other.
@@ -110,7 +110,7 @@ The virtual waiting time process~$V$ is shown by the solid lines with slope~$-1$
  \end{align}
 
 Interestingly, if  $\{X_{k}\}$ and $\{S_{k}\}$ are given, we don't need to first compute $\{A_{k}\}$ and $\{D_{k}\}$  to find the sojourn times and waiting  times. In fact,
-suppose that job $k-1$ has to wait a time $\W_{k-1}$ in queue and then adds its service time $S_{k-1}$ to the waiting time, so that its sojourn time $\J_{k-1} =\W_{k-1}+ S_{k-1}$. If a time $X_k$ elapses between the arrival time of job $k-1$ and~$k$, then job~$k$ has to wait in queue,\sidenote{$[x]^{+} := \max\{x, 0\}$}
+suppose that job $k-1$ has to wait a time $\W_{k-1}$ in queue and then adds its service time $S_{k-1}$ to the waiting time, so that its sojourn time $\J_{k-1} =\W_{k-1}+ S_{k-1}$. If a time $X_k$ elapses between the arrival time of job $k-1$ and~$k$, then job~$k$ has to wait in queue,\marginnote{$[x]^{+} := \max\{x, 0\}$}
 \begin{align}\label{eq:56}
  \W_{k} &= [\J_{k-1} -X_k]^+, & \J_{k} &= \W_{k} + S_{k}, & W_{0} &= 0.
 \end{align}
@@ -128,7 +128,7 @@ The number of arrivals $A(t)$ as a \emph{function of time} $t$ can be computed f
 \begin{equation} \label{eq:2}
  A(t) = \max\{k: A_k \leq t\} = \sum_{k=1}^{\infty}\1{A_k\leq t}.
 \end{equation}
-Observe that the function $t\to A(t)$ is right-continuous\sidenote{A function~$f$ if right-continuous if, for all~$x$, $f(x) = f(x+) := \lim_{y\downarrow x} f(y)$.}.
+Observe that the function $t\to A(t)$ is right-continuous.\marginnote{A function~$f$ if right-continuous if, for all~$x$, $f(x) = f(x+) := \lim_{y\downarrow x} f(y)$.}[-1cm]
 
 In turn, we can retrieve the arrival times $\{A_{k}\}$ from the sequence of numbers $\{A(t)\}$.
 For instance, if we know that $A(s) = k-1$ and $A(t) = k$, then the arrival time $A_k$ of the~$k$th job must lie somewhere in $(s,t]$.
@@ -138,9 +138,9 @@ Specifically,
 \end{equation*}
 And if we have $\{A_{k}\}$,  the inter-arrival times follow from $X_k = A_k - A_{k-1}$. So, with the above recursions and definitions, we can convert into each other the arrival times, the inter-arrival times and the number of arrivals as a function of time. It just depends on what our starting data is to obtain the rest.
 
-Likewise, for the number of jobs $\tilde A(t)$ that departed from the queue up to time~$t$ and and the \emph{departure process} $\{D(t)\}$ we have the relations
+Likewise, for the number of jobs $\As(t)$ that departed from the queue up to time~$t$ and and the \emph{departure process} $\{D(t)\}$ we have the relations
 \begin{align*}
-\tilde A(t) &= \max\{k : \tilde A_k \leq t\}, &  \tilde A_{k} &=\min\{t: \tilde A(t) \geq k\}, \\
+\As(t) &= \max\{k : \As_k \leq t\}, &  \As_{k} &=\min\{t: \As(t) \geq k\}, \\
  D(t) &= \max\{k : D_k \leq t\}, &  D_{k} &=\min\{t: D(t) \geq k\}.
 \end{align*}
 
@@ -150,9 +150,9 @@ Once we have the arrival and departure processes, it is easy to compute the \rec
 \end{equation}
 where $\L(0)$ is the number of jobs in the system at time $t=0$; typically we assume that $\L(0)=0$.
 Recalling that in a queueing system, a job can either be in queue or in service, we distinguish between the number of jobs in the system $\L(t)$, the number of jobs in queue $\QQ(t)$, and the number in service $\Ls(t)$.
-Clearly, $\L(t) = \QQ(t) + \Ls(t)$ and  $\Ls(t) = \tilde A(t) - D(t) = \L(t) - \QQ(t)$.
+Clearly, $\L(t) = \QQ(t) + \Ls(t)$ and  $\Ls(t) = \As(t) - D(t) = \L(t) - \QQ(t)$.
 
-It is important to realize that the queue length process $\{\QQ(t)\}$ at general time moments~$t$ can be quite different from the queue length process $\{ \QQ(A_k-)\}$ as observed by arriving jobs.\sidenote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
+It is important to realize that the queue length process $\{\QQ(t)\}$ at general time moments~$t$ can be quite different from the queue length process $\{ \QQ(A_k-)\}$ as observed by arriving jobs.\marginnote{Observe that we write $A_k-$, and not $A_k$; we need to be careful about left and right limits at jump epochs.}
 
 
 \begin{figure}[t]
@@ -207,15 +207,15 @@ Observe that the arrival and departures times are intertwined.}
 
 Finally, the \recall{virtual waiting time process} $\{V(t)\}$ is the time a job would have to wait if it would arrive at time~$t$.
 In other words, the virtual waiting time is the waiting time observed by jobs arriving virtually (but not in reality).
-To construct\sidenote{~\cref{ex:l-150}} $\{V(t)\}$, we simply draw lines that start at points $(A_k, \J_k)$ and have slope -1, until the lines hit the~$x$-axis.
+To construct\marginnote{~\cref{ex:l-150}} $\{V(t)\}$, we simply draw lines that start at points $(A_k, \J_k)$ and have slope -1, until the lines hit the~$x$-axis.
 Once at $y=0$, the virtual waiting time remains there until an arrival occurs, cf., \cref{fig:waitingtimegg1}.
-Here is the expression\sidenote{See~\cref{ex:l-150}.}
+Here is the expression\marginnote{See~\cref{ex:l-150}.}
  \begin{equation}\label{eq:34}
  V(t)= [\J_{A(t)} - (t-A_{A(t)})]^+;
  \end{equation}
 the ingeneous use of $A(t)$ can take some time to absorb!
 
-\newthought{Finally, we note} that queueing and production-inventory systems are very simmilar, cf., \cref{fig:inv_queue}.\sidenote{In a production-inventory system, a machine is switched on and off to replenish the inventory at a finite production rate.
+\newthought{Finally, we note} that queueing and production-inventory systems are very simmilar, cf., \cref{fig:inv_queue}.\marginnote{In a production-inventory system, a machine is switched on and off to replenish the inventory at a finite production rate.
 This is different from `normal' inventory systems in which replenishements arrive as batches.}
 When a job arrives in the queueing system, the virtual workload~$V(t)$ increases by the service time of the job.
 When a demand arrives in the inventory system, the inventory $I(t)$ decreases by the demand size of the customer.

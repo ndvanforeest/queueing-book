@@ -1,12 +1,4 @@
 \usepackage{classicthesis}
-\usepackage{imakeidx}
-\makeindex[columns=2, title=Index]
-
-% Get the chapter numbers at a good location.
-
-\titleformat{\chapter}[display]%
-  {\relax}{\vspace*{-3\baselineskip}\makebox[\linewidth][r]{\color{halfgray}\chapterNumber\thechapter}}{0pt}%
-  {\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]%
 
 \usepackage{natbib}
 \usepackage[english]{babel}
@@ -14,7 +6,6 @@
 \usepackage{mathtools,amsthm,amssymb,amsmath}
 \usepackage{verbatim}
 \usepackage{enumitem}
-\usepackage{sidenotes}
 \usepackage{ccicons}
 
 \numberwithin{equation}{section}
@@ -22,14 +13,6 @@
 \usepackage{fourier}
 %\usepackage{tgschola}
 \usepackage[T1]{fontenc} % necessary to print >>> correctly.
-
-%\usepackage[a5paper,landscape]{geometry}
-\usepackage{geometry}
-\newgeometry{left=1.8cm,right=1.8cm,top=2.2cm,bottom=3cm,marginparsep=1.2cm,marginparwidth=4.5cm,includemp} %,showframe}
-\savegeometry{tufte}
-\newgeometry{left=3cm,right=3cm,bottom=3cm}
-\savegeometry{normal}
-
 
 \usepackage{pgf}
 \usepackage{tikz}
@@ -52,11 +35,38 @@
 
 \usepackage{etoc}
 
+\opt{solutions}{
+\usepackage{answers}
+\Newassociation{solution}{Solution}{ans}
+\Newassociation{hint}{Hint}{hint}
+\renewcommand{\Hintlabel}[1]{\textbf{h.#1.}}
+\renewcommand{\Solutionlabel}[1]{\textbf{s.#1.}}
+}
+
+\opt{nosolutions}{
+\usepackage{comment}
+\excludecomment{hint}
+\excludecomment{solution}
+}
+
+\opt{check}{
+\usepackage[nosolutionfiles]{answers}
+\Newassociation{solution}{Solution}{ans}
+\Newassociation{hint}{Hint}{hint}
+\renewcommand{\Hintlabel}[1]{\textbf{h.#1.}}
+\renewcommand{\Solutionlabel}[1]{\textbf{s.#1.}}
+}
+
 
 % Widen figure captions
 \usepackage{caption}
 \captionsetup{margin={0cm, -5cm},font={small, sl},labelfont=sc}
+%\captionsetup{margin={0cm, 0cm},font={small, sl},labelfont=sc}
 \captionsetup[figure]{name=Fig.}
+
+\usepackage{sidenotes}
+%\usepackage{marginnote}
+\renewcommand*{\marginfont}{\footnotesize\sl}
 
 
 \usepackage[capitalize]{cleveref}
@@ -101,13 +111,12 @@
 \newtheorem{exercise}{Ex}[section]
 \newtheorem{truefalse}[exercise]{TF}
 \newtheorem{extra}[exercise]{Th}
-%\numberwithin{equation}{section}
 
 
 
 \usepackage{chngcntr}
 \counterwithin{figure}{section}
-\counterwithin*{sidenote}{section}
+%\counterwithin*{marginnote}{section}
 
 
 \newskip\tufteskipamount
@@ -159,7 +168,7 @@
 \newcommand{\1}[1]{\,\mathbb{1}_{#1}} % indicator
 \newcommand{\supp}[1]{\mathrm{supp}\left(#1\right)}
 
-\renewcommand{\TH}{\mathrm{TH}} % indicator
+\renewcommand{\TH}{\mathrm{TH}}
 
 
 \newcommand{\QQ}{Q} % queue length
@@ -168,6 +177,7 @@
 \newcommand{\U}{U} % busy time
 \newcommand{\W}{W} % waiting time (in queue)
 \newcommand{\Ls}{L_s} % number at server
+\newcommand{\As}{\tilde A} % arrival time at server
 \newcommand{\IP}{P}
 \newcommand{\IL}{I}
 

@@ -9,7 +9,7 @@
 
 In this section we establish a set of formulas by which we can compute several performance measures for the single-item inventory systems discussed in~\cref{sec:single-item-invent}.
 With these formulas we can avoid simulation to obtain insight into the performance of the basestock and the $(Q,r)$ inventory control policies as function of the policy parameters.
-However, we will not deal with the $(s,S)$ policy because this is a bit too difficult for these notes.\sidenote{For those interested in a proof of the optimality of $(s,S)$ poliicies and an algorithm to compute the optimal policy parameters see~\citet{foreest23}.}
+However, we will not deal with the $(s,S)$ policy because this is a bit too difficult for these notes.\marginnote{For those interested in a proof of the optimality of $(s,S)$ poliicies and an algorithm to compute the optimal policy parameters see~\citet{foreest23}.}
 % todo: expand with T,S
 
 We need some practical notation.
@@ -22,14 +22,14 @@ and likewise for the amount of out-standing reorders $Q(i, j]$.
 
 
 We assume that the leadtime $L$ is constant and a multiple of the period duration.
-Since the period demand are iid rvs, the rvs $\{D[t-L, t)\}_{k=L+1}^{\infty}$ have the same distribution.\sidenote{Mind, they are not necessarily independent.}
+Since the period demand are iid rvs, the rvs $\{D[t-L, t)\}_{k=L+1}^{\infty}$ have the same distribution.\marginnote{Mind, they are not necessarily independent.}
 Let us write~$F(x)$ for the common cdf $\P{\sum_{i=1}^{L} D_{i} \leq x}$, and let $X\sim F$.
 Occasionally we write $\theta = \E X = L \E D$.
 From~$F$ we can easily obtain the pmf~$f$ and the survivor function $G=1-F$.
 
 
 \newthought{For the basetock} model in discrete time, recall from~\cref{eq:b9} that the start-of-period inventory position $P_{k}$ is always equal to the order-up-to level $S$, the end-of-period inventory position $P_k' = S - D_{k}$, and for the inventory level, $I_{k} = I_{k-1}' + Q_{k-L}$.
-We are going to use these recursions to find expressions for the performance measures when the inventory system has been running for at least one lead time $L$.\sidenote{To get rid of the initial effects.}
+We are going to use these recursions to find expressions for the performance measures when the inventory system has been running for at least one lead time $L$.\marginnote{To get rid of the initial effects.}
 
 The first step is to relate the outstanding orders to the demand.
 \begin{lemma}\label{lem:1}
@@ -75,14 +75,14 @@ where in step 1 we apply~\cref{lem:1} to $Q(1, k-L]$, and the assumption in step
 
 This next theorem, which allows us to properly define inventory level as the rv $I$, follows directly from the above lemmas.
 \begin{theorem}
-The rvs $\{\IL_{k}\}_{k=L+1}^{\infty}$ are identically\sidenote{But not necessary independent}  distributed as the rv $\IL = S - X$ with $X=\sum_{i=1}^{L} D_{i}$.
+The rvs $\{\IL_{k}\}_{k=L+1}^{\infty}$ are identically\marginnote{But not necessary independent}  distributed as the rv $\IL = S - X$ with $X=\sum_{i=1}^{L} D_{i}$.
 \end{theorem}
 \begin{proof}
 As observed earlier, all rvs $D[k-L, k)$  have the same cdf with common rv $X$. As $S$ is constant, the rvs $I_{k} = S - D[k-L, k) \sim S - X$ for all $k\geq L+1$. The same reasoning applies to $I_{k}'$.
 \end{proof}
 
 Now that we have characterized the distribution $I$ in terms of a sum of $L$ iid demands, we can find expressions for the performance measures.
-First, for the ready rate,\sidenote{$I^{+} := [I]^{+} := \max\{I, 0\}$, $I^{-} := [-I]^{+}$.}
+First, for the ready rate,\marginnote{$I^{+} := [I]^{+} := \max\{I, 0\}$, $I^{-} := [-I]^{+}$.}
 \begin{equation}
 \label{eq:5}
 \alpha \stackrel1=  \P{I'\geq 0} \stackrel2= \P{I - D \geq 0} \stackrel3= \P{S-X - D\geq 0} = \P{X+D\leq S},
@@ -92,7 +92,7 @@ Second, by taking expectations in~\cref{eq:c24},  we obtain for the fill rate
 \begin{equation}\label{eq:ic3}
 \beta = \frac{\E{\min\{D, I^{+}\}}}{\E D}.
 \end{equation}
-For the third performance measure, the cycle service level, I have not yet been able to find a simple expression in terms of expectations.\sidenote{I also did not push.}
+For the third performance measure, the cycle service level, I have not yet been able to find a simple expression in terms of expectations.\marginnote{I also did not push.}
 
 
 The mean inventory level is simple,
@@ -167,11 +167,11 @@ To see this, imagine two animals, a squirrel that observes the $(Q,r)$ system at
 Clearly, from the bear's point of view, the system behaves as a basestock system with order-up-to level~$i$, because each period the bear is awake, the inventory position is $i$, and the position just before the bear falls asleep is $i-D$.
 More generally, we can associate a different bear to each posiiton in the set $\{r+1, \ldots r+Q\}$, so that always exactly one bear is awake, and the other bears sleep.
 To combine the statistics as observed by the bears and the statistics as observed by the squirrel, we need to know for each~$i$ the average fraction of periods the inventory position $\IP$ equals $i$.
-For instance, if the squirrel knows\sidenote{We assume that the limit over all sample paths $\{\IP_{i}\}$ exists almost surely, so that we can invoke the strong law of large numbers.}
+For instance, if the squirrel knows\marginnote{We assume that the limit over all sample paths $\{\IP_{i}\}$ exists almost surely, so that we can invoke the strong law of large numbers.}
 \begin{equation*}
 p(i) = \lim_{k\to \infty} \frac{1}{T} \sum_{k=1}^{T}\1{\IP_k = i},
 \end{equation*}
-then it can retrieve the ready rate $\sum_{i=r+1}^{Q+r} p(i) \alpha(i)$ from the ready rate $\alpha(i)$ as seen by bear with order-up-to level $i$.\sidenote{We now need to label the ready rate of the basestock model by the order-up-to level.}
+then it can retrieve the ready rate $\sum_{i=r+1}^{Q+r} p(i) \alpha(i)$ from the ready rate $\alpha(i)$ as seen by bear with order-up-to level $i$.\marginnote{We now need to label the ready rate of the basestock model by the order-up-to level.}
 
 
 \begin{theorem}\label{thr:3}
@@ -179,7 +179,7 @@ Under the $(Q,r)$ policy the inventory position $\IP \sim \Unif{r+1, \ldots, r+Q
 Consequently, $\IL$ is distributed as $\IP-X$.
 \end{theorem}
 \begin{proof}
-For ease take $Q=3, r=0$, so that the inventory position $\IP$ cycles between the levels $1, 2$ and~$3$.\sidenote{The proof is the same for general~$Q$ and~$r$, but needs a bit more notation.}
+For ease take $Q=3, r=0$, so that the inventory position $\IP$ cycles between the levels $1, 2$ and~$3$.\marginnote{The proof is the same for general~$Q$ and~$r$, but needs a bit more notation.}
 We can use level crossing arguments as follows.
 Write $f_{i} = \P{D\in \{i, 3+i, 6+i, \ldots\}}$ for the probability that the period demand is a multiple of~$3$ offset by~$i$, $i=0, 1, 2$.
 Suppose that, at the start of period~$k$, the position $\IP_{k} = 3$.

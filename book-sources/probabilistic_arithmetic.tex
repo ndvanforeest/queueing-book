@@ -208,7 +208,7 @@ Clearly, the print statement in the function is just called once, so \texttt{@ca
 \newthought{We now turn} to building a python class to work in a convenient way with random variables.
 .
 We start with loading a number of modules that provides functionality we certainly do not want to build ourselves; this would be too complicated and too much work.
-We also load the \texttt{typing} module because our code below adds typing information, which means that we specify what type of argument (such as float, or int) is used.\sidenote{In simple scripts I tend not to add typing. However in code that I plan to use at other places I find this extra information helpful.}
+We also load the \texttt{typing} module because our code below adds typing information, which means that we specify what type of argument (such as float, or int) is used.\marginnote{In simple scripts I tend not to add typing. However in code that I plan to use at other places I find this extra information helpful.}
 \begin{minted}[]{python}
 import operator
 from fractions import Fraction
@@ -365,7 +365,7 @@ Subtraction uses  \texttt{\_\_sub\_\_}, and implements it as \texttt{X + (- Y)}.
 \end{minted}
 
 What happens if we would write \texttt{2 + X} to mean that the support of \texttt{X} needs to be shifted two steps to the right?
-\sidenote{We are once again overloading the ~+~ operator.}
+\marginnote{We are once again overloading the ~+~ operator.}
 Actually, we can catch this in our framework by interpreting the number \(2\) as a random variable \(Y\) with all probability mass concentrated on the number \(2\), i.e.
 \(\P{Y=2} = 1\). So, if we convert ints and floats, by means of a function \texttt{convert}, to random variables,  we are done. Observe that we already used \texttt{convert} in \texttt{\_\_add\_\_} and \texttt{\_\_sub\_\_}.
 \begin{minted}[]{python}
@@ -400,7 +400,7 @@ The next two methods enable this functionality for both cases.
 This finishes the \texttt{RV} class.
 
 \newthought{The two remaining} patterns are binary and unary functions.
-To illustrate, finding the pmf of the sum \(Z=X+Y\) of two independent rvs \(X\) and \(Y\) with pmfs \(p\) and \(q\) requires convolution like so.\sidenote{There is a much faster method based on Fast Fourier transforms; we don't discuss that here.}
+To illustrate, finding the pmf of the sum \(Z=X+Y\) of two independent rvs \(X\) and \(Y\) with pmfs \(p\) and \(q\) requires convolution like so.\marginnote{There is a much faster method based on Fast Fourier transforms; we don't discuss that here.}
 \begin{equation*}
 \P{Z=k} = \sum_{i}\sum_j \1{i+j=k} p_i q_{j}.
 \end{equation*}

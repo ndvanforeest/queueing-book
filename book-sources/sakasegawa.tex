@@ -12,7 +12,7 @@ This takes the form
 \begin{equation}\label{eq:7}
  \E{\W} = \frac{C_a^2+C_s^2}2 \frac{\rho^{\sqrt{2(c+1)}-1}}{1-\rho} \frac{\E S}{c},
 \end{equation}
-where $C_a^2 = \V X/(\E X )^2$ and $C_s^2=\V S/(\E S)^2$ are the square coefficient of variation (SCV) of the inter-arrival time and service time, respectively, and the utilization of the station\sidenote{Here is a subtle point.
+where $C_a^2 = \V X/(\E X )^2$ and $C_s^2=\V S/(\E S)^2$ are the square coefficient of variation (SCV) of the inter-arrival time and service time, respectively, and the utilization of the station\marginnote{Here is a subtle point.
 When there are multiple machines, the utilization of each machine need not be equal to $\rho$.
 For instance, if there is a preference to choose the `left-most' machine whenever it is free, then the utilization of this machine is larger than $\rho$.
 Only when the machines have the same speed, and the \emph{routing} is such that each machine receives a fraction $\lambda/c$ of jobs, the machines have the same utilization.}
@@ -34,14 +34,14 @@ not only is $\E\W$ large, it is also extremely \emph{sensitive} to the actual va
 Clearly, such situations must be avoided, and therefore, when trying to improve a queueing system, the first focus should be on reducing~$\rho$.
 
 Second, $\rho = \lambda \E S/c$.
-Thus, when $\rho$ must be made smaller, we have just three options.\sidenote{And not more!}
-We can reduce the arrival rate $\lambda$ of jobs, for instance by blocking demand, or sending it elsewhere such as to another machine.\sidenote{And if customers have a choice, they will take their own measures, simply by going elsewhere.}
+Thus, when $\rho$ must be made smaller, we have just three options.\marginnote{And not more!}
+We can reduce the arrival rate $\lambda$ of jobs, for instance by blocking demand, or sending it elsewhere such as to another machine.\marginnote{And if customers have a choice, they will take their own measures, simply by going elsewhere.}
 We can make $\E S$ smaller by replacing a server with a faster one or by shifting some of the processing steps of a job to other servers, thereby making job sizes smaller.
-Finally, we can add servers, i.e., making $c$ larger.\sidenote{This is precisely what you see in supermarkets.}
+Finally, we can add servers, i.e., making $c$ larger.\marginnote{This is precisely what you see in supermarkets.}
 If technically possible, adapting~$c$ to $\lambda$ when $\E S$ cannot be easily changed is a very effective mechanism to control waiting times.
 
 Third, $\E{\W} \sim C_a^2$ and $\E{\W} \sim C_s^2$, which implies that when job inter-arrival or service times are very variable, $\E\W$ is large.
-Thus, after ensuring that~$\rho$ is sufficiently small, it becomes important to concentrate on reducing on $C_a^2$ and $C_s^2$.\sidenote{It works the other way too: systems with low variability can deal with higher load.
+Thus, after ensuring that~$\rho$ is sufficiently small, it becomes important to concentrate on reducing on $C_a^2$ and $C_s^2$.\marginnote{It works the other way too: systems with low variability can deal with higher load.
 }
 
 Finally, $\E{\W} \sim \E S/c$.
@@ -54,7 +54,7 @@ This says that, from the perspective of a job in queue, average job service time
 % Hence, it is often not possible to directly estimate $C_a^2$ and $C_s^2$ from the information that is available.
 
 % However, when the number of arrivals per period $\{a_n\}$ has been logged for some time, we can use $\{a_n\}$ to estimate~$C_a^2$
-% as\sidenote{This can of course also be used to estimate $C_s^2$.}
+% as\marginnote{This can of course also be used to estimate $C_s^2$.}
 % \begin{equation*}
 % C_a^2 \approx \frac{\tilde \sigma^2}{\tilde \lambda},
 % \end{equation*}
@@ -63,7 +63,7 @@ This says that, from the perspective of a job in queue, average job service time
 % \tilde \lambda = \lim_{n\to\infty} \frac 1n \sum_{i=1}^n a_i,\quad
 % \tilde \sigma^2 = \lim_{n\to\infty} \frac 1 n \sum_{i=1}^n a_i^2 - \tilde \lambda^2.
 % \end{equation*}
-% We derive this results in steps.\sidenote{It is based an argument in~\cite{cox62:_renew_theor}.} If you don't like to extend your knowledge of statistics, you can skip this derivation.
+% We derive this results in steps.\marginnote{It is based an argument in~\cite{cox62:_renew_theor}.} If you don't like to extend your knowledge of statistics, you can skip this derivation.
 
 % First recall some results of earlier sections.
 % Let the inter-arrival time~$X$ have mean $1/\lambda$ and variance $\sigma^2$, so that
@@ -84,7 +84,7 @@ This says that, from the perspective of a job in queue, average job service time
 % \end{equation*}
 % where $N(0,1)$ is a standard normal random variable with
 % distribution $\Phi(\cdot)$. Similarly,
-% for an $\alpha$  yet to be determined,\sidenote{This is a common trick: suppose that there exists a constant to take of the scaling, and then try an extra relation to `ferret out' the scaling constant.}
+% for an $\alpha$  yet to be determined,\marginnote{This is a common trick: suppose that there exists a constant to take of the scaling, and then try an extra relation to `ferret out' the scaling constant.}
 % \begin{equation*}
 % \frac{A(t) -\lambda t}{\alpha \sqrt t} \to N(0,1).
 % \end{equation*}
@@ -153,9 +153,9 @@ True.
 
 \begin{truefalse}
 Claim: For a $G/G/1$ queue, if $\rho=0.95$ then a 5\% increase in the service rate reduces the average waiting time by about a half.
-    \begin{solution}
+\begin{solution}
         True. Suppose for ease that the SCVs don't change when we reduce the load $\rho$ by $5\%$, and that we achieve this load by reducing $\lambda$ with $5\%$ so that $\E S$ remains the same too. Then the only factor that changes in Sakasegawa's formula is $\rho/(1-\rho)$. Now, when $\rho=0.95$, this factor is $0.95/(1-0.95) \approx 20$. When $\rho$ becomes $0.9$, then $\rho/(1-\rho) = 0.9/(1-0.9) \approx 10$. Since $10$ is half of $20$, the reduction in waiting time is roughly a factor 2.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
@@ -214,7 +214,7 @@ Think about the inter-departure time of a machine that produces items every 10 m
 
 \begin{exercise}\label{ex:91}
 In a workplace, when a mechanic has used a specific high precision tool, the tool has to be inspected by a microscope for potential failures.
-The inter-arrival times of the tools at the microscope is $X\sim \Unif{3, 9}]$, and the inspection time~$S$ is such that $\E S = 5$ minutes and $\V S = 4$ minutes squared.
+The inter-arrival times of the tools at the microscope is $X\sim \Unif{[3, 9]}$ minutes, and the inspection time~$S$ is such that $\E S = 5$ minutes and $\V S = 4$ minutes squared.
 Use Sakasegawa's formula to estimate $\E{\W}$.
 Next, when tools would arrive as a Poisson process, what would be $\E\W$.
 Discuss your findings.

@@ -11,11 +11,11 @@ To enhance your understanding, let's use simulation to see how the exponential d
 
 The simulation is based on an internship of one my master's students with the task to evaluate the scheduling system for patients with inflammatory bowel disease (IBD) at a hospital.
 The IBD patients can be characterized as regular and urgent.
-Regular patients required check-ups approximately every six months, whereas urgent patients needed to be seen within one week, i.e., five working days.\sidenote{This procedure has been changed recently; however, the ideas of this case apply much more generally.}
+Regular patients required check-ups approximately every six months, whereas urgent patients needed to be seen within one week, i.e., five working days.\marginnote{This procedure has been changed recently; however, the ideas of this case apply much more generally.}
 Each consultation takes 10 minutes.
 Immediately following a consultation, regular patients scheduled their next visit for approximately six months later.
 There are about 1000 patients in the system, and a working year consist of 200 working days.
-Given that each patient is seen biannually, a physician needed to consult with an average of 10 patients daily.\sidenote{$2\times 1000/200 = 10$.}
+Given that each patient is seen biannually, a physician needed to consult with an average of 10 patients daily.\marginnote{$2\times 1000/200 = 10$.}
 The problem was to design a planning procedure that allowed enough flexibility to meet the time constraints for the urgent patients without leading to idle times for the physicians.
 Of course, new patient intakes occurred, but for ease we assume that the patient population remains constant.
 
@@ -35,14 +35,14 @@ Much less replanning actions are needed, and the probability for no-shows decrea
 \newthought{In the next model} we focus on just the regular patients.
 Assume that the hospital has just~$50$ regular patients.
 Each patient plans the time to the next appointment uniformly on the interval $[0.9 , 1.1]$, independent of previous times and other patients.
-Like this, we model a patient's inter-arrival time between two consecutive appointments as  half a year (100 working days) plus or minus 10 days.\sidenote{$[0.9, 1.1] \times 100 = [90, 110]$}
+Like this, we model a patient's inter-arrival time between two consecutive appointments as  half a year (100 working days) plus or minus 10 days.\marginnote{$[0.9, 1.1] \times 100 = [90, 110]$}
 The question of interest is to estimate the distribution of the inter-arrival times between any two patients \emph{as seen by the planner} of the hospital.
 Of course, when there would be just one patient, this is easy, the planner sees $\sim \Unif{[0.9, 1.1]}$. But what happens for many patients?
 
 We will use simulation to obtain insight into this question.
 The answer will be given in~\cref{fig:unitoexp}.
 Here we present the code to make this figure; it is necessary to understand the algorithms to interpret the figure.
-Hence, I expect you to really read the code.\sidenote{If you don't understand certain commands of python, just consult the web or ChatGPT.}
+Hence, I expect you to really read the code.\marginnote{If you don't understand certain commands of python, just consult the web or ChatGPT.}
 
 \newthought{In python we} nearly always start with loading a set of modules.
 Modules contain specific functionality that not every Python program needs, hence these should only be loaded if required.
@@ -52,13 +52,13 @@ We will not explain commands that are trivial to understand.
 
 \inputminted[firstline=2, lastline=3]{python}{../code/IBD_simulations.py} % modules
 
-To make a pdf file with a plot that looks nice in \LaTeX\, we  use the \mintinline{python}{seaborn} library and provide it with some extra options\sidenote{Such configurations are not algorithmic, so you don't have to memorize this.}, such as good font sizes.\sidenote{While designing a figure, I comment out this code because running \LaTeX\/ slows down the script.}
+To make a pdf file with a plot that looks nice in \LaTeX\, we  use the \mintinline{python}{seaborn} library and provide it with some extra options\marginnote{Such configurations are not algorithmic, so you don't have to memorize this.}[-0.5cm], such as good font sizes.\marginnote{While designing a figure, I comment out this code because running \LaTeX\/ slows down the script.}[0.7cm]
 \inputminted[firstline=9, lastline=24]{python}{../code/IBD_simulations.py} % seaborn
 
 
 The simulation environment will contain \mintinline{python}{num_patients} patients and last for \mintinline{python}{num_periods} half years.
-With \mintinline{python}{default_rng} we can set up a random number generator and by setting a seed\sidenote{Here it is~$3$, but any number would do.}
-we  ensure to always get the same random deviates.\sidenote{A random deviate is a sample taken from a distribution; it is not the same as a random variable.}
+With \mintinline{python}{default_rng} we can set up a random number generator and by setting a seed\marginnote{Here it is~$3$, but any number would do.}
+we  ensure to always get the same random deviates.\marginnote{A random deviate is a sample taken from a distribution; it is not the same as a random variable.}[0.5cm]
 \inputminted[firstline=29, lastline=31]{python}{../code/IBD_simulations.py} % expdata
 
 We next generate a number of inter-arrival times in the following way.
@@ -67,8 +67,8 @@ Row~$k$ of~$X$ corresponds to the inter-arrival times of patient~$k$.
 Each inter-arrival time is $\sim\Unif{[0.9, 1.1]}$.
 With these inter-arrival times, the arrival times for patient~$k$ are $A_{i}^{k} = A_{i-1}^{k} + X_{i}^{k}$, with $A_0^{k}=0$.
 
-The \mintinline{python}{cumsum} along a row\sidenote{Along \mintinline{python}{axis=1}} of a matrix adds up elements one by one along a row.
-\sidenote{The \mintinline{python}{cumsum} of the sequence of numbers $1, 3, 5$ is $1, 4, 9$. Hence,  if we want to implement $A_{0}=0$, we set just set $X_{0}=0$ and keep $X_{1}=3, X_{9}=5$, so that \mintinline{python}{A = [0, 3, 5].cumsum()} expands to $A=[0, 3, 8]$.}
+The \mintinline{python}{cumsum} along a row\marginnote{Along \mintinline{python}{axis=1}} of a matrix adds up elements one by one along a row.
+\marginnote{The \mintinline{python}{cumsum} of the sequence of numbers $1, 3, 5$ is $1, 4, 9$. Hence,  if we want to implement $A_{0}=0$, we set just set $X_{0}=0$ and keep $X_{1}=3, X_{9}=5$, so that \mintinline{python}{A = [0, 3, 5].cumsum()} expands to $A=[0, 3, 8]$.}
 As such, the elements of the first column of \mintinline{python}{A} would be equal to the first column of \mintinline{python}{X}.
 To ensure that the first row of \mintinline{python}{A} is zero, so that all patients start at time~$0$, we set the first column of \mintinline{python}{X} to~$0$.
 However, by setting the first column of inter-arrivals~$X$ to zero, we effectively remove one arrival.
@@ -80,7 +80,7 @@ Thus, we should generate \mintinline{python}{num_periods + 1} of inter-arrival t
 We need an environment to control the plots.
 The \mintinline{python}{fig} object can be thought of as a canvas on which we draw the plots, and \mintinline{python}{axes} is a list of \mintinline{python}{ax} objects, where each \mintinline{python}{ax} represents a single plot within the figure.
 As is apparent from~\cref{fig:unitoexp}, we have a matrix of four \mintinline{python}{ax} objects.
-For easy reference in the code below, we flatten\sidenote{Ask ChatGPT for further explanation.}
+For easy reference in the code below, we flatten\marginnote{Ask ChatGPT for further explanation.}
 the \mintinline{python}{axes} object and unpack it to the four separate objects \mintinline{python}{ax1}, $\ldots$, \mintinline{python}{ax4}.
 \inputminted[firstline=42, lastline=43]{python}{../code/IBD_simulations.py} % expfiguresetup
 
@@ -91,7 +91,7 @@ As we have~$50$ patients, we have~$50$ such rows of dots.
 The for loop adds the dots of each patient to the upper left panel referenced to by \mintinline{python}{ax1}.
 To beautify the plot, we give a few options to the plot command.
 We don't want the dots to be connected by lines, so we set the linestyle \mintinline{python}{ls='None'}.
-The marker style is a dot, the markersize \mintinline{python}{ms=0.2} and the color is blac\textbf{k}.\sidenote{I often use the abbreviations offered by matplotlib as it saves time.}
+The marker style is a dot, the markersize \mintinline{python}{ms=0.2} and the color is blac\textbf{k}.\marginnote{I often use the abbreviations offered by matplotlib as it saves time.}
 \inputminted[firstline=47, lastline=51]{python}{../code/IBD_simulations.py} % plotuniforms
 
 
@@ -186,7 +186,7 @@ Finally, we discuss an important smoothing property of taking expectations. This
 However, if you are not interested in probability theory, skip the rest of the section.
 
 We first prove the lower part of~\cref{fig:unitoexp}.
-Consider iid rvs $\{U_k\}_{k=1}^{\infty}$ such that $U_{k}\sim \Unif{[0,1]}$, and write the order statistic of $\{U_k\}_{i=1}^{n}$ as $0<A^{n}_1 < A^n_2 < \cdots < A_n^{n}<1$.\sidenote{We neglect the probability of simultaneous arrivals; these have probability zero.}
+Consider iid rvs $\{U_k\}_{k=1}^{\infty}$ such that $U_{k}\sim \Unif{[0,1]}$, and write the order statistic of $\{U_k\}_{i=1}^{n}$ as $0<A^{n}_1 < A^n_2 < \cdots < A_n^{n}<1$.\marginnote{We neglect the probability of simultaneous arrivals; these have probability zero.}
 Thus, if the $U_{k}$ represent the arrival times of~$n$ patients, the order statistic represents the ordered sequence of arrivals as seen by the hospital.
 By taking $A_0^{n} = 0, A_{n+1}^n=1$, we define the size of the gaps as seen by the hospital as $X_{k}^{n} = A_k^n - A_{k-1}^{n}$, $k=1, \ldots, n+1$.
 
@@ -254,7 +254,7 @@ As it happens, after having discussed the next topic, this will be easy to answe
 we consider only the day that a patient visits the hospital (the time on a day is of no importance), and assume that there are $C$ days on average between two successive visits.
 For example, suppose the interarrival time $X$ (in days) of a patient to visit the hospital is such that $\P{X=C-1} = \P{X=C} = \P{X=C+1}=1/3$.
 Then, if the process starts on day $0$ and $X = C-1$, the next visit will be on day $C-1$, but if $X=C+1$, the next visit will be on day $1$ of the next half year.
-By looking at the process like this, the patient \emph{moves on a circle} with $C$ states, and with every move the patient moves with probability $1/3$ one state to the left or to the right on the circle, or stays put. We call $C$ the cycle length.\sidenote{There is a subtle, small problem when  the cycle length is $10$ and $\P{X=C-1} = \P{X=C+1} = 1/2$.
+By looking at the process like this, the patient \emph{moves on a circle} with $C$ states, and with every move the patient moves with probability $1/3$ one state to the left or to the right on the circle, or stays put. We call $C$ the cycle length.\marginnote{There is a subtle, small problem when  the cycle length is $10$ and $\P{X=C-1} = \P{X=C+1} = 1/2$.
 As $10$ is a multiple of $2$, the visit happens either on even or odd days.
 By making $\P{X = 0} > 0$ we prevent this behavior.}
 
@@ -289,7 +289,7 @@ Finally, the minimum and the maximum cannot cross after any step.
 All in all, this implies that $\alpha_k(i) \to 1/C$ for all $i$ as $k\to \infty$.
 \end{proof}
 
-Clearly, the proof\sidenote{We might need  some conditions to prevent trivial periodic behavior.} applies to any $C=1, 2, \ldots$
+Clearly, the proof\marginnote{We might need  some conditions to prevent trivial periodic behavior.} applies to any $C=1, 2, \ldots$
 With some additional (technical) effort it can be generalized to the circle $[0, 1)$ on the reals.
 To see how, consider a continuous function $f$ on the unit circle $C$.
 As the circle is compact and $f$ continuous, $f$ achieves its maximum $f(\bar x)$ at $\bar x$, say.
@@ -317,7 +317,7 @@ We can apply this idea term by term, from left to right, and arrive at the concl
 
 \begin{truefalse}
     Consider the following chunk of code, where the $i$th row of $X$ corresponds to the interarrival times of the $i$th patient to a hospital.
-    \begin{minted}{python}
+\begin{minted}{python}
 import numpy as np
 
 rng = np.random.default_rng(3)
@@ -326,20 +326,20 @@ a, b = 0, 3
 X = rng.uniform(low=a, high=b, size=(N, T))
 X[:, 0] = 0
 A = X.cumsum(axis=1)
-    \end{minted}
+\end{minted}
 Claim: the $i$-th row of $A$ contains the $T$ arrival times of the $i$-th patient.
-    \begin{solution}
+\begin{solution}
     B (False).
 The $i$th row of $A$ contains the first $T-1$ number of arrival times of patient $i$ because $A[0] = 0$.
 Hence when $T=8$, $A[:,T]$ corresponds $7$th arrival time of the patients.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse} \textbf{This question is removed; I find it too hard. I just keep it here for the moment to not mess up the numbering.}
 Claim: if the individual interarrival times are iid rvs from a distribution $F$, then in the limit, the interarrival distribution as seen by the server approaches an exponential distribution.
-    \begin{solution}
+\begin{solution}
         False. Consider the case where the individual interarrival distribution is degenerate.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
@@ -348,9 +348,9 @@ Claim: this program prints 24.
 x = [3 * i + 1 for i in range(10)]
 print(x[8])
 \end{minted}
-    \begin{solution}
+\begin{solution}
         False.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
@@ -366,9 +366,9 @@ while True:
 
 print(a.keys())
 \end{minted}
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 
@@ -386,9 +386,9 @@ def doit(a):
 
 print(doit("8"))
 \end{minted}
-    \begin{solution}
+\begin{solution}
         False.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 

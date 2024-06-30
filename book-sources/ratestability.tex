@@ -15,7 +15,7 @@ We first develop the concepts for a queueing process with batch and service size
 
 
 \newthought{We first formalize} the arrival rate and departure rate in terms of the arrival and departure processes $\{A(t)\}$ and $\{D(t)\}$, cf., \cref{sec:constr-gg1-queu}.
-The \recall{arrival rate} is the long-run average number of jobs that arrive per unit time along a sample path, i.e.,\sidenote{This limit does not necessarily exist if $A(t)$ is some pathological function.
+The \recall{arrival rate} is the long-run average number of jobs that arrive per unit time along a sample path, i.e.,\marginnote{This limit does not necessarily exist if $A(t)$ is some pathological function.
 }
 \begin{equation*}
  \lambda = \lim_{t\to\infty} \frac{A(t)}t.
@@ -44,7 +44,7 @@ Assume that $\lambda \in (0, \infty)$. Then, the existence of one of the next tw
 % \end{equation*}
 \end{theorem}
 \begin{proof}
-Observe first that when $A(t)= n$ then\sidenote{\cref{ex:61}} $A_{A(t)} = A_{n}$, and therefore, $A_{A(t)}/A(t) = A_n/n$.
+Observe first that when $A(t)= n$ then\marginnote{\cref{ex:61}} $A_{A(t)} = A_{n}$, and therefore, $A_{A(t)}/A(t) = A_n/n$.
 By assumption at least one of the limits is positive,  so $A(t)$ and $A_{n}$ must increase without bound.
 
 Second, $A_{A(t)}$ is the arrival time of the last job \emph{before} time~$t$, hence $A_{A(t)} \leq t$.
@@ -55,7 +55,7 @@ Therefore, $A_{A(t)} \leq t < A_{A(t)+1}$, hence for $A(t)>0$,
  \end{equation*}
 If $A_n/n \to \lambda^{-1}$, then $t/A(t) \to \lambda^{-1}$, because $A(t) \to \infty \implies A(t)+1)/A(t) \to 1$.
 
-If $A(t)/t \to \lambda$, then on the epochs $A_{k}$ we must also have that $A(A_k)/A_k \to \lambda$.\sidenote{Recall: $A(t)/t \to \lambda$ as $t\to\infty$ $\iff$ $\forall \epsilon > 0: \exists s: \forall t > s : |A(t)/t - \lambda| < \epsilon$.}
+If $A(t)/t \to \lambda$, then on the epochs $A_{k}$ we must also have that $A(A_k)/A_k \to \lambda$.\marginnote{Recall: $A(t)/t \to \lambda$ as $t\to\infty$ $\iff$ $\forall \epsilon > 0: \exists s: \forall t > s : |A(t)/t - \lambda| < \epsilon$.}
 Noting that $A(A_{k}) = k$, it follows that $k/A_{k} \to \lambda$.
 \end{proof}
 
@@ -76,60 +76,40 @@ assuming that this limit exists. This provides us with the relation
 \end{equation*}
 Thus, the service rate $\mu$ of a single server is the \emph{inverse} of $\E S$.
 
-\newthought{The next concept} of importance is \emph{stability}.
-To discuss this properly, we distinguish between three counting functions: the number of arrivals $A(t)$, the number of jobs entering the system $\tilde A(t)$, and the number of departures $D(t)$.
-The difference between $A(t)$ and $\tilde A(t)$ is relevant when we deal with a queueing system in which the server rejects jobs or arriving customers do not wish to join the queue, for whatever reason.
 
-We require the fundamental property that service is \emph{work-conserving}, that is, the server is not idle when there is one (or more) job in the system.\sidenote{Thus, when service is work-conserving, capacity is not wasted when there are jobs in the system}.
 
-Assuming that $\tilde A(t)/t \to \tilde \lambda$, we consider four (intuitively) obvious situations.
-\begin{enumerate}
-\item $\lambda \geq \tilde \lambda > \mu = \delta$. The system overflows because the service capacity cannot keep up with the rate at which jobs enter. Hence, the number of jobs in the system $L(t) \to \infty$. Work-conservation implies that the server is always busy, hence jobs depart at the rate at which they are served.
-\item $\lambda \geq \mu > \tilde \lambda = \delta$. Jobs must be  blocked to prevent the system to explode, but the jobs that enter are (eventually) served.
-\item $\mu$ > $\lambda \geq \tilde \lambda = \delta$.
-There is sufficient capacity to serve all jobs that arrive, but still not all arrivals need not enter the system.
-All accepted jobs are (eventually) served.
-\item $\mu > \lambda = \tilde \lambda = \delta$. All arrivals enter the system and are (eventually) served.
-\end{enumerate}
-To prevent all sorts of pathological situations, we do not consider cases in which $\lambda = \mu = \tilde \lambda$.
+\newthought{With the arrival} and service rate, we define for the single server queue the
+\begin{align*}
+\textrm{Server load } = \rho :=  \lambda \E S=\frac{\lambda}{\mu} = \frac{\E S}{E X},
+\end{align*}
+and the
+\begin{align*}
+\textrm{Server utilization } &= \delta \E S = \frac{\delta}{\mu}.
+\end{align*}
+We need to distinguish between these two concepts when $\lambda> \mu$ or when arriving customers are blocked.
+In the first situation, the queue in front of the server increases beyond bound so that $\lambda > \mu = \delta$.\marginnote{Of course, the departure rate can never exceed the service rate.}
+In the second situation, the blocked jobs do not enter the system, hence are not served, hence $\lambda > \delta$.
+Bear in mind, however, that the load can exceed 1 (when $\lambda > \mu$), while the utilization is always $ \leq 1$.
 
-In view of the above inequalities, we say that a system is \recall{rate-stable} if
+In general we say that a system is \recall{rate-stable} if
 \begin{equation*}
-\tilde \lambda = \delta.
+\lambda = \delta.
 \end{equation*}
 In words: the system is rate-stable whenever in the long run jobs leave the system just as fast as they enter the system.
+As in this case the load and the utilization are equal, we will use these terms interchangeably for rate-stable systems.
+Clearly, for rate-stability, it is necessary that $\lambda \leq \mu$.
 
-Henceforth, we \emph{only} consider queueing systems that fall into cases 2--4, i.e., the system is rate stable and $\mu > \tilde \lambda$.
-Moreover, unless explicitly stated, we assume that the fourth case applies.
-Note that $\lambda = \tilde \lambda$ when $A(t) = \tilde A(t)$, and then we mean by rate-stability that $\lambda = \delta$.
-This holds in particular where there exists an infinite sequence of times $\{T_i\}$,  $T_i\to\infty$, at which the system is empty, i.e., $A(T_i) = D(T_i)$.
-
-
-
-\newthought{With the arrival} and service rate, we define for the single server queue the server \recall{load} as
-\begin{equation*}
-\textrm{Server load } = \rho :=  \lambda \E S=\frac{\lambda}{\mu} = \frac{\E S}{E X}.
-\end{equation*}
-Next, we define the \recall{utilization} as
-\begin{equation*}
-\textrm{Server utilization } = \tilde \lambda \E S = \frac{\tilde \lambda}{\mu},
-\end{equation*}
-as this involves the rate at which work enters the system, and by rate-stability, this is the work that is served.
-When $\lambda = \tilde \lambda$,  the load $\rho$ and the utilization are all equal, and we will use these terms interchangeably.
-However, when $\tilde \lambda < \lambda$  we need to be careful about the difference between load and utilization.
-Note that the load can exceed 1, while the utilization is~$< 1$.
-
-
-It is  easy to generalize the definition for $\rho$.
+It is  easy to generalize the definition for the load.
 When each job contains $\E B$ items each of which requires $\E S$ time to serve, the work per job is $\E S \E B$.
 Similarly, when a server serves, on average, a batch of $\E C$ of items per service time, its service rate is $\E C/\E S$.
 Finally, when the station contains identical~$c$ servers, the station's capacity is~$c$ times are large as that of a single server.
-Thus, in the most general case,
+Thus, in this more general case,
 \begin{equation*}
 \rho := \frac{\lambda \E S}c \frac{\E B}{\E C}.
 \end{equation*}
 The utilization has to change accordingly.
 
+Finaly, we assume that service is \emph{work-conserving}, which means that the server is not idle when there is at least one job in the system.\marginnote{Thus, when service is work-conserving, capacity is not wasted when there are jobs in the system}.
 
 \newthought{We can use} the memoryless property of the inter-arrival times of the $M/G/1$ queue to  show that the expected busy time of the $M/G/1$ satisfies $\E \U = \E S/(1-\rho)$.
 During the service time of the first customer that starts a busy time, an expected number $\lambda \E S$ new jobs arrive.
@@ -138,23 +118,23 @@ Realize further that because inter-arrivals times are memoryless for the $M/G/1$
 
 \begin{truefalse}
     Claim: If for a queueing system $\lim_{t\to\infty}A(t) = \infty$, then the system is not rate stable.
-    \begin{solution}
+\begin{solution}
         False. In any reasonable queueueing system this limit is $\infty$.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
     Claim:  $\lim_{t\to\infty}\frac{A(t)}{t}=\lim_{n\to\infty}\frac{A_n}{n}$.
-    \begin{solution}
+\begin{solution}
         False.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
     Claim: $\lambda = \delta \implies \rho = 1$, hence the queue is not stable.
-    \begin{solution}
+\begin{solution}
         False: $\delta$ is not $\mu$
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{extra}

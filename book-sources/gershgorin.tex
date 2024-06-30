@@ -24,12 +24,12 @@
 %                      \vdots
 %                    \end{pmatrix},
 % \end{align*}
-% and the latter as $\lambda = \gamma + \lambda P$.\sidenote{A similar form can be found for~\cref{eq:98}.}
+% and the latter as $\lambda = \gamma + \lambda P$.\marginnote{A similar form can be found for~\cref{eq:98}.}
 % Clearly, the former is just the transpose of the latter.
 In this final section we concentrate on finding a general condition to ensure that the equation $\lambda = \gamma + \lambda P$ has a solution.
 
 % We remark that, formally speaking, the matrix~$P$ in $v=Pv +h$ is an infinite matrix.
-% Rather than dealing with the ensuing technical complications, we bypass them by restricting the analysis to an $M/M/1/K$ queue under an~$N$-policy, with $K\gg N$ for any~$N$ that can be `reasonable'.\sidenote{What is reasonable depends on the context of course, but $N=1000$ seems ridiculously large for any practical queueing system.}
+% Rather than dealing with the ensuing technical complications, we bypass them by restricting the analysis to an $M/M/1/K$ queue under an~$N$-policy, with $K\gg N$ for any~$N$ that can be `reasonable'.\marginnote{What is reasonable depends on the context of course, but $N=1000$ seems ridiculously large for any practical queueing system.}
 %For ease of writing, we only regard $\lambda = \gamma + \lambda P$.
 
 To start, define iteratively, $\lambda^0 = 0$, $\lambda^n = \gamma + \lambda^{n-1}P$, for $n\geq 1$.
@@ -38,7 +38,7 @@ Then, by substitution, we find
   \lambda^n = \gamma + \lambda^{n-1} P = \gamma + (\gamma + \lambda^{n-2}P) P = \cdots = \gamma \sum_{m=0}^{n-1} P^m,
 \end{align*}
 where $P^0$ as the identity matrix.
-Since~$P$ is a non-negative matrix, $P^n$ is also non-negative for any~$n$, hence, $\sum_{m=0}^n P^m$ is a monotone increasing sequence (of matrices).\sidenote{Formally, non-decreasing sequence.}
+Since~$P$ is a non-negative matrix, $P^n$ is also non-negative for any~$n$, hence, $\sum_{m=0}^n P^m$ is a monotone increasing sequence (of matrices).\marginnote{Formally, non-decreasing sequence.}
 Thus, for $\lambda=\gamma + \lambda P$ to have a (unique) solution, this sum must remain finite as $n\to \infty$.
 
 Now, observe the similarity with $\sum_{i=0}^n x^i$ with $|x| < 1$.
@@ -55,9 +55,9 @@ Consequently, $P^2_{k0} = \sum_{j=0}^M P_{kj}P_{j0} \geq P_{ki}P_{i0} > 0$.
 
 More generally, we say that $M\times M$ matrix~$P$ is \recall{transient} when it is possible to leave the network from any station in at most~$M$ steps.
 In other words, for any station~$j$ there is a sequence of intermediate stations $j_1, j_2, \ldots , j_{M-1}$ such that $P^{M}_{j0} \geq P_{j j_1}P_{j_1 j_2}\cdots P_{j_{M-1}0} > 0$.
-Using this, it is not hard to prove that $P^n \leq  (1-\epsilon)^n$ when~$P$ is transient.\sidenote{\cref{ex:g-3}}
+Using this, it is not hard to prove that $P^n \leq  (1-\epsilon)^n$ when~$P$ is transient.\marginnote{\cref{ex:g-3}}
 
-\newthought{For the second} method, let us make the simplifying assumption that~$P$ is a diagonalizable matrix with~$M$ different eigenvalues.\sidenote{The argument below applies just as well to matrices reduced to Jordan normal form, but adds only notational clutter.}
+\newthought{For the second} method, let us make the simplifying assumption that~$P$ is a diagonalizable matrix with~$M$ different eigenvalues.\marginnote{The argument below applies just as well to matrices reduced to Jordan normal form, but adds only notational clutter.}
 In this case, there exists an invertible matrix~$V$ with the (left) eigenvectors of~$P$ as its rows and a diagonal matrix $\Lambda$ with the eigenvalues of~$P$ on its diagonal such that $ V P = \Lambda V$.
 Hence, premultiplying with $V^{-1}$, $ P = V^{-1}\Lambda V$.
 But then $P^2 = V^{-1}\Lambda V \cdot V^{-1}\Lambda V= V^{-1}\Lambda^2 V$, and in general $P^n = V^{-1}\Lambda^n V$.
@@ -70,7 +70,7 @@ Define the Gerschgorin disk of the~$i$th row of the matrix~$P$ as the disk in th
 B_i=\left\{z\in \mathbb{C};  |z-p_{ii}|\leq \sum_{j\neq i} |p_{i j}| \right\}.
 \end{equation*}
 In words, this is the set of complex numbers that lies within a distance $\sum_{j\neq i} |p_{i,j}|$ of the point $p_{i,i}$.
-Next, assume for notational simplicity that for each row~$i$ of~$P$ we have that $\sum_{j} p_{i j}<1$.\sidenote{Otherwise apply the argument to $P^M$.}
+Next, assume for notational simplicity that for each row~$i$ of~$P$ we have that $\sum_{j} p_{i j}<1$.\marginnote{Otherwise apply the argument to $P^M$.}
 Then this implies for all~$i$ that
 \begin{equation*}
 1> \sum_{j=1}^M p_{i j} =  p_{ii} + \sum_{j\neq i} p_{i j}.

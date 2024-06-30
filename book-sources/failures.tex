@@ -7,7 +7,7 @@
 
 In~\cref{sec:setups-batch-proc,sec:non-preempt-interr} we assumed that servers are never interrupted while serving a job.
 However, this assumption is not always satisfied, for instance, a machine may fail in the midst of processing of a job.
-In this section, we develop a model\sidenote{There is not much point in combining the models of~\cref{sec:setups-batch-proc}--\cref{sec:preempt-interr-serv} into one large model.
+In this section, we develop a model\marginnote{There is not much point in combining the models of~\cref{sec:setups-batch-proc}--\cref{sec:preempt-interr-serv} into one large model.
   For instance, when a machine can be setup, while a part is being repaired, there may not be time lost on the setup.
   All depends on the specific strategies to combine outages.}
 to compute the influence on the mean waiting time of such \emph{preemptive outages}, again based on Sakasegawa's formula for the $G/G/1$ queue.
@@ -18,7 +18,7 @@ Just as in~\cref{sec:non-preempt-interr}, we only have to derive expressions for
 
 We assume that a break down can occur at any moment during a job's service time.
 The repair times $\{R_i\}$ are a set of iid rvs, distributed as the common rv~$R$ and have mean $\E R$ and finite second moment $\E{R^{2}}$.
-Supposing that~$N$ interruptions occur during the net job service time $S_0$, the effective service time becomes\sidenote{In an insurance context, if we interpret $\{R_i\}$ as a set of claims, then $\sum_{i=1}^N R_i$ is the total claim size of~$N$ claims.
+Supposing that~$N$ interruptions occur during the net job service time $S_0$, the effective service time becomes\marginnote{In an insurance context, if we interpret $\{R_i\}$ as a set of claims, then $\sum_{i=1}^N R_i$ is the total claim size of~$N$ claims.
 Likewise, in an inventory system, this sum is the total demand of~$N$ customers.}
 \begin{equation}\label{eq:f1}
   S= S_0 + S_N = S_0 + \sum_{i=1}^N R_i.
@@ -28,13 +28,13 @@ In general,  $N$ is a random number, so we need to adjust for this in the comput
 
 \newthought{It is common} to assume that the time between two interruptions is memoryless with mean $1/\lambda_f$, where $\lambda_f$ is the \emph{failure rate}.
 % Then, if the net service time $S_0$ is a constant, the expected number of failures $\E N$ is $\lambda_f S_0$.
-% More generally, if $S_0$ is also a random variable, we find\sidenote{~\cref{ex:f-3}} that $\E N =\lambda_f \E{S_0}$.
+% More generally, if $S_0$ is also a random variable, we find\marginnote{~\cref{ex:f-3}} that $\E N =\lambda_f \E{S_0}$.
 
 Defining the mean time to fail as $m_{f} = 1/\lambda_f$, then the  \emph{availability} is given by
 \begin{equation*}
  A:=\frac{m_f}{m_f + \E R},
 \end{equation*}
-from which follows  easily that\sidenote{\cref{ex:80}}
+from which follows  easily that\marginnote{\cref{ex:80}}
 \begin{equation}\label{eq:91}
 A=(1+\lambda_f \E R)^{-1}.
 \end{equation}
@@ -55,11 +55,11 @@ With this expression for the expectted effective servie, the load becomes
 \end{equation*}
 Clearly, $A\in (0,1)$, hence the load increases due to failures.
 
-\newthought{With some work}, we obtain\sidenote{\cref{ex:f-4}} from~\cref{eq:f1},
+\newthought{With some work}, we obtain\marginnote{\cref{ex:f-4}} from~\cref{eq:f1},
  \begin{align}\label{eq:f2}
 \E S &= (1+\lambda_f \E R) \E{S_0}, & \V{S} &= \frac{\V{S_0}}{A^2} + \lambda_f \E{R^2} \E{S_0}.
  \end{align}
-By assuming the repair times are exponentially distributed, it is possible to find a neat expression for the scv of the service times\sidenote{\cref{ex:l-161}}
+By assuming the repair times are exponentially distributed, it is possible to find a neat expression for the scv of the service times\marginnote{\cref{ex:l-161}}
 \begin{equation}\label{eq:f3}
  C_s^2 = C_0^2 + 2 A(1-A) \frac{\E{R}}{\E{S_0}},
 \end{equation}
@@ -84,9 +84,9 @@ Then all steps in the computation below are correct:
 \begin{truefalse}
 Assume that server failures are memoryless and happen at a rate of $6$ per hour. Moreover, assume that the expected amount of time to fix a failure is $18$ minutes. An investment can be made which will result in a failure rate of $18$ per hour and an expected amount of repair time of $6$ minutes per failure.
 Claim: This is a good investment.
-    \begin{solution}
+\begin{solution}
         True. The service time is less variable.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 

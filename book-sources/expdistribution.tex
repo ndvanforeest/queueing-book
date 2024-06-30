@@ -17,7 +17,7 @@ We say that a random variable~$X$ is \recall{exponentially distributed} with mea
 \begin{equation*}
  \P{X \leq t} = 1- e^{-\lambda t},
 \end{equation*}
-and then we write $X\sim \Exp{\lambda}$. The following properties hold:\sidenote{~\cref{ex:lambda}--~\cref{ex:11}}
+and then we write $X\sim \Exp{\lambda}$. The following properties hold:\marginnote{~\cref{ex:lambda}--~\cref{ex:11}}
 \begin{subequations}
   \begin{align}
   \E X &= \lambda^{-1},  &  %\label{eq:24}\\
@@ -34,14 +34,14 @@ and then we write $X\sim \Exp{\lambda}$. The following properties hold:\sidenote
 \end{equation*}
 In words, the probability that~$X$ is larger than some time $s+t$, conditional on it being larger than a time~$s$, is equal to the probability that~$X$ is larger than~$t$.
 Stated differently, even given that~$X$ did not occur before~$s$, the probability that it takes~$t$ time units more to occur, is the same as if we did not have to wait for~$s$ time units to pass.
-The remarkable fact is he reverse--when -a continuous memoryless random variable is memoryless it is exponential---can also be proven, but that is harder\sidenote{\citet[Appendix 3]{yushkevich69:_markov_proces}}.
+The remarkable fact is he reverse--when -a continuous memoryless random variable is memoryless it is exponential---can also be proven, but that is harder\marginnote{\citet[Appendix 3]{yushkevich69:_markov_proces}}.
 
-The characteristic timescales we consider in queueing theory range from minutes to a week.\sidenote{And of course there are exceptions.}
+The characteristic timescales we consider in queueing theory range from minutes to a week.\marginnote{And of course there are exceptions.}
 On these timescales it often turns out that it is reasonable to model inter-arrival times of jobs as memoryless, hence exponentially distributed.
 For instance, if~$X$ is the arrival time of the next patient with a broken arm at the emergency room of a hospital, what can we say about~$X$ when we know that an hour earlier a patient came in with broken arm?
 Not much, as most of us will agree.
 
-However, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s=t = 100$ years. Then $\P{X>100}$ was small, but not zero, but $\P{X>200 \given X>100} = 0$.%\sidenote{Even if you believe that Elvis Presley is still alive.}
+However, the life span of human beings is not memoryless: take~$X$ as the life span of an arbitrary person born in 1880, and $s=t = 100$ years. Then $\P{X>100}$ was small, but not zero, but $\P{X>200 \given X>100} = 0$.%\marginnote{Even if you believe that Elvis Presley is still alive.}
 
 
 \newthought{There is a} close link between the Poisson process~$N$ and the exponential distribution.

@@ -7,21 +7,21 @@
 \label{sec:mm1}
 
 
-In this section we develop many different queueing models by making judicious choices for $\lambda(n)$, $\tilde \lambda(n)$ and $\mu(n)$ for the level-crossing equations~\cref{eq:25}.
+In this section we develop many different queueing models by making judicious choices for $\lambda(n)$, $\lambda^{+}(n)$ and $\mu(n)$ for the level-crossing equations~\cref{eq:25}.
 We first discuss several models, then we sketch an algorithm which allows to compute the performance measures for the general case.
 We assume that a system that does not block arrivals in some way is stable; a systems that blocks demand is stable anyway.
 Note that it is much more important to understand how to specify the correct level-crossing equations than to derive closed form expressions for the performance measures.
 
-In the models below we allow $\lambda(n)$ and $\mu(n)$ to depend on the number~$n$ in the system, but such that, given~$n$, the inter-arrival and service times should be exponentially distributed, that is,\sidenote{This very general queueing systems is sometimes written as the $M(n)/M(n)/1$ queue.}
+In the models below we allow $\lambda(n)$ and $\mu(n)$ to depend on the number~$n$ in the system, but such that, given~$n$, the inter-arrival and service times should be exponentially distributed, that is,\marginnote{This very general queueing systems is sometimes written as the $M(n)/M(n)/1$ queue.}
 \begin{align*}
   X|L=n &\sim \Exp{\lambda(n)}, & S|L=n &\sim \Exp{\mu(n)}.
 \end{align*}
-As  in the general case arrivals need not enter, we consider $\tilde \lambda$ rather than $\lambda$ in the next equations:
+As  in the general case arrivals need not enter, we consider $\lambda^{+}$ rather than $\lambda$ in the next equations:
 \begin{align*}
-  \P{\L(t+\Delta t) = n+1 \given \L(t) = n } &= \tilde \lambda(n) \Delta t + o(\Delta t), \quad n\geq 0,\\
+  \P{\L(t+\Delta t) = n+1 \given \L(t) = n } &= \lambda^{+}(n) \Delta t + o(\Delta t), \quad n\geq 0,\\
   \P{\L(t+\Delta t) = n-1 \given \L(t) = n } &= \mu(n) \Delta t + o(\Delta t), \quad n \geq 1.
 \end{align*}
-Below, when all arrivals are accepted, we write $\tilde \lambda = \lambda$, but otherwise, we use~$\tilde \lambda$.
+Below, when all arrivals are accepted $\lambda^{+} = \lambda$, and then we just write $\lambda(n)$, but otherwise, we use~$\lambda^{+}$.
 
 
 \newthought{The $M/M/1$ queue} has  a constant arrival and service rate so that we take
@@ -38,7 +38,7 @@ p(n) &= (1-\rho)\rho^{n}, \quad n \geq 0.
 \end{align}
 
 It is now easy to compute the most important performance measures.
-The load and the utilization are equal since all jobs are accepted, hence served.  With a bit of algebra,\sidenote{\cref{ex:34}}
+The load and the utilization are equal since all jobs are accepted, hence served.  With a bit of algebra,\marginnote{\cref{ex:34}}
 \begin{align}\label{eq:el}
 \rho &= \frac{\lambda}{\mu}, & \E{\Ls} &= \rho, \\
   \E \L &= \frac \rho{1-\rho}, & \P{\L> n} &= \rho^{n+1},
@@ -55,7 +55,7 @@ To model this, set
 \begin{align*}
 \lambda(n) &= \lambda, & \mu(n) &= \mu \min\{n, c\}.
 \end{align*}
-It is possible\sidenote{\cref{ex:7}} to derive closed form expressions for $\E \QQ$ and $p(n)$, but I don't find them really useful.
+It is possible\marginnote{\cref{ex:7}} to derive closed form expressions for $\E \QQ$ and $p(n)$, but I don't find them really useful.
 It is much easier to use the code for the $M/M/c/K$ below, and compute the performance measures for various large values for $K$.
 When $K$ is so large that the measures hardly change, then for all practical purposes, $\P{L=K}$ is negligible.
 
@@ -63,26 +63,26 @@ Still, two measures are particularly simple:
 \begin{align*}
   \rho & = \frac{\lambda}{ c\mu}, & \E{\Ls} &\stackrel1= \sum_{n=0}^{\infty}\min\{n,c\} p(n) \stackrel2= \frac{\lambda}\mu,
 \end{align*}
-where 1 shows how to compute $\E L_{S}$ as an expectation, and 2 follows from Little's law.\sidenote{Recall, jobs spend an average time $\E S$ in service, and jobs arrive at rate $\lambda$ at the servers, hence $\lambda \E S$ must be number of jobs at some server.}\sidenote{Note that $\E{\Ls} \neq \rho$.}
+where 1 shows how to compute $\E L_{S}$ as an expectation, and 2 follows from Little's law.\marginnote{Recall, jobs spend an average time $\E S$ in service, and jobs arrive at rate $\lambda$ at the servers, hence $\lambda \E S$ must be number of jobs at some server.}[-2.2cm]\marginnote{Note that $\E{\Ls} \neq \rho$.}
 
 
 
 \newthought{The $M/M/1/K$ queue} blocks jobs when $L\geq K$.
-We can implement this by taking\sidenote{Note how $\lambda$ and $\tilde \lambda$ relate.}
+We can implement this by taking\marginnote{Now $\lambda(n) \neq \lambda^{+}(n)$.}
 \begin{align*}
-\tilde \lambda(n) &= \lambda \1{n < K}, & \mu(n) &= \mu.
+\lambda^{+}(n) &= \lambda \1{n < K}, & \mu(n) &= \mu.
 \end{align*}
-This gives $\lambda p(n) = \mu p(n+1)$ for $n<K$, and $p(n) = 0$ for $n>K$ because $\tilde \lambda(n) = 0$ for $n\geq K$.
-Thus, in general, $\tilde \lambda(n) p(n) = \mu(n+1)p(n+1)$, from which follows right away that
+This gives $\lambda p(n) = \mu p(n+1)$ for $n<K$, and $p(n) = 0$ for $n>K$ because $\lambda^{+}(n) = 0$ for $n\geq K$.
+Thus, in general, $\lambda^{+}(n) p(n) = \mu(n+1)p(n+1)$, from which follows right away that
  \begin{align*}
 \rho &= \frac{\lambda}{\mu}, & p(n) &= \frac{1-\rho}{1-\rho^{K+1}} \rho^n.
 \end{align*}
 
 
 There is a subtle point here to make.
-When the system contains $K$ jobs, the rate at which jobs arrive at the system is $\lambda (K) = \lambda$ because jobs still \emph{arrive} as a Poisson process, but the rate at which the jobs \emph{enter} is $\tilde \lambda(K)= 0$ Consequently,
+When the system contains $K$ jobs, the rate at which jobs arrive at the system is $\lambda (K) = \lambda$ because jobs still \emph{arrive} as a Poisson process, but the rate at which the jobs \emph{enter} is $\lambda^{+}(K)= 0$ Consequently,
 \begin{equation*}
-\lambda \pi(K) = \lambda(K) p(K) \neq \tilde \lambda(K) p(K) = 0.
+\lambda \pi(K) = \lambda(K) p(K) \neq \lambda^{+}(K) p(K) = 0.
 \end{equation*}
 Thus, since $\lambda(K) = \lambda$,  we still have that $\pi(K) = p(K)$. By PASTA, the \emph{fraction} of jobs rejected is therefore equal to $p(K)$.
 Moreover, since jobs are blocked, the utilization is no longer equal to the load:
@@ -93,16 +93,16 @@ Moreover, since jobs are blocked, the utilization is no longer equal to the load
 
 \newthought{The $M/M/c/K$ queue} is a multiserver queue with blocking and is a immediate combination of the $M/M/c$ and $M/M/1/K$ queue:
 \begin{align*}
-\tilde \lambda(n) &= \lambda\1{n<K}, &\mu(n) &= \mu \min\{n, c\}.
+\lambda^{+}(n) &= \lambda\1{n<K}, &\mu(n) &= \mu \min\{n, c\}.
 \end{align*}
 
-\newthought{The $M/M/c/c$ queue} blocks jobs when all of its~$c$ servers are occupied.\sidenote{This queueing model is also known as the Erlang~$B$ model.}
-Thus, we take\sidenote{Why is it not necessary to write $\mu(n) = \mu \min\{c, n\}$?}
+\newthought{The $M/M/c/c$ queue} blocks jobs when all of its~$c$ servers are occupied.\marginnote{This queueing model is also known as the Erlang~$B$ model.}
+Thus, we take\marginnote{Why is it not necessary to write $\mu(n) = \mu \min\{c, n\}$?}[1cm]
 \begin{align*}
-\tilde \lambda(n) &= \lambda\1{n<c}, & \mu(n) &= n \mu.
+\lambda^{+}(n) &= \lambda\1{n<c}, & \mu(n) &= n \mu.
  \end{align*}
 This queueing system is often used to determine the number of beds needed by a hospital: the beds act as servers and the patients as jobs.
-Given the arrival rate of patients, and the average time they occupy a bed\sidenote{i.e., the expected service time}, the problem is to find the number of beds~$c$ such that the probability $p(c)$ to block a patient is less than some threshold, $1\%$ say.
+Given the arrival rate of patients, and the average time they occupy a bed\marginnote{i.e., the expected service time}, the problem is to find the number of beds~$c$ such that the probability $p(c)$ to block a patient is less than some threshold, $1\%$ say.
 For hospitals it is reasonable to assume Poisson arrivals since patients arrive independently from a large population.
 Then, by PASTA, we conclude that indeed $\pi(c) = p(c)$, in other words, the blocked fraction is equal to the fraction of time $p(c)$ during which all beds are occupied.
 As for the service times, there are often many patients in a hospital, and they have many different reasons why they occupy a bed.
@@ -125,7 +125,7 @@ Therefore,
 \begin{align*}
 \lambda(n)&=\lambda, & \mu(n) &= n \mu.
 \end{align*}
-By taking the limit $c\to \infty$ in the expressions of the $M/M/c$ queue\sidenote{Or the $M/M/c/c$ queue.} we get
+By taking the limit $c\to \infty$ in the expressions of the $M/M/c$ queue\marginnote{Or the $M/M/c/c$ queue.} we get
 \begin{align*}
   p(n) &= e^{-\lambda/\mu} \frac{(\lambda/\mu)^n}{n!}, & \E Q&=0, & \E \L = \E \Ls = \frac \lambda \mu.
 \end{align*}
@@ -134,7 +134,7 @@ We mention in passing---but do not prove it---that the same results also hold fo
 
 \newthought{With a finite calling population} the number of jobs is fixed, $N$ say.
 This model is useful to analyze repair systems and inventory systems of spare parts.
-To see this, consider a factory with~$N$ machines and~$c$ mechanics.\sidenote{When  $c=N$ we obtain the Ehrenfest model of diffusion, which is used to provide some insight into the second law of thermodynamics.}
+To see this, consider a factory with~$N$ machines and~$c$ mechanics.\marginnote{When  $c=N$ we obtain the Ehrenfest model of diffusion, which is used to provide some insight into the second law of thermodynamics.}
 A machine can be in one of two states: working or failed.
 When a machine breaks down, it moves to the repair department and waits until it is repaired.
 When~$n$ machines are in repair, there are $N-n$ machines still working.
@@ -144,10 +144,10 @@ we obtain
 \begin{align*}
   \lambda(n) &= \lambda (N-n), & \mu(n) = \mu \min\{n, c\}.
 \end{align*}
-Since jobs are not lost: $\tilde \lambda(n) = \lambda(n)$.
+Since jobs are not lost: $\lambda^{+}(n) = \lambda(n)$.
 It's easy to modify the code below, therefore it's easy to obtain numerical answers.
 
-% In case $c=1$, the probabilities become \sidenote{~\cref{ex:l-247}}
+% In case $c=1$, the probabilities become \marginnote{~\cref{ex:l-247}}
 % \begin{align*}
 %  p(n)  &= \frac{N!}{(N-n)!}\frac{\rho^n}{G}, & G &= \sum_{n=0}^N \rho^n \frac{N!}{(N-n)!}.
 % \end{align*}
@@ -157,13 +157,13 @@ It's easy to modify the code below, therefore it's easy to obtain numerical answ
 \newthought{A customer balks} when the customer finds the queue too long, hence decides not to join.
 A simple example with customer balking is to take,
  \begin{align*}
-\tilde \lambda(n) &= \lambda [K-n]^{+}, &  \mu(n)&=\mu.
+\lambda^{+}(n) &= \lambda [K-n]^{+}, &  \mu(n)&=\mu.
 \end{align*}
 
 Balking is not necessarily the same as blocking.
-In the latter case, $\tilde \lambda(n)= \lambda \1{n < K}$; in the former case, a fraction of the customers may already choose not the join the system at a lower level than~$K$.
+In the latter case, $\lambda^{+}(n)= \lambda \1{n < K}$; in the former case, a fraction of the customers may already choose not the join the system at a lower level than~$K$.
 
-As the steady-state probabilities depend heavily on the form of $\tilde \lambda(n)$ and $\mu(n)$, we use the recursion~\cref{eq:25} and the code below to compute the performance measures.
+As the steady-state probabilities depend heavily on the form of $\lambda^{+}(n)$ and $\mu(n)$, we use the recursion~\cref{eq:25} and the code below to compute the performance measures.
 
 
 \newthought{The most general} case can only be approached with numerical methods.

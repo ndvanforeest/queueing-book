@@ -6,15 +6,15 @@
 \label{sec:setups-batch-proc}
 
 In some cases, machines have to be setup before they can start producing items.
-Consider, for instance, a machine that paints red and blue items.\sidenote{In realistic problems there can be tens of families.}
+Consider, for instance, a machine that paints red and blue items.\marginnote{In realistic problems there can be tens of families.}
 When the machine requires a color change, it may be necessary to clean up the machine, which takes time.
 Another example is an oven that needs a temperature change when different item types require different production temperatures.
-Service operations form another setting with setup times: when servers (personnel) have to move from one part of a building to another, the time spent moving cannot be spent on serving customers.\sidenote{Often, the setup time depends on the sequence in which the families are produced, for example, a switch in color from white to black might take less cleaning time than from black to white.
-The problem then becomes to determine a production sequence that minimizes the sum of the setup times to produce the families, and then find suitable batch sizes to minimize the average waiting times.}
+Service operations form another setting with setup times: when servers (personnel) have to move from one part of a building to another, the time spent moving cannot be spent on serving customers.\marginnote{Often, the setup time depends on the sequence in which the families are produced, for example, a switch in color from white to black might take less cleaning time than from black to white.
+The problem then becomes to determine a production sequence that minimizes the sum of the setup times to produce the families, and then find suitable batch sizes to minimize the average waiting times.}[-1.5cm]
 
 
 In all such cases, the setups consume a significant amount of time; in fact, setup times of an hour or longer are not uncommon.
-To prevent overloading the server, it is necessary to produce in batches such that a server first processes a batch of jobs of one type\sidenote{Producing one type of job is often called a `run'.}, then performes a setup to serve a batch of another type, and so on.
+To prevent overloading the server, it is necessary to produce in batches such that a server first processes a batch of jobs of one type\marginnote{Producing one type of job is often called a `run'.}[2cm], then performes a setup to serve a batch of another type, and so on.
 
 Here we use Sakasegawa's formula to model the effect of change-over, or setup, times on the average sojourn time of jobs.
 In the main text we provide a list of elements required to compute $\E J$, in~\cref{ex:103} we illustrate in detail how to carry out the computations.
@@ -29,7 +29,7 @@ Finally, setup times are iid and have mean $\E R$ and variance $\V R$, and are a
 
 A job's sojourn time in the \emph{entire} system is built up as follows.
 First, we assemble jobs into batches of the same color.
-For simplicity, we take~$B$ constant and the same for both colors.\sidenote{In general, $B$ should depend on the arrival rate of the job type when the arrival rates vary considerably between the famlilies.}
+For simplicity, we take~$B$ constant and the same for both colors.\marginnote{In general, $B$ should depend on the arrival rate of the job type when the arrival rates vary considerably between the famlilies.}
 Once~$B$ jobs of one color arrived, the batch is complete, and the \emph{batch enters} a queue; thus we consider a queue with batches, not single jobs.
 After some time the batch reaches the head of the queue, and its service starts as soon as the machine becomes free.
 To serve a batch, the machine first performs a setup, and then processes each job individually until the batch is finished.
@@ -38,12 +38,12 @@ Once a job's service is completed, it leaves the server.
 It remains to make a quantitative model of this queueing system.
 
 
-\newthought{When a job} of color~$i$ arrives, the expected time for its batch to be formed is given by\sidenote{~\cref{ex:48}}
+\newthought{When a job} of color~$i$ arrives, the expected time for its batch to be formed is given by\marginnote{~\cref{ex:48}}
 \begin{equation}\label{eq:79}
 \frac{B-1}{2\lambda_i}, \quad i\in \{r, b\}.
 \end{equation}
 
-\newthought{When the batch} is complete, the batch joins the queue, so we next compute the average time batches spend in queue.\sidenote{Note that we shift interpretation: batches (not individual items) form the queue.}
+\newthought{When the batch} is complete, the batch joins the queue, so we next compute the average time batches spend in queue.\marginnote{Note that we shift interpretation: batches (not individual items) form the queue.}
 For this we can use Sakasegawa's formula, and this formula makes us easy because we only have to find expressions for each of its components.
 
 The total arrival rate of jobs is $\lambda= \lambda_b+\lambda_r$. Thus, $\lambda_B=\lambda/B$ is the arrival rate of \emph{batches}.
@@ -60,7 +60,7 @@ With~\cref{eq:90} this leads to the condition that~$B$ must be larger than some 
 B> B_m = \frac{\lambda \E R}{1-\lambda \E{S_0}}.
 \end{equation*}
 
-Now that we have identified the arrival rate and service times of batches, it remains to find expressions for the scv of the batch inter-arrival times $C_{a,B}^2$ and the batch service times $C_{s,B}^2$. It's easy to derive that\sidenote{~\cref{ex:490} \cref{ex:491}}
+Now that we have identified the arrival rate and service times of batches, it remains to find expressions for the scv of the batch inter-arrival times $C_{a,B}^2$ and the batch service times $C_{s,B}^2$. It's easy to derive that\marginnote{~\cref{ex:490} \cref{ex:491}}
  \begin{align}\label{eq:82}
 C_{a,B}^2 &= \frac{C_{a}^2}B, &
 C_{s, B}^2 &= \frac{\V{S_B}}{(\E{S_B})^2},
@@ -82,7 +82,7 @@ Note in particular that the variance of the effective service times is larger th
 \newthought{It is left} to find a rule to determine what happens to an item after it has been processed.
 If the job has to wait until all jobs in the batch are served, the expected time it spends at the server is $\E R + B \E{S_0}$.
 However, if the item can leave
-right after being served, the expected time at the server is\sidenote{\cref{ex:492}}
+right after being served, the expected time at the server is\marginnote{\cref{ex:492}}
 \begin{equation}\label{eq:85}
 \E{R} + \frac{B+1}{2}\E{S_0};
 \end{equation}
@@ -182,7 +182,7 @@ plt.savefig("../figures/setups.pdf")
     Claim: for a $G^{B}/B/1$ queue, the waiting time of a job can be reduced by making the batches larger as this means that there are fewer batches in the queue.
     \begin{solution}
         False.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 

@@ -9,7 +9,7 @@
 
 With the recursions of~\cref{sec:constr-gg1-queu}  we can simulate simple queueing systems in continuous time.
 In this section we implement these recursions in python and show how to build a graph of the system length process~$L$ and the virtual waiting time process~$V$.
-This is not entirely straightward, though: to get around the problems, we need an \emph{event stack}, which is actually a queueing process operating under a specific scheduling rule.\sidenote{Thus, we use a queue, i.e., the event stack, to simulate queueing processes.}
+This is not entirely straightward, though: to get around the problems, we need an \emph{event stack}, which is actually a queueing process operating under a specific scheduling rule.\marginnote{Thus, we use a queue, i.e., the event stack, to simulate queueing processes.}
 More generally, event stacks form the heart of every discrete event simulator you will ever use.
 In \cref{sec:discr-event-simul} we will deal with the details of discrete event simultion; here we start simple.
 
@@ -18,7 +18,7 @@ The relating code is simple, but there is a small detail we should solve.
 If we were to compute the total offered amount of work, then the natural thing is to call \mintinline{python}{S.sum()}.
 However, this includes \mintinline{python}{S[0]}, while actually job~$0$ is never served.
 So, we set \mintinline{python}{S[0]=0}, which is in line with the choice to set \mintinline{python}{X[0]=0}.
-This induces a slight error though: \mintinline{python}{S.mean()} includes still $S[0]$, so we divide by one job too much; to repair we should compute \mintinline{python}{S.mean() * len(S) / (len(S) -1)}, but we choose to neglect this small error.\sidenote{Be aware, in critical software you should not use such tricks.}
+This induces a slight error though: \mintinline{python}{S.mean()} includes still $S[0]$, so we divide by one job too much; to repair we should compute \mintinline{python}{S.mean() * len(S) / (len(S) -1)}, but we choose to neglect this small error.\marginnote{Be aware, in critical software you should not use such tricks.}
 
 The next code computes first the departure times~$D$, and then the sojourn times~$J$ and waiting times~$W$. Note how easy this is. Calling statistics is trivial too.
 

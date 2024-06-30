@@ -9,9 +9,9 @@ There exists a fascinating connection, known as \emph{Little's law}, between the
 To heuristically understand this relationship let's consider an illustrative example.
 Imagine a highway segment between points A and B spanning 100 km.
 Every minute, one car enters the highway, and each car maintains a constant speed of 50 km/h.
-Now, since each car spends 2 hours\sidenote{100 km $/$ 50 km/h = 2 hours} on the highway, there must be $120$ cars\sidenote{2 h $\times$ 60 min/h $\times$ 1 car/min = 120 cars.}
+Now, since each car spends 2 hours\marginnote{100 km $/$ 50 km/h = 2 hours} on the highway, there must be $120$ cars\marginnote{2 h $\times$ 60 min/h $\times$ 1 car/min = 120 cars.}
 on the highway simultaneously.
-The objective in this section is to demonstrate that under a few simple conditions this relation generalizes to stochastic systems, in which case it takes the form $\E L = \lambda \E J$, i.e., the average number of `things' in a system is the rate at which these `things' arrive times the average time they spend in the system.\sidenote{Use the physical dimensions of the components of Little's law to check that $\E{\J} \neq \lambda \E{\L}$.}
+The objective in this section is to demonstrate that under a few simple conditions this relation generalizes to stochastic systems, in which case it takes the form $\E L = \lambda \E J$, i.e., the average number of `things' in a system is the rate at which these `things' arrive times the average time they spend in the system.\marginnote{Use the physical dimensions of the components of Little's law to check that $\E{\J} \neq \lambda \E{\L}$.}
 
 
 Define for the $k$th job the indicator function $I_k(s) := \1{A_{k}\leq s < D_{k}}$ to say that $I_{k}(s) =1$ if job~$k$ is present in the system at time~$s$ and zero otherwise.
@@ -30,7 +30,7 @@ A comparison of the costs of these three charging schemes shows that
 \begin{equation*}
 J_{k} \1{D_k\leq t} \leq \int_0^t I_k(s) \d s \leq J_k \1{A_k \leq t}.
 \end{equation*}
-Taking the sum over this inequality gives\sidenote{Observe that $\sum_{k=1}^{\infty} J_k \1{D_k\leq t} = \sum_{k=1}^{D(t)} J_{k}$ and likewise for $A(t)$.}
+Taking the sum over this inequality gives\marginnote{Observe that $\sum_{k=1}^{\infty} J_k \1{D_k\leq t} = \sum_{k=1}^{D(t)} J_{k}$ and likewise for $A(t)$.}
 \begin{equation*}
 \frac{1}{t} \sum_{k=1}^{D(t)} J_k \leq \frac{1}{t}\int_0^t \sum_{k=1}^{\infty} I_k(s) \d s = \frac{1}{t} \int_{0}^{t}L(s) \d s \leq \frac{1}{t}\sum_{k=1}^{A(t)} J_{k}.
 \end{equation*}

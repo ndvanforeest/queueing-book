@@ -5,15 +5,19 @@
 \frontmatter
 \maketitle
 
-\noindent
-\href{https://creativecommons.org/licenses/by-sa/4.0/}{\ccbysa} \\
-This work\ is licensed by the University of Groningen under a
-\href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
 
 % Table des matières avec seulement les chapitres
 \etocsettocstyle{\section*{Contents}}{}
 \etocsettocdepth{chapter}
 \tableofcontents
+
+\vfill
+
+\noindent
+\href{https://creativecommons.org/licenses/by-sa/4.0/}{\ccbysa} \\
+This work\ is licensed by the University of Groningen under a
+\href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
+
 
 \newpage
 
@@ -31,11 +35,17 @@ This work\ is licensed by the University of Groningen under a
 
 \mainmatter
 
+% This is needed to get align  notes in the margin to the main text.
+% Without this command, the margin notes are shifted too far to the right.
+\edef\marginnotetextwidth{\the\textwidth}
+
+
 \chapter{Introduction}
 \label{cha:introduction}
 
 
 \subfile{preliminaries.tex}
+
 \subfile{exp_poisson.tex}
 \subfile{exponential_wins.tex}
 \subfile{probabilistic_arithmetic.tex}

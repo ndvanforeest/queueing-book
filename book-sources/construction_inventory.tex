@@ -11,25 +11,26 @@ At the end of the period, here a day, the supermarket uses the amount of boxes l
 If so, it orders in the evening a batch containing ten, say, macaroni boxes to refill the stock.
 The batch will be delivered by truck at the start of the next day after which a shelf stocker unpacks the batch and puts all ten macaroni boxes on the shelf.
 
-In general there are many different types of items in inventory, ranging from cheap to expensive, so we need different rules to control inventories.\sidenote{As such, inventory systems are examples of stochastic processes subject to control.}
+In general there are many different types of items in inventory, ranging from cheap to expensive, so we need different rules to control inventories.\marginnote{As such, inventory systems are examples of stochastic processes subject to control.}
 We assume that demand is discrete, stochastic, and items are not perishable so that items unsold in one period carry over to the next period.
 With these assumptions we can develop a few simple, elegant, formulas by which we can construct, hence simulate, the discrete-time dynamics of the most important inventory control systems.
 Then we define a number of performance measures that allow us to assess the performance of these rules by means of simulation.
 In a later chapter, after developing some appropriate further mathematical concepts, we can derive closed form expressions for a number of performance measures.
 
 
-We use the following notation, the meaning of which we explain below:\sidenote{Inventory theory uses  the word `level'  for many different concepts, which should not be confused.
-Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level~$s$, and service levels.}\sidenote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in a queueing system; do not confuse these concepts even though they have the same symbol.}
+We use the following notation, the meaning of which we explain below:
 \begin{align*}
   Q_k &= \text{order size that arrives at  the \emph{start} of period~$k$}, \\
   D_k &= \text{demand arriving \emph{during} period~$k$}, \\
-  \IL_k &= \text{inventory level at the \emph{start} of period~$k$}, \\
+  \IL_k &= \text{inventory level \marginnote{Inventory theory uses  the word `level'  for many different concepts, which should not be confused.
+Below we introduce inventory level $\IL$,  order-up-to level~$S$,  reorder level~$s$, and service levels.}[-0.5cm] at the \emph{start} of period~$k$}, \\
 \IL_k^+ &= \text{inventory on hand at the \emph{start} of period~$k$}, \\
 \IL_k^- &= \text{backlogged demand at the \emph{start} of period~$k$}. \\
   \IP_k &= \text{inventory position at the \emph{start} of period~$k$}, \\
-  L &= \text{fixed lead time.}
+  L &= \text{fixed lead time.\marginnote{The leadtime~$L$ is not the same as the average number~$L$ of jobs in a queueing system; do not confuse these concepts even though they have the same symbol.}[0cm]}
 \end{align*}
-Note  that we are specific about the \emph{timing} of each of the  variables; we distinguish between the start and the end of a period. When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_k'$.
+Note that we are specific about the \emph{timing} of each of the variables; we distinguish between the start and the end of a period.
+When refering to a quantity measured at the \emph{end} of a period, we mark it with a prime, for instance $I_k'$.
 
 \newthought{The dynamics of} the inventory can be simply constructed if we are given a set of period demands $\{D_k, t=1, 2, \ldots\}$ and order sizes $\{Q_k, t=0, 1, \ldots\}$, but first we need to address a subtle point.
 In many inventory systems there is a delay between \emph{issuing} a replenishment order and \emph{receiving} this order:  only after receiving the order, the order can be used to replenish on-hand stock and serve demand.  The time between the placement of the order and its arrival at the inventory is called the \recall{leadtime} $L$, and the number of orders under way are called \recall{outstanding} orders. In the sequel we take~$L$ to be constant over time and independent of the number of outstanding orders.
@@ -54,7 +55,7 @@ In other words, the difference between the inventory position and the inventory 
 Let us next study a number of rules that use the inventory position to compute order sizes; these policies differ only in the decision when to trigger an order and how much to order. Since these rules check the inventory position at the end of a period, we say that the inventory is under periodic review.
 
 
-\newthought{The basestock policy} seems to be the simplest rule as it asks for a replenishment for each item demanded. Specifically, under a basestock policy, the  size of the order is given by\sidenote{Why is the second equality true?}
+\newthought{The basestock policy} seems to be the simplest rule as it asks for a replenishment for each item demanded. Specifically, under a basestock policy, the  size of the order is given by\marginnote{Why is the second equality true?}
 \begin{equation*}
   Q_k = (s+1-\IP_{k-1}')\1{\IP_{k-1}' \leq s} = s+1-\IP_{k-1}',
 \end{equation*}
@@ -199,14 +200,14 @@ It remains to fill in the data and feed this to an optimizer.
 
 
 \newthought{Inventory and queueing} systems are related throught three types of `buffer': \emph{inventory}, \emph{capacity}, and \emph{time}.
-These three related concepts are exceedingly useful\sidenote{If you consider to become consultant, then memorize this as you can use it time and again.}
+These three related concepts are exceedingly useful\marginnote{If you consider to become consultant, then memorize this as you can use it time and again.}
 in the analysis and improvement of nearly any logistic system as they can traded against each other to satisfy demand.
 Suppose demand can be backlogged, that is, a company does not have to meet (all) demand from stock, but customers agree that they (sometimes) have to wait for their demand to be satisfied.
 In this case, the company needs \emph{more} time, but \emph{less} inventory to meet demand, which can reduce overall cost.
 In the limiting case in which it is impossible to stock the product, e.g., operations in a hospital, or very expensive, e.g., customer-specific machines, all demand is backlogged, thereby reducing the inventory system to a queueing system with finite capacity.
 The company can still increase capacity, as this typically shortens queueing times.
 However, increasing capacity comes at a cost.
-All in all, many businesses struggle with how to organize \emph{capacity} and \emph{inventory} levels such that the \emph{time} limitations as imposed by customers are met.\sidenote{\citet{hopp08:_factor_physic} offers very nice additional insights on this material.}
+All in all, many businesses struggle with how to organize \emph{capacity} and \emph{inventory} levels such that the \emph{time} limitations as imposed by customers are met.\marginnote{\citet{hopp08:_factor_physic} offers very nice additional insights on this material.}
 
 
 
@@ -214,30 +215,30 @@ All in all, many businesses struggle with how to organize \emph{capacity} and \e
 
 \begin{truefalse}
     Simulating inventory control problems is significantly harder than simulating queueing problems, due to the presence of control policies.
-    \begin{solution}
+\begin{solution}
         False,  they are very similar.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 Claim: in a single-item inventory system, the inventory level triggers the orders.
-    \begin{solution}
+\begin{solution}
         False, it's the inventory position.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 Claim: in a single-item inventory system the inventory level only depends on the lead time $L$ when $L>0$.
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 Claim: in a single-item inventory system the inventory position and inventory level coincide when the leadtime $L=0$.
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{exercise}
@@ -282,10 +283,10 @@ For instance, if right after the start of period~$k$, the inventory level $\IL_{
 \begin{solution}
 Since at the start of period~$k$, only the on-hand inventory $I_{k}$ can be used to serve the demand $D_{k}$, the rules for a loss system become
 \begin{align*}
-\tilde D_k &= \min\{\IL_k, D_k\} & \text{accepted demand}\\
-L_k &= D_{k} - \tilde D_{k} & \text{lost demand}\\
-\IP_k' &= \IP_{k} - \tilde D_k, &\text{subtract the accepted demand}\\
-\IL_k' &= \IL_{k} - \tilde D_k, &\text{subtract the accepted demand}.
+D_k' &= \min\{\IL_k, D_k\} & \text{accepted demand}\\
+L_k &= D_{k} - D_{k}' & \text{lost demand}\\
+\IP_k' &= \IP_{k} - D_k', &\text{subtract the accepted demand}\\
+\IL_k' &= \IL_{k} - D_k', &\text{subtract the accepted demand}.
 \end{align*}
 And now use the standard rules to compute $Q_{k+1}$, and update $P_{k+1}$ and $I_{k+1}$ accordingly.
 \end{solution}

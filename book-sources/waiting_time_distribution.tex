@@ -12,7 +12,7 @@ That is, for given random deviates $\{X_{k}\}$ and $\{S_{k}\}$ we can compute th
 If want to get information about the \emph{distribution} of $W_{k}$, we need to do some more work.
 One way is to use simulation and repeat the recursions many different times with different seeds to make a histogram of the observed values of $W_{k}$.
 There is however, another way that is directly based on the tools for probabilistic arithmetic we developed in~\cref{sec:prob_artithmetic}.
-Let us show some code how to we can do this;~\cref{fig:waitingdistribution} will be the result of our effort.\sidenote{We discuss the main ideas of the code blocks just above each block.}
+Let us show some code how to we can do this;~\cref{fig:waitingdistribution} will be the result of our effort.\marginnote{We discuss the main ideas of the code blocks just above each block.}
 
 \newthought{To start, we}  load \mintinline{python}{pytictoc}, besides the regular libraries, to measure the running times of certain parts of the code.
 The module \mintinline{python}{random_variables.py} contains our code to handle the probabilistic arithmetic..
@@ -46,7 +46,7 @@ We use small letters for the variables to avoid a name clash with the capitals l
 
 Making the plots follows the same pattern as we did earlier.
 First we plot the cdfs of the departure times.
-The keyword \mintinline{python}{cumulative=True} converts a histogram\sidenote{Recall, a histogram is an (approximation of a) pmf} to a cdf.
+The keyword \mintinline{python}{cumulative=True} converts a histogram\marginnote{Recall, a histogram is an (approximation of a) pmf} to a cdf.
 \inputminted[firstline=71, lastline=88]{python}{../code/waiting_time_distribution.py} % figdeparturetimes
 \noindent
 And next the waiting times.
@@ -76,9 +76,9 @@ Finally, to plot the pmf instead of the cdf, we change the \mintinline{python}{c
 
 
 \newthought{You might wonder} why we should have a preference for ploting the cdf instead of the pmf of the waiting and departure times; it seems that the pmf is easier to interpret.
-However, this is not true: the pmf is an ill-behaved object.\sidenote{You'll appreciate the wisdom of this only after making some related errors yourself.}
+However, this is not true: the pmf is an ill-behaved object.\marginnote{You'll appreciate the wisdom of this only after making some related errors yourself.}
 For instance, let us take the support of~$X$ as $3, 4.1, 5$ instead of $3, 4, 5$ as above, and leave the rest of the parameters untouched.
-Plotting the pmf in the same way as for~\cref{fig:waitingdistributionpmfgood}, we now obtain~\cref{fig:waitingdistributionpmf}.This looks quite a bit different from the densities in~\cref{fig:waitingdistributionpmfgood}, to say the least.\sidenote{If you doubt the correctness of the compuations, just run the same code but plot the cdfs instead; the pathology disappear.}
+Plotting the pmf in the same way as for~\cref{fig:waitingdistributionpmfgood}, we now obtain~\cref{fig:waitingdistributionpmf}.This looks quite a bit different from the densities in~\cref{fig:waitingdistributionpmfgood}, to say the least.\marginnote{If you doubt the correctness of the compuations, just run the same code but plot the cdfs instead; the pathology disappear.}
 In general, you should remember that plotting the density of a rv is not simple, and I leave the  interesting exercise to find out why to you.
 
 \begin{figure}[tb]
@@ -100,14 +100,14 @@ for i in range(1, horizon):
     D = rv.compose_function(max, D, A) + S
 \end{python}
 \noindent In fact, this is wrong for a subtle reason.
-The code in \mintinline{python}{random_variable.py} assumes that the rvs are \emph{independent}, but $D_{k}$ and $A_{k-1}$ are dependent!\sidenote{Dependent is the same as not independent.}
+The code in \mintinline{python}{random_variable.py} assumes that the rvs are \emph{independent}, but $D_{k}$ and $A_{k-1}$ are dependent!\marginnote{Dependent is the same as not independent.}
 To see this, observe from the left panel of~\cref{fig:waitingdistribution} that $\P{D_{30} \leq 150} > 0$, but $\P{D_{30} \leq 150| A_{30} > 151} = 0$ while still $\P{A_{30} > 151} > 0$.
-This also explains the conceptual\sidenote{The mistake lies not in the code of \texttt{RV} itself, but in how we \emph{use} the code.}
-mistake in our earlier code \mintinline{python}{D = A + W + S}, and why the graphs of the `theoretical' cdf and the ecdf\sidenote{empirical cdf} in the left panel of~\cref{fig:waitingdistribution} do not agree.
+This also explains the conceptual\marginnote{The mistake lies not in the code of \texttt{RV} itself, but in how we \emph{use} the code.}
+mistake in our earlier code \mintinline{python}{D = A + W + S}, and why the graphs of the `theoretical' cdf and the ecdf\marginnote{ecdf := empirical cdf}[0.5cm] in the left panel of~\cref{fig:waitingdistribution} do not agree.
 By inspecting this carefully, we see that the ecdf obtained by simulation starts to increase later than the cdf of~$D$ but increases faster.
 The variance of the simulated departure times are apparently smaller.
 In conclusion, as $A_{30}$ and $W_{30}$ are dependent, $D_{30}$ cannot be computed as simply as the code suggests.
-In fact, its computation requires a careful build up of the dependency structure of the rvs involved.\sidenote{A nice python package that implements dependence in a correct way is \mintinline{python}{lea}.}
+In fact, its computation requires a careful build up of the dependency structure of the rvs involved.\marginnote{A nice python package that implements dependence in a correct way is \mintinline{python}{lea}.}
 
 But why then does our compuation works in the code that implements the recursion $W_k = [W_{k-1} + S_{k-1} - X_k]^{+}$?
 This is because $W_{k-1}$ \emph{is} independent of $S_{k-1}$ and $X_{k}$ so that we can compute $W_{k-1}+ S_{k-1} - X_{k}$ without problems.
@@ -136,9 +136,9 @@ for i in range(1, num):
 
 print(D.mean())
 \end{minted}
-    \begin{solution}
+\begin{solution}
         False. Very sneaky, but the correct quantity is \texttt{D[1:].mean()}.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}

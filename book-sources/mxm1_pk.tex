@@ -27,13 +27,13 @@ $\rho = \lambda \E B \E S$;
 As always we require that $\rho<1$.
 
 
-An arriving job joins the end of the queue (if present), and once the queue in front of it has been cleared, it moves in its entirety to the server.\sidenote{This is the same batching model as in~\cref{sec:setups-batch-proc}.}
+An arriving job joins the end of the queue (if present), and once the queue in front of it has been cleared, it moves in its entirety to the server.\marginnote{This is the same batching model as in~\cref{sec:setups-batch-proc}.}
 Thus, all items in one batch spend the same time in queue.
 Once the batch moves to the server, the server processes the items one after another until the batch is finished.
 Write $\QQ^B$ for the number of batches in queue and $\Ls^B$ for the number of items (if any) at the server.
 
 
-Observe that the average time $\E{\W^{B}}$ a batch spends in queue is\sidenote{First  the items at the server have to be served, then the ones in queue.}
+Observe that the average time $\E{\W^{B}}$ a batch spends in queue is\marginnote{First  the items at the server have to be served, then the ones in queue.}
 \begin{equation*}
   \E{\W^B} =  \E{\Ls^B}\E S + \E{\QQ^B} \E B \E S.
 \end{equation*}
@@ -44,7 +44,7 @@ But since $\E{\Ls^B} + \E{\QQ^B} \E B = \E \L$,
 where $\E W$ is the average time an \emph{item} spends in queue.
 We conclude that the average time a job spends in queue is the same as the average time an item spends in queue.
 
-Substituting the equality\sidenote{Little's law}  $\E{\QQ^B} = \lambda \E{\W^B}$  in the above yields
+Substituting the equality\marginnote{Little's law}  $\E{\QQ^B} = \lambda \E{\W^B}$  in the above yields
 \begin{align}\label{eq:96}
 \E W =  \E{\W^B} &= \frac{\E{\Ls^B}}{1-\rho}\E{S}.
 \end{align}
@@ -58,7 +58,7 @@ Suppose the~$k$th job has batch size $B_{k}$, then
     X_k|B_{k} &= \int_{D_{k-1}}^{D_k} \Ls^B(s) \d s
     = B_{k} S_{k,1} + (B_{k}-1)S_{k,2} + \cdots + S_{B_{k}, B_{k}}.
   \end{align*}
-Using Adam's law\sidenote{$\E{\E{Y|X}} = \E Y$.}, and that the $S_{k,i}$ are iid,
+Using Adam's law\marginnote{$\E{\E{Y|X}} = \E Y$.}, and that the $S_{k,i}$ are iid,
 \begin{align*}
     \E{X_k | B_k} &= B_{k}\E S + (B_{k}-1)\E S + \cdots \E S = B_{k}(B_{k}+1)/2 \cdot \E S, \\
     \E{X_k} & = \E{\E{X_k| B_k}} = \E{\frac{B(B+1)}2} \E S =    \frac{\E{B^2}+\E B}2 \E S,
@@ -98,13 +98,13 @@ Since the $\{S_{k, i}\}$ are iid\ with $\E{S_{k,i}} = \E S$, and the $\{B_k\}$ a
  \begin{equation*}
 X = \lim_{n\to\infty} \frac{1}{n}\sum_{k=1}^n S_{k,i} \1{B_{k} \geq i} = \E{S \1{B\geq i}} = \E S G(i-1),
  \end{equation*}
-since\sidenote{Recall: $\P{A} := \E{\1{A}}$.} $G(i-1) = \E{\1{B\geq i}} = \P{B> i-1}$ is the survivor function of~$B$.
+since\marginnote{Recall: $\P{A} := \E{\1{A}}$.} $G(i-1) = \E{\1{B\geq i}} = \P{B> i-1}$ is the survivor function of~$B$.
 Since, by construction, $Y_i(t)/t \to \P{\Ls=i}$,   we use the renewal reward theorem and rate stability, $\delta = \lambda$, to conclude that
  \begin{align*}
  \P{\Ls = i} &= \lambda \E{S} G(i-1) = \rho \frac{G(i-1)}{\E B}, \\
  \E{\Ls} &= \sum_{i=0}^\infty i \P{\Ls=i} = \frac{\rho}{\E B} \sum_{i=1}^\infty i G(i-1).
 \end{align*}
-Simplifying\sidenote{\cref{ex:ER}}  the summation yields~\cref{eq:43}.
+Simplifying\marginnote{\cref{ex:ER}}  the summation yields~\cref{eq:43}.
 
 
 \begin{figure}[t]
@@ -162,7 +162,7 @@ Simplifying\sidenote{\cref{ex:ER}}  the summation yields~\cref{eq:43}.
 \end{figure}
 
 
-\newthought{The second task } is to use level-crossing arguments to find a recursive formula for the state probabilities $\{\pi(n)\}$.\sidenote{Note: $n$ means the number of items in the system, not the number of batches.}
+\newthought{The second task } is to use level-crossing arguments to find a recursive formula for the state probabilities $\{\pi(n)\}$.\marginnote{Note: $n$ means the number of items in the system, not the number of batches.}
 For this we need to generalize our earlier level-crossing equation $\lambda p(n) = \mu p(n-1)$ because, at the arrival of a batch containing many items, multiple levels will be up-crossed, see~\cref{fig:levelcrossing}.
 
 
@@ -224,17 +224,17 @@ As by level-crossing, the up-crossing and down-crossing rates must match,
 \begin{equation}\label{eq:42}
 \lambda \sum_{m=0}^n \pi(m) G(n-m) = \mu \pi(n+1).
 \end{equation}
-It is an important check\sidenote{~\cref{ex:73}} to retrieve \cref{eq:43} from the expression $\E\L = \sum_{n} n \pi(n)$ and Little's law.
+It is an important check\marginnote{~\cref{ex:73}} to retrieve \cref{eq:43} from the expression $\E\L = \sum_{n} n \pi(n)$ and Little's law.
 %At the end of this section, we provide some further details for the interested reader.
 
 \newthought{It is left} to find the normalization constant.
-This, however, is not possible in general because ~\cref{eq:42} does not lead to a closed form expression for $\pi(n)$.\sidenote{Compare~\cref{eq:23}.}
+This, however, is not possible in general because ~\cref{eq:42} does not lead to a closed form expression for $\pi(n)$.\marginnote{Compare~\cref{eq:23}.}
 A simple and sensible way out is to circumvent the problem altogether by blocking demand above some level~$M$.
 There are three common policies to decide which items in a batch to accept.
 \begin{enumerate}
-\item Complete acceptance: accept all batches that arrive when the system contains~$K$ or fewer items, and reject the entire batch otherwise.\sidenote{~\cref{ex:9}}
-\item Partial acceptance: accept whatever fits of a batch, and reject the rest.\sidenote{~\cref{ex:45}}
-\item Complete rejection: if a batch does not fit entirely into the system, it will be rejected completely.\sidenote{~\cref{ex:l-156}}
+\item Complete acceptance: accept all batches that arrive when the system contains~$K$ or fewer items, and reject the entire batch otherwise.\marginnote{~\cref{ex:9}}
+\item Partial acceptance: accept whatever fits of a batch, and reject the rest.\marginnote{~\cref{ex:45}}
+\item Complete rejection: if a batch does not fit entirely into the system, it will be rejected completely.\marginnote{~\cref{ex:l-156}}
 \end{enumerate}
 In the exercises we will derive recursions similar to~\cref{eq:42} by which we can obtain $\{\pi(n)\}$.
 Since the recursions stop after some level~$M$, there is a finite number of recusions, hence we can solve them numerically without much problems.
@@ -242,9 +242,9 @@ Since the recursions stop after some level~$M$, there is a finite number of recu
 
 \begin{truefalse}
 Claim:   Little's Law informs us that in the $M^{B}/M/1$ queue, the expected number of items in queue satisfies $\E{\QQ}=\lambda\E{W}$.
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
@@ -255,17 +255,17 @@ Claim:   Little's Law informs us that in the $M^{B}/M/1$ queue, the expected num
     Suppose that $\V B = 0$.
     Claim: this formula implies that if the batch size increases, but $\E S$ decreases such that $\rho$ remains the same, the expected waiting time becomes smaller.
 
-    \begin{solution}
+\begin{solution}
         True. $\V B = 0 \implies C_{B}^{2} = 0 \implies$ the first term on the RHS does not change when $\rho$ remains constant. The second term does become smaller.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}
 Suppose the time to process an item has an exponential distribution.
 Claim: the interarrival times at which individual items arrive at an $M^B/M/1$ queue are exponentially distributed.
-    \begin{solution}
+\begin{solution}
         False. Jobs come in batches, hence, multiple items can arrive at the same time, implying that the interarrival distribution is no longer exponential.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 % \begin{truefalse}

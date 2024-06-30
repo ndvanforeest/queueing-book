@@ -1,54 +1,26 @@
-%\documentclass[oneside,11pt]{book}
 \documentclass[oneside,11pt,a4paper]{book}
-%\documentclass[landscape,oneside,a5paper]{book}
 
-\usepackage{answers}
-%\usepackage[nosolutionfiles]{answers}
-
-\Newassociation{solution}{Solution}{ans}
-\Newassociation{hint}{Hint}{hint}
-\renewcommand{\Hintlabel}[1]{\textbf{h.#1.}}
-\renewcommand{\Solutionlabel}[1]{\textbf{s.#1.}}
-
-
-%\usepackage[all-solutions-at-end]{optional}
-%\usepackage[check]{optional}
-% \usepackage{answers}
-% \opt{all-solutions-at-end}{
-% \usepackage{answers}
-% \Newassociation{solution}{Solution}{ans}
-% \Newassociation{hint}{Hint}{hint}
-% \renewcommand{\Hintlabel}[1]{\textbf{h.#1.}}
-% \renewcommand{\Solutionlabel}[1]{\textbf{s.#1.}}
-% }
-
-
-
-% \opt{solutionfiles}{
-% \usepackage{answers}
-% \Newassociation{solution}{Solution}{ans}
-% \Newassociation{hint}{Hint}{hint}
-% \renewcommand{\Hintlabel}[1]{\textbf{h.#1.}}
-% \renewcommand{\Solutionlabel}[1]{\textbf{s.#1.}}
-% }
-
-% \opt{nosolutionfiles}{
-% \excludecomment{hint}
-% \excludecomment{solution}
-% }
-
-% \opt{check}{
-% \usepackage[nosolutionfiles]{answers}
-% \Newassociation{solution}{Solution}{ans}
-% \Newassociation{hint}{Hint}{hint}
-% \renewcommand{\Hintlabel}[1]{\textbf{h.#1.}}
-% \renewcommand{\Solutionlabel}[1]{\textbf{s.#1.}}
-% }
-
-
-
+% Include solutions at the end
+\usepackage[solutions]{optional}
 \usepackage{preamble}
-%\usepackage{marginfix}
+
+% The next settings are specific to the document such as the geometry of the pages. I don't
+% want to include this in the general preamble because that complicates using the subfiles
+% for other (stand alone) purposes.
+\usepackage{geometry}
+\newgeometry{left=1.8cm,right=1.8cm,top=2.2cm,bottom=3cm,marginparsep=1.2cm,marginparwidth=4.5cm,includemp} %,showframe}
+\savegeometry{tufte}
+\newgeometry{left=3cm,right=3cm,bottom=3cm}
+\savegeometry{normal}
+
+\usepackage{imakeidx}
+\makeindex[columns=2, title=Index]
+
+% Get the chapter numbers at a good location.
+
+\titleformat{\chapter}[display]%
+  {\relax}{\vspace*{-3\baselineskip}\makebox[\linewidth][r]{\color{halfgray}\chapterNumber\thechapter}}{0pt}%
+  {\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]%
 
 \input{book_contents}
 

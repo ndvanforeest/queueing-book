@@ -11,49 +11,21 @@ The sample path \recall{down-crosses level~$n$} at time~$t$ when, due to a depar
 Clearly, the number of up-crossings and down-crossings cannot differ by more than 1 at any time, because it is only possible to down-cross level~$n$ after an up-crossing (or the other way around).
 This simple idea will prove to be a key stepping stone in the analysis of many stochastic systems.
 
-In this section we make a distinction between jobs that just arrive and jobs that do enter, because we want our arguments to apply to a queueing systems in which jobs can be blocked or do not enter for other reasons.\sidenote{For inventory systems, blocked jobs are lost demands.}
-Just as in~\cref{sec:rate-stability}, we write $A(t)$ and $\tilde A(t)$ to distinguish between the counting functions.
 
 
-\newthought{Similar to the} definition for $A(n,t)$ in~\cref{eq:rates_}, let
-\begin{align}\label{eq:102}
- \tilde A(n,t) &:=  \sum_{k=1}^{A(t)} \1{L(A_k-) = n}\1{\L(A_k) = n+1}, &
-\tilde \lambda(n) &:= \lim_{t\to\infty} \frac{\tilde A(n,t)}{Y(n,t)},
- \end{align}
- so that $\tilde A(n,t)$ denotes the number of jobs that \emph{enter} the system when the system contains~$n$ jobs just before arrival and
-$\tilde \lambda$  the rate at which jobs enter when the system contains~$n$ jobs.
-Likewise, let\sidenote{Note that we write $L(D_{k})$ and not $L(D_{k}-)$: to leave~$n$ jobs behind, the system must contain $n+1$ jobs just prior to the departure.}
+
+\newthought{Similar to the} definitions for $A(n,t)$  and $\lambda(n)$,  let\marginnote{Note that we write $L(D_{k})$ and not $L(D_{k}-)$: to leave~$n$ jobs behind, the system must contain $n+1$ jobs just prior to the departure.}
 \begin{align}
  D(n,t) &:=  \sum_{k=1}^{D(t)} \1{\L(D_k) = n}, & \mu(n+1) := \lim_{t\to\infty} \frac{D(n,t)}{Y(n+1,t)},
  \end{align}
-denote the number of departures up to time~$t$ that\emph{ leave~$n$ customers behind}, and the departure rate from state $n+1$.
+respectively, denote the number of departures up to time~$t$ that\emph{ leave~$n$ customers behind} and the departure rate from state $n+1$.
 
 
 \begin{theorem}[Level-crossing]
 When  jobs arrive and depart as single units,
 \begin{equation}\label{eq:12}
-\tilde \lambda(n) p(n) = \mu(n+1)p(n+1).
+\lambda(n) p(n) = \mu(n+1)p(n+1).
 \end{equation}
-\end{theorem}
-\begin{proof}
-By the assumption, $|L(t) - L(t-)| \leq 1$ for all $t\geq 0$.
-But this implies that\sidenote{Think about this. This is simple, but has profound consequences. Do you understand why this does not need to hold for $A(n,t)$?}
-\begin{equation}\label{eq:97}
-|\tilde A(n,t) - D(n,t)| \leq 1.
-\end{equation}
-From this observation it follows immediately that
-\begin{equation}\label{eq:15}
- \lim_{t\to\infty} \frac{\tilde A(n,t)}t = \lim_{t\to\infty} \frac{D(n,t)}t.
-\end{equation}
-But
-\begin{align*}
-\lim_{t\to\infty} \frac{\tilde A(n,t)}t &= \lim_{t\to\infty} \frac{\tilde A(n,t)}{Y(n,t)}\frac{Y(n,t)}t = \tilde \lambda(n) p(n),\\
-\lim_{t\to\infty} \frac{D(n,t)}t &= \lim_{t\to\infty} \frac{D(n,t)}{Y(n+1,t)}\frac{Y(n+1,t)}t = \mu(n+1) p(n+1),
-\end{align*}
-from which claim follows.
-
-\end{proof}
-
 \begin{marginfigure}%[th]
 \begin{tikzpicture}[scale=0.8,->,>=stealth',shorten >=1pt,auto,node distance=1.8cm,
  semithick]
@@ -74,22 +46,41 @@ from which claim follows.
 % (4) edge [bend left] node {$\mu(4)$} (3);
 
 %\draw[-, dotted, gray] (1.5,-1.5)--(1.5,1.5) node[above, black] {}; % {level~$1$};
-\draw[->] (3,1.8) node[left] {$\tilde A(1,t)$} -- (4.5,1.8);
+\draw[->] (3,1.8) node[left] {$A(1,t)$} -- (4.5,1.8);
 \draw[<-] (3,-1.8) node[left] {$D(1,t)$} --(4.5,-1.8) ;
 
 \end{tikzpicture}
 \end{marginfigure}
+\end{theorem}
+\begin{proof}
+By the assumption, $|L(t) - L(t-)| \leq 1$ for all $t\geq 0$.
+But this implies that\marginnote{\cref{eq:97} is simple, but has profound consequences.}[1cm]
+\begin{equation}\label{eq:97}
+|A(n,t) - D(n,t)| \leq 1.
+\end{equation}
+From this observation it follows immediately that
+\begin{equation}\label{eq:15}
+ \lim_{t\to\infty} \frac{A(n,t)}t = \lim_{t\to\infty} \frac{D(n,t)}t.
+\end{equation}
+But
+\begin{align*}
+\lim_{t\to\infty} \frac{A(n,t)}t &= \lim_{t\to\infty} \frac{A(n,t)}{Y(n,t)}\frac{Y(n,t)}t = \lambda(n) p(n),\\
+\lim_{t\to\infty} \frac{D(n,t)}t &= \lim_{t\to\infty} \frac{D(n,t)}{Y(n+1,t)}\frac{Y(n+1,t)}t = \mu(n+1) p(n+1),
+\end{align*}
+from which the claim follows.
+\end{proof}
 
 
-\newthought{Suppose we can} specify\sidenote{In \cref{sec:mm1} and onward we will model many queueing situations by making suitable choices for $\tilde \lambda(n)$ and $\mu(n)$.}
-the arrival and service rates $\tilde \lambda(n)$ and $\mu(n)$, then we can easily compute the long-run fraction of time $p(n)$ that the system contains~$n$ jobs.
+
+\newthought{Suppose we can} specify\marginnote{In \cref{sec:mm1} and onward we will model many queueing situations by making suitable choices for $\lambda(n)$ and $\mu(n)$.}
+the arrival and service rates $\lambda(n)$ and $\mu(n)$, then we can easily compute the long-run fraction of time $p(n)$ that the system contains~$n$ jobs.
 To see this, rewrite~\cref{eq:12} as
 \begin{equation}\label{eq:25}
- p(n+1) = \frac{\tilde \lambda(n)}{\mu(n+1)}p(n).
+ p(n+1) = \frac{\lambda(n)}{\mu(n+1)}p(n).
 \end{equation}
 A straightaway recursion then leads to
 \begin{equation*}
- p(n+1) = \frac{\tilde \lambda(n)\tilde\lambda(n-1)\cdots \tilde \lambda(0)}{\mu(n+1)\mu(n)\cdots \mu(1)}p(0).
+ p(n+1) = \frac{\lambda(n)\lambda(n-1)\cdots \lambda(0)}{\mu(n+1)\mu(n)\cdots \mu(1)}p(0).
 \end{equation*}
 Thus, $p(n)$, $n\geq 1$, is just $p(0)$ times a constant, and this constant is based on  arrival and service rates.
 
@@ -97,10 +88,10 @@ To determine $p(0)$ we can use the fact that the numbers $p(n)$ represent probab
 Hence, from the normalizing condition $\sum_{n=0}^\infty p(n)=1$, we get $p(0) = G^{-1}$ with
 $G$ being the \emph{normalization constant}
 \begin{equation*}
-G = 1+\sum_{n=0}^\infty \frac{\tilde \lambda(n)\tilde \lambda(n-1)\cdots\tilde \lambda(0)}{\mu(n+1)\mu(n)\cdots \mu(1)}.
+G = 1+\sum_{n=0}^\infty \frac{\lambda(n)\lambda(n-1)\cdots\lambda(0)}{\mu(n+1)\mu(n)\cdots \mu(1)}.
 \end{equation*}
 
-Finally, once we have $p(n)$, it is easy to compute  the time-average\sidenote{It is important to realize that this is not necessarily the same as what jobs see upon arrival.} number of jobs in the system and the long-run fraction of time the system contains at least~$n$:
+Finally, once we have $p(n)$, it is easy to compute  the time-average\marginnote{It is important to realize that this is not necessarily the same as what jobs see upon arrival.} number of jobs in the system and the long-run fraction of time the system contains at least~$n$:
 \begin{align*}
 \E\L &= \sum_{n=0}^\infty n p(n), & \P{\L \geq n} &= \sum_{i=n}^\infty p(i).
 \end{align*}
@@ -111,12 +102,12 @@ Finally, once we have $p(n)$, it is easy to compute  the time-average\sidenote{I
  \delta(n) := \lim_{t\to\infty} \frac{D(n,t)}{D(t)}
 \end{equation*}
 as the long-run fraction of jobs that leave~$n$ jobs \emph{behind}.
-From~\cref{eq:15} and supposing that $A(n,t) = \tilde A(n,t)$,
+From~\cref{eq:15} and supposing that $A(n,t) = A(n,t)$,
 \begin{equation*}
-\frac{A(t)}t \frac{A(n,t)}{A(t)} = \frac{A(n,t)}t = \frac{\tilde A(n,t)}{t}\approx \frac{D(n,t)}t
+\frac{A(t)}t \frac{A(n,t)}{A(t)} = \frac{A(n,t)}t = \frac{A(n,t)}{t}\approx \frac{D(n,t)}t
 = \frac{D(t)}t \frac{D(n,t)}{D(t)}.
 \end{equation*}
-Taking limits at the left and right, and using~\cref{eq:28}, we obtain for the $G/G/c$ queue\sidenote{Because customers arrive and leave as single units in a (rate-stable) $G/G/c$ queue.}
+Taking limits at the left and right, and using~\cref{eq:28}, we obtain for the $G/G/c$ queue\marginnote{Because customers arrive and leave as single units in a (rate-stable) $G/G/c$ queue.}
 \begin{equation} \label{eq:36}
  \lambda \pi(n) = \delta \delta(n).
 \end{equation}
@@ -125,6 +116,20 @@ Consequently, for the (stable)  $G/G/c$ queue  the statistics obtained by arriva
 \lambda = \delta \iff \pi(n) = \delta(n).
 \end{equation}
 
+
+\newthought{When jobs can blocked}, we need to make a distinction between jobs that just arrive and jobs that actually enter.
+Jobs that are blocked do not enter, hence such arrivals do not produce up-crossings.
+To handle this more general case, we consider
+\begin{align}\label{eq:102}
+A^{+}(n,t) &:=  \sum_{k=1}^{A(t)} \1{L(A_k-) = n}\1{\L(A_k) \geq  n+1}, &
+\lambda^{+}(n) &:= \lim_{t\to\infty} \frac{A^{+}(n,t)}{Y(n,t)},
+ \end{align}
+ so that $A^{+}(n,t)$ only counts arrivals that up-cross level $n$, and $\lambda^{+}(n)$ corresponds to the rate at which jobs \emph{enter} when the system contains~$n$ jobs.
+We should replace $\lambda(n)$ by $\lambda^{+}(n)$ at all other relevant places, for instance, \cref{eq:12} becomes
+\begin{equation*}
+\lambda^{+}(n) p(n) = \mu(n+1) p(n+1).
+\end{equation*}
+Observe that $\lambda(n) > \lambda^{+}(n)$ when a fraction of jobs is blocked, otherwise $\lambda(n) = \lambda^{+}(n)$.
 
 \newthought{It is important} to realize that the level-crossing argument cannot always be used, as it is not always possible to split the state space into two disjoint parts by `drawing a line' between two states.
 For a more general approach, we focus on a single state and count how often this state is entered and left.
@@ -153,7 +158,7 @@ For a more general approach, we focus on a single state and count how often this
 Specifically, define $I(n,t) = A(n-1,t) + D(n,t)$ as the number of times the queueing process enters state~$n$ either due to an arrival from state $n-1$ or due to a departure leaving~$n$ jobs behind. Similarly,  $O(n,t) = A(n,t) + D(n-1,t)$ counts how often state~$n$ is left either by an arrival (to state $n+1$) or a departure (to state $n-1$).
 
 
-Just like~\cref{eq:97}, it is evident that $|I(n,t)-O(n,t)|\leq 1$, and this implies\sidenote{~\cref{ex:79}}
+Just like~\cref{eq:97}, it is evident that $|I(n,t)-O(n,t)|\leq 1$, and this implies\marginnote{~\cref{ex:79}}
 \begin{equation}\label{eq:104}
  \lambda(n-1)p(n-1)+\mu(n+1)p(n+1) = (\lambda(n)+\mu(n))p(n).
 \end{equation}
@@ -166,7 +171,7 @@ With this we can find a closed form expression for the waiting time of the $M/G/
 However, this is a bit more complicated as the argument hinges on an integral equation.
 If you don't like developing mathematical skills, you may skip this derivation.
 
-Suppose that the waiting time~$W$ of the $M/G/1$ queue has a density~$f$, that is, the cdf $F(x) = \P{W\leq x}$ has a derivative $f(x)$ for all $x>0$.\sidenote{For a real proof we should prove first that~$f$ exists.}
+Suppose that the waiting time~$W$ of the $M/G/1$ queue has a density~$f$, that is, the cdf $F(x) = \P{W\leq x}$ has a derivative $f(x)$ for all $x>0$.\marginnote{For a real proof we should prove first that~$f$ exists.}
 ($F$ is only differentiable from the right at~$0$ because $\P{W=0}>0$, while $\P{W\leq x} = 0$ for $x<0$.)
 Consider some level $x>0$.
 By PASTA, the rate of arriving jobs that see a waiting time $y \in [0, x)$ is equal to $\lambda f(y)$. (Observe that we use the splitting property of Poisson processes.)
@@ -472,7 +477,8 @@ Single jobs arrive as a Poisson process with $\lambda$.
 Due to blocking, we take $\lambda(n) = \lambda$ for $n<3$ and $\lambda(n)=0$ for $n\geq 3$.
 The batch service times are exponentially distributed with mean $1/\mu$, so that by the memoryless property, $\mu(n) = \mu$.
 
-Make a graph of the state-space and show, with arrows, the transitions that can occur and  use level-crossing arguments to express the steady-state probabilities $p(n), n=0,\ldots, 3$ in terms of $\lambda$ and $\mu$.
+Make a graph of the state-space and show, with arrows, the transitions that can occur and use level-crossing arguments to express the steady-state probabilities $p(n), n=0,\ldots, 3$ in terms of $\lambda$ and $\mu$.
+
 \begin{solution}
 %It is the $M/M^2/1/3$ queue.
 
@@ -503,7 +509,7 @@ With level-crossing:
  \begin{equation*}
  \lambda p(1) = \mu(p(2) + p(3)) = \mu (\rho + \rho^2) p(0) = (\lambda + \lambda^2/\mu) p(0),
  \end{equation*}
-hence $p(1) = p(0)(\mu + \lambda)/\mu$.
+hence $p(1) = p(0)(\mu + \lambda)/\mu$. For the final answer, use the normalization constraint $p(0) + p(1) + p(2) = 1$. (As this is simple, we skip it.)
 \end{solution}
 \end{exercise}
 

@@ -5,7 +5,7 @@
 \section{Poisson Distribution}\label{sec:poisson-distribution}
 
 In queueing systems the goal is to meet supply with demand at reasonable cost.
-For this to work, we need to characterize demand, and one of the most reasonable models for the arrival process of jobs\sidenote{A job can be anything that requires service; it æcan be a customer, an item to make, a car to repair,\ldots} is the Poisson process.
+For this to work, we need to characterize demand, and one of the most reasonable models for the arrival process of jobs\marginnote{A job can be anything that requires service; it æcan be a customer, an item to make, a car to repair,\ldots} is the Poisson process.
 We derive a number of its properties in the text and in the exercises; we use these properties throughout the book.
 
 
@@ -20,7 +20,7 @@ where  $p=1/n$ is the success probability, that is, the probability that some cu
 Clearly, the expected number of arrivals during this first interval $[0,t]$ is $\E{N_n(t)} = \lambda t n p = \lambda t$, because $p=1/n$.
 
 If we take the limit $n\to\infty$, then since $p=1/n$,  the expected number of arrivals during the first interval $[0,t]$ remains equal to $\lambda t$,
-and,\sidenote{\cref{ex:31}}
+and,\marginnote{\cref{ex:31}}
 \begin{equation}\label{eq:bin}
   \lim_{\stackrel{n\to\infty, p\to 0}{np=1}}{\lambda t n \choose k} p^k (1-p)^{\lambda t n -k} = e^{-\lambda t}\frac{(\lambda t)^k}{k!}.
 \end{equation}
@@ -30,7 +30,7 @@ associated with this distribution is \recall{Poisson distributed} with parameter
  \P{N(t) = k} =
 e^{-\lambda t} \frac{(\lambda t)^k}{k!},
 \end{equation*}
-and we write $N(t)\sim \Pois{\lambda t}$.%\sidenote{\cref{ex:p2}}
+and we write $N(t)\sim \Pois{\lambda t}$.%\marginnote{\cref{ex:p2}}
 From this it is immediate that
 \begin{align}
 \E{N(t)} &= \lambda t
@@ -41,13 +41,13 @@ From this it is immediate that
 
 
 
-\newthought{The family} of random variables $N_\lambda=\{N(t), t\geq 0\}$ is a \recall{Poisson process} with \emph{arrival rate} $\lambda$.\sidenote{ A random process is a much more complicated mathematical object than a random variable: a process is a (possibly uncountable) set of random variables indexed by time, not just \emph{one} random variable.}
-Once we have $N(t)$, we can define $N(s, t] := N(t)-N(s)$ as the number of customers that arrive in a general time period $(s, t]$.\sidenote{Note that $[0,t]$ is closed at both ends, but $(s,t]$ is open at the left.}
+\newthought{The family} of random variables $N_\lambda=\{N(t), t\geq 0\}$ is a \recall{Poisson process} with \emph{arrival rate} $\lambda$.\marginnote{ A random process is a much more complicated mathematical object than a random variable: a process is a (possibly uncountable) set of random variables indexed by time, not just \emph{one} random variable.}
+Once we have $N(t)$, we can define $N(s, t] := N(t)-N(s)$ as the number of customers that arrive in a general time period $(s, t]$.\marginnote{Note that $[0,t]$ is closed at both ends, but $(s,t]$ is open at the left.}
 
 It is important to realize that  $N_\lambda$ has \recall{stationary and independent increments}.
 Stationarity means that the distributions of the number of arrivals are the same for all intervals of equal length, that is,
 $N(s,t]$ has the same probability distribution as $N(u, v]$ if $t-s = v-u$.
-Independence means, roughly speaking, that knowing that $N(s,t]= n$, does not help to make any predictions about the value of $N(u, v]$ if the intervals $(s,t]$ and $(u, v]$ do not overlap.\sidenote{We refer to the literature on (mathematical) probability theory for further background.}
+Independence means, roughly speaking, that knowing that $N(s,t]= n$, does not help to make any predictions about the value of $N(u, v]$ if the intervals $(s,t]$ and $(u, v]$ do not overlap.\marginnote{We refer to the literature on (mathematical) probability theory for further background.}
 
 We next address a number of useful properties of the Poisson process.
 If $\Delta t\ll 1$ then for all $t\geq 0$,
@@ -79,7 +79,7 @@ Step 1 is true because $N(t+\Delta t]= N(t) + N(t, t+\Delta t]$, step 2 follows 
 
 
 The next equation says that if you know that an arrival occurred during $[0,t]$, the arrival is distributed uniformly on the interval $[0,t]$.
-If $s\in [0,t]$,\sidenote{\cref{ex:p-36} }
+If $s\in [0,t]$,\marginnote{\cref{ex:p-36} }
 \begin{equation}\label{eq:22}
   \P{N(s) =1\given N(t)=1} = \frac s t.
 \end{equation}
@@ -89,7 +89,7 @@ Note that this is independent of $\lambda$.
 
 \newthought{Merging and splitting} of arrival processes often occurs in practice.
 Consider, for instance, the arrival processes $N_\lambda$ of men and $N_\mu$ of women at a shop, see the figure at the right.
-\begin{marginfigure}
+\begin{figure}
 \begin{tikzpicture}[xscale=0.3]
 %\draw[[-{Triangle[open]},dotted] (0,10)--(8.5,10);
 
@@ -109,14 +109,14 @@ Consider, for instance, the arrival processes $N_\lambda$ of men and $N_\mu$ of 
 \draw[{Rays[]}-{Rays[]},dotted] (6.1,1.06)--(6.1,-0.06);
 \draw[{Rays[]}-{Rays[]},dotted] (7.1,2.06)--(7.1,-0.06);
 \end{tikzpicture}
-\end{marginfigure}
+\end{figure}
 Each cross represents an arrival; in the upper line it corresponds to a man, in the middle line to a woman, and in the lower line to an arrival of a general customer at the shop.
 Thus, the shop `sees' the merged process of these two arrival processes.
-In fact, this merged process $N_{\lambda+\mu}$ is also a Poisson process\sidenote{\cref{ex:l-103} } with rate $\lambda+\mu$.
+In fact, this merged process $N_{\lambda+\mu}$ is also a Poisson process\marginnote{\cref{ex:l-103} } with rate $\lambda+\mu$.
 
 We can also \emph{split}, or \emph{thin}, a stream into several sub-streams.
 Model the stream of people passing by a shop as a Poisson process $N_\lambda$, and the decision $B_{i}\in \{0, 1\}$ that customer~$i$ enters the shop as an  Bernoulli distributed rv with success probability $\P{B_{i} = 1} = 1$.
-\begin{marginfigure}
+\begin{figure}
 \begin{tikzpicture}[xscale=0.4]
 %\draw[[-{Triangle[open]},dotted] (0,10)--(8.5,10);
 \draw[->] (0,2)--(6,2);
@@ -146,9 +146,9 @@ node[below] {$B_4$};
 % node[below, fill=white] {$B_6=0$};
 
 \end{tikzpicture}
- \end{marginfigure}
+ \end{figure}
  In the figure at the right, we mark the arrivals of all potential customers as crosses at the upper line.
-The lines downward represent whether a potential customer actually enters the shops. Now, when $\{B_{i}\}$ forms a set of iid rvs, then the thinned process is also a Poisson process\sidenote{\cref{ex:1}} but  with rate $\lambda p$.
+The lines downward represent whether a potential customer actually enters the shops. Now, when $\{B_{i}\}$ forms a set of iid rvs, then the thinned process is also a Poisson process\marginnote{\cref{ex:1}} but  with rate $\lambda p$.
 
 
 
@@ -157,7 +157,7 @@ Suppose the departure stream of a machine splits into two sub-streams, e.g., a f
 Then we can model the arrival stream at the second machine as a thinned stream (with probability~$p$) of the departures of the first machine.
 Merging occurs where the output streams of various stations arrive at another station.
 
-% \newthought{With moment-generating functions} we can simplify the derivations above; the last few exercises of this section show how to apply this.\sidenote{In general, it is hard to obtain closed-form expressions for the moment-generating function, but when it works, it is an easy and slick technique.}
+% \newthought{With moment-generating functions} we can simplify the derivations above; the last few exercises of this section show how to apply this.\marginnote{In general, it is hard to obtain closed-form expressions for the moment-generating function, but when it works, it is an easy and slick technique.}
 
 
 % \begin{exercise}\label{ex:p1}

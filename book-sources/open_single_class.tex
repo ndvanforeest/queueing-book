@@ -11,14 +11,14 @@ However, jobs, or patients, may need several `processing' steps at different sta
 In such cases, jobs move from one queueing station to another.
 In this section we analyze such queueing networks in simple settings.
 We start with two stations in tandem, and then extend to general networks.
-Throughout we assume that external jobs\sidenote{i.e., new jobs that have not visited any other station before.}
+Throughout we assume that external jobs\marginnote{i.e., new jobs that have not visited any other station before.}
 arrive as a Poisson processes, and that service times at all stations are exponentially distributed.
-Under this condition we are able to obtain closed-form expressions for the stationary distribution of jobs at each station.\sidenote{Recall, \cref{sec:tandem-queues} only considers the expected sojourn times in tandem networks of $G/G/c$ queues, not the distribution of the number of jobs at each station in a network of $M/M/1$ queues.}
+Under this condition we are able to obtain closed-form expressions for the stationary distribution of jobs at each station.\marginnote{Recall, \cref{sec:tandem-queues} only considers the expected sojourn times in tandem networks of $G/G/c$ queues, not the distribution of the number of jobs at each station in a network of $M/M/1$ queues.}
 
 
 
 
-\newthought{We start with} stating the remarkable, and crucially important, result that the \emph{inter-departure times} of jobs of an $M/M/1$ queue are exponentially distributed with rate $\lambda$, just as the inter-arrival times.\sidenote{\cref{ex:63}} This property makes the analysis of a \recall{tandem network} of stations, i.e., stations placed in sequence, particularly easy.
+\newthought{We start with} stating the remarkable, and crucially important, result that the \emph{inter-departure times} of jobs of an $M/M/1$ queue are exponentially distributed with rate $\lambda$, just as the inter-arrival times.\marginnote{\cref{ex:63}} This property makes the analysis of a \recall{tandem network} of stations, i.e., stations placed in sequence, particularly easy.
 
 When the first station is an $M/M/1$ queue, jobs arrive as a Poisson process, but its output process is also a Poisson process.
 Therefore the second station, i.e., the station immediately downstream of station 1, receives jobs as a Poisson process.
@@ -36,7 +36,7 @@ where $\E{\J_i}$ is the sojourn time at station~$i$ with $\rho_i = \lambda \E{S_
 
 \newthought{It is not difficult} to extend the above result to general networks of $M/M/1$ queues.
 For this, we first need to model such networks more formally.
-In particular, we assume that the probability that a job moves to station~$j$ after completing its service at station~$i$ is independent of anything else, and is given by the number $P_{i j}\in[0,1]$.\sidenote{This is called Markov routing.}
+In particular, we assume that the probability that a job moves to station~$j$ after completing its service at station~$i$ is independent of anything else, and is given by the number $P_{i j}\in[0,1]$.\marginnote{This is called Markov routing.}
 We assemble all these probabilities in a \emph{routing matrix} $P$ such that $P_{i j}$ is the element of~$P$ on the~$i$th row and~$j$th column.
 Define $P_{i0} = 1-\sum_{j>0}P_{ij}$ as the probability that a job leaves the network from station~$i$.
 In~\cref{sec:lambda-=-gamma} we discuss some properties on~$P$ such that the  network is stable.
@@ -68,7 +68,7 @@ This insight leads us to the \recall{traffic equations}, which state that for ea
   \lambda_i = \gamma_i + \sum_{j=1}^M \lambda_j P_{j i}, \quad i = 1, \ldots, M.
 \end{equation}
 For the \emph{network as whole}, the total external arrival rate is given by $|\gamma|= \sum_{i=1}^M \gamma_i$.
-Hence, this is also the departure rate of the network.\sidenote{Not for an individual station~$i$, because $\delta_i = \lambda_i$.} In~\cref{sec:lambda-=-gamma} we present a method to compute $\lambda$ from $\gamma$ and~$P$.
+Hence, this is also the departure rate of the network.\marginnote{Not for an individual station~$i$, because $\delta_i = \lambda_i$.} In~\cref{sec:lambda-=-gamma} we present a method to compute $\lambda$ from $\gamma$ and~$P$.
 
 \newthought{Let us for} the moment assume that we can solve the traffic equations, in other words, for given $\gamma =(\gamma_1, \ldots, \gamma_M)$ and routing matrix~$P$ we can find a set of numbers $\lambda =(\lambda_1, \ldots, \lambda_M)$  that satisfies \cref{eq:101}.
 Then, we can define $\rho_i = \lambda_i \E{S_i}$ as the utilization of (the server of) station~$i$.
@@ -98,7 +98,7 @@ p(n) =  \P{\L_1=n_1, \ldots, \L_M=n_M}  = \prod_{i=1}^M p(n_i). % = \prod_{i=1}^
 where $p(n_i)=(1-\rho_i)\rho_i^{n_i}$ is the stationary probability that station~$i$ contains $n_i$ jobs, compare~\cref{eq:23}.
 In other words, the stationary probability $p(n_i)$ of station~$i$ is \emph{independent} of the state of the other stations. Hence, in stationarity, we can concentrate on each station individually. As a consequence, we can easily compute the excess probability $\P{\L_1> n_1}$ for each station~$i$.
 
-As a matter of fact, any stable open network of $M/M/c$ stations\sidenote{Note, $M/M/c$ queues, not just $M/M/1$ queues.}
+As a matter of fact, any stable open network of $M/M/c$ stations\marginnote{Note, $M/M/c$ queues, not just $M/M/1$ queues.}
 admits a \recall{product-form solution}, a result known as \recall{Jackson's theorem}.
 
 \newthought{Let us prove} this result for the case of two $M/M/1$ stations in tandem.
@@ -146,7 +146,7 @@ Clearly, the balance equations hold for $i, j \geq 1$.
                      &= \mu_2p(i, j+1) + \lambda p(i-1, j) + \mu_1 p(i+1, j-1)\\
     &= \text{ rate in}.
 \end{align*}
-It remains to check  the boundary\sidenote{\cref{ex:72}--\cref{ex:75}} to complete the claim.
+It remains to check  the boundary\marginnote{\cref{ex:72}--\cref{ex:75}} to complete the claim.
 
 
 

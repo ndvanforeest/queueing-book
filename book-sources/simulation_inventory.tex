@@ -34,7 +34,7 @@ Most of the next modules should by now be familiar to you. \mintinline{python}{i
 
 Here are the model parameters.
 The daily demand is a \texttt{RV}.
-Check in particular how we compute the cost parameters.\sidenote{Getting the units right is not always easy.}
+Check in particular how we compute the cost parameters.\marginnote{Getting the units right is not always easy.}
 
 \inputminted[firstline=12, lastline=19]{python}{../code/ss_inventory_simulation.py} % data2
 
@@ -42,13 +42,13 @@ We next compute the inventory positions and inventory levels.
 We generate \mintinline{python}{N} random deviates for the demand and pass a random generator to ensure to get the same numbers for every simulation run.
 For ease we combine ~\cref{eq:i5} into a single recursion for $P_t$, and likewise for $I_t$.
 Expressions like \mintinline{python}{(3 <= 4)} evalutate to \mintinline{python}{True} which in turn become~$1$ in computations.
-Thus, \mintinline{python}{(Pprime <= s)} implements the indicator function.\sidenote{The indicator $\1{A} = 0$ if the event~$A$ occurs, and~$0$ otherwise.}
+Thus, \mintinline{python}{(Pprime <= s)} implements the indicator function.\marginnote{The indicator $\1{A} = 0$ if the event~$A$ occurs, and~$0$ otherwise.}
 The first \mintinline{python}{for} loop for the inventory levels computes $\IL$ for the first couple of period, because $t-L< 0$ for $t< L$.
 In the second loop we should protect against a simple error: it might happen that the number of periods over which we simule is smaller than~$L$.
 \inputminted[firstline=23, lastline=40]{python}{../code/ss_inventory_simulation.py} % simulation
 
 The last block of code computes the measures.
-The cycle service level~$\alpha_{c}$ is worth to study.\sidenote{Ask ChatGPT for explanation if you find this line hard.}
+The cycle service level~$\alpha_{c}$ is worth to study.\marginnote{Ask ChatGPT for explanation if you find this line hard.}
 We use slicing, which is a technique  much used in python, but also in matlab.
 \inputminted[firstline=44, lastline=57]{python}{../code/ss_inventory_simulation.py} % results
 

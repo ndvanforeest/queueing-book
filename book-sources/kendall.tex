@@ -9,7 +9,7 @@ As is apparent from~\cref{sec:constr-discr-time,sec:constr-gg1-queu}, the constr
 
 
 To characterize the type of queueing process it is common to use \recall{Kendall's abbreviation} $A^{B}/Y^{C}/c/K$, where~$A$ is the distribution of the iid inter-arrival times,
-$Y$ the distribution of the iid service times, $c$ the number of servers, and~$K$ the system size, i.e., the total number of customers that can be simultaneously present, whether in queue or in service.\sidenote{The meaning of~$K$ differs among authors.
+$Y$ the distribution of the iid service times, $c$ the number of servers, and~$K$ the system size, i.e., the total number of customers that can be simultaneously present, whether in queue or in service.\marginnote{The meaning of~$K$ differs among authors.
 Sometimes it stands for the capacity of the queue, not the entire system.
 In this book~$K$ corresponds to the system's size.} It is implicit that $K\geq c$ for any queueing system. When $K$ is not specified, the system capacity is unbounded, but when it appears in the acronym,  queue length is bounded.
 When at an arrival epoch multiple jobs can arrive simultaneously (like a group of people entering a restaurant), we say that a \emph{batch of jobs} arrives.
@@ -19,7 +19,7 @@ When $B\equiv 1$ or $C \equiv 1$, i.e., single batch arrivals or single batch se
 Finally, in this notation, it is assumed that the service discipline is FIFO.
 
 
-The most important inter-arrival and service distributions are the exponential distribution, denoted with the shorthand\sidenote{which stands for Markov or Memoryless}  $M$, and the general distribution\sidenote{with the implicit assumption that the first moment is finite},  denoted with  $G$. We write~$D$ for a deterministic (constant) random variable.
+The most important inter-arrival and service distributions are the exponential distribution, denoted with the shorthand\marginnote{M := Markov or Memoryless}  $M$, and the general distribution\marginnote{With the implicit assumption that the first moment is finite},  denoted with  $G$. We write~$D$ for a deterministic (constant) random variable.
 
 \newthought{A few important} examples are the following queueing processes: the $M/M/1$ queue in which inter-arrival times and service times are exponentially distributed;  the $M/G/1$ queue with exponential inter-arrival times and general service times; and the $G/G/c$ queue in which the inter-arrival and service times are not specified.
 
@@ -37,12 +37,12 @@ We can represent the discrete-time model  that corresponds to the recursion \cre
 \begin{truefalse}
 Consider an $M^2/G/c/K$ queue, with $K\geq c$.
 Claim: exactly one of the following statements is false.
-    \begin{itemize}
+\begin{itemize}
         \item Jobs arrive in pairs of two.
         \item Service times can be deterministic.
         \item The  queue shared among $c$ parallel servers cannot contain more than $K$ jobs.
-    \end{itemize}
-    \begin{solution}
+\end{itemize}
+\begin{solution}
     False.
 All statements are true.
 The first and second statement are evident.

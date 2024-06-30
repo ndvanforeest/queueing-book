@@ -11,11 +11,24 @@ Thus, what jobs see upon arrival is \emph{in general not equal} to what the serv
 However, when jobs arrive as a Poisson process, both sampling methods produce the same number, a result known as the \recall{Poisson arrivals see time averages} (\recall{PASTA}) property.
 Here we will discuss this property in more detail, and in the remainder of the book we will use it time and again.
 
-\newthought{Let us say} that the system is in \emph{state}~$n$ at time~$t$ when $L(t)=n$. Then define\sidenote{Note the $A_k-$; since $L(t)$ is right-continuous, we concentrate on what an \emph{arrival} sees just before it's arrival}
+\newthought{Let us say} that the system is in \emph{state}~$n$ at time~$t$ when $L(t)=n$. Then define\marginnote{Note the $A_k-$; since $L(t)$ is right-continuous, we concentrate on what an \emph{arrival} sees just before it's arrival}
 \begin{equation}\label{eq:rates_}
  A(n,t) :=  \sum_{k=1}^\infty \1{A_k \leq t}\1{\L(A_k-) = n} = \sum_{k=1}^{A(t)}\1{\L(A_k-) = n}
 \end{equation}
-as the number of arrivals up to time~$t$ that saw the system in state~$n$.\sidenote{\cref{ex:36},\cref{ex:38}}
+as the number of arrivals up to time~$t$ that saw the system in state~$n$.\marginnote{\cref{ex:36},\cref{ex:38}}
+Next, let
+\begin{equation*}
+ Y(n,t) := \int_0^t \1{\L(s) = n} \d s
+\end{equation*}
+be the total time the system spends in state~$n$ during $[0,t]$.
+% , and
+% \begin{equation} \label{eq:18}
+%  p(n,t) := \frac 1 t \int_0^t \1{\L(s) = n} \d s = \frac{Y(n,t)}t,
+% \end{equation}
+% \end{subequations}
+% be the fraction of time in state~$n$ during $[0,t]$.
+To see the practical relevance of this definitions, suppose it costs~$w$ per unit time to have a job in the system.
+Then, the total cost up to time~$t$ is $w \sum_{n=0}^\infty n Y(n,t)$. % and the time-average cost is $w \sum_{n=0}^\infty n p(n,t)$.
 \begin{marginfigure}%[t]
 \begin{tikzpicture}[scale=0.5,
  open/.style={shape=circle, fill=white, inner sep=1pt, draw, node contents=},
@@ -80,19 +93,6 @@ node (c3) at (6.3,2) {};
 \end{tikzpicture}
 \footnotesize{\emph{We subtracted $1/2$ from the graph of $A(1,t)$, for otherwise this  overlaps with the graph of~$Y$.}}
 \end{marginfigure}
-Next, let
-\begin{equation*}
- Y(n,t) := \int_0^t \1{\L(s) = n} \d s
-\end{equation*}
-be the total time the system spends in state~$n$ during $[0,t]$.
-% , and
-% \begin{equation} \label{eq:18}
-%  p(n,t) := \frac 1 t \int_0^t \1{\L(s) = n} \d s = \frac{Y(n,t)}t,
-% \end{equation}
-% \end{subequations}
-% be the fraction of time in state~$n$ during $[0,t]$.
-To see the practical relevance of this definitions, suppose it costs~$w$ per unit time to have a job in the system.
-Then, the total cost up to time~$t$ is $w \sum_{n=0}^\infty n Y(n,t)$. % and the time-average cost is $w \sum_{n=0}^\infty n p(n,t)$.
 
 With these definitions, assume the following limits exist:
 \begin{subequations}
@@ -131,7 +131,7 @@ On the other,
 % % = \frac1{A(t)}\sum_{k=1}^\infty \1{A_k \leq t, L(A_k-) = n}
 % =   \frac1{A(t)}\sum_{k=1}^{A(t)} \1{\L(A_k-) = n}.
 % \end{equation*}
-% Then, since $A(t)\to \infty$ as $t\to\infty$, it follows from the renewal reward theorem\sidenote{\cref{ex:18}} that the following limit can be defined:
+% Then, since $A(t)\to \infty$ as $t\to\infty$, it follows from the renewal reward theorem\marginnote{\cref{ex:18}} that the following limit can be defined:
 % \begin{equation}\label{eq:pasta2}
 % \pi(n) := \lim_{t\to\infty}\frac1{A(t)}\sum_{k=1}^{A(t)} \1{\L(A_k-) = n}.
 % \end{equation}
@@ -139,7 +139,7 @@ On the other,
 \end{proof}
 
 This result has a simple consequence.
-Write $\mathcal{S}$ for all the states the system can attain.\sidenote{When there is no upper bound on $L$, then $\mathcal{S} = \N$, but when the $L$ is bounded by some number~$K$, then $\mathcal{S} = \{0, 1, \ldots, K\}$.}
+Write $\mathcal{S}$ for all the states the system can attain.\marginnote{When there is no upper bound on $L$, then $\mathcal{S} = \N$, but when the $L$ is bounded by some number~$K$, then $\mathcal{S} = \{0, 1, \ldots, K\}$.}
 Clearly, any arrival must see the system in some state, hence $\sum_{n\in \mathcal{S}} \pi(n) = 1$.
 Thus, summing over~$n$ in~\cref{eq:13}, the overall arrival rate $\lambda$ is such that
 \begin{equation}
@@ -161,7 +161,7 @@ From~\cref{eq:13}, $\pi(n) = \lambda(n) p(n)/\lambda$. By the assumption, $\lamb
 
 
 As the example in the introduction of this section shows, this property is not satisfied in general.
-However,\sidenote{A rigorous proof of this is hard, see e.g., \cite{el-taha98:_sampl_path_analy_queuein_system}}
+However,\marginnote{A rigorous proof of this is hard, see e.g., \cite{el-taha98:_sampl_path_analy_queuein_system}}
 \begin{corollary}[Poisson Arrivals See Time Averages (PASTA)]
 If the arrival process is Poisson, then $\lambda(n)=\lambda$, in which case $\pi(n)=p(n)$.
 \end{corollary}
@@ -181,12 +181,12 @@ In that case $\P{a_n=1, L_{n-1}=m} = \P{a_n=1} \P{L_{n-1}=m}$, and by canceling 
 \begin{equation*}
 \pi(m) \approx \frac{\P{a_n=1} \P{L_{n-1}=m}}{\P{a_n=1}} = \P{L_{n-1}=m} \approx p(m),
 \end{equation*}
-where the last approximation follows from the fact that $\P{L_{n-1}=m}$ is the fraction of time $L_{n-1}=m$.\sidenote{For  mathematically interested students: The  assumed strong convergence $N^{-1}\sum_{n=1}^N \1{L_n=m} \to p(m)$ as $N\to\infty$ implies the weak converge $\P{L_n=m} \to p(m)$ as $n \to \infty$.}
+where the last approximation follows from the fact that $\P{L_{n-1}=m}$ is the fraction of time $L_{n-1}=m$.\marginnote{For  mathematically interested students: The  assumed strong convergence $N^{-1}\sum_{n=1}^N \1{L_n=m} \to p(m)$ as $N\to\infty$ implies the weak converge $\P{L_n=m} \to p(m)$ as $n \to \infty$.}
 
 However, PASTA does not hold when $a_{n}$ depends on $L_{n-1}$. For instance, if $a_{n}=0$ when $L_{n-1}>0$, and $c_{k}\sim \Bern{d}$ for some small probability~$d$, then $\pi(1) = 0$, but $\P{L_{n-1}=0} > 0$ in general.
 
 
-\newthought{With just PASTA}, Little's law and memorylessness we can already achieve quite a few interesting results for the $M/M/1$ queue.\sidenote{For the $M/G/1$ queue, things are bit subtler, see \cref{ex:l-216} and~\cref{sec:n-policies-mg1}.}
+\newthought{With just PASTA}, Little's law and memorylessness we can already achieve quite a few interesting results for the $M/M/1$ queue.\marginnote{For the $M/G/1$ queue, things are bit subtler, see \cref{ex:l-216} and~\cref{sec:n-policies-mg1}.}
 First observe that
 \begin{equation*}
  \E\J \stackrel 1 = \E \L \E S + \E S \stackrel 2= \lambda \E \J \E S + \E S \stackrel= \rho \E \J + \E S,
@@ -208,9 +208,9 @@ and then step by step,
 
 
 \newthought{To let you} think a bit deeper about the PASTA property, and statistics in general, consider the next interesting riddle.
-The problem is known as the `inspection paradox'.\sidenote{ Look this paradox up on the web. You should be aware of such biases in data science.}
+The problem is known as the `inspection paradox'.\marginnote{ Look this paradox up on the web. You should be aware of such biases in data science.}[-0.7cm]
 
-In a small Midwestern town\sidenote{The story comes  from the book `Puzzle Math' by G. Gamow and M. Stern.}
+In a small Midwestern town\marginnote{The story comes  from the book `Puzzle Math' by G. Gamow and M. Stern, \url{https://www.arvindguptatoys.com/arvindgupta/puzzlemath.pdf}. The interesting solution can also be found there.}
  there lived a retired railroad engineer named William
 Johnson.
 The main line on which he had worked for so many years passed through the
@@ -235,7 +235,7 @@ In despair, he called the depot in the nearest big city to find whether some of 
 He was, in fact, assured that the trains were running exactly on schedule, and that equal numbers of trains daily were going each way.
 This mystery brought him to such despair that he became completely unable to sleep and was a very sick man.
 
-Can you reveal the mystery thereby solving the sleeping problems of Mr. Johnson?\sidenote{You can find the solution online.}
+Can you reveal the mystery thereby solving the sleeping problems of Mr. Johnson?
 
 
 \begin{truefalse}

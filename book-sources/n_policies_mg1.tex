@@ -20,9 +20,9 @@ For instance, the cost to heat up an oven after being idle can be quite signific
 
 
 
-To reduce the average cost, we can use an~$N$-policy\sidenote{\cref{ex:n-policies}}, which works as follows.
-As soon as the system becomes empty,\sidenote{and the server idle} the server switches off.
-Then it waits until~$N$ jobs have arrived,\sidenote{or~$N$ or more items in case of batch arrivals} and then it switches on.
+To reduce the average cost, we can use an~$N$-policy\marginnote{\cref{ex:n-policies}}, which works as follows.
+As soon as the system becomes empty,\marginnote{and the server idle} the server switches off.
+Then it waits until~$N$ jobs have arrived,\marginnote{or~$N$ or more items in case of batch arrivals} and then it switches on.
 The server processes jobs until the system is empty again, then switches off, and remains idle until~$N$ new jobs have arrived, and so on, cycle after cycle.
 
 Note that under an~$N$-policy, even though the load remains the same, the server has longer busy and idle times.
@@ -31,8 +31,8 @@ At hospitals, for instance, doctors might prefer to let patients wait a bit unti
 Like this, the doctor (server) does not have to wait for short times for late patients, but instead can collect idle times into one long stretch, and do something (they find more) useful instead.
 
 Suppose it costs~$K$ Euro to set up the server, independent of the time it has been idle, and each job charges~$h$ Euros per unit time while in the system.
-Then it makes sense to first build up a queue of~$N$ jobs right after the server becomes idle,\sidenote{To reduce time-average setup cost.}
-and after some time switch on the server to process jobs until the system is empty again.\sidenote{To reduce time-average queueing costs of jobs.}
+Then it makes sense to first build up a queue of~$N$ jobs right after the server becomes idle,\marginnote{To reduce time-average setup cost.}
+and after some time switch on the server to process jobs until the system is empty again.\marginnote{To reduce time-average queueing costs of jobs.}
 The problem is to find a switching threshold~$N^{*}$ that minimizes long-run average cost.
 
 
@@ -43,14 +43,14 @@ Throughout we consider the queueing process at moments at which services start.
 \newthought{As a first step,} we concentrate on the expected time $T(q)$ it takes to clear the system when the server \emph{starts working} on a job and there are~$q$ jobs in the system. We present three different ideas to obtain $T(q)$.
 
 The first heuristic idea is this. We know that jobs arrive at rate $\lambda$ and they are served at rate $\mu>\lambda$, where $\mu = 1/ \E{S}$.
-Clearly, the net `drain rate' of the queue is $\mu-\lambda$; hence we guess that\sidenote{By analogy: when you have a `queue' of~$q$ km to cycle, and your speed is~$v$ km/h, then it takes $q/v$ h to complete the trip.}
+Clearly, the net `drain rate' of the queue is $\mu-\lambda$; hence we guess that\marginnote{By analogy: when you have a `queue' of~$q$ km to cycle, and your speed is~$v$ km/h, then it takes $q/v$ h to complete the trip.}
 \begin{equation}\label{eq:n-pol-2}
 T(q)= \frac{q}{\mu-\lambda} = \frac{\E{S} }{1-\lambda \E{S}} q = \frac{\E{S}}{1-\rho}q.
 \end{equation}
 Observe, however, that this reasoning completely ignores the stochasticity in arrival times and services, hence, we have no guarantee that the result is correct.
 
 
-For the second idea, consider a regular\sidenote{i.e., not controlled by an~$N$-policy.} $M/G/1$ queue for the moment.
+For the second idea, consider a regular\marginnote{i.e., not controlled by an~$N$-policy.} $M/G/1$ queue for the moment.
 When a job arrives to an empty system, it takes a busy time $\E \U$ to get rid of this job and all jobs that arrive during the service of this first job.
 In other words, it takes $\E\U$ time on average to move from~$1$ job in the system to~$0$, i.e., one less, jobs.
 But then, when there are~$q$ jobs in the system, it must take $T(q) = q\E\U$ units of time to move from state~$q$ to state~$0$.
@@ -66,9 +66,9 @@ Then, $T(q)$ satisfies the relation
 \end{equation}
 because first the job in service must leave, and then, when $Y=k$, it takes $T(q+k-1)$ to clear the system.
 To solve this equation, we substitute the guess $T(q) = aq+b$ and solve for~$a$ and~$b$.
-It is clear that $T(0)=0$, hence $b=0$.\sidenote{If the system is empty, it takes no time to clear it.}
+It is clear that $T(0)=0$, hence $b=0$.\marginnote{If the system is empty, it takes no time to clear it.}
 Substituting $a q$ into~\cref{eq:33} gives $q a =\E S + aq + a\E Y - a$.
-Noting that $\E Y = \lambda \E S$, \sidenote{Poisson arrivals $\implies$ $\E{Y|S=s} = \lambda s$ $\implies$ $\E{Y|S} = \lambda S$ $\implies$ $\E Y = \E{\E{Y|S}} = \lambda \E S$.}
+Noting that $\E Y = \lambda \E S$, \marginnote{Poisson arrivals $\implies$ $\E{Y|S=s} = \lambda s$ $\implies$ $\E{Y|S} = \lambda S$ $\implies$ $\E Y = \E{\E{Y|S}} = \lambda \E S$.}[1cm]
 and solving for~$a$ we find~\cref{eq:n-pol-2}.
 We note that the solution of~\cref{eq:33} is unique once $T(0)$ is fixed.
 
@@ -92,7 +92,7 @@ By analogy with~\cref{eq:33}, $V(q)$ must be the solution of
 Now note that as in~\cref{eq:93}, $U(q)$ has a term linear in~$q$ and a constant term.
 We substitute the form $V(q) = aq^2 + bq+c$, assemble terms with the same power in~$q$, and solve for $a, b$ and~$c$.
 Of course $c = 0$ since $V(0)=0$.
-For~$a$ and~$b$ we need to do some work to arrive at\sidenote{~\cref{ex:68}--\cref{ex:nm-2}}
+For~$a$ and~$b$ we need to do some work to arrive at\marginnote{~\cref{ex:68}--\cref{ex:nm-2}}
 \begin{align*}
   V(q) = \frac{h}{2}\frac{\E S}{1-\rho} q^2 + h  \frac{ 1+ \rho C_s^2}2 \frac{\E S}{(1-\rho)^2} q.
 \end{align*}
@@ -109,14 +109,14 @@ C(N) = N/\lambda + T(N).
 
 
 For the cost during the build up the queue, we use again a recursive procedure.
-Write $W(q)$ for the accumulated queueing cost\sidenote{Here~$W$ is not the waiting time in queue.}
+Write $W(q)$ for the accumulated queueing cost\marginnote{Here~$W$ is not the waiting time in queue.}
 from the moment the server becomes idle up to the arrival time of the~$q$th job (the job that sees $q-1$ jobs in the system upon arrival).
-Then,\sidenote{\cref{ex:nmm-4}}
+Then,\marginnote{\cref{ex:nmm-4}}
 \begin{equation*}
   W(q) = W(q-1) +  h\frac{q-1}{\lambda}= h \frac{q(q-1)}{2\lambda}.
 \end{equation*}
 
-By combining all the above cost factors and using the renewal reward theorem, we find for the long-run average cost\sidenote{~\cref{ex:n-mg3}}
+By combining all the above cost factors and using the renewal reward theorem, we find for the long-run average cost\marginnote{~\cref{ex:n-mg3}}
 \begin{equation}  \label{eq:100}
     \frac{W(N) + K + V(N)}{C(N)}
     = h \frac{1+ C_s^2}2 \frac{\rho^2}{1-\rho} + h \rho + h \frac{N-1}2 + K \frac{\lambda(1-\rho)}N.
@@ -154,7 +154,7 @@ Next, recall that $\E \L = \E\QQ + \E\Ls$, and $\E \QQ = \lambda \E\W$ and $\E \
 \end{proof}
 
 
-\newthought{Let us rederive} the PK formula by starting from the simple observation that before an arriving job gets access to the server, it first has to wait until the job in service (if any) completes, and then it has wait for the queue to be cleared.\sidenote{Compare the derivation leading to~\cref{eq:96}.}
+\newthought{Let us rederive} the PK formula by starting from the simple observation that before an arriving job gets access to the server, it first has to wait until the job in service (if any) completes, and then it has wait for the queue to be cleared.\marginnote{Compare the derivation leading to~\cref{eq:96}.}
 From PASTA it follows that $\E{\W} = \E{S_r} + \E{\QQ} \E S$, where $\E{S_r}$ is the (time-)average remaining service time of the job in service.
 With Little's law $\E \QQ = \lambda \E\W$ and writing $\rho = \lambda \E S$, we find that
 \begin{equation*}
@@ -162,7 +162,7 @@ With Little's law $\E \QQ = \lambda \E\W$ and writing $\rho = \lambda \E S$, we 
 \end{equation*}
 
 To make further progress we need to find an expression for $\E{S_r}$ when~$S$ is a generally distributed service time.
-\sidenote{For the $M/M/1$ queue, $\E{S_r} = \rho\E S$, but not for the $M/G/1$ queue.}
+\marginnote{For the $M/M/1$ queue, $\E{S_r} = \rho\E S$, but not for the $M/G/1$ queue.}
 For this, we use the renewal reward theorem, just as in~\cref{sec:mxm1-queue:-expected}.
 
 \begin{theorem}[Remaining Service time]
@@ -174,9 +174,9 @@ provided the second moment of the (generic) service time $S$ exists.
 \end{theorem}
 \begin{proof}
 Consider the~$k$th job of some sample path of the $M/G/1$ queueing process.
-Let the job's service start\sidenote{Usually  $\tilde A_{k} > A_{k}$.} at time $\tilde A_k$, so that it departs at time $D_k=\tilde A_k + S_k$, see~\cref{fig:mg1remainingservicetime}.
+Let the job's service start\marginnote{Usually  $\As_{k} > A_{k}$.} at time $\As_{k}$, so that it departs at time $D_k=\As_k + S_k$, see~\cref{fig:mg1remainingservicetime}.
 At time~$s$,  the remaining service time of job~$k$ is
-$(D_k-s)\1{\tilde A_k \leq s < D_k}$.
+$(D_k-s)\1{\As_k \leq s < D_k}$.
 \begin{marginfigure}
 \begin{tikzpicture}[scale=1,
  open/.style={shape=circle, fill=white, inner sep=1pt, draw, node contents=},
@@ -187,7 +187,7 @@ $(D_k-s)\1{\tilde A_k \leq s < D_k}$.
  node (c2) at (3,0)[open, label={}]
  (c1) to (c2);
  \draw[dotted] (0,0) -- (0,3) node[midway, rotate=90, fill=white] {$S_k$};
- \node[below] at (0,0) {$\tilde A_k$};
+ \node[below] at (0,0) {$\As_k$};
  \node[below] at (3,0) {$D_k$};
 
  \draw[<->, dotted] (0.75,0) -- (0.75,2.25) node[midway,fill=white,rotate=90] {$D_k-s$};
@@ -207,7 +207,7 @@ As $t \to \infty$, $Y(t)/t \to \E{S_{r}}$, i.e., the  (time-average) remaining s
 
  We also see in \cref{fig:mg1remainingservicetime} that $Y(D_k) - Y(D_{k-1}) =:X_k$ is the area under the triangle.
  By choosing $T_k=D_k$ in the renewal-reward theorem as the epochs to inspect $Y(\cdot)$, $X=\lim_{n\to\infty} \frac{1}{n}\sum_{k=1}^n S_k^2/ 2 = \E{S^2}/2$.
- By the renewal-reward theorem, $Y=\delta X$, but $\delta = \lambda$; \sidenote{By rate-stability.} the result follows directly.
+ By the renewal-reward theorem, $Y=\delta X$, but $\delta = \lambda$; \marginnote{By rate-stability.} the result follows directly.
 \end{proof}
 
 
@@ -218,7 +218,7 @@ Replacing this expression in the above expression for $\E\W$, we obtain the PK f
 \end{equation*}
 
 
-\newthought{The Pollaczek-Khinchine equation} can also be found as a limiting case of the expression~\cref{eq:43} of the waiting time of the $M^{B}/M/1$ queue.\sidenote{If you are not interested in maths, than you should this derivation.}
+\newthought{The Pollaczek-Khinchine equation} can also be found as a limiting case of the expression~\cref{eq:43} of the waiting time of the $M^{B}/M/1$ queue.\marginnote{If you are not interested in maths, than you should this derivation.}
 Recall that, in the $M^{B}/M/1$ queue, batches of items arrives, and the service times of the items are iid with mean $1/\nu$, say. If $F$ is the cdf of the service times of the $M/G/1$ queue, then we take
 \begin{equation*}
 \P{B=k} = F(k/\nu) - F((k-1)/\nu)
@@ -233,7 +233,7 @@ With this, the expected service time of a batch becomes
 \end{align*}
 In words, when $\nu$ becomes large, the expected service time of a batch in the $M^{B}/M/1$ queue is nearly the the same as the expected waiting time of a job of the $M/G/1$ queue.
 
-In fact, the proof that the expected waiting time of the $M^{B}/M/1$ converges to the Pollaczek-Khinchine equation when $\nu\to \infty$ is based on the fact that every cdf $F$, concentrated on $[0, \infty)$, can be approximated (weakly) by the sequence of cdfs\sidenote{See Asmussen, Section III.4, Applied Probability and Queues, 2003.}
+In fact, the proof that the expected waiting time of the $M^{B}/M/1$ converges to the Pollaczek-Khinchine equation when $\nu\to \infty$ is based on the fact that every cdf $F$, concentrated on $[0, \infty)$, can be approximated (weakly) by the sequence of cdfs\marginnote{See Asmussen, Section III.4, Applied Probability and Queues, 2003.}
 \begin{equation*}
 F_{\nu}(x) = F(0) + \sum_{k=1}^{\infty} [F(k/\nu] - F((k-1)/\nu)] \frac{e^{-\nu t}}{x} \frac{(\nu x)^k}{(k-1)!},\quad\text{as } \nu\to\infty.
 \end{equation*}
@@ -247,7 +247,7 @@ Consider the $M/G/1$ queue.
 Denote by $\tilde{A}_k$ the time job $k$ starts service and by $D_k$ its departure time, $k=1,\ldots,n$.
 Claim: the expression
 \begin{equation*}
-\sum_{k=1}^{n} \int_0^{D_n} (D_k-s)\1{\tilde A_k \leq s < D_k} \d s
+\sum_{k=1}^{n} \int_0^{D_n} (D_k-s)\1{\As_k \leq s < D_k} \d s
 \end{equation*}
 computes the total remaining service time up to time $t = D_n$.
 \begin{solution}
@@ -265,9 +265,9 @@ True.
 
 \begin{truefalse}
 Claim: For an $M/D/1$ queue the expected waiting time is $\E{W}=\frac{\rho}{1-\rho}\frac{\E{S}}{2}$.
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 \begin{truefalse}[5.6]
@@ -296,9 +296,9 @@ It should be this: $d_k =I_k \min\{L_{k-1}, c_k\}$, $L_k = L_{k-1} - d_k + a_k$.
 \begin{truefalse}[5.6]
 We have an $M/G/1$ queue controlled by an $N$-policy, $\lambda=1$ and $S_i\equiv 2$.
 Claim, the expected time to clear the system after reaching $N-$jobs is the same as for as a $D/D/1$ queue with the same arrival and service rate.
-    \begin{solution}
+\begin{solution}
         True.
-    \end{solution}
+\end{solution}
 \end{truefalse}
 
 
@@ -406,8 +406,8 @@ Use the memoryless property for the $M/M/1$ queue to show that
 \begin{solution}
 Consider an arbitrary moment in time at which $q>0$ and the server is busy.
 Now either of two events happens first: a new job enters the system, or the job in service leaves.
-The probability of an arrival to occur first is $\alpha=\lambda/(\lambda+\mu)$,\sidenote{\cref{ex:3}} the probability of a departure to occur first is $\beta=1-\alpha = \mu/(\lambda+\mu)$.
-Moreover, the expected time to either an arrival or a departure, whichever is first, is $1/(\mu+\lambda)$.\sidenote{\cref{ex:10}}
+The probability of an arrival to occur first is $\alpha=\lambda/(\lambda+\mu)$,\marginnote{\cref{ex:3}} the probability of a departure to occur first is $\beta=1-\alpha = \mu/(\lambda+\mu)$.
+Moreover, the expected time to either an arrival or a departure, whichever is first, is $1/(\mu+\lambda)$.\marginnote{\cref{ex:10}}
 In words, the system stays in state~$q$ for an expected time $1/(\lambda+\mu)$ until an arrival or departure occurs.
 Then, it moves to state $q+1$ or $q-1$, and from there it takes $T(q+1)$ or $T(q-1)$ until the system is empty.
 Observe that this reasoning depends crucially on the memoryless property.
